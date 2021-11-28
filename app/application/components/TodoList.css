@@ -1,0 +1,14 @@
+.TodoList {
+  margin-top: var(--space-xl);
+}
+
+.TodoList__title {
+  font-size: var(--size-text-l);
+  color: var(--color-text-secondary);
+}
+
+.TodoList__list {
+  display: grid;
+  gap: 0.75rem;
+  margin: var(--space) 0;
+}

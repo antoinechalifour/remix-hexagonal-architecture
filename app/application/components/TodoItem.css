@@ -1,0 +1,24 @@
+.TodoItem {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: var(--space-s);
+  align-items: center;
+  border-radius: var(--radius);
+  padding: var(--space) var(--space-l);
+  background: var(--color-background-light);
+  box-shadow: var(--shadow-elevation-low);
+}
+
+.TodoItem input:checked + * {
+  text-decoration: line-through;
+  opacity: 0.75;
+}
+
+.TodoItem label {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: var(--space-s);
+  align-items: center;
+
+  font-weight: 600;
+}

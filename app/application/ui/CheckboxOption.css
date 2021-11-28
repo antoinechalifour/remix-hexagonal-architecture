@@ -1,0 +1,45 @@
+.CheckboxOption {
+  cursor: pointer;
+  --checkbox-size: 2rem;
+  --checkbox-border-size: 2px;
+}
+
+.CheckboxOption input[type="checkbox"] {
+  display: inline-block;
+  position: relative;
+  height: var(--checkbox-size);
+  width: var(--checkbox-size);
+  margin: 0;
+  top: -1px;
+}
+
+.CheckboxOption input[type="checkbox"]:before {
+  content: "";
+  display: block;
+  width: calc(var(--checkbox-size) - var(--checkbox-border-size));
+  aspect-ratio: 1;
+  border: var(--checkbox-border-size) solid var(--color-primary);
+  border-radius: 0.33rem;
+
+  position: absolute;
+  top: -1px;
+  left: -1px;
+
+  background: var(--color-background);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.CheckboxOption input[type="checkbox"]:checked:before {
+  background: var(--color-primary);
+}
+
+.CheckboxOption input[type="checkbox"]:checked:after {
+  content: "✓";
+  color: var(--color-text-secondary);
+  position: absolute;
+  top: 53%;
+  left: 55%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+}

@@ -1,0 +1,5 @@
+.PageTitle {
+  font-size: var(--size-text-2xl);
+  font-weight: 600;
+  color: var(--color-text-secondary);
+}

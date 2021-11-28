@@ -1,0 +1,10 @@
+.AddTodoForm {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: start;
+  gap: 2rem;
+}
+
+.AddTodoForm .Button {
+  margin-top: 3px;
+}

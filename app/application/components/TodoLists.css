@@ -1,0 +1,13 @@
+.TodoLists {
+  display: grid;
+  gap: var(--space);
+  margin: var(--space-3xl) 0;
+}
+
+.AddTodoListForm {
+  margin: var(--space) 0;
+}
+
+.TodoLists__item {
+  padding: 0.75rem 0;
+}

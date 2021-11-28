@@ -1,0 +1,48 @@
+.FloatingLabelInput {
+  display: block;
+  width: 100%;
+  position: relative;
+}
+
+.FloatingLabelInput input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space) var(--space-l);
+  border: 2px solid var(--color-background-light);
+  border-radius: var(--radius);
+  background: transparent;
+  color: var(--color-text-secondary);
+  font-family: inherit;
+  font-size: inherit;
+  transition: border 0.2s ease;
+}
+
+.FloatingLabelInput input:focus {
+  border-color: var(--color-primary);
+}
+
+.FloatingLabelInput .FloatingLabelInput__label {
+  position: absolute;
+  top: 50%;
+  left: 1.6rem;
+  transform: translateY(-50%);
+  padding: var(--space-s);
+  font-size: var(--size-text-s);
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.FloatingLabelInput:focus-within .FloatingLabelInput__label,
+.FloatingLabelInput .FloatingLabelInput__label--sticky {
+  top: 0;
+  font-size: var(--size-text-xs);
+  background: var(--color-background);
+}
+
+.FloatingLabelInput__error {
+  display: block;
+  color: var(--color-danger);
+  font-size: var(--size-text-s);
+  padding: var(--space) var(--space) 0;
+}

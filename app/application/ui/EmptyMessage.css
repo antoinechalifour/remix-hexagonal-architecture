@@ -1,0 +1,7 @@
+.EmptyMessage {
+  background: var(--color-background-light);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-elevation-low);
+  padding: var(--space) var(--space-xl);
+  margin: var(--space) 0;
+}
