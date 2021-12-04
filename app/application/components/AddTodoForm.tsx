@@ -1,4 +1,4 @@
-import { Form, useActionData } from "remix";
+import { Form, useActionData, useTransition } from "remix";
 import { AddTodoErrors } from "~/domain/AddTodoError";
 import {
   FloatingLabelInput,
@@ -18,7 +18,22 @@ type ActionData = {
   errors?: AddTodoErrors;
 };
 
-export const AddTodoForm = () => {
+interface AddTodoButton {
+  todoListId: string;
+}
+
+const AddTodoButton = ({ todoListId }: AddTodoButton) => {
+  const transition = useTransition();
+  const isSubmitting = transition.submission?.action === `/l/${todoListId}`;
+
+  return <ButtonPrimary disabled={isSubmitting}>Done</ButtonPrimary>;
+};
+
+interface AddTodoFormProps {
+  todoListId: string;
+}
+
+export const AddTodoForm = ({ todoListId }: AddTodoFormProps) => {
   const actionData = useActionData<ActionData>();
 
   return (
@@ -29,7 +44,7 @@ export const AddTodoForm = () => {
         errorMessage={actionData?.errors?.todoTitle}
       />
 
-      <ButtonPrimary>Done</ButtonPrimary>
+      <AddTodoButton todoListId={todoListId} />
     </Form>
   );
 };

@@ -16,4 +16,10 @@
   font-size: var(--size-text-s);
   text-transform: uppercase;
   font-weight: 600;
+  transition: background .2s ease;
+}
+
+.Button--primary[disabled] {
+  background: var(--color-primary-disabled);
+  cursor: not-allowed;
 }

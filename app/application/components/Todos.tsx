@@ -29,6 +29,7 @@ export const Todos = ({ todoList }: TodosProps) => (
     </p>
 
     <AddTodoForm
+      todoListId={todoList.id}
       key={todoList.completedTodos.length + todoList.doingTodos.length}
     />
 

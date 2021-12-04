@@ -29,7 +29,9 @@ body {
   --color-background-light: hsl(240, 15%, 17%);
   --color-text-secondary: hsl(0, 0%, 100%);
   --color-text: hsl(0, 0%, 64%);
+  --color-text-reversed: hsl(235, 19%, 12%);
   --color-primary: hsl(240, 67%, 64%);
+  --color-primary-disabled: hsl(240, 25%, 64%);
   --color-danger: hsl(345, 86%, 56%);
   --size-text-xs: 1.2rem;
   --size-text-s: 1.4rem;
