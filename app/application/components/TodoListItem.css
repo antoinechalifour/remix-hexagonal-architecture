@@ -8,6 +8,10 @@
   box-shadow: var(--shadow-elevation-low);
 }
 
+.TodoListItem--archiving {
+  opacity: .5;
+}
+
 .TodoListItem a {
   text-decoration: none;
   color: inherit;

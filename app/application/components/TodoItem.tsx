@@ -1,7 +1,8 @@
 import type { TodoReadModel } from "~/query/TodoListReadModel";
 
 import React from "react";
-import { Form, useSubmit } from "remix";
+import classNames from "classnames";
+import { Form, useSubmit, useTransition } from "remix";
 import {
   CheckboxOption,
   links as checkboxOptionsLinks,
@@ -23,15 +24,22 @@ interface TodoItemProps {
 
 export const TodoItem = ({ todoListId, todo }: TodoItemProps) => {
   const submit = useSubmit();
+  const transition = useTransition();
   const htmlId = `todo-${todo.id}`;
+  const completionAction = `/l/${todoListId}/todo/${todo.id}`;
+  const archiveAction = `/l/${todoListId}/todo/${todo.id}/archive`;
+  const isArchiving = transition.submission?.action === archiveAction;
+
   const handleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
     submit(e.currentTarget);
 
   return (
-    <div className="TodoItem">
+    <div
+      className={classNames("TodoItem", { "TodoItem--archiving": isArchiving })}
+    >
       <Form
         method="post"
-        action={`/l/${todoListId}/todo/${todo.id}`}
+        action={completionAction}
         onChange={handleChange}
         replace
       >
@@ -42,12 +50,10 @@ export const TodoItem = ({ todoListId, todo }: TodoItemProps) => {
         />
       </Form>
 
-      <Form
-        method="post"
-        action={`/l/${todoListId}/todo/${todo.id}/archive`}
-        replace
-      >
-        <Button title="Archive this todo">🗑</Button>
+      <Form method="post" action={archiveAction} replace>
+        <Button disabled={isArchiving} title="Archive this todo">
+          🗑
+        </Button>
       </Form>
     </div>
   );

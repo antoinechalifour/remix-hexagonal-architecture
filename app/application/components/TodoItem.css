@@ -9,6 +9,10 @@
   box-shadow: var(--shadow-elevation-low);
 }
 
+.TodoItem--archiving {
+  opacity: .5;
+}
+
 .TodoItem input:checked + * {
   text-decoration: line-through;
   opacity: 0.75;
