@@ -11,8 +11,8 @@ import { AddTodo } from "~/domain/AddTodo";
 import { FetchTodoListPrismaQuery } from "~/infrastructure/queries/FetchTodoListPrismaQuery";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
-  title: `TLM | ${todoList.title} (${todoList.doingTodos.length})`,
-  description: `Created by you on ${todoList.createdAt}`,
+  title: `TLM | ${todoList?.title} (${todoList?.doingTodos.length})`,
+  description: `Created by you on ${todoList?.createdAt}`,
 });
 
 export { links };

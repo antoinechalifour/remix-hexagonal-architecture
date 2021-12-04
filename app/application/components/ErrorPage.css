@@ -1,0 +1,20 @@
+.ErrorPage {
+  display: grid;
+  gap: var(--space-l);
+  margin: var(--space-4xl) 0;
+  text-align: center;
+}
+
+.ErrorPage a {
+  color: var(--color-text-secondary);
+  font-size: var(--size-text-xl);
+}
+
+.ErrorPageHero {
+  font-weight: bold;
+  font-size: 12rem;
+  color: var(--color-text-secondary);
+}
+
+.ErrorPageMessage {
+}

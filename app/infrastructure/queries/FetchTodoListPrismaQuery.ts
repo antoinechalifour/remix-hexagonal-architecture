@@ -2,6 +2,7 @@ import type { PrismaClient } from "@prisma/client";
 import type { FetchTodoListQuery } from "~/query/FetchTodoListQuery";
 import type { TodoListId } from "~/domain/TodoList";
 import type { TodoListReadModel } from "~/query/TodoListReadModel";
+import { todoListNotFound } from "~/infrastructure/errors";
 
 interface FetchTodoListPrismaQueryOptions {
   prisma: PrismaClient;
@@ -20,6 +21,8 @@ export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
       this.fetchDoingTodos(todoListId),
       this.fetchCompleteTodos(todoListId),
     ]);
+
+    if (!todoList) todoListNotFound(todoListId);
 
     return {
       ...todoList,
