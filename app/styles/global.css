@@ -33,6 +33,7 @@ body {
   --color-primary: hsl(240, 67%, 64%);
   --color-primary-disabled: hsl(240, 25%, 64%);
   --color-danger: hsl(345, 86%, 56%);
+  --color-danger-lighter: hsl(345, 86%, 80%);
   --size-text-xs: 1.2rem;
   --size-text-s: 1.4rem;
   --size-text: 1.6rem;

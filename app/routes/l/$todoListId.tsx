@@ -4,8 +4,9 @@ import type { TodoListReadModel } from "~/query/TodoListReadModel";
 
 import { MetaFunction, useLoaderData } from "remix";
 import { container } from "~/container";
-import { links, Todos } from "~/application/components/Todos";
+import { requireAuthentication } from "~/application/remix/http";
 import { AddTodoAction } from "~/application/actions/AddTodoAction";
+import { links, Todos } from "~/application/components/Todos";
 import { FetchTodoListPrismaQuery } from "~/infrastructure/queries/FetchTodoListPrismaQuery";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
@@ -16,14 +17,19 @@ export const meta: MetaFunction = ({ data: todoList }) => ({
 export { links };
 
 export const loader: LoaderFunction = async ({
+  request,
   params,
-}): Promise<TodoListReadModel> =>
-  container
+}): Promise<TodoListReadModel> => {
+  await requireAuthentication(request);
+  return container
     .build(FetchTodoListPrismaQuery)
     .run(params.todoListId as TodoListId);
+};
 
-export const action: ActionFunction = async (context) =>
-  container.build(AddTodoAction).run(context);
+export const action: ActionFunction = async (context) => {
+  await requireAuthentication(context.request);
+  return container.build(AddTodoAction).run(context);
+};
 
 export default function TodoListPage() {
   const todoList = useLoaderData<TodoListReadModel>();

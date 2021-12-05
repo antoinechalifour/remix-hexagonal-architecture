@@ -8,6 +8,8 @@ import { AddTodo } from "~/domain/AddTodo";
 import { ChangeTodoCompletion } from "~/domain/ChangeTodoCompletion";
 import { ArchiveTodo } from "~/domain/ArchiveTodo";
 import { ArchiveTodoList } from "~/domain/ArchiveTodoList";
+import { CredentialsEnvironmentRepository } from "~/infrastructure/repositories/CredentialsEnvironmentRepository";
+import { LoginFlow } from "~/application/authentication/LoginFlow";
 
 export const container = createContainer();
 
@@ -21,4 +23,6 @@ container.register({
   todos: asClass(TodoPrismaRepository).singleton(),
   todoLists: asClass(TodoListPrismaRepository).singleton(),
   fetchTodoList: asClass(FetchTodoListPrismaQuery).singleton(),
+  loginFlow: asClass(LoginFlow).singleton(),
+  credentials: asClass(CredentialsEnvironmentRepository).singleton(),
 });

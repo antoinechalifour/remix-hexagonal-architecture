@@ -1,4 +1,9 @@
 import Joi from "joi";
+import {
+  getSession,
+  isAuthenticatedSession,
+} from "~/application/remix/sessions";
+import { redirect } from "remix";
 
 const formatErrors = (error: Joi.ValidationError) => {
   const errors: Record<string, string> = {};
@@ -26,3 +31,15 @@ export const validateBody = async <T = unknown>(
 
   return [null, value!];
 };
+
+export const requireAuthentication = async (request: Request) => {
+  const session = await sessionFromCookies(request);
+
+  if (!isAuthenticatedSession(session)) throw redirect("/login");
+};
+
+export const header = (headerName: string, request: Request) =>
+  request.headers.get(headerName);
+
+export const sessionFromCookies = (request: Request) =>
+  getSession(header("Cookie", request));

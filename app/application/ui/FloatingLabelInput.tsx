@@ -9,12 +9,14 @@ interface FloatingLabelInputOptions {
   name: string;
   label: string;
   errorMessage?: string;
+  type?: string;
 }
 
 export const FloatingLabelInput = ({
   name,
   label,
   errorMessage,
+  type = "text",
 }: FloatingLabelInputOptions) => {
   const [value, setValue] = useState("");
   const isStickyLabel = value.length > 0;
@@ -26,7 +28,7 @@ export const FloatingLabelInput = ({
       })}
     >
       <input
-        type="text"
+        type={type}
         name={name}
         value={value}
         onChange={(e) => setValue(e.target.value)}
