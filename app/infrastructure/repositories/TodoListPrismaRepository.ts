@@ -1,6 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
-import type { TodoLists } from "../../domain/TodoLists";
-import type { TodoList } from "../../domain/TodoList";
+import type { TodoLists } from "~/domain/TodoLists";
+import type { TodoList } from "~/domain/TodoList";
 
 interface TodoListPrismaRepositoryOptions {
   prisma: PrismaClient;
@@ -54,7 +54,9 @@ export class TodoListPrismaRepository implements TodoLists {
   }
 
   async remove(todoListId: string): Promise<void> {
-    await this.prisma.todo.deleteMany();
+    await this.prisma.todo.deleteMany({
+      where: { todoListId },
+    });
     await this.prisma.todoList.delete({
       where: { id: todoListId },
     });
