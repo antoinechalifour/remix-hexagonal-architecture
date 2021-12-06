@@ -20,7 +20,11 @@ export const FloatingLabelInput = ({
   const isStickyLabel = value.length > 0;
 
   return (
-    <label className="FloatingLabelInput">
+    <label
+      className={classNames("FloatingLabelInput", {
+        "FloatingLabelInput--error": !!errorMessage,
+      })}
+    >
       <input
         type="text"
         name={name}
@@ -37,7 +41,7 @@ export const FloatingLabelInput = ({
 
       {errorMessage && (
         <span className="FloatingLabelInput__error" role="alert">
-          👉 {errorMessage}
+          <span aria-hidden>👉</span> {errorMessage}
         </span>
       )}
     </label>

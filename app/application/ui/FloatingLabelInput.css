@@ -40,9 +40,22 @@
   background: var(--color-background);
 }
 
+.FloatingLabelInput--error .FloatingLabelInput__label {
+  color: var(--color-danger);
+}
+
+.FloatingLabelInput--error input {
+  border-color: var(--color-danger);
+}
+
 .FloatingLabelInput__error {
   display: block;
   color: var(--color-danger);
   font-size: var(--size-text-s);
   padding: var(--space) var(--space) 0;
+}
+
+.FloatingLabelInput__error [aria-hidden] {
+  width: 2ch;
+  display: inline-block;
 }
