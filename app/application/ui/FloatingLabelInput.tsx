@@ -1,6 +1,6 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./FloatingLabelInput.css";
 
 export const links = componentCss(link(css));

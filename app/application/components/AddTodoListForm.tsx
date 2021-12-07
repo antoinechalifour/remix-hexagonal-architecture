@@ -5,7 +5,7 @@ import {
   links as floatingLabelInputLinks,
 } from "../ui/FloatingLabelInput";
 import { ButtonPrimary, links as buttonLinks } from "../ui/Button";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./AddTodoListForm.css";
 
 export const links = componentCss(

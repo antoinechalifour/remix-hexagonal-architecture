@@ -1,5 +1,5 @@
 import React from "react";
-import { componentCss, link } from "~/application/remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./ErrorPage.css";
 
 export const links = componentCss(link(css));

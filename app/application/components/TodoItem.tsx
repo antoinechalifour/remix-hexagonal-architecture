@@ -8,7 +8,7 @@ import {
   links as checkboxOptionsLinks,
 } from "../ui/CheckboxOption";
 import { Button, links as buttonLinks } from "../ui/Button";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./TodoItem.css";
 
 export const links = componentCss(

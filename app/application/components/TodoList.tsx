@@ -5,7 +5,7 @@ import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage, links as emptyMessageLinks } from "../ui/EmptyMessage";
 import { TodoItem, links as todoItemLinks } from "./TodoItem";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./TodoList.css";
 
 export const links = componentCss(

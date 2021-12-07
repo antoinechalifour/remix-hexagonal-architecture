@@ -1,15 +1,9 @@
 import type { ActionFunction } from "remix";
-import type { TodoId } from "~/domain/Todo";
-
-import { redirect } from "remix";
 import { container } from "~/container";
-import { ArchiveTodo } from "~/domain/ArchiveTodo";
+import { ArchiveTodoAction } from "~/application/actions/ArchiveTodoAction";
 
-export const action: ActionFunction = async ({ params }) => {
-  await container.build(ArchiveTodo).execute(params.todoId as TodoId);
-
-  return redirect(`/l/${params.todoListId}`);
-};
+export const action: ActionFunction = async (context) =>
+  container.build(ArchiveTodoAction).run(context);
 
 export default function Noop() {
   return null;

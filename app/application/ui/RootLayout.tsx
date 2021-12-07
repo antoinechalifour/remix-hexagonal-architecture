@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "remix";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./RootLayout.css";
 
 export const links = componentCss(link(css));

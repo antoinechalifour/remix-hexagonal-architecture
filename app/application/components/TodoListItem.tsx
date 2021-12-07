@@ -4,7 +4,7 @@ import { Form, Link, useTransition } from "remix";
 import classNames from "classnames";
 import { displayDate } from "~/domain/Date";
 import { Button, links as buttonLinks } from "../ui/Button";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./TodoListItem.css";
 
 export const links = componentCss(...buttonLinks(), link(css));

@@ -4,9 +4,9 @@ import React from "react";
 import { displayDate } from "~/domain/Date";
 import { links as emptyMessageLinks } from "../ui/EmptyMessage";
 import { PageTitle, links as pageTitleLinks } from "../ui/PageTitle";
-import { componentCss, link } from "../remix";
 import { AddTodoForm, links as addTodoFormLinks } from "./AddTodoForm";
 import { TodoList, links as todoListLinks } from "./TodoList";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./Todos.css";
 
 export const links = componentCss(

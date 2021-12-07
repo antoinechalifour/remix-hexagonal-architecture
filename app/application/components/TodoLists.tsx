@@ -1,15 +1,16 @@
+import type { HomePageTodoListReadModel } from "~/query/HomePageReadModel";
+
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage, links as emptyMessageLinks } from "../ui/EmptyMessage";
 import { links as pageTitleLinks, PageTitle } from "../ui/PageTitle";
-import { componentCss, link } from "../remix";
 import { links as todoListItemLinks, TodoListItem } from "./TodoListItem";
 import {
   AddTodoListForm,
   links as addTodoListFormLinks,
 } from "./AddTodoListForm";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./TodoLists.css";
-import { HomePageTodoListReadModel } from "~/query/HomePageReadModel";
 
 export const links = componentCss(
   ...addTodoListFormLinks(),

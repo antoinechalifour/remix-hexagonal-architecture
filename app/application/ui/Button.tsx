@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 
 import classNames from "classnames";
-import { componentCss, link } from "../remix";
+import { componentCss, link } from "~/application/remix/styling";
 import css from "./Button.css";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
