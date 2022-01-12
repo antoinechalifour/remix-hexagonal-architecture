@@ -1,14 +1,23 @@
+import type { TodoLists } from "~/domain/TodoLists";
+import type { Clock } from "~/domain/Clock";
+import type { GenerateId } from "~/domain/GenerateId";
+
 import { AddTodoList } from "~/domain/AddTodoList";
-import { TodoLists } from "~/domain/TodoLists";
-import { TodoListsInMemory } from "./TodoListsInMemory";
+import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
+import { FixedClock } from "./fakes/FixedClock";
+import { GenerateTestId } from "./fakes/GenerateTestId";
 
 describe("AddTodoList", () => {
   let addTodoList: AddTodoList;
   let todoLists: TodoLists;
+  let generateId: GenerateId;
+  let clock: Clock;
 
   beforeEach(() => {
     todoLists = new TodoListsInMemory();
-    addTodoList = new AddTodoList({ todoLists });
+    generateId = new GenerateTestId("todoList");
+    clock = new FixedClock();
+    addTodoList = new AddTodoList({ todoLists, generateId, clock });
   });
 
   it("should add a new todo list", async () => {
@@ -22,8 +31,8 @@ describe("AddTodoList", () => {
     // Assert
     const [todoList] = await todoLists.all();
     expect(todoList).toEqual({
-      id: expect.any(String),
-      createdAt: expect.any(String),
+      id: "todoList/1",
+      createdAt: "2022-01-05T12:00:00.000Z",
       title: theTitle,
     });
   });

@@ -10,6 +10,8 @@ import { ArchiveTodo } from "~/domain/ArchiveTodo";
 import { ArchiveTodoList } from "~/domain/ArchiveTodoList";
 import { CredentialsEnvironmentRepository } from "~/infrastructure/repositories/CredentialsEnvironmentRepository";
 import { LoginFlow } from "~/application/authentication/LoginFlow";
+import { GenerateUUID } from "~/infrastructure/GenerateUUID";
+import { RealClock } from "~/infrastructure/RealClock";
 
 export const container = createContainer();
 
@@ -25,4 +27,6 @@ container.register({
   fetchTodoList: asClass(FetchTodoListPrismaQuery).singleton(),
   loginFlow: asClass(LoginFlow).singleton(),
   credentials: asClass(CredentialsEnvironmentRepository).singleton(),
+  generateId: asClass(GenerateUUID).singleton(),
+  clock: asClass(RealClock).singleton(),
 });

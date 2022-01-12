@@ -1,6 +1,8 @@
 import type { Todo } from "./Todo";
 
 import { v4 as uuid } from "uuid";
+import { Clock } from "~/domain/Clock";
+import { GenerateId } from "~/domain/GenerateId";
 
 export type TodoListId = string;
 
@@ -10,9 +12,13 @@ export type TodoList = {
   createdAt: string;
 };
 
-export const makeTodoList = (title: string): TodoList => ({
-  id: uuid(),
-  createdAt: new Date().toISOString(),
+export const makeTodoList = (
+  title: string,
+  generateId: GenerateId,
+  clock: Clock
+): TodoList => ({
+  id: generateId.generate(),
+  createdAt: clock.now().toISOString(),
   title,
 });
 
