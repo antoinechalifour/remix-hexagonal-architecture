@@ -3,7 +3,6 @@ import type { TodoId } from "~/domain/Todo";
 
 import { redirect } from "remix";
 import Joi from "joi";
-import { container } from "~/container";
 import { validateBody } from "~/application/remix/http";
 import { ChangeTodoCompletion } from "~/domain/ChangeTodoCompletion";
 
@@ -28,9 +27,10 @@ export class ChangeTodoCompletionAction {
 
     if (errors) return { errors };
 
-    await container
-      .build(ChangeTodoCompletion)
-      .execute(params.todoId as TodoId, payload.isChecked as string);
+    await this.changeTodoCompletion.execute(
+      params.todoId as TodoId,
+      payload.isChecked as string
+    );
 
     return redirect(`/l/${params.todoListId}`);
   }
