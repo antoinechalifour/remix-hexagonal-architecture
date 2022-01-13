@@ -23,15 +23,15 @@ describe("Archiving a todo", () => {
 
   it("should remove the todo from the todo list", async () => {
     // Arrange
-    const todoList = aTodoList().build();
-    const todo = addTodo(todoList, "Buy bread", generateId, clock);
-    await todos.save(todo);
-    expect(await todos.ofTodoList(todoList.id)).toHaveLength(1);
+    const theTodoList = aTodoList().build();
+    const theTodo = addTodo(theTodoList, "Buy bread", generateId, clock);
+    await todos.save(theTodo);
+    expect(await todos.ofTodoList(theTodoList.id)).toHaveLength(1);
 
     // Act
-    await archiveTodo.execute(todo.id);
+    await archiveTodo.execute(theTodo.id);
 
     // Assert
-    expect(await todos.ofTodoList(todoList.id)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoList.id)).toHaveLength(0);
   });
 });
