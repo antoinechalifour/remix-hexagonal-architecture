@@ -7,7 +7,7 @@ import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { FixedClock } from "./fakes/FixedClock";
 import { GenerateTestId } from "./fakes/GenerateTestId";
 
-describe("AddTodoList", () => {
+describe("Adding a todo list", () => {
   let addTodoList: AddTodoList;
   let todoLists: TodoLists;
   let generateId: GenerateId;

@@ -10,7 +10,7 @@ import { Clock } from "~/domain/Clock";
 import { GenerateTestId } from "./fakes/GenerateTestId";
 import { FixedClock } from "./fakes/FixedClock";
 
-describe("AddTodo", () => {
+describe("Adding a todo", () => {
   let addTodo: AddTodo;
   let todos: Todos;
   let todoLists: TodoLists;
