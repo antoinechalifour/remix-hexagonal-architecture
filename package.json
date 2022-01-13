@@ -8,7 +8,14 @@
     "dev": "remix dev",
     "postinstall": "remix setup node",
     "start": "remix-serve build",
-    "test": "jest"
+    "test": "jest",
+    "e2e:clean": "rm -f prisma/e2e_todolists.db",
+    "e2e:prepare": "DATABASE_URL=file:./e2e_todolists.db prisma migrate deploy",
+    "e2e:app": "PORT=3333 DATABASE_URL=file:./e2e_todolists.db remix dev",
+    "e2e:cypress:run": "cypress run",
+    "e2e:cypress:dev": "cypress open",
+    "e2e:run": "start-test e2e:app 3333 e2e:cypress:run",
+    "e2e:dev": "start-test e2e:app 3333 e2e:cypress:dev"
   },
   "dependencies": {
     "@prisma/client": "^3.5.0",
@@ -27,13 +34,16 @@
   },
   "devDependencies": {
     "@remix-run/dev": "^1.0.4",
+    "@testing-library/cypress": "^8.0.2",
     "@types/jest": "^27.4.0",
     "@types/react": "^17.0.24",
     "@types/react-dom": "^17.0.9",
     "@types/uuid": "^8.3.3",
+    "cypress": "^9.2.1",
     "jest": "^27.4.7",
     "prettier": "^2.4.1",
     "prisma": "3.5.0",
+    "start-server-and-test": "^1.14.0",
     "ts-jest": "^27.1.2",
     "typescript": "^4.1.2"
   },
