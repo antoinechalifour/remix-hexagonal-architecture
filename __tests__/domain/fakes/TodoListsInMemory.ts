@@ -1,8 +1,8 @@
-import { TodoLists } from "~/domain/TodoLists";
-import { TodoList, TodoListId } from "~/domain/TodoList";
+import type { TodoLists } from "~/domain/TodoLists";
+import type { TodoList, TodoListId } from "~/domain/TodoList";
 
 export class TodoListsInMemory implements TodoLists {
-  __database = new Map<string, TodoList>();
+  private __database = new Map<string, TodoList>();
 
   all(): Promise<TodoList[]> {
     return Promise.resolve([...this.__database.values()]);
