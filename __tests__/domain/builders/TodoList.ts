@@ -1,10 +1,8 @@
-import { TodoList } from "~/domain/TodoList";
+import type { TodoList } from "~/domain/TodoList";
 
 interface TodoListBuilder {
   todoList: TodoList;
-
   identifiedBy(id: string): TodoListBuilder;
-
   build(): TodoList;
 }
 
