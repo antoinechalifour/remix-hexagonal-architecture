@@ -3,7 +3,7 @@ describe("The user can manage a todo list", () => {
     cy.exec("yarn e2e:clean && yarn e2e:prepare");
   });
 
-  it("creates a new todo list and navigates to its page", () => {
+  it("creates a new todo list and allows adding todos", () => {
     cy.visit("/");
 
     givenALoggedInUser();
@@ -11,8 +11,8 @@ describe("The user can manage a todo list", () => {
     theyCanAddATodo("Beer");
     theyCanAddATodo("Pizza");
     theyCanAddATodo("Chocolate");
-    theyCanCompleteTheTodo(/Pizza/);
-    theyCanUncompleteTheTodo(/Pizza/);
+    theyCanCompleteTheTodo(/Pizza2/);
+    theyCanUncompleteTheTodo(/Pizza3/);
   });
 });
 
@@ -48,7 +48,7 @@ function theyCanUncompleteTheTodo(todo) {
     .within(() => {
       cy.findByText(todo).click();
     });
-  cy.wait(100);
+  cy.wait(500);
   cy.findByText(/^Things to do/)
     .parent()
     .within(() => {
