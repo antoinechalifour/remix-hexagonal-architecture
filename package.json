@@ -5,8 +5,10 @@
   "license": "",
   "scripts": {
     "build": "remix build",
+    "predev": "yarn prepare",
     "dev": "remix dev",
     "postinstall": "remix setup node",
+    "prepare": "DATABASE_URL=file:./todolists.db prisma migrate deploy",
     "start": "remix-serve build",
     "test": "jest",
     "e2e:clean": "rm -f prisma/e2e_todolists.db",
