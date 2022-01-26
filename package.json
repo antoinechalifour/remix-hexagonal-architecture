@@ -8,6 +8,7 @@
     "predev": "yarn prepare",
     "dev": "remix dev",
     "postinstall": "remix setup node",
+    "clean": "rm -f prisma/todolists.db",
     "prepare": "DATABASE_URL=file:./todolists.db prisma migrate deploy",
     "start": "remix-serve build",
     "test": "jest",
