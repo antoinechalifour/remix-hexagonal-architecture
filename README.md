@@ -61,6 +61,37 @@ yarn dev
 
 This starts your app in development mode, rebuilding assets on file changes.
 
+To log in, use the following credentials:
+
+- Login: `chan`
+- Password: `azerty`
+
+### Tests
+
+From your terminal:
+
+```sh
+yarn test
+```
+
+This runs the automated tests against the source code.
+
+#### E2E tests
+
+The project uses [Cypress](https://www.cypress.io/) to automatically interact with the app, like a user would do.
+
+From your terminal:
+
+```sh
+yarn e2e:run
+```
+
+This runs the E2E tests in your terminal. If you want to "see" the tests running in the browser, use:
+
+```sh
+yarn e2e:dev
+```
+
 ### Deployment
 
 First, build your app for production:
