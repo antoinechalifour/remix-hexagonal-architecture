@@ -1,7 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
-import type { Todos } from "../../domain/Todos";
-import type { TodoListId } from "../../domain/TodoList";
-import type { Todo, TodoId } from "../../domain/Todo";
+import type { Todos } from "~/domain/Todos";
+import type { TodoListId } from "~/domain/TodoList";
+import type { Todo, TodoId } from "~/domain/Todo";
 
 interface TodoPrismaRepositoryOptions {
   prisma: PrismaClient;

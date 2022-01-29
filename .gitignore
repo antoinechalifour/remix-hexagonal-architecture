@@ -4,6 +4,6 @@ node_modules
 /build
 /public/build
 
-prisma/todolists.db
-prisma/e2e_todolists.*
+prisma/*.db
+prisma/*.db-journal
 .idea
