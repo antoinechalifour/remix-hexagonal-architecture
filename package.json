@@ -11,7 +11,7 @@
     "clean": "rm -f prisma/todolists.db",
     "prepare": "DATABASE_URL=file:./todolists.db prisma migrate deploy",
     "start": "remix-serve build",
-    "test": "jest",
+    "test": "jest --runInBand",
     "integration:clean": "rm -f prisma/integration_todolists.db",
     "integration:prepare": "DATABASE_URL=file:./integration_todolists.db prisma migrate deploy",
     "e2e:clean": "rm -f prisma/e2e_todolists.db",
