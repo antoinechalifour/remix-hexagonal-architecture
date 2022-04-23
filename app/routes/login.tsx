@@ -1,12 +1,7 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import { container } from "~/container";
-import { componentCss } from "~/application/remix/styling";
-import { LoginAction } from "~/application/actions/LoginAction";
-import { LoadLoginPage } from "~/application/authentication/LoadLoginPage";
-import {
-  links as loginFormLinks,
-  LoginForm,
-} from "~/application/components/LoginForm";
+import type { RemixAppContext } from "shared";
+import { componentCss } from "web/remix/styling";
+import { links as loginFormLinks, LoginForm } from "web/components/LoginForm";
 
 export const meta: MetaFunction = () => ({
   title: "TLM | Login",
@@ -14,11 +9,11 @@ export const meta: MetaFunction = () => ({
 
 export const links = componentCss(...loginFormLinks());
 
-export const loader: LoaderFunction = (context) =>
-  container.build(LoadLoginPage).run(context);
+export const loader: LoaderFunction = (args) =>
+  (args.context as RemixAppContext).loaders.loginPage.run(args);
 
-export const action: ActionFunction = (context) =>
-  container.build(LoginAction).run(context);
+export const action: ActionFunction = (args) =>
+  (args.context as RemixAppContext).actions.login.run(args);
 
 export default function LoginPage() {
   return <LoginForm />;
