@@ -1,13 +1,9 @@
 import type { ActionFunction } from "remix";
 
-import { container } from "~/container";
-import { requireAuthentication } from "~/application/remix/http";
-import { ChangeTodoCompletionAction } from "~/application/actions/ChangeTodoCompletionAction";
+import { RemixAppContext } from "shared";
 
-export const action: ActionFunction = async (context) => {
-  await requireAuthentication(context.request);
-  return container.build(ChangeTodoCompletionAction).run(context);
-};
+export const action: ActionFunction = async (args) =>
+  (args.context as RemixAppContext).actions.changeTodoCompletion.run(args);
 
 export default function Noop() {
   return null;
