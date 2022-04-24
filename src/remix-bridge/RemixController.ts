@@ -1,5 +1,5 @@
-import { All, Body, Controller, Next, Req, Res } from "@nestjs/common";
-import { NextFunction, Request, Response } from "express";
+import { All, Body, Controller, Get, Next, Req, Res } from "@nestjs/common";
+import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import { createRequestHandler } from "@remix-run/express";
 import { RemixNestContextLoader } from "./RemixNestContextLoader";
@@ -36,6 +36,30 @@ export class RemixController {
       // loaders and actions. This is where you can bridge the gap between Remix
       // and your server
       getLoadContext: () => this.remixNestContextLoader.loadContext(),
+    })(request, response, next);
+  }
+
+  @Get("/build")
+  serveBuild(
+    @Req() request: Request,
+    @Res() response: Response,
+    @Next() next: NextFunction
+  ) {
+    return express.static("public/build", {
+      immutable: true,
+      maxAge: "1y",
+    })(request, response, next);
+  }
+
+  @Get("/fonts")
+  serveFonts(
+    @Req() request: Request,
+    @Res() response: Response,
+    @Next() next: NextFunction
+  ) {
+    return express.static("public/fonts", {
+      immutable: true,
+      maxAge: "1y",
     })(request, response, next);
   }
 }

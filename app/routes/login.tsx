@@ -1,7 +1,7 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
 import type { RemixAppContext } from "shared";
-import { componentCss } from "web/remix/styling";
 import { links as loginFormLinks, LoginForm } from "web/components/LoginForm";
+import { componentCss } from "../stylesheet";
 
 export const meta: MetaFunction = () => ({
   title: "TLM | Login",
