@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { RemixAppContext } from "shared";
 import { AddTodoAction } from "./actions/AddTodoAction";
 import { AddTodoListAction } from "./actions/AddTodoListAction";
 import { ArchiveTodoAction } from "./actions/ArchiveTodoAction";
@@ -24,7 +23,7 @@ export class RemixNestContextLoader {
     private readonly todoListPageLoader: TodoListPageLoader
   ) {}
 
-  loadContext(): RemixAppContext {
+  loadContext() {
     return {
       actions: {
         addTodo: this.addTodo,
@@ -42,3 +41,5 @@ export class RemixNestContextLoader {
     };
   }
 }
+
+export type RemixAppContext = ReturnType<RemixNestContextLoader["loadContext"]>;
