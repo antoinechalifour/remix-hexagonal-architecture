@@ -4,6 +4,8 @@ module.exports = {
   testEnvironment: "node",
   moduleNameMapper: {
     "web/(.*)$": "<rootDir>/app/$1",
+    "todo-list-manager$": "<rootDir>/src/todo-list-manager",
+    infrastructure$: "<rootDir>/src/infrastructure",
   },
   testMatch: ["**/__tests__/**/*.test.ts?(x)"],
 };
