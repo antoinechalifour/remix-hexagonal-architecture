@@ -1,8 +1,9 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import type { HomePageDto, RemixAppContext } from "shared";
+import type { HomePageDto } from "shared";
+import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";
-import { links, TodoLists } from "web/components/TodoLists";
+import { links, TodoLists } from "front/components/TodoLists";
 
 export const meta: MetaFunction = ({ data: homePage }) => ({
   title: `TLM | Your todo lists (${homePage.totalNumberOfDoingTodos})`,
@@ -12,10 +13,10 @@ export const meta: MetaFunction = ({ data: homePage }) => ({
 export { links };
 
 export const loader: LoaderFunction = async (args): Promise<HomePageDto> =>
-  (args.context as RemixAppContext).loaders.homePage.run(args);
+  (args.context as RemixAppContext).loaders.homePage(args);
 
 export const action: ActionFunction = async (args) =>
-  (args.context as RemixAppContext).actions.addTodoList.run(args);
+  (args.context as RemixAppContext).actions.addTodoList(args);
 
 export default function IndexPage() {
   const { todoLists } = useLoaderData<HomePageDto>();

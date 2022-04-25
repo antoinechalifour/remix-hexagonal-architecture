@@ -14,14 +14,14 @@ import {
 import * as React from "react";
 
 import resetCssUrl from "reset.css/reset.css";
-import globalCssUrl from "web/styles/global.css";
+import globalCssUrl from "front/styles/global.css";
 import { RootLayout, links as rootLayoutLinks } from "./ui/RootLayout";
 import {
   ErrorPage,
   ErrorPageHero,
   ErrorPageMessage,
   links as errorPageLinks,
-} from "web/components/ErrorPage";
+} from "front/components/ErrorPage";
 
 export const links: LinksFunction = () => {
   return [

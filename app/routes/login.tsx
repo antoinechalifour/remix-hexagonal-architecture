@@ -1,6 +1,7 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import type { RemixAppContext } from "shared";
-import { links as loginFormLinks, LoginForm } from "web/components/LoginForm";
+import type { RemixAppContext } from "web";
+
+import { links as loginFormLinks, LoginForm } from "front/components/LoginForm";
 import { componentCss } from "../stylesheet";
 
 export const meta: MetaFunction = () => ({
@@ -10,10 +11,10 @@ export const meta: MetaFunction = () => ({
 export const links = componentCss(...loginFormLinks());
 
 export const loader: LoaderFunction = (args) =>
-  (args.context as RemixAppContext).loaders.loginPage.run(args);
+  (args.context as RemixAppContext).loaders.login(args);
 
 export const action: ActionFunction = (args) =>
-  (args.context as RemixAppContext).actions.login.run(args);
+  (args.context as RemixAppContext).actions.login(args);
 
 export default function LoginPage() {
   return <LoginForm />;

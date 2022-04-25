@@ -1,8 +1,9 @@
 import type { ActionFunction, LoaderFunction } from "remix";
-import type { TodoListDto, RemixAppContext } from "shared";
+import type { TodoListDto } from "shared";
+import type { RemixAppContext } from "web";
 
 import { MetaFunction, useLoaderData } from "remix";
-import { links, Todos } from "web/components/Todos";
+import { links, Todos } from "front/components/Todos";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
   title: `TLM | ${todoList?.title} (${todoList?.doingTodos.length})`,
@@ -12,10 +13,10 @@ export const meta: MetaFunction = ({ data: todoList }) => ({
 export { links };
 
 export const loader: LoaderFunction = async (args): Promise<TodoListDto> =>
-  (args.context as RemixAppContext).loaders.todoListPage.run(args);
+  (args.context as RemixAppContext).loaders.todoList(args);
 
 export const action: ActionFunction = async (args) =>
-  (args.context as RemixAppContext).actions.addTodo.run(args);
+  (args.context as RemixAppContext).actions.addTodo(args);
 
 export default function TodoListPage() {
   const todoList = useLoaderData<TodoListDto>();

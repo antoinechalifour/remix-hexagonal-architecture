@@ -10,8 +10,9 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "web/*": ["./app/*"],
-      "remix-bridge": ["./src/remix-bridge"],
+      "front/*": ["./app/*"],
+      "remix-nest-adapter": ["./src/remix-nest-adapter"],
+      "web": ["./src/web"],
       "shared": ["./src/shared"],
       "infrastructure": ["./src/infrastructure"],
       "authentication": ["./src/authentication"],
