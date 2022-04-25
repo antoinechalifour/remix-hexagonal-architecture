@@ -1,14 +1,35 @@
-import { All, Body, Controller, Get, Next, Req, Res } from "@nestjs/common";
+import {
+  All,
+  Body,
+  Controller,
+  Get,
+  Inject,
+  Next,
+  Req,
+  Res,
+} from "@nestjs/common";
 import express, { NextFunction, Request, Response } from "express";
 import path from "path";
 import { createRequestHandler } from "@remix-run/express";
 import { RemixNestContextLoader } from "./RemixNestContextLoader";
+import { RemixNestConfiguration } from "./RemixNestConfiguration";
 
 @Controller("/")
 export class RemixController {
+  private readonly staticMiddleware;
+
   constructor(
-    private readonly remixNestContextLoader: RemixNestContextLoader
-  ) {}
+    private readonly remixNestContextLoader: RemixNestContextLoader,
+    @Inject("options") private readonly configuration: RemixNestConfiguration
+  ) {
+    this.staticMiddleware = express.static(
+      this.configuration.publicBuildFolder,
+      {
+        immutable: true,
+        maxAge: "#y",
+      }
+    );
+  }
 
   @Get("/build/*")
   serveBuild(
@@ -16,10 +37,7 @@ export class RemixController {
     @Res() response: Response,
     @Next() next: NextFunction
   ) {
-    return express.static(path.join(__dirname, "../../public"), {
-      immutable: true,
-      maxAge: "1y",
-    })(request, response, next);
+    return this.staticMiddleware(request, response, next);
   }
 
   @Get("/fonts/*")
@@ -28,10 +46,7 @@ export class RemixController {
     @Res() response: Response,
     @Next() next: NextFunction
   ) {
-    return express.static(path.join(__dirname, "../../public"), {
-      immutable: true,
-      maxAge: "1y",
-    })(request, response, next);
+    return this.staticMiddleware(request, response, next);
   }
 
   @All("*")
@@ -54,7 +69,7 @@ export class RemixController {
     return createRequestHandler({
       // `remix build` and `remix dev` output files to a build directory, you need
       // to pass that build to the request handler
-      build: require("../../build"),
+      build: require(this.configuration.serverBuildFolder),
 
       // return anything you want here to be available as `context` in your
       // loaders and actions. This is where you can bridge the gap between Remix

@@ -42,4 +42,6 @@ export class RemixNestContextLoader {
   }
 }
 
-export type RemixAppContext = ReturnType<RemixNestContextLoader["loadContext"]>;
+export type RemixAppContext = Awaited<
+  ReturnType<RemixNestContextLoader["loadContext"]>
+>;
