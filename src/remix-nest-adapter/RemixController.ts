@@ -1,3 +1,4 @@
+import path from "path";
 import {
   All,
   Body,
@@ -9,24 +10,24 @@ import {
   Res,
 } from "@nestjs/common";
 import express, { NextFunction, Request, Response } from "express";
-import path from "path";
 import { createRequestHandler } from "@remix-run/express";
-import { RemixNestContextLoader } from "./RemixNestContextLoader";
-import { RemixNestConfiguration } from "./RemixNestConfiguration";
+import { RemixNestBuildConfig } from "./RemixNestBuildConfig";
+import { ACTIONS_CLASS, BUILD_CONFIG, LOADERS_CLASS } from "./keys";
 
 @Controller("/")
 export class RemixController {
   private readonly staticMiddleware;
 
   constructor(
-    private readonly remixNestContextLoader: RemixNestContextLoader,
-    @Inject("options") private readonly configuration: RemixNestConfiguration
+    @Inject(BUILD_CONFIG) private readonly configuration: RemixNestBuildConfig,
+    @Inject(ACTIONS_CLASS) private readonly actions: unknown,
+    @Inject(LOADERS_CLASS) private readonly loaders: unknown
   ) {
     this.staticMiddleware = express.static(
       this.configuration.publicBuildFolder,
       {
         immutable: true,
-        maxAge: "#y",
+        maxAge: "1y",
       }
     );
   }
@@ -74,7 +75,10 @@ export class RemixController {
       // return anything you want here to be available as `context` in your
       // loaders and actions. This is where you can bridge the gap between Remix
       // and your server
-      getLoadContext: () => this.remixNestContextLoader.loadContext(),
+      getLoadContext: () => ({
+        actions: this.actions,
+        loaders: this.loaders,
+      }),
     })(request, response, next);
   }
 }

@@ -3,7 +3,7 @@ module.exports = {
   preset: "ts-jest",
   testEnvironment: "node",
   moduleNameMapper: {
-    "web/(.*)$": "<rootDir>/app/$1",
+    "front/(.*)$": "<rootDir>/app/$1",
     "todo-list-manager$": "<rootDir>/src/todo-list-manager",
     infrastructure$: "<rootDir>/src/infrastructure",
   },

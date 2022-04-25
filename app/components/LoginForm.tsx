@@ -3,9 +3,9 @@ import { Form, useLoaderData } from "remix";
 import {
   FloatingLabelInput,
   links as floatingLabelInputLinks,
-} from "web/ui/FloatingLabelInput";
-import { ButtonPrimary, links as buttonPrimaryLinks } from "web/ui/Button";
-import { links as pageTitleLinks, PageTitle } from "web/ui/PageTitle";
+} from "front/ui/FloatingLabelInput";
+import { ButtonPrimary, links as buttonPrimaryLinks } from "front/ui/Button";
+import { links as pageTitleLinks, PageTitle } from "front/ui/PageTitle";
 import { componentCss, link } from "../stylesheet";
 import css from "./LoginForm.css";
 

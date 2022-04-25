@@ -1,13 +1,17 @@
+import path from "path";
 import { NestFactory } from "@nestjs/core";
 import { Module } from "@nestjs/common";
-import { RemixModule } from "remix-bridge";
-import path from "path";
+import { RemixModule } from "remix-nest-adapter";
+import { WebModule } from "web";
 
 @Module({
   imports: [
     RemixModule.forRoot({
-      publicBuildFolder: path.join(__dirname, "../public"),
-      serverBuildFolder: path.join(__dirname, "../build"),
+      buildConfig: {
+        publicBuildFolder: path.join(__dirname, "../public"),
+        serverBuildFolder: path.join(__dirname, "../build"),
+      },
+      handlerModule: WebModule,
     }),
   ],
 })
