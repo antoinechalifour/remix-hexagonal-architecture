@@ -1,9 +1,15 @@
 import { NestFactory } from "@nestjs/core";
 import { Module } from "@nestjs/common";
 import { RemixModule } from "remix-bridge";
+import path from "path";
 
 @Module({
-  imports: [RemixModule],
+  imports: [
+    RemixModule.forRoot({
+      publicBuildFolder: path.join(__dirname, "../public"),
+      serverBuildFolder: path.join(__dirname, "../build"),
+    }),
+  ],
 })
 class AppModule {}
 

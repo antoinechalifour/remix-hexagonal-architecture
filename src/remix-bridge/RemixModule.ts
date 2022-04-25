@@ -1,17 +1,18 @@
-import { Module } from "@nestjs/common";
+import { DynamicModule, Module } from "@nestjs/common";
 import { RemixController } from "./RemixController";
-import { AddTodoAction } from "./actions/AddTodoAction";
-import { TodoListManagerModule } from "todo-list-manager";
-import { AuthenticationModule } from "authentication";
-import { ArchiveTodoAction } from "./actions/ArchiveTodoAction";
-import { ChangeTodoCompletionAction } from "./actions/ChangeTodoCompletionAction";
-import { AddTodoListAction } from "./actions/AddTodoListAction";
-import { ArchiveTodoListAction } from "./actions/ArchiveTodoListAction";
-import { LoginAction } from "./actions/LoginAction";
 import { RemixNestContextLoader } from "./RemixNestContextLoader";
 import { LoginPageLoader } from "./loaders/LoginPageLoader";
 import { HomePageLoader } from "./loaders/HomePageLoader";
 import { TodoListPageLoader } from "./loaders/TodoListPageLoader";
+import { TodoListManagerModule } from "todo-list-manager";
+import { AuthenticationModule } from "authentication";
+import { ArchiveTodoListAction } from "./actions/ArchiveTodoListAction";
+import { AddTodoListAction } from "./actions/AddTodoListAction";
+import { ArchiveTodoAction } from "./actions/ArchiveTodoAction";
+import { AddTodoAction } from "./actions/AddTodoAction";
+import { LoginAction } from "./actions/LoginAction";
+import { RemixNestConfiguration } from "./RemixNestConfiguration";
+import { ChangeTodoCompletionAction } from "./actions/ChangeTodoCompletionAction";
 
 @Module({
   imports: [TodoListManagerModule, AuthenticationModule],
@@ -29,4 +30,11 @@ import { TodoListPageLoader } from "./loaders/TodoListPageLoader";
     TodoListPageLoader,
   ],
 })
-export class RemixModule {}
+export class RemixModule {
+  static forRoot(options: RemixNestConfiguration): DynamicModule {
+    return {
+      module: RemixModule,
+      providers: [{ provide: "options", useValue: options }],
+    };
+  }
+}
