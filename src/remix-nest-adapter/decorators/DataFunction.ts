@@ -1,7 +1,6 @@
 import { DataFunctionArgs } from "@remix-run/node";
 import { validateSync, ValidationError } from "class-validator";
 import { getSession } from "../../web/sessions";
-import { header } from "../../web/http";
 import { METADATA_BODY } from "./Body";
 import { METADATA_PARAMS } from "./Params";
 import { METADATA_SESSION } from "./CurrentSession";
@@ -12,7 +11,7 @@ class DecoratorValidationError extends Error {
   }
 }
 
-interface ErrorFormatter {
+export interface ErrorFormatter {
   format(errors: ValidationError[]): Record<string, string>;
 }
 
@@ -94,7 +93,7 @@ export const DataFunction =
     }
 
     function parseSession(args: DataFunctionArgs) {
-      return getSession(header("Cookie", args.request));
+      return getSession(args.request.headers.get("Cookie"));
     }
 
     descriptor.value = async function (args: DataFunctionArgs) {
