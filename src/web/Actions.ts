@@ -1,14 +1,27 @@
 import { Injectable } from "@nestjs/common";
-import { DataFunctionArgs } from "@remix-run/node";
-import { redirect } from "remix";
-import Joi from "joi";
+import { redirect } from "@remix-run/node";
+import { Session } from "remix";
 import { LoginApplicationService } from "authentication";
 import {
   TodoApplicationService,
   TodoListApplicationService,
 } from "todo-list-manager";
-import { commitSession, getSession } from "./sessions";
-import { header, requireAuthentication, validateBody } from "./http";
+import {
+  DataFunction,
+  Authenticated,
+  Body,
+  CurrentSession,
+  Params,
+} from "./decorators";
+import { AddTodoBody, AddTodoParams } from "./dtos/AddTodo";
+import { ArchiveTodoParams } from "./dtos/ArchiveTodo";
+import {
+  ChangeTodoCompletionBody,
+  ChangeTodoCompletionParams,
+} from "./dtos/ChangeTodoCompletion";
+import { AddTodoListBody } from "./dtos/AddTodoList";
+import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
+import { LoginBody } from "./dtos/Login";
 
 @Injectable()
 export class Actions {
@@ -18,116 +31,57 @@ export class Actions {
     private readonly todoListApplicationService: TodoListApplicationService
   ) {}
 
-  async login({ request }: DataFunctionArgs) {
-    const session = await getSession(header("Cookie", request));
-    const [errors, payload] = await validateBody(
-      Joi.object({
-        username: Joi.string().required(),
-        password: Joi.string().required(),
-      }),
-      request
+  @DataFunction()
+  async login(@Body() body: LoginBody, @CurrentSession() session: Session) {
+    const [url, cookie] = await this.loginApplicationService.login(
+      session,
+      body.username,
+      body.password
     );
-
-    if (errors) return { errors };
-
-    const [error, userId] = await this.loginApplicationService.login(
-      payload.username,
-      payload.password
-    );
-
-    let url;
-
-    if (error) {
-      session.flash("error", error.message);
-      url = "/login";
-    } else {
-      session.set("userId", userId);
-      url = "/";
-    }
 
     return redirect(url, {
-      headers: {
-        "Set-Cookie": await commitSession(session),
-      },
+      headers: { "Set-Cookie": cookie },
     });
   }
 
-  async addTodo({ request, params }: DataFunctionArgs) {
-    await requireAuthentication(request);
-    const [errors, payload] = await validateBody(
-      Joi.object({
-        todoTitle: Joi.string().required().trim().max(50).messages({
-          "string.required": "The title of your todo is required.",
-          "string.empty": "The title of your todo is required.",
-          "string.max": "The title of your todo is limited to 50 characters.",
-        }),
-      }),
-      request
-    );
-
-    if (errors) return { errors };
-
-    await this.todoApplicationService.add(
-      params.todoListId as string,
-      payload.todoTitle as string
-    );
-
+  @Authenticated()
+  @DataFunction()
+  async addTodo(@Params() params: AddTodoParams, @Body() body: AddTodoBody) {
+    await this.todoApplicationService.add(params.todoListId, body.todoTitle);
     return null;
   }
 
-  async archiveTodo({ request, params }: DataFunctionArgs) {
-    await requireAuthentication(request);
-    await this.todoApplicationService.archive(params.todoId as string);
-
+  @Authenticated()
+  @DataFunction()
+  async archiveTodo(@Params() params: ArchiveTodoParams) {
+    await this.todoApplicationService.archive(params.todoId);
     return redirect(`/l/${params.todoListId}`);
   }
 
-  async changeTodoCompletion({ request, params }: DataFunctionArgs) {
-    await requireAuthentication(request);
-    const [errors, payload] = await validateBody(
-      Joi.object({
-        isChecked: Joi.string().required().valid("on", "off"),
-      }),
-      request
-    );
-
-    if (errors) return { errors };
-
+  @Authenticated()
+  @DataFunction()
+  async changeTodoCompletion(
+    @Params() params: ChangeTodoCompletionParams,
+    @Body() body: ChangeTodoCompletionBody
+  ) {
     await this.todoApplicationService.changeTodoCompletion(
-      params.todoId as string,
-      payload.isChecked as string
+      params.todoId,
+      body.isChecked
     );
-
     return redirect(`/l/${params.todoListId}`);
   }
 
-  async addTodoList({ request }: DataFunctionArgs) {
-    await requireAuthentication(request);
-    const [errors, payload] = await validateBody(
-      Joi.object({
-        title: Joi.string().required().trim().max(60).messages({
-          "string.empty": "The title of your todo list is required.",
-          "string.required": "The title of your todo list is required.",
-          "string.max":
-            "The title of your todo list is limited to 60 characters.",
-        }),
-      }),
-      request
-    );
-
-    if (errors) return { errors };
-
-    const url = await this.todoListApplicationService.add(
-      payload.title as string
-    );
-
+  @Authenticated()
+  @DataFunction()
+  async addTodoList(@Body() body: AddTodoListBody) {
+    const url = await this.todoListApplicationService.add(body.title);
     return redirect(url);
   }
 
-  async archiveTodoList({ request, params }: DataFunctionArgs) {
-    await requireAuthentication(request);
-    await this.todoListApplicationService.archive(params.todoListId as string);
-
+  @Authenticated()
+  @DataFunction()
+  async archiveTodoList(@Params() params: ArchiveTodoListParams) {
+    await this.todoListApplicationService.archive(params.todoListId);
     return redirect("/");
   }
 }
