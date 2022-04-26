@@ -4,3 +4,6 @@ export * from "./types";
 export * from "./keys";
 export * from "./decorators/Body";
 export * from "./decorators/Params";
+export * from "./decorators/DataFunction";
+export * from "./decorators/Authenticated";
+export * from "./decorators/CurrentSession";
