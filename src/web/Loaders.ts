@@ -5,13 +5,11 @@ import {
   FetchTodoListPrismaQuery,
 } from "todo-list-manager";
 import { commitSession, isAuthenticatedSession } from "./sessions";
-import {
-  Authenticated,
-  CurrentSession,
-  DataFunction,
-  Params,
-} from "./decorators";
+import { Authenticated } from "./decorators";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
+import { Params } from "../remix-nest-adapter/decorators/Params";
+import { DataFunction } from "../remix-nest-adapter/decorators/DataFunction";
+import { CurrentSession } from "../remix-nest-adapter/decorators/CurrentSession";
 
 @Injectable()
 export class Loaders {

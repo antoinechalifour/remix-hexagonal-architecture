@@ -6,13 +6,7 @@ import {
   TodoApplicationService,
   TodoListApplicationService,
 } from "todo-list-manager";
-import {
-  DataFunction,
-  Authenticated,
-  Body,
-  CurrentSession,
-  Params,
-} from "./decorators";
+import { Authenticated } from "./decorators";
 import { AddTodoBody, AddTodoParams } from "./dtos/AddTodo";
 import { ArchiveTodoParams } from "./dtos/ArchiveTodo";
 import {
@@ -22,6 +16,9 @@ import {
 import { AddTodoListBody } from "./dtos/AddTodoList";
 import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
 import { LoginBody } from "./dtos/Login";
+import { Body, Params } from "remix-nest-adapter";
+import { DataFunction } from "../remix-nest-adapter/decorators/DataFunction";
+import { CurrentSession } from "../remix-nest-adapter/decorators/CurrentSession";
 
 @Injectable()
 export class Actions {
