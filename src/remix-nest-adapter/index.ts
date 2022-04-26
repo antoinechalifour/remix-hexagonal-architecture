@@ -1,14 +1,6 @@
-import { ActionFunction, LoaderFunction } from "remix";
-
 export * from "./RemixModule";
 export * from "./RemixNestBuildConfig";
+export * from "./types";
 export * from "./keys";
-
-export type MakeRemixContext<Actions, Loaders> = {
-  actions: {
-    [key in keyof Actions]: ActionFunction;
-  };
-  loaders: {
-    [key in keyof Loaders]: LoaderFunction;
-  };
-};
+export * from "./decorators/Body";
+export * from "./decorators/Params";
