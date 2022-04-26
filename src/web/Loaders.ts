@@ -1,12 +1,17 @@
 import { Injectable } from "@nestjs/common";
-import { json, redirect } from "remix";
-import { DataFunctionArgs } from "@remix-run/node";
+import { json, redirect, Session } from "remix";
 import {
   FetchHomePagePrismaQuery,
   FetchTodoListPrismaQuery,
 } from "todo-list-manager";
-import { requireAuthentication, sessionFromCookies } from "./http";
 import { commitSession, isAuthenticatedSession } from "./sessions";
+import {
+  Authenticated,
+  CurrentSession,
+  DataFunction,
+  Params,
+} from "./decorators";
+import { FetchTodoListParams } from "./dtos/FetchTodoList";
 
 @Injectable()
 export class Loaders {
@@ -15,9 +20,8 @@ export class Loaders {
     private readonly fetchTodoListQuery: FetchTodoListPrismaQuery
   ) {}
 
-  async login({ request }: DataFunctionArgs) {
-    const session = await sessionFromCookies(request);
-
+  @DataFunction()
+  async login(@CurrentSession() session: Session) {
     if (isAuthenticatedSession(session)) return redirect("/");
 
     const error = session.get("error");
@@ -32,13 +36,15 @@ export class Loaders {
     );
   }
 
-  async homePage({ request }: DataFunctionArgs) {
-    await requireAuthentication(request);
+  @Authenticated()
+  @DataFunction()
+  async homePage() {
     return this.fetchHomePageQuery.run();
   }
 
-  async todoList({ request, params }: DataFunctionArgs) {
-    await requireAuthentication(request);
-    return this.fetchTodoListQuery.run(params.todoListId as string);
+  @Authenticated()
+  @DataFunction()
+  async todoList(@Params() params: FetchTodoListParams) {
+    return this.fetchTodoListQuery.run(params.todoListId);
   }
 }
