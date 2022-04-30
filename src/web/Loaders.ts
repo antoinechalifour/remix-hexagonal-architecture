@@ -4,33 +4,34 @@ import {
   FetchHomePagePrismaQuery,
   FetchTodoListPrismaQuery,
 } from "todo-list-manager";
-import {
-  DataFunction,
-  Params,
-  CurrentSession,
-  Authenticated,
-} from "remix-nest-adapter";
-import { commitSession, isAuthenticatedSession } from "./sessions";
+import { DataFunction, Params, SessionManager } from "remix-nest-adapter";
+import { isAuthenticatedSession } from "./sessions";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
+import { Authenticated } from "./decorators/Authenticated";
+import { Authenticator } from "./Authenticator";
 
 @Injectable()
 export class Loaders {
   constructor(
+    private readonly sessionManager: SessionManager,
+    private readonly authenticator: Authenticator,
     private readonly fetchHomePageQuery: FetchHomePagePrismaQuery,
     private readonly fetchTodoListQuery: FetchTodoListPrismaQuery
   ) {}
 
   @DataFunction()
-  async login(@CurrentSession() session: Session) {
-    if (isAuthenticatedSession(session)) return redirect("/");
+  async login() {
+    const isAuthenticated = await this.authenticator.isAuthenticated();
+    if (isAuthenticated) return redirect("/");
 
+    const session = await this.sessionManager.get();
     const error = session.get("error");
 
     return json(
       { error },
       {
         headers: {
-          "Set-Cookie": await commitSession(session),
+          "Set-Cookie": await this.sessionManager.commit(session),
         },
       }
     );

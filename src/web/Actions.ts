@@ -1,13 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { redirect } from "@remix-run/node";
-import { Session } from "remix";
-import {
-  Body,
-  Params,
-  DataFunction,
-  CurrentSession,
-  Authenticated,
-} from "remix-nest-adapter";
+import { Body, Params, DataFunction, SessionManager } from "remix-nest-adapter";
 import { LoginApplicationService } from "authentication";
 import {
   TodoApplicationService,
@@ -22,25 +15,28 @@ import {
 import { AddTodoListBody } from "./dtos/AddTodoList";
 import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
 import { LoginBody } from "./dtos/Login";
+import { Authenticated } from "./decorators/Authenticated";
 
 @Injectable()
 export class Actions {
   constructor(
+    private readonly sessionManager: SessionManager,
     private readonly loginApplicationService: LoginApplicationService,
     private readonly todoApplicationService: TodoApplicationService,
     private readonly todoListApplicationService: TodoListApplicationService
   ) {}
 
   @DataFunction()
-  async login(@Body() body: LoginBody, @CurrentSession() session: Session) {
-    const [url, cookie] = await this.loginApplicationService.login(
+  async login(@Body() body: LoginBody) {
+    const session = await this.sessionManager.get();
+    const url = await this.loginApplicationService.login(
       session,
       body.username,
       body.password
     );
 
     return redirect(url, {
-      headers: { "Set-Cookie": cookie },
+      headers: { "Set-Cookie": await this.sessionManager.commit(session) },
     });
   }
 

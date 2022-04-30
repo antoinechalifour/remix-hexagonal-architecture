@@ -7,11 +7,18 @@ import { WebModule } from "web";
 @Module({
   imports: [
     RemixModule.forRoot({
+      handlerModule: WebModule,
       buildConfig: {
         publicBuildFolder: path.join(__dirname, "../public"),
         serverBuildFolder: path.join(__dirname, "../build"),
       },
-      handlerModule: WebModule,
+      sessionConfig: {
+        name: "__session",
+        maxAge: 60 * 60 * 24,
+        httpOnly: true,
+        sameSite: "strict",
+        secrets: ["azerty"],
+      },
     }),
   ],
 })
