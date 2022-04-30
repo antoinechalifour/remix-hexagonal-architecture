@@ -1,7 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { CredentialsEnvironmentRepository } from "../persistence/CredentialsEnvironmentRepository";
-import { commitSession } from "../../web/sessions";
 import { Session } from "remix";
 
 @Injectable()
@@ -24,6 +23,6 @@ export class LoginApplicationService {
       url = "/";
     }
 
-    return [url, await commitSession(session)];
+    return url;
   }
 }

@@ -1,9 +1,7 @@
 import { DataFunctionArgs } from "@remix-run/node";
 import { validateSync, ValidationError } from "class-validator";
-import { getSession } from "../../web/sessions";
 import { METADATA_BODY } from "./Body";
 import { METADATA_PARAMS } from "./Params";
-import { METADATA_SESSION } from "./CurrentSession";
 
 class DecoratorValidationError extends Error {
   constructor(message: string, public validationErrors: ValidationError[]) {
@@ -50,11 +48,6 @@ export const DataFunction =
       target,
       propertyKey
     );
-    const sessionParameterIndex = Reflect.getOwnMetadata(
-      METADATA_SESSION,
-      target,
-      propertyKey
-    );
     const ParamTypes = Reflect.getMetadata(
       "design:paramtypes",
       target,
@@ -92,10 +85,6 @@ export const DataFunction =
       return params;
     }
 
-    function parseSession(args: DataFunctionArgs) {
-      return getSession(args.request.headers.get("Cookie"));
-    }
-
     descriptor.value = async function (args: DataFunctionArgs) {
       const newArgs: any[] = [];
 
@@ -104,8 +93,6 @@ export const DataFunction =
           newArgs[bodyParameterIndex] = await parseBody(args);
         if (paramsParameterIndex != null)
           newArgs[paramsParameterIndex] = await parseParams(args);
-        if (sessionParameterIndex != null)
-          newArgs[sessionParameterIndex] = await parseSession(args);
       } catch (e) {
         if (!(e instanceof DecoratorValidationError)) throw e;
 
