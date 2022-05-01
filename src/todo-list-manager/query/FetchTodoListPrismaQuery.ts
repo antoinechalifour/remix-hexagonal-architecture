@@ -1,8 +1,8 @@
 import type { PrismaClient } from "@prisma/client";
 import { Inject, Injectable } from "@nestjs/common";
-import { PRISMA } from "infrastructure";
 import type { TodoListDto } from "shared";
 import type { TodoListId } from "../domain/TodoList";
+import { PRISMA } from "../keys";
 import type { FetchTodoListQuery } from "./FetchTodoListQuery";
 
 @Injectable()

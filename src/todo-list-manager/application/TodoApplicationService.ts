@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { GenerateUUID, RealClock } from "infrastructure";
 import { AddTodo } from "../usecase/AddTodo";
 import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
 import { ArchiveTodo } from "../usecase/ArchiveTodo";
@@ -7,6 +6,8 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoId } from "../domain/Todo";
 import { TodoListPrismaRepository } from "../persistence/TodoListPrismaRepository";
 import { TodoPrismaRepository } from "../persistence/TodoPrismaRepository";
+import { GenerateUUID } from "../infrastructure/GenerateUUID";
+import { RealClock } from "../infrastructure/RealClock";
 
 @Injectable()
 export class TodoApplicationService {

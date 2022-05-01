@@ -1,9 +1,9 @@
 import { Inject, Injectable } from "@nestjs/common";
 import type { PrismaClient } from "@prisma/client";
-import { PRISMA } from "infrastructure";
 import type { Todos } from "../domain/Todos";
 import type { TodoListId } from "../domain/TodoList";
 import type { Todo, TodoId } from "../domain/Todo";
+import { PRISMA } from "../keys";
 
 @Injectable()
 export class TodoPrismaRepository implements Todos {

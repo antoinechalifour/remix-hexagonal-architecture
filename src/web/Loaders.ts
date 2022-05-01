@@ -1,11 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { json, redirect, Session } from "remix";
+import { json, redirect } from "remix";
 import {
   FetchHomePagePrismaQuery,
   FetchTodoListPrismaQuery,
 } from "todo-list-manager";
 import { DataFunction, Params, SessionManager } from "remix-nest-adapter";
-import { isAuthenticatedSession } from "./sessions";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
 import { Authenticated } from "./decorators/Authenticated";
 import { Authenticator } from "./Authenticator";
