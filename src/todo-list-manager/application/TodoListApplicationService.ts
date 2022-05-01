@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { GenerateUUID, RealClock } from "infrastructure";
 import { AddTodoList } from "../usecase/AddTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
 import { TodoListId } from "../domain/TodoList";
 import { TodoListPrismaRepository } from "../persistence/TodoListPrismaRepository";
+import { GenerateUUID } from "../infrastructure/GenerateUUID";
+import { RealClock } from "../infrastructure/RealClock";
 
 @Injectable()
 export class TodoListApplicationService {

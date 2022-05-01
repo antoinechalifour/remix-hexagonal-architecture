@@ -1,8 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
 import type { PrismaClient } from "@prisma/client";
-import { PRISMA } from "infrastructure";
 import type { TodoList } from "../domain/TodoList";
 import type { TodoLists } from "../domain/TodoLists";
+import { PRISMA } from "../keys";
 
 @Injectable()
 export class TodoListPrismaRepository implements TodoLists {
