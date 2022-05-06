@@ -1,6 +1,6 @@
 describe("The user can manage a todo list", () => {
   beforeEach(() => {
-    cy.exec("yarn e2e:clean && yarn e2e:prepare");
+    cy.exec("yarn e2e:clean");
   });
 
   it("creates a new todo list and allows adding todos", () => {
@@ -11,8 +11,8 @@ describe("The user can manage a todo list", () => {
     theyCanAddATodo("Beer");
     theyCanAddATodo("Pizza");
     theyCanAddATodo("Chocolate");
-    theyCanCompleteTheTodo(/Pizza2/);
-    theyCanUncompleteTheTodo(/Pizza3/);
+    theyCanCompleteTheTodo("Pizza");
+    theyCanUncompleteTheTodo("Pizza");
   });
 });
 
@@ -32,6 +32,7 @@ function theyCanAddATodo(todo) {
   cy.findByLabelText("What needs to be done?").click().type(todo);
   cy.findByRole("button", { name: "Done" }).click();
   cy.wait("@todosLoaded");
+  cy.findByText(todo).should("be.visible");
 }
 
 function theyCanCompleteTheTodo(todo) {

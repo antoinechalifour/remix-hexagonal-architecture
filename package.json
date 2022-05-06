@@ -12,18 +12,22 @@
     "dev:remix": "remix watch",
     "dev:nest": "nest start --watch",
     "postinstall": "remix setup node",
-    "clean": "rm -f prisma/todolists.db",
-    "prepare": "DATABASE_URL=file:./todolists.db prisma migrate deploy",
+    "prepare": "DATABASE_URL=postgresql://user:password@localhost:6060/todolistmanager-dev yarn prisma:migrate",
     "test": "jest --runInBand",
-    "integration:clean": "rm -f prisma/integration_todolists.db",
-    "integration:prepare": "DATABASE_URL=file:./integration_todolists.db prisma migrate deploy",
-    "e2e:clean": "rm -f prisma/e2e_todolists.db",
-    "e2e:prepare": "DATABASE_URL=file:./e2e_todolists.db prisma migrate deploy",
-    "e2e:app": "PORT=3333 DATABASE_URL=file:./e2e_todolists.db remix dev",
-    "e2e:cypress:run": "cypress run",
-    "e2e:cypress:dev": "cypress open",
-    "e2e:run": "start-test e2e:app 3333 e2e:cypress:run",
-    "e2e:dev": "start-test e2e:app 3333 e2e:cypress:dev"
+
+    "integration:clean": "DATABASE_URL=postgresql://user:password@localhost:6070/todolistmanager-integration yarn prisma:reset",
+
+    "e2e:run": "start-test e2e:app 3333 cypress:run",
+    "e2e:run:dev": "start-test e2e:app 3333 cypress:dev",
+    "e2e:prepare": "run-s build:remix e2e:clean e2e:app:start",
+    "e2e:clean": "DATABASE_URL=postgresql://user:password@localhost:6080/todolistmanager-e2e yarn prisma:reset",
+    "e2e:app:start": "PORT=3333 DATABASE_URL=postgresql://user:password@localhost:6080/todolistmanager-e2e yarn nest start",
+
+    "cypress:run": "cypress run",
+    "cypress:dev": "cypress open",
+
+    "prisma:migrate": "prisma migrate deploy",
+    "prisma:reset": "prisma migrate reset --force"
   },
   "dependencies": {
     "@nestjs/common": "8.4.4",
