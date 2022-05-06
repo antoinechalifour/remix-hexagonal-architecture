@@ -5,15 +5,16 @@
   "license": "",
   "scripts": {
     "start": "nest start",
+    "postinstall": "remix setup node",
     "build": "run-p build:*",
-    "dev": "run-p dev:*",
+    "test": "jest --runInBand",
+    "dev": "run-s dev:migrate dev:start",
     "build:remix": "remix build",
     "build:nest": "nest build",
+    "dev:start": "run-p dev:remix dev:nest",
     "dev:remix": "remix watch",
     "dev:nest": "nest start --watch",
-    "postinstall": "remix setup node",
-    "prepare": "DATABASE_URL=postgresql://user:password@localhost:6060/todolistmanager-dev yarn prisma:migrate",
-    "test": "jest --runInBand",
+    "dev:migrate": "DATABASE_URL=postgresql://user:password@localhost:6060/todolistmanager-dev yarn prisma:migrate",
 
     "integration:clean": "DATABASE_URL=postgresql://user:password@localhost:6070/todolistmanager-integration yarn prisma:reset",
 

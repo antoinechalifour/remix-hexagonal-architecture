@@ -4,7 +4,7 @@
 
 ![Cover](./doc/cover.png)
 
-This is a Remix application, you may want to check out the [Remix documentation](https://remix.run/docs).
+This is a Remix and Nest application, you may want to check out the [Remix documentation](https://remix.run/docs) and the [Nest documentation](https://nestjs.com/).
 
 ## Context
 
@@ -36,10 +36,11 @@ This project is based on the following principles :
 
 The project is organized as such :
 
-- `app/application` : where **React** components and **Remix** stuff lives ;
-- `app/domain` : where **domain modeling** happens for writing operations (domain interfaces, behaviors and ports) ;
-- `app/query` : where **queries** are modeled for reading operation (preparing data for our pages) ;
-- `app/infrastructure` : where the ports / queries implementation live (repositories / database queries) ;
+- `app/*` : where **React** components and **Remix** stuff lives ;
+- `src/<module>/(domain|usecase)` : where **domain modeling** happens for writing operations (domain interfaces, behaviors and ports) ;
+- `src/<module>/persistence` : where **repositories** are implemented (for persisting aggregates) ;
+- `src/<module>/query` : where **queries** are modeled for reading operation (preparing data for our pages) ;
+- `src/<module>/application` : where the application layer lives (glue between layers) ;
 
 ## Limitations
 
@@ -56,7 +57,8 @@ The following limitations have been identified :
 From your terminal:
 
 ```sh
-yarn dev
+docker-compose up # Launches databases
+yarn dev # Boot app
 ```
 
 This starts your app in development mode, rebuilding assets on file changes.
