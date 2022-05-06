@@ -1,0 +1,36 @@
+# Use postgres/example user/password credentials
+version: "3.1"
+
+services:
+   database:
+    image: postgres
+    restart: always
+    ports:
+      - "6060:5432"
+    environment:
+      PGDATA: ./data
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todolistmanager-dev
+
+   database-integration:
+    image: postgres
+    restart: always
+    ports:
+      - "6070:5432"
+    environment:
+      PGDATA: ./data
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todolistmanager-integration
+
+   database-e2e:
+    image: postgres
+    restart: always
+    ports:
+      - "6080:5432"
+    environment:
+      PGDATA: ./data
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todolistmanager-e2e
