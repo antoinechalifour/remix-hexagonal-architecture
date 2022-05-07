@@ -17,12 +17,12 @@ describe("Archiving a todo list", () => {
     const theTodoListId = "todoList/1";
     const theTodoList = aTodoList().identifiedBy(theTodoListId).build();
     await todoLists.save(theTodoList);
-    expect(await todoLists.all()).toHaveLength(1);
+    expect(await todoLists.all("owner/1")).toHaveLength(1);
 
     // Act
-    await archiveTodoList.execute(theTodoListId);
+    await archiveTodoList.execute(theTodoListId, "owner/1");
 
     // Assert
-    expect(await todoLists.all()).toHaveLength(0);
+    expect(await todoLists.all("owner/1")).toHaveLength(0);
   });
 });

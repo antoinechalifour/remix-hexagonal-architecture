@@ -26,12 +26,12 @@ describe("Archiving a todo", () => {
     const theTodoList = aTodoList().build();
     const theTodo = addTodo(theTodoList, "Buy bread", generateId, clock);
     await todos.save(theTodo);
-    expect(await todos.ofTodoList(theTodoList.id)).toHaveLength(1);
+    expect(await todos.ofTodoList(theTodoList.id, "owner/1")).toHaveLength(1);
 
     // Act
-    await archiveTodo.execute(theTodo.id);
+    await archiveTodo.execute(theTodo.id, "owner/1");
 
     // Assert
-    expect(await todos.ofTodoList(theTodoList.id)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoList.id, "owner/1")).toHaveLength(0);
   });
 });

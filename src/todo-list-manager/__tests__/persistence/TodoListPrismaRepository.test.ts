@@ -39,7 +39,7 @@ describe("TodoListPrismaRepository", () => {
     await todoLists.save(todoList);
 
     // Arrange
-    expect(await todoLists.ofId("todoList/1")).toEqual(todoList);
+    expect(await todoLists.ofId("todoList/1", "owner/1")).toEqual(todoList);
   });
 
   it("should be able to remove todo lists and their associated todos", async () => {
@@ -48,18 +48,18 @@ describe("TodoListPrismaRepository", () => {
     await saveATodoListWithATodo(todoLists, todos, "todoLists/2", "todos/2");
 
     // Act
-    await todoLists.remove("todoLists/1");
+    await todoLists.remove("todoLists/1", "owner/1");
 
     // Assert
-    await expect(() => todoLists.ofId("todoLists/1")).rejects.toThrow(
-      "Todolist todoLists/1 was not found"
-    );
-    expect(await todos.ofTodoList("todoLists/1")).toHaveLength(0);
-    expect(await todos.ofTodoList("todoLists/2")).toHaveLength(1);
+    await expect(() =>
+      todoLists.ofId("todoLists/1", "owner/1")
+    ).rejects.toThrow("Todolist todoLists/1 was not found");
+    expect(await todos.ofTodoList("todoLists/1", "owner/1")).toHaveLength(0);
+    expect(await todos.ofTodoList("todoLists/2", "owner/1")).toHaveLength(1);
   });
 
   it("should throw an error when trying to access a non-existing todo list", () =>
-    expect(() => todoLists.ofId("todoLists/1")).rejects.toThrow(
+    expect(() => todoLists.ofId("todoLists/1", "owner/1")).rejects.toThrow(
       "Todolist todoLists/1 was not found"
     ));
 });

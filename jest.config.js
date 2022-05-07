@@ -6,6 +6,7 @@ module.exports = {
     "front/(.*)$": "<rootDir>/app/$1",
     "todo-list-manager$": "<rootDir>/src/todo-list-manager",
     infrastructure$: "<rootDir>/src/infrastructure",
+    shared$: "<rootDir>/src/shared",
   },
   testMatch: ["**/__tests__/**/*.test.ts?(x)"],
 };

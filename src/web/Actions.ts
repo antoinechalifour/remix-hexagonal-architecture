@@ -16,11 +16,13 @@ import { AddTodoListBody } from "./dtos/AddTodoList";
 import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
 import { LoginBody } from "./dtos/Login";
 import { Authenticated } from "./decorators/Authenticated";
+import { Authenticator } from "./Authenticator";
 
 @Injectable()
 export class Actions {
   constructor(
     private readonly sessionManager: SessionManager,
+    private readonly authenticator: Authenticator,
     private readonly loginApplicationService: LoginApplicationService,
     private readonly todoApplicationService: TodoApplicationService,
     private readonly todoListApplicationService: TodoListApplicationService
@@ -47,14 +49,21 @@ export class Actions {
   @Authenticated()
   @DataFunction()
   async addTodo(@Params() params: AddTodoParams, @Body() body: AddTodoBody) {
-    await this.todoApplicationService.add(params.todoListId, body.todoTitle);
+    await this.todoApplicationService.add(
+      params.todoListId,
+      body.todoTitle,
+      await this.authenticator.currentUser()
+    );
     return null;
   }
 
   @Authenticated()
   @DataFunction()
   async archiveTodo(@Params() params: ArchiveTodoParams) {
-    await this.todoApplicationService.archive(params.todoId);
+    await this.todoApplicationService.archive(
+      params.todoId,
+      await this.authenticator.currentUser()
+    );
     return redirect(`/l/${params.todoListId}`);
   }
 
@@ -66,7 +75,8 @@ export class Actions {
   ) {
     await this.todoApplicationService.changeTodoCompletion(
       params.todoId,
-      body.isChecked
+      body.isChecked,
+      await this.authenticator.currentUser()
     );
     return redirect(`/l/${params.todoListId}`);
   }
@@ -74,14 +84,20 @@ export class Actions {
   @Authenticated()
   @DataFunction()
   async addTodoList(@Body() body: AddTodoListBody) {
-    const url = await this.todoListApplicationService.add(body.title);
+    const url = await this.todoListApplicationService.add(
+      body.title,
+      await this.authenticator.currentUser()
+    );
     return redirect(url);
   }
 
   @Authenticated()
   @DataFunction()
   async archiveTodoList(@Params() params: ArchiveTodoListParams) {
-    await this.todoListApplicationService.archive(params.todoListId);
+    await this.todoListApplicationService.archive(
+      params.todoListId,
+      await this.authenticator.currentUser()
+    );
     return redirect("/");
   }
 }

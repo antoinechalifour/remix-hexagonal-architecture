@@ -1,6 +1,7 @@
 import type { GenerateId } from "shared";
 import type { TodoLists } from "../domain/TodoLists";
 import type { Clock } from "../domain/Clock";
+import type { OwnerId } from "../domain/OwnerId";
 
 import { makeTodoList } from "../domain/TodoList";
 
@@ -11,8 +12,8 @@ export class AddTodoList {
     private readonly clock: Clock
   ) {}
 
-  async execute(title: string) {
-    const todoList = makeTodoList(title, this.generateId, this.clock);
+  async execute(title: string, ownerId: OwnerId) {
+    const todoList = makeTodoList(title, ownerId, this.generateId, this.clock);
     await this.todoLists.save(todoList);
 
     return `/l/${todoList.id}`;

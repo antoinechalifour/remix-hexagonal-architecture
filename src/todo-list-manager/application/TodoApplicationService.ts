@@ -2,8 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { AddTodo } from "../usecase/AddTodo";
 import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
 import { ArchiveTodo } from "../usecase/ArchiveTodo";
-import type { TodoListId } from "../domain/TodoList";
-import type { TodoId } from "../domain/Todo";
 import { TodoListPrismaRepository } from "../persistence/TodoListPrismaRepository";
 import { TodoPrismaRepository } from "../persistence/TodoPrismaRepository";
 import { RealClock } from "../infrastructure/RealClock";
@@ -18,23 +16,24 @@ export class TodoApplicationService {
     private readonly clock: RealClock
   ) {}
 
-  add(todoListId: string, title: string) {
+  add(todoListId: string, title: string, ownerId: string) {
     return new AddTodo(
       this.todos,
       this.todoLists,
       this.generateId,
       this.clock
-    ).execute(todoListId as TodoListId, title);
+    ).execute(todoListId, title, ownerId);
   }
 
-  archive(todoId: string) {
-    return new ArchiveTodo(this.todos).execute(todoId as TodoId);
+  archive(todoId: string, ownerId: string) {
+    return new ArchiveTodo(this.todos).execute(todoId, ownerId);
   }
 
-  changeTodoCompletion(todoId: string, isChecked: string) {
+  changeTodoCompletion(todoId: string, isChecked: string, ownerId: string) {
     return new ChangeTodoCompletion(this.todos).execute(
-      todoId as TodoId,
-      isChecked
+      todoId,
+      isChecked,
+      ownerId
     );
   }
 }

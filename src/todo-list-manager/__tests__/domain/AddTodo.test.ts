@@ -31,19 +31,20 @@ describe("Adding a todo", () => {
     const theTodoListId = "todoList/1";
     const theTodoList = aTodoList().identifiedBy(theTodoListId).build();
     await todoLists.save(theTodoList);
-    expect(await todos.ofTodoList(theTodoListId)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoListId, "owner/1")).toHaveLength(0);
 
     // Act
-    await addTodo.execute(theTodoListId, theTitle);
+    await addTodo.execute(theTodoListId, theTitle, "owner/1");
 
     // Assert
-    const [todo] = await todos.ofTodoList(theTodoListId);
+    const [todo] = await todos.ofTodoList(theTodoListId, "owner/1");
     expect(todo).toEqual({
       id: "todo/1",
       createdAt: "2022-01-05T12:00:00.000Z",
       isComplete: false,
       title: "Buy cereals",
       todoListId: "todoList/1",
+      ownerId: "owner/1",
     });
   });
 
@@ -51,15 +52,15 @@ describe("Adding a todo", () => {
     // Arrange
     expect.assertions(3);
     const theTodoListId = "todoList/1";
-    expect(await todos.ofTodoList(theTodoListId)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoListId, "owner/1")).toHaveLength(0);
 
     // Act
     try {
-      await addTodo.execute(theTodoListId, "Buy cereals");
+      await addTodo.execute(theTodoListId, "Buy cereals", "owner/1");
     } catch (e) {
       // Assert
       expect(e).toEqual(new Error("Todolist todoList/1 not found"));
-      expect(await todos.ofTodoList(theTodoListId)).toHaveLength(0);
+      expect(await todos.ofTodoList(theTodoListId, "owner/1")).toHaveLength(0);
     }
   });
 });

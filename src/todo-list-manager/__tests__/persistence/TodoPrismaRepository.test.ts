@@ -41,16 +41,16 @@ describe("TodoPrismaRepository", () => {
       .ofTodoList(todoList.id)
       .build();
     await todos.save(todo);
-    expect(await todos.ofId("todos/1")).toEqual(todo);
+    expect(await todos.ofId("todos/1", "owner/1")).toEqual(todo);
 
     // Updates todos
     todo = updateCompletion(todo, true);
     await todos.save(todo);
-    expect(await todos.ofId("todos/1")).toEqual(todo);
+    expect(await todos.ofId("todos/1", "owner/1")).toEqual(todo);
 
     // Removes todos
-    await todos.remove("todos/1");
-    await expect(() => todos.ofId("todos/1")).rejects.toThrow(
+    await todos.remove("todos/1", "owner/1");
+    await expect(() => todos.ofId("todos/1", "owner/1")).rejects.toThrow(
       new Error("No Todo found")
     );
   });

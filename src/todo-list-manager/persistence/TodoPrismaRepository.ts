@@ -4,14 +4,15 @@ import type { Todos } from "../domain/Todos";
 import type { TodoListId } from "../domain/TodoList";
 import type { Todo, TodoId } from "../domain/Todo";
 import { PRISMA } from "../keys";
+import { OwnerId } from "../domain/OwnerId";
 
 @Injectable()
 export class TodoPrismaRepository implements Todos {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
-  async ofId(todoId: TodoId): Promise<Todo> {
-    const row = await this.prisma.todo.findUnique({
-      where: { id: todoId },
+  async ofId(todoId: TodoId, ownerId: OwnerId): Promise<Todo> {
+    const row = await this.prisma.todo.findFirst({
+      where: { id: todoId, ownerId },
       rejectOnNotFound: true,
     });
 
@@ -21,13 +22,15 @@ export class TodoPrismaRepository implements Todos {
       isComplete: row.isComplete,
       createdAt: row.createdAt.toISOString(),
       todoListId: row.todoListId,
+      ownerId,
     };
   }
 
-  async ofTodoList(todoListId: TodoListId): Promise<Todo[]> {
+  async ofTodoList(todoListId: TodoListId, ownerId: OwnerId): Promise<Todo[]> {
     const todos = await this.prisma.todo.findMany({
       where: {
         todoListId,
+        ownerId,
       },
     });
 
@@ -37,6 +40,7 @@ export class TodoPrismaRepository implements Todos {
       isComplete: row.isComplete,
       createdAt: row.createdAt.toISOString(),
       todoListId,
+      ownerId,
     }));
   }
 
@@ -50,14 +54,14 @@ export class TodoPrismaRepository implements Todos {
         isComplete: todo.isComplete,
         createdAt: new Date(todo.createdAt),
         todoListId: todo.todoListId,
-        ownerId: "",
+        ownerId: todo.ownerId,
       },
     });
   }
 
-  async remove(todoId: TodoId): Promise<void> {
-    await this.prisma.todo.delete({
-      where: { id: todoId },
+  async remove(todoId: TodoId, ownerId: OwnerId): Promise<void> {
+    await this.prisma.todo.deleteMany({
+      where: { id: todoId, ownerId },
     });
   }
 }
