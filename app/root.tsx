@@ -14,7 +14,6 @@ import {
 import * as React from "react";
 
 import styles from "./styles/app.css";
-import globalCssUrl from "front/styles/global.css";
 import { RootLayout } from "./ui/RootLayout";
 import {
   ErrorPage,
@@ -23,10 +22,7 @@ import {
 } from "front/components/ErrorPage";
 
 export const links: LinksFunction = () => {
-  return [
-    { rel: "stylesheet", href: globalCssUrl },
-    { rel: "stylesheet", href: styles },
-  ];
+  return [{ rel: "stylesheet", href: styles }];
 };
 
 export default function App() {

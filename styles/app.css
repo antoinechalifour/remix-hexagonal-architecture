@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@font-face {
+  font-family: Metropolis;
+  src: url("/fonts/Metropolis-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: Metropolis;
+  font-weight: 600;
+  src: url("/fonts/Metropolis-SemiBold.woff2") format("woff2");
+}
+
+@layer base {
+  *:focus-visible {
+    @apply outline-2 outline-lighter outline-dashed outline-offset-4;
+  }
+
+  body {
+    @apply text-light;
+    @apply font-metropolis;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+}
