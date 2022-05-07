@@ -5,6 +5,15 @@ import type { TodoListId } from "../domain/TodoList";
 import { PRISMA } from "../keys";
 import type { FetchTodoListQuery } from "./FetchTodoListQuery";
 
+type TodoListRow = { id: string; title: string; createdAt: string };
+
+type TodoRow<Completion extends boolean> = {
+  id: string;
+  title: string;
+  isComplete: Completion;
+  createdAt: string;
+};
+
 @Injectable()
 export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
@@ -27,7 +36,7 @@ export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
   }
 
   private fetchTodoList(todoListId: TodoListId) {
-    return this.prisma.$queryRaw<any[]>`
+    return this.prisma.$queryRaw<TodoListRow[]>`
         SELECT TL.id, TL.title, TL."createdAt"
         FROM "TodoList" TL
         WHERE TL.id=${todoListId};
@@ -35,14 +44,14 @@ export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
   }
 
   private fetchDoingTodos(todoListId: TodoListId) {
-    return this.prisma.$queryRaw<any[]>`
+    return this.prisma.$queryRaw<TodoRow<false>[]>`
         SELECT id, title, "isComplete", "createdAt" FROM "Todo"
         WHERE "isComplete" IS false AND "todoListId"=${todoListId};
     `;
   }
 
   private fetchCompleteTodos(todoListId: TodoListId) {
-    return this.prisma.$queryRaw<any[]>`
+    return this.prisma.$queryRaw<TodoRow<true>[]>`
         SELECT id, title, "isComplete", "createdAt" FROM "Todo"
         WHERE "isComplete" IS true AND "todoListId"=${todoListId};
     `;

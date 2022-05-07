@@ -28,6 +28,7 @@
     "cypress:dev": "cypress open",
 
     "prisma:migrate": "prisma migrate deploy",
+    "prisma:setup": "prisma generate",
     "prisma:reset": "prisma migrate reset --force"
   },
   "dependencies": {

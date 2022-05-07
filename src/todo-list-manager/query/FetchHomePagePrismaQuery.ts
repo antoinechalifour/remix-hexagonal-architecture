@@ -31,7 +31,7 @@ export class FetchHomePagePrismaQuery implements FetchHomePageQuery {
   }
 
   private fetchTotalNumberOfDoingTodos() {
-    return this.prisma.$queryRaw<any[]>`
+    return this.prisma.$queryRaw<{ totalNumberOfDoingTodos: number }[]>`
       SELECT count(*) as "totalNumberOfDoingTodos"
       FROM "Todo"
       WHERE "isComplete" IS false;
