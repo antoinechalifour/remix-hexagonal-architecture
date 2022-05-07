@@ -1,24 +1,33 @@
-import { Credentials } from "../domain/Credentials";
+import { Accounts } from "../domain/Accounts";
+import { PasswordHasher } from "../domain/PasswordHasher";
 
 export type LoginResult = [Error, null] | [null, string];
 
 export class LoginFlow {
-  constructor(private readonly credentials: Credentials) {}
+  constructor(
+    private readonly accounts: Accounts,
+    private readonly passwordHasher: PasswordHasher
+  ) {}
 
-  async execute(username: string, password: string): Promise<LoginResult> {
-    const isValidCredentials = await this.credentials.isValid(
-      username,
-      password
+  async execute(email: string, password: string): Promise<LoginResult> {
+    let isValidCredentials = false;
+    const error = new Error(
+      "Could not log you in. Make sure your credentials are valid."
     );
 
-    if (!isValidCredentials)
-      return [
-        new Error(
-          "Could not log you in. Make sure your credentials are valid."
-        ),
-        null,
-      ];
+    try {
+      const account = await this.accounts.ofEmail(email);
 
-    return [null, "user-1"];
+      isValidCredentials = await this.passwordHasher.verify(
+        password,
+        account.hash
+      );
+
+      if (!isValidCredentials) return [error, null];
+
+      return [null, account.id];
+    } catch {
+      return [error, null];
+    }
   }
 }

@@ -1,7 +1,7 @@
 import type { Todo } from "./Todo";
+import type { GenerateId } from "shared";
 
 import { Clock } from "./Clock";
-import { GenerateId } from "./GenerateId";
 
 export type TodoListId = string;
 

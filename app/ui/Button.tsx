@@ -7,7 +7,10 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 export const Button = ({ children, className, ...props }: ButtonProps) => (
   <button
     {...props}
-    className={classNames("disabled:cursor-not-allowed", className)}
+    className={classNames(
+      "text-sm font-semibold uppercase text-lighter disabled:cursor-not-allowed",
+      className
+    )}
   >
     {children}
   </button>
@@ -22,7 +25,22 @@ export const ButtonPrimary = ({
     {...props}
     className={classNames(
       "rounded-2xl bg-primary py-4 px-6 shadow transition-colors disabled:bg-primary-lighter",
-      "text-sm font-semibold uppercase text-white text-lighter",
+      className
+    )}
+  >
+    {children}
+  </Button>
+);
+
+export const ButtonSecondary = ({
+  children,
+  className,
+  ...props
+}: ButtonProps) => (
+  <Button
+    {...props}
+    className={classNames(
+      "rounded-2xl border-2 border-primary py-4 px-6 shadow transition-colors",
       className
     )}
   >

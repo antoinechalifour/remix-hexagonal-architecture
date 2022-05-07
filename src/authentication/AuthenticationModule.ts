@@ -1,9 +1,17 @@
 import { Module } from "@nestjs/common";
+import { GenerateUUID, Prisma } from "shared";
 import { LoginApplicationService } from "./application/LoginApplicationService";
-import { CredentialsEnvironmentRepository } from "./persistence/CredentialsEnvironmentRepository";
+import { BCryptPasswordHasher } from "./infrastructure/BCryptPasswordHasher";
+import { AccountPrismaRepository } from "./persistence/AccountPrismaRepository";
 
 @Module({
-  providers: [LoginApplicationService, CredentialsEnvironmentRepository],
+  providers: [
+    LoginApplicationService,
+    AccountPrismaRepository,
+    BCryptPasswordHasher,
+    GenerateUUID,
+    Prisma,
+  ],
   exports: [LoginApplicationService],
 })
 export class AuthenticationModule {}

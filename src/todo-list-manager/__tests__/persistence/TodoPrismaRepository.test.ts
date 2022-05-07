@@ -1,14 +1,14 @@
-import type { Todos } from "../../../domain/Todos";
+import type { Todos } from "../../domain/Todos";
 
 import { PrismaClient } from "@prisma/client";
 import {
   TodoListPrismaRepository,
   TodoPrismaRepository,
 } from "todo-list-manager";
-import { updateCompletion } from "../../../domain/Todo";
-import { TodoLists } from "../../../domain/TodoLists";
-import { anUncompletedTodo } from "../../domain/builders/Todo";
-import { aTodoList } from "../../domain/builders/TodoList";
+import { updateCompletion } from "../../domain/Todo";
+import { TodoLists } from "../../domain/TodoLists";
+import { anUncompletedTodo } from "../domain/builders/Todo";
+import { aTodoList } from "../domain/builders/TodoList";
 import {
   configureTestingDatabaseEnvironment,
   prepareDatabase,

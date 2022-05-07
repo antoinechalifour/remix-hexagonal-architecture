@@ -1,8 +1,8 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
+import { GenerateId } from "shared";
 
 import { AddTodo } from "../../usecase/AddTodo";
-import { GenerateId } from "../../domain/GenerateId";
 import { Clock } from "../../domain/Clock";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";

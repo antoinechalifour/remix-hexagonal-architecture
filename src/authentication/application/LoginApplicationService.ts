@@ -1,17 +1,24 @@
 import { Injectable } from "@nestjs/common";
-import { LoginFlow } from "../usecase/LoginFlow";
-import { CredentialsEnvironmentRepository } from "../persistence/CredentialsEnvironmentRepository";
 import { Session } from "remix";
+import { LoginFlow } from "../usecase/LoginFlow";
+import { RegisterFlow } from "../usecase/RegisterFlow";
+import { GenerateUUID } from "shared";
+import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
+import { AccountPrismaRepository } from "../persistence/AccountPrismaRepository";
 
 @Injectable()
 export class LoginApplicationService {
-  constructor(private readonly credentials: CredentialsEnvironmentRepository) {}
+  constructor(
+    private readonly accounts: AccountPrismaRepository,
+    private readonly generateId: GenerateUUID,
+    private readonly passwordHasher: BCryptPasswordHasher
+  ) {}
 
-  async login(session: Session, username: string, password: string) {
-    const [error, userId] = await new LoginFlow(this.credentials).execute(
-      username,
-      password
-    );
+  async login(session: Session, email: string, password: string) {
+    const [error, userId] = await new LoginFlow(
+      this.accounts,
+      this.passwordHasher
+    ).execute(email, password);
 
     let url;
 
@@ -24,5 +31,13 @@ export class LoginApplicationService {
     }
 
     return url;
+  }
+
+  async register(email: string, password: string) {
+    await new RegisterFlow(
+      this.accounts,
+      this.generateId,
+      this.passwordHasher
+    ).execute(email, password);
   }
 }

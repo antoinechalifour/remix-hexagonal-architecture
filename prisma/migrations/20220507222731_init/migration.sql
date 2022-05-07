@@ -1,21 +1,32 @@
 -- CreateTable
 CREATE TABLE "Todo" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
     "isComplete" BOOLEAN NOT NULL,
-    "todoListId" TEXT NOT NULL,
+    "todoListId" UUID NOT NULL,
+    "ownerId" UUID NOT NULL,
 
     CONSTRAINT "Todo_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "TodoList" (
-    "id" TEXT NOT NULL,
+    "id" UUID NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL,
     "title" TEXT NOT NULL,
+    "ownerId" UUID NOT NULL,
 
     CONSTRAINT "TodoList_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Account" (
+    "id" UUID NOT NULL,
+    "email" TEXT NOT NULL,
+    "hash" TEXT NOT NULL,
+
+    CONSTRAINT "Account_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

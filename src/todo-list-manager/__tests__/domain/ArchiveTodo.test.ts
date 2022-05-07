@@ -1,7 +1,7 @@
+import type { GenerateId } from "shared";
 import { ArchiveTodo } from "../../usecase/ArchiveTodo";
 import { Todos } from "../../domain/Todos";
 import { addTodo } from "../../domain/TodoList";
-import { GenerateId } from "../../domain/GenerateId";
 import { Clock } from "../../domain/Clock";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { GenerateTestId } from "./fakes/GenerateTestId";

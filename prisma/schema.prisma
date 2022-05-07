@@ -8,17 +8,25 @@ datasource db {
 }
 
 model Todo {
-  id            String      @id
-  createdAt     DateTime
-  title         String
-  isComplete    Boolean
-  todoListId    String
-  todoList      TodoList    @relation(fields: [todoListId], references: [id])
+  id         String    @id @db.Uuid
+  createdAt  DateTime
+  title      String
+  isComplete Boolean
+  TodoList   TodoList @relation(fields: [todoListId], references: [id])
+  todoListId String   @db.Uuid
+  ownerId    String   @db.Uuid
 }
 
 model TodoList {
-    id          String      @id
-    createdAt   DateTime
-    title       String
-    todos       Todo[]
+  id        String   @id @db.Uuid
+  createdAt DateTime
+  title     String
+  todos     Todo[]
+  ownerId   String   @db.Uuid
+}
+
+model Account {
+  id    String @id @db.Uuid
+  email String
+  hash  String
 }
