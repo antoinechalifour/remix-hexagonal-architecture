@@ -4,26 +4,15 @@ import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "../ui/EmptyMessage";
 import { PageTitle } from "../ui/PageTitle";
-import { links as todoListItemLinks, TodoListItem } from "./TodoListItem";
-import {
-  AddTodoListForm,
-  links as addTodoListFormLinks,
-} from "./AddTodoListForm";
-import { componentCss, link } from "../stylesheet";
-import css from "./TodoLists.css";
-
-export const links = componentCss(
-  ...addTodoListFormLinks(),
-  ...todoListItemLinks(),
-  link(css)
-);
+import { TodoListItem } from "./TodoListItem";
+import { AddTodoListForm } from "./AddTodoListForm";
 
 interface TodoListsProps {
   todoLists: HomePageTodoListDto[];
 }
 
 export const TodoLists = ({ todoLists }: TodoListsProps) => (
-  <section className="TodoLists">
+  <section className="space-y-4">
     <PageTitle>Welcome, these are your todo lists</PageTitle>
 
     <AddTodoListForm />
@@ -31,9 +20,9 @@ export const TodoLists = ({ todoLists }: TodoListsProps) => (
     {isEmpty(todoLists) ? (
       <EmptyMessage>No todo list has been added yet!</EmptyMessage>
     ) : (
-      <ol>
+      <ol className="space-y-2">
         {todoLists.map((todoList) => (
-          <li className="TodoLists__item" key={todoList.id}>
+          <li key={todoList.id}>
             <TodoListItem todoList={todoList} />
           </li>
         ))}

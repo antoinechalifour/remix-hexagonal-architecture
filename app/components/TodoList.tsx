@@ -3,11 +3,7 @@ import type { TodoDto } from "shared";
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "../ui/EmptyMessage";
-import { TodoItem, links as todoItemLinks } from "./TodoItem";
-import { componentCss, link } from "../stylesheet";
-import css from "./TodoList.css";
-
-export const links = componentCss(...todoItemLinks(), link(css));
+import { TodoItem } from "./TodoItem";
 
 interface TodoListProps {
   title: string;
@@ -22,15 +18,15 @@ export const TodoList = ({
   todos,
   emptyMessage,
 }: TodoListProps) => (
-  <section className="TodoList">
-    <h2 className="TodoList__title">
+  <section className="mt-8">
+    <h2 className="text-lg text-lighter">
       {title} ({todos.length})
     </h2>
 
     {isEmpty(todos) ? (
       <EmptyMessage>{emptyMessage}</EmptyMessage>
     ) : (
-      <ol className="TodoList__list">
+      <ol className="mt-4 space-y-2">
         {todos.map((todo) => (
           <li key={todo.id}>
             <TodoItem todoListId={todoListId} todo={todo} />

@@ -1,10 +1,10 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import classNames from "classnames";
 
 interface CheckboxOptionProps {
   id: string;
   isChecked: boolean;
-  label: string;
+  label: ReactNode;
 }
 
 export const CheckboxOption = ({
@@ -12,7 +12,10 @@ export const CheckboxOption = ({
   isChecked,
   label,
 }: CheckboxOptionProps) => (
-  <label htmlFor={id} className="cursor-pointer">
+  <label
+    htmlFor={id}
+    className="grid cursor-pointer grid-cols-[auto_1fr] items-center gap-4"
+  >
     <input name="isChecked" type="hidden" value="off" />
     <input
       id={id}
@@ -23,7 +26,7 @@ export const CheckboxOption = ({
       className={classNames(
         "relative inline-block h-5 w-5 border-none bg-transparent",
         "before:absolute before:block before:rounded-md",
-        "before:-top-px before:-left-px before:h-6 before:w-6",
+        "before:-top-[3px] before:-left-px before:h-6 before:w-6",
         "before:cursor-pointer before:bg-darker before:transition-colors",
         "before:border-2 before:border-primary",
         "checked:before:bg-primary",
@@ -33,6 +36,6 @@ export const CheckboxOption = ({
         "checked:after:cursor-pointer checked:after:text-lighter"
       )}
     />
-    <span>{label}</span>
+    <span className="font-semibold">{label}</span>
   </label>
 );

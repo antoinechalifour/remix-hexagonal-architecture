@@ -20,14 +20,12 @@ import {
   ErrorPage,
   ErrorPageHero,
   ErrorPageMessage,
-  links as errorPageLinks,
 } from "front/components/ErrorPage";
 
 export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: globalCssUrl },
     { rel: "stylesheet", href: styles },
-    ...errorPageLinks(),
   ];
 };
 
@@ -82,7 +80,9 @@ export function CatchBoundary() {
             How did you get here? Seems like you got lost...
           </ErrorPageMessage>
 
-          <Link to="/">Take me home</Link>
+          <Link to="/" className="text-xl text-lighter">
+            Take me home
+          </Link>
         </ErrorPage>
       </RootLayout>
     </Document>
@@ -99,7 +99,10 @@ export function ErrorBoundary({ error }: { error: Error }) {
           <ErrorPageMessage>
             Something went super wrong. Don't worry it'll get fixed soon!
           </ErrorPageMessage>
-          <Link to="/">Take me home</Link>
+
+          <Link to="/" className="text-xl text-lighter">
+            Take me home
+          </Link>
         </ErrorPage>
       </RootLayout>
     </Document>

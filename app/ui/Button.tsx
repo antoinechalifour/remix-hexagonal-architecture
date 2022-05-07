@@ -22,7 +22,8 @@ export const ButtonPrimary = ({
     {...props}
     className={classNames(
       "rounded-2xl bg-primary py-4 px-6 shadow transition-colors disabled:bg-primary-light",
-      "text-sm font-semibold uppercase text-white text-text-secondary"
+      "text-sm font-semibold uppercase text-white text-text-secondary",
+      className
     )}
   >
     {children}

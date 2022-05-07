@@ -2,10 +2,6 @@ import { Form, useActionData, useTransition } from "remix";
 import { AddTodoErrorDto } from "shared";
 import { FloatingLabelInput } from "../ui/FloatingLabelInput";
 import { ButtonPrimary } from "../ui/Button";
-import { componentCss, link } from "../stylesheet";
-import css from "./AddTodoForm.css";
-
-export const links = componentCss(link(css));
 
 type ActionData = {
   errors?: AddTodoErrorDto;
@@ -30,7 +26,11 @@ export const AddTodoForm = ({ todoListId }: AddTodoFormProps) => {
   const actionData = useActionData<ActionData>();
 
   return (
-    <Form method="post" replace className="AddTodoForm">
+    <Form
+      method="post"
+      replace
+      className="grid grid-cols-[1fr_auto] items-center gap-5"
+    >
       <FloatingLabelInput
         label="What needs to be done?"
         name="todoTitle"
