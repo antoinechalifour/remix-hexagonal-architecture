@@ -3,14 +3,12 @@ import type { TodoListDto } from "shared";
 import type { RemixAppContext } from "web";
 
 import { MetaFunction, useLoaderData } from "remix";
-import { links, Todos } from "front/components/Todos";
+import { Todos } from "front/components/Todos";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
   title: `TLM | ${todoList?.title} (${todoList?.doingTodos.length})`,
   description: `Created by you on ${todoList?.createdAt}`,
 });
-
-export { links };
 
 export const loader: LoaderFunction = async (args): Promise<TodoListDto> =>
   (args.context as RemixAppContext).loaders.todoList(args);

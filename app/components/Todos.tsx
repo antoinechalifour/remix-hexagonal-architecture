@@ -3,32 +3,27 @@ import type { TodoListDto } from "shared";
 import React from "react";
 import { displayDate } from "../Date";
 import { PageTitle } from "../ui/PageTitle";
-import { AddTodoForm, links as addTodoFormLinks } from "./AddTodoForm";
-import { TodoList, links as todoListLinks } from "./TodoList";
-import { componentCss, link } from "../stylesheet";
-import css from "./Todos.css";
-
-export const links = componentCss(
-  ...addTodoFormLinks(),
-  ...todoListLinks(),
-  link(css)
-);
+import { AddTodoForm } from "./AddTodoForm";
+import { TodoList } from "./TodoList";
 
 interface TodosProps {
   todoList: TodoListDto;
 }
 
 export const Todos = ({ todoList }: TodosProps) => (
-  <section className="Todos">
-    <PageTitle>{todoList.title}</PageTitle>
-    <p className="Todos__info">
-      ↳ You created this list {displayDate(todoList.createdAt)}
-    </p>
+  <section>
+    <div className="space-y-4">
+      <PageTitle>{todoList.title}</PageTitle>
 
-    <AddTodoForm
-      todoListId={todoList.id}
-      key={todoList.completedTodos.length + todoList.doingTodos.length}
-    />
+      <p className="pl-3 text-xs">
+        ↳ You created this list {displayDate(todoList.createdAt)}
+      </p>
+
+      <AddTodoForm
+        todoListId={todoList.id}
+        key={todoList.completedTodos.length + todoList.doingTodos.length}
+      />
+    </div>
 
     <TodoList
       title="Things to do"

@@ -22,7 +22,7 @@ export class FetchHomePagePrismaQuery implements FetchHomePageQuery {
 
   private fetchTodoLists() {
     return this.prisma.$queryRaw<any[]>`
-      SELECT TL.id, TL.title, TL."createdAt", count(T.id) as numberOfTodos
+      SELECT TL.id, TL.title, TL."createdAt", count(T.id) as "numberOfTodos"
       FROM "TodoList" TL
       LEFT JOIN "Todo" T ON TL.id = T."todoListId"
       AND T."isComplete" IS false

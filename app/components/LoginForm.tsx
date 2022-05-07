@@ -3,20 +3,18 @@ import { Form, useLoaderData } from "remix";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { PageTitle } from "front/ui/PageTitle";
-import { componentCss, link } from "../stylesheet";
-import css from "./LoginForm.css";
-
-export const links = componentCss(link(css));
 
 export const LoginForm = () => {
   const loaderData = useLoaderData<AuthenticationErrorDto>();
 
   return (
-    <Form method="post" className="LoginForm">
+    <Form method="post" className="my-8 grid gap-4">
       <PageTitle>Welcome back</PageTitle>
 
       {loaderData?.error && (
-        <p className="LoginForm__error">{loaderData.error}</p>
+        <p className="my-8 rounded-2xl border-2 border-danger bg-danger-lighter p-4 text-inverse">
+          {loaderData.error}
+        </p>
       )}
 
       <FloatingLabelInput name="username" label="Email address" />

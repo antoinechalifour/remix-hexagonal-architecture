@@ -5,10 +5,6 @@ import classNames from "classnames";
 import { Form, useSubmit, useTransition } from "remix";
 import { CheckboxOption } from "../ui/CheckboxOption";
 import { Button } from "../ui/Button";
-import { componentCss, link } from "../stylesheet";
-import css from "./TodoItem.css";
-
-export const links = componentCss(link(css));
 
 interface TodoItemProps {
   todoListId: string;
@@ -28,7 +24,13 @@ export const TodoItem = ({ todoListId, todo }: TodoItemProps) => {
 
   return (
     <div
-      className={classNames("TodoItem", { "TodoItem--archiving": isArchiving })}
+      className={classNames(
+        "TodoItem",
+        "grid grid-cols-[1fr_auto] items-center gap-3",
+        "rounded-2xl py-4 px-6",
+        "bg-dark shadow",
+        { "opacity-50": isArchiving }
+      )}
     >
       <Form
         method="post"
@@ -39,7 +41,15 @@ export const TodoItem = ({ todoListId, todo }: TodoItemProps) => {
         <CheckboxOption
           id={htmlId}
           isChecked={todo.isComplete}
-          label={todo.title}
+          label={
+            <span
+              className={classNames({
+                "line-through opacity-75": todo.isComplete,
+              })}
+            >
+              {todo.title}
+            </span>
+          }
         />
       </Form>
 
