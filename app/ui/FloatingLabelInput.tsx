@@ -1,9 +1,5 @@
 import { useState } from "react";
 import classNames from "classnames";
-import { componentCss, link } from "../stylesheet";
-import css from "./FloatingLabelInput.css";
-
-export const links = componentCss(link(css));
 
 interface FloatingLabelInputOptions {
   name: string;
@@ -22,28 +18,42 @@ export const FloatingLabelInput = ({
   const isStickyLabel = value.length > 0;
 
   return (
-    <label
-      className={classNames("FloatingLabelInput", {
-        "FloatingLabelInput--error": !!errorMessage,
-      })}
-    >
-      <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
-      <span
-        className={classNames("FloatingLabelInput__label", {
-          "FloatingLabelInput__label--sticky": isStickyLabel,
-        })}
-      >
-        {label}
-      </span>
+    <label className="group">
+      <div className="relative">
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          className={classNames(
+            "block w-full rounded-2xl border bg-transparent py-4 px-6",
+            "border-2 border border-dark focus:border-primary",
+            "text-base text-lighter transition-colors",
+            {
+              "border-danger": !!errorMessage,
+            }
+          )}
+        />
+        <span
+          className={classNames(
+            "absolute top-1/2 left-4 -translate-y-1/2 p-3 font-bold",
+            "transition-all group-focus-within:top-0 group-focus-within:bg-darker group-focus-within:text-xs",
+            {
+              "top-0 bg-darker text-xs": isStickyLabel,
+              "text-danger": !!errorMessage,
+            }
+          )}
+        >
+          {label}
+        </span>
+      </div>
 
       {errorMessage && (
-        <span className="FloatingLabelInput__error" role="alert">
-          <span aria-hidden>👉</span> {errorMessage}
+        <span className="block px-4 pt-4 text-sm text-danger" role="alert">
+          <span aria-hidden className="inline-block w-[2ch]">
+            👉
+          </span>{" "}
+          {errorMessage}
         </span>
       )}
     </label>

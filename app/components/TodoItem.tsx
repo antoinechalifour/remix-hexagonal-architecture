@@ -3,19 +3,12 @@ import type { TodoDto } from "shared";
 import React from "react";
 import classNames from "classnames";
 import { Form, useSubmit, useTransition } from "remix";
-import {
-  CheckboxOption,
-  links as checkboxOptionsLinks,
-} from "../ui/CheckboxOption";
-import { Button, links as buttonLinks } from "../ui/Button";
+import { CheckboxOption } from "../ui/CheckboxOption";
+import { Button } from "../ui/Button";
 import { componentCss, link } from "../stylesheet";
 import css from "./TodoItem.css";
 
-export const links = componentCss(
-  ...checkboxOptionsLinks(),
-  ...buttonLinks(),
-  link(css)
-);
+export const links = componentCss(link(css));
 
 interface TodoItemProps {
   todoListId: string;

@@ -1,9 +1,5 @@
 import React from "react";
-import { componentCss, link } from "../stylesheet";
-import css from "./EmptyMessage.css";
-
-export const links = componentCss(link(css));
 
 export const EmptyMessage: React.FC = ({ children }) => (
-  <p className="EmptyMessage">{children}</p>
+  <p className="my-4 rounded-2xl bg-dark py-4 px-8 shadow">{children}</p>
 );

@@ -1,18 +1,14 @@
 import * as React from "react";
 import { Link } from "remix";
-import { componentCss, link } from "../stylesheet";
-import css from "./RootLayout.css";
-
-export const links = componentCss(link(css));
 
 export const RootLayout = ({ children }: React.PropsWithChildren<{}>) => (
-  <div className="RootLayout">
-    <header>
-      <div className="RootLayout__content">
+  <div className="grid min-h-screen grid-rows-[auto_1fr] gap-4 bg-darker">
+    <header className="bg-dark p-6 font-semibold text-lighter shadow-lg">
+      <div className="mx-auto max-w-5xl px-5">
         <Link to="/">Todo List Manager</Link>
       </div>
     </header>
 
-    <main className="RootLayout__content">{children}</main>
+    <main className="mx-auto w-full max-w-5xl px-5">{children}</main>
   </div>
 );

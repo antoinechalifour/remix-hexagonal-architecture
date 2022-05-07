@@ -3,11 +3,11 @@ import type { HomePageTodoListDto } from "shared";
 import { Form, Link, useTransition } from "remix";
 import classNames from "classnames";
 import { displayDate } from "../Date";
-import { Button, links as buttonLinks } from "../ui/Button";
+import { Button } from "../ui/Button";
 import { componentCss, link } from "../stylesheet";
 import css from "./TodoListItem.css";
 
-export const links = componentCss(...buttonLinks(), link(css));
+export const links = componentCss(link(css));
 
 interface TodoListItemProps {
   todoList: HomePageTodoListDto;

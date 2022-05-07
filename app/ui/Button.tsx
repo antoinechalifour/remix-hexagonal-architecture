@@ -1,17 +1,13 @@
 import type { ButtonHTMLAttributes } from "react";
 
 import classNames from "classnames";
-import { componentCss, link } from "../stylesheet";
-import css from "./Button.css";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
-
-export const links = componentCss(link(css));
 
 export const Button = ({ children, className, ...props }: ButtonProps) => (
   <button
     {...props}
-    className={classNames("Button", "Button--reset", className)}
+    className={classNames("disabled:cursor-not-allowed", className)}
   >
     {children}
   </button>
@@ -22,7 +18,13 @@ export const ButtonPrimary = ({
   className,
   ...props
 }: ButtonProps) => (
-  <Button {...props} className={classNames("Button--primary", className)}>
+  <Button
+    {...props}
+    className={classNames(
+      "rounded-2xl bg-primary py-4 px-6 shadow transition-colors disabled:bg-primary-light",
+      "text-sm font-semibold uppercase text-white text-text-secondary"
+    )}
+  >
     {children}
   </Button>
 );

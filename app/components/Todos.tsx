@@ -2,8 +2,7 @@ import type { TodoListDto } from "shared";
 
 import React from "react";
 import { displayDate } from "../Date";
-import { links as emptyMessageLinks } from "../ui/EmptyMessage";
-import { PageTitle, links as pageTitleLinks } from "../ui/PageTitle";
+import { PageTitle } from "../ui/PageTitle";
 import { AddTodoForm, links as addTodoFormLinks } from "./AddTodoForm";
 import { TodoList, links as todoListLinks } from "./TodoList";
 import { componentCss, link } from "../stylesheet";
@@ -11,8 +10,6 @@ import css from "./Todos.css";
 
 export const links = componentCss(
   ...addTodoFormLinks(),
-  ...emptyMessageLinks(),
-  ...pageTitleLinks(),
   ...todoListLinks(),
   link(css)
 );
