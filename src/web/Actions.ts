@@ -29,9 +29,13 @@ export class Actions {
   @DataFunction()
   async login(@Body() body: LoginBody) {
     const session = await this.sessionManager.get();
+    if (body.register != null) {
+      await this.loginApplicationService.register(body.email, body.password);
+    }
+
     const url = await this.loginApplicationService.login(
       session,
-      body.username,
+      body.email,
       body.password
     );
 

@@ -44,6 +44,7 @@ export class TodoListPrismaRepository implements TodoLists {
         id: todoList.id,
         title: todoList.title,
         createdAt: new Date(todoList.createdAt),
+        ownerId: "",
       },
     });
   }

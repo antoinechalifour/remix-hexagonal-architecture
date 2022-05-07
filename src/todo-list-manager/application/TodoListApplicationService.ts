@@ -3,8 +3,8 @@ import { AddTodoList } from "../usecase/AddTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
 import { TodoListId } from "../domain/TodoList";
 import { TodoListPrismaRepository } from "../persistence/TodoListPrismaRepository";
-import { GenerateUUID } from "../infrastructure/GenerateUUID";
 import { RealClock } from "../infrastructure/RealClock";
+import { GenerateUUID } from "shared";
 
 @Injectable()
 export class TodoListApplicationService {

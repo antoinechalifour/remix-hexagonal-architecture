@@ -1,4 +1,4 @@
-import type { GenerateId } from "../../../domain/GenerateId";
+import type { GenerateId } from "shared";
 
 export class GenerateTestId implements GenerateId {
   private count = 0;

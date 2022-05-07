@@ -1,9 +1,12 @@
-import { IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
 export class LoginBody {
   @IsString()
-  username!: string;
+  email!: string;
 
   @IsString()
   password!: string;
+
+  @IsOptional()
+  register: unknown;
 }

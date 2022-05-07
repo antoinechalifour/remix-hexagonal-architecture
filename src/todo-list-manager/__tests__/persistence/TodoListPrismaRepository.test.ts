@@ -1,5 +1,5 @@
-import type { TodoLists } from "../../../domain/TodoLists";
-import type { Todos } from "../../../domain/Todos";
+import type { TodoLists } from "../../domain/TodoLists";
+import type { Todos } from "../../domain/Todos";
 
 import { PrismaClient } from "@prisma/client";
 import {
@@ -7,8 +7,8 @@ import {
   TodoPrismaRepository,
 } from "todo-list-manager";
 
-import { aTodoList } from "../../domain/builders/TodoList";
-import { aTodo } from "../../domain/builders/Todo";
+import { aTodoList } from "../domain/builders/TodoList";
+import { aTodo } from "../domain/builders/Todo";
 import {
   configureTestingDatabaseEnvironment,
   prepareDatabase,

@@ -6,8 +6,8 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoId } from "../domain/Todo";
 import { TodoListPrismaRepository } from "../persistence/TodoListPrismaRepository";
 import { TodoPrismaRepository } from "../persistence/TodoPrismaRepository";
-import { GenerateUUID } from "../infrastructure/GenerateUUID";
 import { RealClock } from "../infrastructure/RealClock";
+import { GenerateUUID } from "shared";
 
 @Injectable()
 export class TodoApplicationService {

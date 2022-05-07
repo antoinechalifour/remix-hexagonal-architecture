@@ -50,6 +50,7 @@ export class TodoPrismaRepository implements Todos {
         isComplete: todo.isComplete,
         createdAt: new Date(todo.createdAt),
         todoListId: todo.todoListId,
+        ownerId: "",
       },
     });
   }
