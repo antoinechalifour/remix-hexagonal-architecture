@@ -11,7 +11,7 @@ interface TodosProps {
 }
 
 export const Todos = ({ todoList }: TodosProps) => (
-  <section>
+  <section className="space-y-10">
     <div className="space-y-4">
       <PageTitle>{todoList.title}</PageTitle>
 
