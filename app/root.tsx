@@ -14,6 +14,7 @@ import {
 import * as React from "react";
 
 import resetCssUrl from "reset.css/reset.css";
+import styles from "./styles/app.css";
 import globalCssUrl from "front/styles/global.css";
 import { RootLayout, links as rootLayoutLinks } from "./ui/RootLayout";
 import {
@@ -27,6 +28,7 @@ export const links: LinksFunction = () => {
   return [
     { rel: "stylesheet", href: resetCssUrl },
     { rel: "stylesheet", href: globalCssUrl },
+    { rel: "stylesheet", href: styles },
     ...rootLayoutLinks(),
     ...errorPageLinks(),
   ];

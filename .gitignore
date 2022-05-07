@@ -4,6 +4,7 @@ node_modules
 /build
 /dist
 /public/build
+/app/styles/app.css
 
 prisma/*.db
 prisma/*.db-journal
