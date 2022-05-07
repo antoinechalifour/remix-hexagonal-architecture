@@ -9,6 +9,7 @@ interface TodoListBuilder {
 export const aTodoList = (): TodoListBuilder => ({
   todoList: {
     id: "todoList/1",
+    ownerId: "owner/1",
     title: "A sample todo list",
     createdAt: new Date().toISOString(),
   },

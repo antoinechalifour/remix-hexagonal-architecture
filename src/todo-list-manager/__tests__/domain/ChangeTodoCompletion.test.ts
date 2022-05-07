@@ -21,10 +21,10 @@ describe("Changing a todo completion status", () => {
 
     // Act
     // Assert
-    await changeTodoCompletion.execute(theTodo.id, "on");
-    expect((await todos.ofId(theTodo.id)).isComplete).toBe(true);
+    await changeTodoCompletion.execute(theTodo.id, "on", "owner/1");
+    expect((await todos.ofId(theTodo.id, "owner/1")).isComplete).toBe(true);
 
-    await changeTodoCompletion.execute(theTodo.id, "off");
-    expect((await todos.ofId(theTodo.id)).isComplete).toBe(false);
+    await changeTodoCompletion.execute(theTodo.id, "off", "owner/1");
+    expect((await todos.ofId(theTodo.id, "owner/1")).isComplete).toBe(false);
   });
 });

@@ -9,4 +9,9 @@ export class Authenticator {
     const session = await this.sessionManager.get();
     return session.has("userId");
   }
+
+  async currentUser(): Promise<string> {
+    const session = await this.sessionManager.get();
+    return session.get("userId");
+  }
 }

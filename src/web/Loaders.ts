@@ -39,12 +39,15 @@ export class Loaders {
   @Authenticated()
   @DataFunction()
   async homePage() {
-    return this.fetchHomePageQuery.run();
+    return this.fetchHomePageQuery.run(await this.authenticator.currentUser());
   }
 
   @Authenticated()
   @DataFunction()
   async todoList(@Params() params: FetchTodoListParams) {
-    return this.fetchTodoListQuery.run(params.todoListId);
+    return this.fetchTodoListQuery.run(
+      params.todoListId,
+      await this.authenticator.currentUser()
+    );
   }
 }
