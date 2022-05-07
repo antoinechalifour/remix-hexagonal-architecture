@@ -12,7 +12,7 @@ interface TodoListsProps {
 }
 
 export const TodoLists = ({ todoLists }: TodoListsProps) => (
-  <section className="space-y-4">
+  <section className="space-y-10">
     <PageTitle>Welcome, these are your todo lists</PageTitle>
 
     <AddTodoListForm />
