@@ -2,16 +2,12 @@ import type { TodoDto } from "shared";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
-import { EmptyMessage, links as emptyMessageLinks } from "../ui/EmptyMessage";
+import { EmptyMessage } from "../ui/EmptyMessage";
 import { TodoItem, links as todoItemLinks } from "./TodoItem";
 import { componentCss, link } from "../stylesheet";
 import css from "./TodoList.css";
 
-export const links = componentCss(
-  ...todoItemLinks(),
-  ...emptyMessageLinks(),
-  link(css)
-);
+export const links = componentCss(...todoItemLinks(), link(css));
 
 interface TodoListProps {
   title: string;

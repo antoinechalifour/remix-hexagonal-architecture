@@ -2,8 +2,8 @@ import type { HomePageTodoListDto } from "shared";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
-import { EmptyMessage, links as emptyMessageLinks } from "../ui/EmptyMessage";
-import { links as pageTitleLinks, PageTitle } from "../ui/PageTitle";
+import { EmptyMessage } from "../ui/EmptyMessage";
+import { PageTitle } from "../ui/PageTitle";
 import { links as todoListItemLinks, TodoListItem } from "./TodoListItem";
 import {
   AddTodoListForm,
@@ -15,8 +15,6 @@ import css from "./TodoLists.css";
 export const links = componentCss(
   ...addTodoListFormLinks(),
   ...todoListItemLinks(),
-  ...emptyMessageLinks(),
-  ...pageTitleLinks(),
   link(css)
 );
 

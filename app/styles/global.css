@@ -13,14 +13,10 @@
   box-sizing: border-box;
 }
 
-html {
-  font-size: 62.5%;
-}
-
 body {
   font-family: Metropolis, -apple-system, "Segoe UI", Helvetica Neue, Helvetica,
     Roboto, Arial, sans-serif, system-ui, "Apple Color Emoji", "Segoe UI Emoji";
-  font-size: var(--size-text);
+  /*font-size: var(--size-text);*/
   color: var(--color-text);
 }
 

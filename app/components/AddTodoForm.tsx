@@ -1,18 +1,11 @@
 import { Form, useActionData, useTransition } from "remix";
 import { AddTodoErrorDto } from "shared";
-import {
-  FloatingLabelInput,
-  links as floatingLabelInputLinks,
-} from "../ui/FloatingLabelInput";
-import { ButtonPrimary, links as buttonLinks } from "../ui/Button";
+import { FloatingLabelInput } from "../ui/FloatingLabelInput";
+import { ButtonPrimary } from "../ui/Button";
 import { componentCss, link } from "../stylesheet";
 import css from "./AddTodoForm.css";
 
-export const links = componentCss(
-  ...floatingLabelInputLinks(),
-  ...buttonLinks(),
-  link(css)
-);
+export const links = componentCss(link(css));
 
 type ActionData = {
   errors?: AddTodoErrorDto;

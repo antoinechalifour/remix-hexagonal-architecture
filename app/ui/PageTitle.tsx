@@ -1,9 +1,5 @@
 import React from "react";
-import { componentCss, link } from "../stylesheet";
-import css from "./PageTitle.css";
-
-export const links = componentCss(link(css));
 
 export const PageTitle: React.FC = ({ children }) => (
-  <h1 className="PageTitle">{children}</h1>
+  <h1 className="text-2xl font-semibold text-lighter">{children}</h1>
 );
