@@ -1,4 +1,4 @@
-import { IsInt, IsPositive, IsString } from "class-validator";
+import { IsInt, IsPositive, IsString, Min } from "class-validator";
 import { Type } from "class-transformer";
 
 export class ReorderTodosParams {
@@ -11,7 +11,7 @@ export class ReorderTodosBody {
   todoId!: string;
 
   @Type(() => Number)
-  @IsPositive()
   @IsInt()
+  @Min(0)
   newIndex!: number;
 }

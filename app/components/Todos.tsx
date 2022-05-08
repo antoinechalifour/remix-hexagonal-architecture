@@ -5,6 +5,8 @@ import { displayDate } from "../Date";
 import { PageTitle } from "../ui/PageTitle";
 import { AddTodoForm } from "./AddTodoForm";
 import { TodoList } from "./TodoList";
+import { TodoItem } from "front/components/TodoItem";
+import { ReorderableTodoItem } from "front/components/ReorderableTodoItem";
 
 interface TodosProps {
   todoList: TodoListDto;
@@ -27,16 +29,24 @@ export const Todos = ({ todoList }: TodosProps) => (
 
     <TodoList
       title="Things to do"
-      todoListId={todoList.id}
       todos={todoList.doingTodos}
       emptyMessage="Come on! Don't you have anything to do?"
+      renderTodo={(todoItem, index) => (
+        <ReorderableTodoItem
+          todoListId={todoList.id}
+          todo={todoItem}
+          index={index}
+        />
+      )}
     />
 
     <TodoList
       title="Things done"
-      todoListId={todoList.id}
       todos={todoList.completedTodos}
       emptyMessage="Alright let's get to work!"
+      renderTodo={(todoItem, index) => (
+        <TodoItem todoListId={todoList.id} todo={todoItem} />
+      )}
     />
   </section>
 );

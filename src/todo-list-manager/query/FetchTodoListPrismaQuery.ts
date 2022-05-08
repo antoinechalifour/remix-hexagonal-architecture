@@ -6,7 +6,12 @@ import { PRISMA } from "../keys";
 import type { FetchTodoListQuery } from "./FetchTodoListQuery";
 import type { OwnerId } from "../domain/OwnerId";
 
-type TodoListRow = { id: string; title: string; createdAt: string };
+type TodoListRow = {
+  id: string;
+  title: string;
+  createdAt: string;
+  todosOrder: string[];
+};
 
 type TodoRow<Completion extends boolean> = {
   id: string;
@@ -20,8 +25,11 @@ export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
   async run(todoListId: TodoListId, ownerId: OwnerId): Promise<TodoListDto> {
-    const [todoList, doingTodos, completedTodos] = await Promise.all([
-      this.fetchTodoList(todoListId, ownerId),
+    const { todosOrder, ...todoList } = await this.fetchTodoList(
+      todoListId,
+      ownerId
+    );
+    const [doingTodos, completedTodos] = await Promise.all([
       this.fetchDoingTodos(todoListId, ownerId),
       this.fetchCompleteTodos(todoListId, ownerId),
     ]);
@@ -31,14 +39,14 @@ export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
 
     return {
       ...todoList,
-      doingTodos,
-      completedTodos,
+      doingTodos: this.sortTodos(doingTodos, todosOrder),
+      completedTodos: this.sortTodos(completedTodos, todosOrder),
     };
   }
 
   private fetchTodoList(todoListId: TodoListId, ownerId: OwnerId) {
     return this.prisma.$queryRaw<TodoListRow[]>`
-        SELECT TL.id, TL.title, TL."createdAt"
+        SELECT TL.id, TL.title, TL."createdAt", TL."todosOrder"
         FROM "TodoList" TL
         WHERE TL.id = ${todoListId} AND TL."ownerId" = ${ownerId};
     `.then((rows) => rows[0]);
@@ -56,5 +64,11 @@ export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
         SELECT id, title, "isComplete", "createdAt" FROM "Todo"
         WHERE "isComplete" IS true AND "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
     `;
+  }
+
+  private sortTodos<T extends boolean>(todos: TodoRow<T>[], order: string[]) {
+    const position = (idToCheck: string) =>
+      order.findIndex((id) => idToCheck === id) ?? 0;
+    return todos.sort((t1, t2) => position(t1.id) - position(t2.id));
   }
 }
