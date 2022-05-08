@@ -1,8 +1,8 @@
-import type { ActionFunction, LoaderFunction } from "remix";
+import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
 import type { TodoListDto } from "shared";
 import type { RemixAppContext } from "web";
 
-import { MetaFunction, useLoaderData } from "remix";
+import { useLoaderData } from "remix";
 import { Todos } from "front/components/Todos";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({

@@ -1,5 +1,5 @@
+import type { AddTodoErrorDto } from "shared";
 import { Form, useActionData, useTransition } from "remix";
-import { AddTodoErrorDto } from "shared";
 import { FloatingLabelInput } from "../ui/FloatingLabelInput";
 import { ButtonPrimary } from "../ui/Button";
 
@@ -7,11 +7,11 @@ type ActionData = {
   errors?: AddTodoErrorDto;
 };
 
-interface AddTodoButton {
+interface AddTodoButtonProps {
   todoListId: string;
 }
 
-const AddTodoButton = ({ todoListId }: AddTodoButton) => {
+const AddTodoButton = ({ todoListId }: AddTodoButtonProps) => {
   const transition = useTransition();
   const isSubmitting = transition.submission?.action === `/l/${todoListId}`;
 

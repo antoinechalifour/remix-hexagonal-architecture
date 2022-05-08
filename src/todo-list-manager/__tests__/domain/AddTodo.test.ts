@@ -58,13 +58,10 @@ describe("Adding a todo", () => {
     const theOwnerId = "owner/1";
     expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
 
-    // Act
-    try {
-      await addTodo.execute(theTodoListId, "Buy cereals", theOwnerId);
-    } catch (e) {
-      // Assert
-      expect(e).toEqual(new Error("Todolist todoList/1 not found"));
-      expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
-    }
+    await expect(() =>
+      addTodo.execute(theTodoListId, "Buy cereals", theOwnerId)
+    ).rejects.toEqual(new Error("Todolist todoList/1 not found"));
+
+    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
   });
 });

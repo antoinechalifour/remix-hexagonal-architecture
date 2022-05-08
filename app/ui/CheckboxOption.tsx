@@ -1,10 +1,10 @@
-import React, { ReactNode } from "react";
+import React from "react";
 import classNames from "classnames";
 
 interface CheckboxOptionProps {
   id: string;
   isChecked: boolean;
-  label: ReactNode;
+  label: React.ReactNode;
 }
 
 export const CheckboxOption = ({

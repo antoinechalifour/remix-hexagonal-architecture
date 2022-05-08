@@ -105,7 +105,7 @@ export function ErrorBoundary({ error }: { error: Error }) {
   );
 }
 
-const RouteChangeAnnouncement = React.memo(() => {
+const RouteChangeAnnouncement = React.memo(function RouteChangeAnnouncement() {
   let [hydrated, setHydrated] = React.useState(false);
   let [innerHtml, setInnerHtml] = React.useState("");
   let location = useLocation();

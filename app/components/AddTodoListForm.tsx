@@ -1,5 +1,5 @@
+import type { AddTodoListErrorDto } from "shared";
 import { Form, useActionData, useTransition } from "remix";
-import { AddTodoListErrorDto } from "shared";
 import { FloatingLabelInput } from "../ui/FloatingLabelInput";
 import { ButtonPrimary } from "../ui/Button";
 

@@ -1,7 +1,7 @@
+import type { Accounts } from "../../domain/Accounts";
+import type { Account } from "../../domain/Account";
+import type { PasswordHasher } from "../../domain/PasswordHasher";
 import { LoginFlow } from "../../usecase/LoginFlow";
-import { Accounts } from "../../domain/Accounts";
-import { Account } from "../../domain/Account";
-import { PasswordHasher } from "../../domain/PasswordHasher";
 
 class AccountsInMemory implements Accounts {
   private _database = new Map<string, Account>();
