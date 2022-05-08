@@ -22,7 +22,8 @@ const DragTypeTodo = Symbol("todo");
 const useReorderTodo = (
   todoListId: string,
   todo: TodoDto,
-  currentIndex: number
+  currentIndex: number,
+  onPreviewMove: (todoId: string, newIndex: number) => void
 ) => {
   const todosOrder = useFetcher();
 
@@ -55,6 +56,9 @@ const useReorderTodo = (
 
   const [, drop] = useDrop<DragItem, DropResult>({
     accept: DragTypeTodo,
+    hover: (item, monitor) => {
+      onPreviewMove(item.todoId, currentIndex);
+    },
     drop: () => ({
       newIndex: currentIndex,
     }),
@@ -67,14 +71,21 @@ const useReorderTodo = (
   };
 };
 
+export type ReorderableTodoItemProps = TodoItemProps & {
+  index: number;
+  onPreviewMove: (todoId: string, newIndex: number) => void;
+};
+
 export const ReorderableTodoItem = ({
   index,
+  onPreviewMove,
   ...props
-}: TodoItemProps & { index: number }) => {
+}: ReorderableTodoItemProps) => {
   const { ref, preview, isDragging } = useReorderTodo(
     props.todoListId,
     props.todo,
-    index
+    index,
+    onPreviewMove
   );
 
   return (
