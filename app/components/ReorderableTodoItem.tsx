@@ -1,9 +1,11 @@
+import type { TodoDto } from "shared";
+import type { TodoItemProps } from "./TodoItem";
+
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { useDrag, useDrop } from "react-dnd";
 import classNames from "classnames";
-import { TodoItem, TodoItemProps } from "./TodoItem";
-import { TodoDto } from "shared";
+import { TodoItem } from "./TodoItem";
 
 interface DragItem {
   todoId: string;

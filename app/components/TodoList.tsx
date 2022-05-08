@@ -1,6 +1,6 @@
 import type { TodoDto } from "shared";
 
-import React, { ReactNode } from "react";
+import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "../ui/EmptyMessage";
 
@@ -8,7 +8,7 @@ interface TodoListProps {
   title: string;
   todos: TodoDto[];
   emptyMessage: string;
-  renderTodo: (todoItem: TodoDto, index: number) => ReactNode;
+  renderTodo: (todoItem: TodoDto, index: number) => React.ReactNode;
 }
 
 export const TodoList = ({
