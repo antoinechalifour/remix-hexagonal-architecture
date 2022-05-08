@@ -49,7 +49,6 @@ const useReorderTodo = (
     }),
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
-      console.log(dropResult, todo.id, todo.title);
       if (dropResult?.newIndex != null) moveTodo(dropResult.newIndex);
     },
   });
