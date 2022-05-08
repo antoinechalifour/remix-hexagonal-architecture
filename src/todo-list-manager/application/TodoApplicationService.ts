@@ -25,8 +25,12 @@ export class TodoApplicationService {
     ).execute(todoListId, title, ownerId);
   }
 
-  archive(todoId: string, ownerId: string) {
-    return new ArchiveTodo(this.todos).execute(todoId, ownerId);
+  archive(todoListId: string, todoId: string, ownerId: string) {
+    return new ArchiveTodo(this.todoLists, this.todos).execute(
+      todoListId,
+      todoId,
+      ownerId
+    );
   }
 
   changeTodoCompletion(todoId: string, isChecked: string, ownerId: string) {

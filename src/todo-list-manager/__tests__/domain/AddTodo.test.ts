@@ -32,6 +32,7 @@ describe("Adding a todo", () => {
     const theTodoList = aTodoList()
       .withId(theTodoListId)
       .ownedBy(theOwnerId)
+      .withTodosOrder("todo/0")
       .build();
     await todoLists.save(theTodoList);
     expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
@@ -49,6 +50,9 @@ describe("Adding a todo", () => {
       todoListId: "todoList/1",
       ownerId: "owner/1",
     });
+
+    const updatedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);
+    expect(updatedTodoList.todosOrder).toEqual(["todo/0", "todo/1"]);
   });
 
   it("should not add a new todo to a todo list that does not exist", async () => {

@@ -1,38 +1,54 @@
-import type { GenerateId } from "shared";
+import type { Todos } from "../../domain/Todos";
+import type { TodoLists } from "../../domain/TodoLists";
 import { ArchiveTodo } from "../../usecase/ArchiveTodo";
-import { Todos } from "../../domain/Todos";
-import { addTodo } from "../../domain/TodoList";
-import { Clock } from "../../domain/Clock";
 import { TodosInMemory } from "./fakes/TodosInMemory";
-import { GenerateTestId } from "./fakes/GenerateTestId";
-import { FixedClock } from "./fakes/FixedClock";
 import { aTodoList } from "./builders/TodoList";
+import { aTodo } from "./builders/Todo";
+import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 
 describe("Archiving a todo", () => {
   let archiveTodo: ArchiveTodo;
+  let todoLists: TodoLists;
   let todos: Todos;
-  let generateId: GenerateId;
-  let clock: Clock;
 
   beforeEach(() => {
     todos = new TodosInMemory();
-    generateId = new GenerateTestId("todo");
-    clock = new FixedClock();
-    archiveTodo = new ArchiveTodo(todos);
+    todoLists = new TodoListsInMemory();
+    archiveTodo = new ArchiveTodo(todoLists, todos);
   });
 
   it("should remove the todo from the todo list", async () => {
     // Arrange
     const theOwnerId = "owner/1";
-    const theTodoList = aTodoList().ownedBy(theOwnerId).build();
-    const theTodo = addTodo(theTodoList, "Buy bread", generateId, clock);
-    await todos.save(theTodo);
-    expect(await todos.ofTodoList(theTodoList.id, theOwnerId)).toHaveLength(1);
+    const theTodoListId = "todoLists/1";
+    const theTodoList = aTodoList()
+      .withId(theTodoListId)
+      .ownedBy(theOwnerId)
+      .withTodosOrder("todos/1", "todos/2")
+      .build();
+    const theTodoRemoved = aTodo()
+      .withId("todos/1")
+      .ownedBy(theOwnerId)
+      .ofTodoList(theTodoListId)
+      .build();
+    const theTodoNotRemoved = aTodo()
+      .withId("todos/2")
+      .ownedBy(theOwnerId)
+      .ofTodoList(theTodoListId)
+      .build();
+    await todoLists.save(theTodoList);
+    await todos.save(theTodoRemoved);
+    await todos.save(theTodoNotRemoved);
+    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(2);
 
     // Act
-    await archiveTodo.execute(theTodo.id, theOwnerId);
+    await archiveTodo.execute(theTodoListId, "todos/1", theOwnerId);
 
     // Assert
-    expect(await todos.ofTodoList(theTodoList.id, theOwnerId)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toEqual([
+      theTodoNotRemoved,
+    ]);
+    const updatedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);
+    expect(updatedTodoList.todosOrder).toEqual(["todos/2"]);
   });
 });
