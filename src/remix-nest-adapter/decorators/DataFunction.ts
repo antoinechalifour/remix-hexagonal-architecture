@@ -2,6 +2,7 @@ import { DataFunctionArgs } from "@remix-run/node";
 import { validateSync, ValidationError } from "class-validator";
 import { METADATA_BODY } from "./Body";
 import { METADATA_PARAMS } from "./Params";
+import { plainToClass } from "class-transformer";
 
 class DecoratorValidationError extends Error {
   constructor(message: string, public validationErrors: ValidationError[]) {
@@ -56,8 +57,10 @@ export const DataFunction =
 
     async function parseBody(args: DataFunctionArgs) {
       const formData = await args.request.formData();
-      const body = new ParamTypes[bodyParameterIndex]();
-      Object.assign(body, Object.fromEntries(formData.entries()));
+      const body = plainToClass<any, any>(
+        ParamTypes[bodyParameterIndex],
+        Object.fromEntries(formData.entries())
+      );
       const validationErrors = validateSync(body);
 
       if (validationErrors.length > 0) {

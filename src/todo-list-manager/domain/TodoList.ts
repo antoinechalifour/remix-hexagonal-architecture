@@ -2,6 +2,7 @@ import type { Todo, TodoId } from "./Todo";
 import type { GenerateId } from "shared";
 import type { OwnerId } from "./OwnerId";
 
+import { moveArrayItem } from "shared";
 import { Clock } from "./Clock";
 
 export type TodoListId = string;
@@ -79,12 +80,3 @@ export const reorderTodoList = (
     todosOrder: moveArrayItem(todoList.todosOrder, todoCurrentIndex, newIndex),
   };
 };
-
-function moveArrayItem<T>(source: T[], currentIndex: number, newIndex: number) {
-  const copy = [...source];
-  const element = copy[currentIndex];
-  copy.splice(currentIndex, 1);
-  copy.splice(newIndex, 0, element);
-
-  return copy;
-}

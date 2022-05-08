@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { redirect } from "@remix-run/node";
-import { Body, Params, DataFunction, SessionManager } from "remix-nest-adapter";
+import { Body, DataFunction, Params, SessionManager } from "remix-nest-adapter";
 import { LoginApplicationService } from "authentication";
 import {
   TodoApplicationService,
@@ -17,6 +17,7 @@ import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
 import { LoginBody } from "./dtos/Login";
 import { Authenticated } from "./decorators/Authenticated";
 import { Authenticator } from "./Authenticator";
+import { ReorderTodosBody, ReorderTodosParams } from "./dtos/ReorderTodos";
 
 @Injectable()
 export class Actions {
@@ -100,5 +101,21 @@ export class Actions {
       await this.authenticator.currentUser()
     );
     return redirect("/");
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async reorderTodoList(
+    @Params() params: ReorderTodosParams,
+    @Body() body: ReorderTodosBody
+  ) {
+    await this.todoListApplicationService.reorder(
+      params.todoListId,
+      await this.authenticator.currentUser(),
+      body.todoId,
+      body.newIndex
+    );
+
+    return null;
   }
 }
