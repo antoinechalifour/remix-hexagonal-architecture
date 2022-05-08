@@ -18,11 +18,12 @@ model Todo {
 }
 
 model TodoList {
-  id        String   @id @db.Uuid
-  createdAt DateTime
-  title     String
-  todos     Todo[]
-  ownerId   String   @db.Uuid
+  id         String   @id @db.Uuid
+  createdAt  DateTime
+  title      String
+  todos      Todo[]
+  ownerId    String   @db.Uuid
+  todosOrder Json
 }
 
 model Account {

@@ -38,6 +38,7 @@ describe("TodoListPrismaRepository", () => {
     const todoList = aTodoList()
       .withId(theTodoListId)
       .ownedBy(theOwnerId)
+      .withTodosOrder("todos/2", "todo/1")
       .build();
 
     // Act

@@ -4,6 +4,7 @@ import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
 import { TodoListPrismaRepository } from "../persistence/TodoListPrismaRepository";
 import { RealClock } from "../infrastructure/RealClock";
 import { GenerateUUID } from "shared";
+import { ReorderTodos } from "../usecase/ReorderTodos";
 
 @Injectable()
 export class TodoListApplicationService {
@@ -22,5 +23,19 @@ export class TodoListApplicationService {
 
   archive(todoListId: string, ownerId: string) {
     return new ArchiveTodoList(this.todoLists).execute(todoListId, ownerId);
+  }
+
+  async reorder(
+    todoListId: string,
+    ownerId: string,
+    todoId: string,
+    newIndex: number
+  ) {
+    return new ReorderTodos(this.todoLists).execute(
+      todoListId,
+      ownerId,
+      todoId,
+      newIndex
+    );
   }
 }

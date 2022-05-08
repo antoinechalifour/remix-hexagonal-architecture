@@ -3,6 +3,8 @@ import type { TodoListDto } from "shared";
 import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { Todos } from "front/components/Todos";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
@@ -19,5 +21,9 @@ export const action: ActionFunction = async (args) =>
 export default function TodoListPage() {
   const todoList = useLoaderData<TodoListDto>();
 
-  return <Todos todoList={todoList} />;
+  return (
+    <DndProvider backend={HTML5Backend}>
+      <Todos todoList={todoList} />
+    </DndProvider>
+  );
 }
