@@ -15,16 +15,20 @@ describe("Changing a todo completion status", () => {
 
   it("should allow a todo to be completed or uncompleted", async () => {
     // Arrange
-    let theTodoId = "todo/1";
-    const theTodo = anUncompletedTodo().identifiedBy(theTodoId).build();
+    const theTodoId = "todo/1";
+    const theOwnerId = "owner/1";
+    const theTodo = anUncompletedTodo()
+      .withId(theTodoId)
+      .ownedBy(theOwnerId)
+      .build();
     await todos.save(theTodo);
 
     // Act
     // Assert
-    await changeTodoCompletion.execute(theTodo.id, "on", "owner/1");
-    expect((await todos.ofId(theTodo.id, "owner/1")).isComplete).toBe(true);
+    await changeTodoCompletion.execute(theTodo.id, "on", theOwnerId);
+    expect((await todos.ofId(theTodo.id, theOwnerId)).isComplete).toBe(true);
 
-    await changeTodoCompletion.execute(theTodo.id, "off", "owner/1");
-    expect((await todos.ofId(theTodo.id, "owner/1")).isComplete).toBe(false);
+    await changeTodoCompletion.execute(theTodo.id, "off", theOwnerId);
+    expect((await todos.ofId(theTodo.id, theOwnerId)).isComplete).toBe(false);
   });
 });
