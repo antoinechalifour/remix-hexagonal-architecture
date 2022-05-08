@@ -8,7 +8,7 @@ datasource db {
 }
 
 model Todo {
-  id         String    @id @db.Uuid
+  id         String   @id @db.Uuid
   createdAt  DateTime
   title      String
   isComplete Boolean
@@ -27,6 +27,6 @@ model TodoList {
 
 model Account {
   id    String @id @db.Uuid
-  email String
+  email String @unique
   hash  String
 }
