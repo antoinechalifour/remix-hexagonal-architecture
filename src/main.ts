@@ -17,7 +17,7 @@ import { WebModule } from "web";
         maxAge: 60 * 60 * 24,
         httpOnly: true,
         sameSite: "strict",
-        secrets: ["azerty"],
+        secrets: [process.env.SESSION_SECRET!],
       },
     }),
   ],
