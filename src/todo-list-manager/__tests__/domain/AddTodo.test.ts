@@ -27,17 +27,20 @@ describe("Adding a todo", () => {
 
   it("should add a new todo to an existing todo list", async () => {
     // Arrange
-    const theTitle = "Buy cereals";
     const theTodoListId = "todoList/1";
-    const theTodoList = aTodoList().identifiedBy(theTodoListId).build();
+    const theOwnerId = "owner/1";
+    const theTodoList = aTodoList()
+      .withId(theTodoListId)
+      .ownedBy(theOwnerId)
+      .build();
     await todoLists.save(theTodoList);
-    expect(await todos.ofTodoList(theTodoListId, "owner/1")).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
 
     // Act
-    await addTodo.execute(theTodoListId, theTitle, "owner/1");
+    await addTodo.execute(theTodoListId, "Buy cereals", theOwnerId);
 
     // Assert
-    const [todo] = await todos.ofTodoList(theTodoListId, "owner/1");
+    const [todo] = await todos.ofTodoList(theTodoListId, theOwnerId);
     expect(todo).toEqual({
       id: "todo/1",
       createdAt: "2022-01-05T12:00:00.000Z",
@@ -52,15 +55,16 @@ describe("Adding a todo", () => {
     // Arrange
     expect.assertions(3);
     const theTodoListId = "todoList/1";
-    expect(await todos.ofTodoList(theTodoListId, "owner/1")).toHaveLength(0);
+    const theOwnerId = "owner/1";
+    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
 
     // Act
     try {
-      await addTodo.execute(theTodoListId, "Buy cereals", "owner/1");
+      await addTodo.execute(theTodoListId, "Buy cereals", theOwnerId);
     } catch (e) {
       // Assert
       expect(e).toEqual(new Error("Todolist todoList/1 not found"));
-      expect(await todos.ofTodoList(theTodoListId, "owner/1")).toHaveLength(0);
+      expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
     }
   });
 });

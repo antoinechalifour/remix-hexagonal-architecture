@@ -2,19 +2,24 @@ import type { TodoList } from "../../../domain/TodoList";
 
 interface TodoListBuilder {
   todoList: TodoList;
-  identifiedBy(id: string): TodoListBuilder;
+  withId(id: string): TodoListBuilder;
+  ownedBy(ownerId: string): TodoListBuilder;
   build(): TodoList;
 }
 
 export const aTodoList = (): TodoListBuilder => ({
   todoList: {
-    id: "todoList/1",
-    ownerId: "owner/1",
+    id: "6885f4fc-dc8e-46ef-bbbd-141de0db6c9c",
+    ownerId: "f650d049-0b52-4fef-9798-9d9be18cab14",
     title: "A sample todo list",
     createdAt: new Date().toISOString(),
   },
-  identifiedBy(id: string) {
+  withId(id: string) {
     this.todoList.id = id;
+    return this;
+  },
+  ownedBy(ownerId: string): TodoListBuilder {
+    this.todoList.ownerId = ownerId;
     return this;
   },
   build() {

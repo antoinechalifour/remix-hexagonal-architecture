@@ -32,25 +32,28 @@ describe("TodoPrismaRepository", () => {
   afterEach(() => prisma.$disconnect());
 
   it("persists and retrieves todos", async () => {
-    const todoList = aTodoList().build();
+    const theOwnerId = "feff99e6-875f-4cf6-9c5a-40ee20008fc2";
+    const theTodoId = "eb7531dd-0e2b-47b6-9bca-47182995f3ab";
+    const todoList = aTodoList().ownedBy(theOwnerId).build();
     await todoLists.save(todoList);
 
     // Persist todos
     let todo = anUncompletedTodo()
-      .identifiedBy("todos/1")
+      .withId(theTodoId)
       .ofTodoList(todoList.id)
+      .ownedBy(theOwnerId)
       .build();
     await todos.save(todo);
-    expect(await todos.ofId("todos/1", "owner/1")).toEqual(todo);
+    expect(await todos.ofId(theTodoId, theOwnerId)).toEqual(todo);
 
     // Updates todos
     todo = updateCompletion(todo, true);
     await todos.save(todo);
-    expect(await todos.ofId("todos/1", "owner/1")).toEqual(todo);
+    expect(await todos.ofId(theTodoId, theOwnerId)).toEqual(todo);
 
     // Removes todos
-    await todos.remove("todos/1", "owner/1");
-    await expect(() => todos.ofId("todos/1", "owner/1")).rejects.toThrow(
+    await todos.remove(theTodoId, theOwnerId);
+    await expect(() => todos.ofId(theTodoId, theOwnerId)).rejects.toThrow(
       new Error("No Todo found")
     );
   });

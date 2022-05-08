@@ -15,14 +15,18 @@ describe("Archiving a todo list", () => {
   it("should archive the todo list", async () => {
     // Arrange
     const theTodoListId = "todoList/1";
-    const theTodoList = aTodoList().identifiedBy(theTodoListId).build();
+    const theOwnerId = "owner/1";
+    const theTodoList = aTodoList()
+      .withId(theTodoListId)
+      .ownedBy(theOwnerId)
+      .build();
     await todoLists.save(theTodoList);
-    expect(await todoLists.all("owner/1")).toHaveLength(1);
+    expect(await todoLists.all(theOwnerId)).toHaveLength(1);
 
     // Act
-    await archiveTodoList.execute(theTodoListId, "owner/1");
+    await archiveTodoList.execute(theTodoListId, theOwnerId);
 
     // Assert
-    expect(await todoLists.all("owner/1")).toHaveLength(0);
+    expect(await todoLists.all(theOwnerId)).toHaveLength(0);
   });
 });
