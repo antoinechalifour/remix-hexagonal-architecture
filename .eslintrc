@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "@remix-run/eslint-config",
+    "@remix-run/eslint-config/jest-testing-library"
+  ],
+  "overrides": [{
+    "files": ["src/**/*.ts"],
+    "rules": {
+      "@typescript-eslint/consistent-type-imports": "off"
+    }
+  }]
+}
