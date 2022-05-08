@@ -24,7 +24,7 @@
     "integration:clean": "DATABASE_URL=postgresql://user:password@localhost:6070/todolistmanager-integration yarn prisma:reset",
     "e2e:run": "start-test e2e:app 3333 cypress:run",
     "e2e:run:dev": "start-test e2e:app 3333 cypress:dev",
-    "e2e:app": "run-s build:remix e2e:clean e2e:app:start",
+    "e2e:app": "run-s build:front e2e:clean e2e:app:start",
     "e2e:clean": "DATABASE_URL=postgresql://user:password@localhost:6080/todolistmanager-e2e yarn prisma:reset",
     "e2e:app:start": "PORT=3333 DATABASE_URL=postgresql://user:password@localhost:6080/todolistmanager-e2e yarn nest start",
     "e2e:seed": "DATABASE_URL=postgresql://user:password@localhost:6080/todolistmanager-e2e yarn prisma:seed",
