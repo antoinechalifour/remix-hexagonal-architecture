@@ -61,6 +61,7 @@ export class Actions {
   @DataFunction()
   async archiveTodo(@Params() params: ArchiveTodoParams) {
     await this.todoApplicationService.archive(
+      params.todoListId,
       params.todoId,
       await this.authenticator.currentUser()
     );

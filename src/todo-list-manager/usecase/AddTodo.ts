@@ -16,8 +16,16 @@ export class AddTodo {
 
   async execute(todoListId: TodoListId, title: string, ownerId: OwnerId) {
     const todoList = await this.todoLists.ofId(todoListId, ownerId);
-    const todo = addTodo(todoList, title, this.generateId, this.clock);
+    const [updatedTodoList, createdTodo] = addTodo(
+      todoList,
+      title,
+      this.generateId,
+      this.clock
+    );
 
-    await this.todos.save(todo);
+    await Promise.all([
+      this.todoLists.save(updatedTodoList),
+      this.todos.save(createdTodo),
+    ]);
   }
 }

@@ -36,6 +36,7 @@ describe("Adding a todo list", () => {
       createdAt: "2022-01-05T12:00:00.000Z",
       title: "Things to do @ home",
       ownerId: "owner/1",
+      todosOrder: [],
     });
   });
 });

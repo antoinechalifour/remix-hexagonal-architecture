@@ -24,6 +24,7 @@ export class TodoListPrismaRepository implements TodoLists {
       createdAt: todoList.createdAt.toISOString(),
       title: todoList.title,
       ownerId,
+      todosOrder: [],
     };
   }
 
@@ -37,6 +38,7 @@ export class TodoListPrismaRepository implements TodoLists {
       createdAt: row.createdAt.toISOString(),
       title: row.title,
       ownerId,
+      todosOrder: [],
     }));
   }
 

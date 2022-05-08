@@ -1,4 +1,4 @@
-import type { Todo } from "./Todo";
+import type { Todo, TodoId } from "./Todo";
 import type { GenerateId } from "shared";
 import type { OwnerId } from "./OwnerId";
 
@@ -11,6 +11,7 @@ export type TodoList = {
   title: string;
   createdAt: string;
   ownerId: OwnerId;
+  todosOrder: TodoId[];
 };
 
 export const makeTodoList = (
@@ -23,6 +24,7 @@ export const makeTodoList = (
   createdAt: clock.now().toISOString(),
   title,
   ownerId,
+  todosOrder: [],
 });
 
 export const addTodo = (
@@ -30,11 +32,59 @@ export const addTodo = (
   title: string,
   generateId: GenerateId,
   clock: Clock
-): Todo => ({
-  id: generateId.generate(),
-  createdAt: clock.now().toISOString(),
-  title,
-  isComplete: false,
-  todoListId: todoList.id,
-  ownerId: todoList.ownerId,
+): [TodoList, Todo] => {
+  const newTodoId = generateId.generate();
+  const updatedTodoList = {
+    ...todoList,
+    todosOrder: [...todoList.todosOrder, newTodoId],
+  };
+  const createdTodo = {
+    id: newTodoId,
+    createdAt: clock.now().toISOString(),
+    title,
+    isComplete: false,
+    todoListId: todoList.id,
+    ownerId: todoList.ownerId,
+  };
+
+  return [updatedTodoList, createdTodo];
+};
+
+export const removeTodo = (
+  todoList: TodoList,
+  todoToRemoveId: TodoId
+): TodoList => ({
+  ...todoList,
+  todosOrder: todoList.todosOrder.filter((todoId) => todoId !== todoToRemoveId),
 });
+
+export const reorderTodoList = (
+  todoList: TodoList,
+  todoToReorderId: TodoId,
+  newIndex: number
+): TodoList => {
+  if (newIndex < 0 || newIndex >= todoList.todosOrder.length)
+    throw new Error(`Index ${newIndex} is out of bounds`);
+
+  const todoCurrentIndex = todoList.todosOrder.findIndex(
+    (todoId) => todoToReorderId === todoId
+  );
+
+  if (todoCurrentIndex === -1) {
+    throw new Error(`Todo ${todoToReorderId} not found`);
+  }
+
+  return {
+    ...todoList,
+    todosOrder: moveArrayItem(todoList.todosOrder, todoCurrentIndex, newIndex),
+  };
+};
+
+function moveArrayItem<T>(source: T[], currentIndex: number, newIndex: number) {
+  const copy = [...source];
+  const element = copy[currentIndex];
+  copy.splice(currentIndex, 1);
+  copy.splice(newIndex, 0, element);
+
+  return copy;
+}
