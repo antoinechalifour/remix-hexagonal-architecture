@@ -9,8 +9,8 @@ import { WebModule } from "web";
     RemixModule.forRoot({
       handlerModule: WebModule,
       buildConfig: {
-        publicBuildFolder: path.join(__dirname, "../public"),
-        serverBuildFolder: path.join(__dirname, "../build"),
+        publicBuildFolder: path.join(__dirname, "../../public"),
+        serverBuildFolder: path.join(__dirname, "../../build"),
       },
       sessionConfig: {
         name: "__session",
