@@ -1,6 +1,7 @@
 describe("The user can manage a todo list", () => {
   beforeEach(() => {
     cy.exec("yarn e2e:clean");
+    cy.exec("yarn e2e:seed");
   });
 
   it("creates a new todo list and allows adding todos", () => {
@@ -17,7 +18,7 @@ describe("The user can manage a todo list", () => {
 });
 
 function givenALoggedInUser() {
-  cy.findByLabelText("Email address").click().type("chan");
+  cy.findByLabelText("Email address").click().type("john.doe@example.com");
   cy.findByLabelText("Password").click().type("azerty");
   cy.findByRole("button", { name: "Login" }).click();
 }
