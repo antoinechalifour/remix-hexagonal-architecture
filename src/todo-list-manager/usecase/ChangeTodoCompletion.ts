@@ -22,14 +22,18 @@ export class ChangeTodoCompletion {
     ownerId: OwnerId
   ) {
     const completed = isChecked === "on";
-    const todo = await this.todos.ofId(todoId, ownerId);
-    const todoList = await this.todoLists.ofId(todoListId, ownerId);
+    const [todo, todoList] = await Promise.all([
+      this.todos.ofId(todoId, ownerId),
+      this.todoLists.ofId(todoListId, ownerId),
+    ]);
 
     const newTodoOrder = completed
       ? orderAsLastTodo(todoList.todosOrder)
       : orderAsFirstTodo();
 
-    await this.todos.save(updateCompletion(todo, completed));
-    await this.todoLists.save(reorderTodoList(todoList, todoId, newTodoOrder));
+    await Promise.all([
+      this.todos.save(updateCompletion(todo, completed)),
+      this.todoLists.save(reorderTodoList(todoList, todoId, newTodoOrder)),
+    ]);
   }
 }
