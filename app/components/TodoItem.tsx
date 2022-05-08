@@ -13,7 +13,7 @@ export interface TodoItemProps {
 }
 
 export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
-  ({ todoListId, todo, className }, ref) => {
+  function TodoItem({ todoListId, todo, className }, ref) {
     const submit = useSubmit();
     const transition = useTransition();
     const htmlId = `todo-${todo.id}`;

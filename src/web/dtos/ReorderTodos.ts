@@ -1,4 +1,4 @@
-import { IsInt, IsPositive, IsString, Min } from "class-validator";
+import { IsInt, IsString, Min } from "class-validator";
 import { Type } from "class-transformer";
 
 export class ReorderTodosParams {
