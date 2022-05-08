@@ -76,6 +76,7 @@ export class Actions {
     @Body() body: ChangeTodoCompletionBody
   ) {
     await this.todoApplicationService.changeTodoCompletion(
+      params.todoListId,
       params.todoId,
       body.isChecked,
       await this.authenticator.currentUser()

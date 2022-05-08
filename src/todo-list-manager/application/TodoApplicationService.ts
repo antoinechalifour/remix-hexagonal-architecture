@@ -33,8 +33,14 @@ export class TodoApplicationService {
     );
   }
 
-  changeTodoCompletion(todoId: string, isChecked: string, ownerId: string) {
-    return new ChangeTodoCompletion(this.todos).execute(
+  changeTodoCompletion(
+    todoListId: string,
+    todoId: string,
+    isChecked: string,
+    ownerId: string
+  ) {
+    return new ChangeTodoCompletion(this.todoLists, this.todos).execute(
+      todoListId,
       todoId,
       isChecked,
       ownerId

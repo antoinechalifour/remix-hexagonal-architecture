@@ -80,3 +80,6 @@ export const reorderTodoList = (
     todosOrder: moveArrayItem(todoList.todosOrder, todoCurrentIndex, newIndex),
   };
 };
+
+export const orderAsFirstTodo = () => 0;
+export const orderAsLastTodo = (todoOrder: string[]) => todoOrder.length - 1;
