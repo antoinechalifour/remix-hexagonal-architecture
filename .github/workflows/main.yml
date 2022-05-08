@@ -60,3 +60,28 @@ jobs:
           cache: 'yarn'
       - run: yarn
       - run: yarn typecheck
+
+  e2e:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_USER: user
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: todolistmanager-e2e
+        ports:
+          - 6080:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Cypress run
+        uses: cypress-io/github-action@v2
+        with:
+          start: yarn e2e:app
+          wait-on: 'http://localhost:3333'
