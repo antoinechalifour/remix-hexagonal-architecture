@@ -10,6 +10,7 @@
     "test": "jest --runInBand",
     "dev": "run-s dev:migrate dev:start",
     "lint": "eslint src app --ext ts,tsx",
+    "typecheck": "tsc --noEmit",
     "build:front": "run-s build:css build:remix",
     "build:css": "tailwindcss -m -i ./styles/app.css -o app/styles/app.css",
     "build:remix": "remix build",
