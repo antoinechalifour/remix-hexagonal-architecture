@@ -63,11 +63,6 @@ yarn dev # Boot app
 
 This starts your app in development mode, rebuilding assets on file changes.
 
-To log in, use the following credentials:
-
-- Login: `chan`
-- Password: `azerty`
-
 ### Tests
 
 From your terminal:
@@ -92,6 +87,13 @@ This runs the E2E tests in your terminal. If you want to "see" the tests running
 
 ```sh
 yarn e2e:dev
+```
+
+You can also launch Cypress and the test environment separately to debug / write tests :
+
+```sh
+yarn e2e:app # Boot the app using E2E configuration (separate database, ...)
+yarn cypress:dev 
 ```
 
 ### Deployment
