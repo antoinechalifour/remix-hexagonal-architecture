@@ -1,5 +1,7 @@
 import React from "react";
 
-export const PageTitle: React.FC = ({ children }) => (
+export type PageTitleProps = { children: React.ReactNode };
+
+export const PageTitle = ({ children }: PageTitleProps) => (
   <h1 className="text-2xl font-semibold text-lighter">{children}</h1>
 );

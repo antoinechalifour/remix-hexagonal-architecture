@@ -1,7 +1,7 @@
 import type { DoingTodoDto, TodoListDto } from "shared";
 import { moveArrayItem } from "../../src/shared/lib";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useTransition } from "react";
 import { displayDate } from "../Date";
 import { PageTitle } from "../ui/PageTitle";
 import { AddTodoForm } from "./AddTodoForm";
@@ -32,15 +32,29 @@ const sortDoingTodos = (
   return moveArrayItem(todos, currentIndex, orderPreview.newIndex);
 };
 
-export const Todos = ({ todoList }: TodosProps) => {
+const useOrderedTodos = (todoList: TodoListDto) => {
+  const [, startTransition] = useTransition();
   const [todoOrderPreview, setTodoOrderPreview] =
     useState<TodoOrderPreview | null>(null);
-  const moveForPreview = (todoId: string, newIndex: number) =>
-    setTodoOrderPreview({ todoId, newIndex });
+
+  const moveForPreview = (todoId: string, newIndex: number) => {
+    startTransition(() => {
+      setTodoOrderPreview({ todoId, newIndex });
+    });
+  };
 
   useEffect(() => {
     setTodoOrderPreview(null);
   }, [todoList]);
+
+  return {
+    orderedTodos: sortDoingTodos(todoList.doingTodos, todoOrderPreview),
+    moveForPreview,
+  };
+};
+
+export const Todos = ({ todoList }: TodosProps) => {
+  const { orderedTodos, moveForPreview } = useOrderedTodos(todoList);
 
   return (
     <section className="space-y-10">
@@ -59,7 +73,7 @@ export const Todos = ({ todoList }: TodosProps) => {
 
       <TodoList
         title="Things to do"
-        todos={sortDoingTodos(todoList.doingTodos, todoOrderPreview)}
+        todos={orderedTodos}
         emptyMessage="Come on! Don't you have anything to do?"
         renderTodo={(todoItem, index) => (
           <ReorderableTodoItem
