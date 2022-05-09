@@ -1,0 +1,1 @@
+web: yarn remix setup && node dist/src/main.js
