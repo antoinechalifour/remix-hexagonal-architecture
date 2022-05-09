@@ -36,9 +36,10 @@ export const FloatingLabelInput = ({
         />
         <span
           className={classNames(
-            "absolute top-1/2 left-4 -translate-y-1/2 p-3 font-bold",
+            "absolute left-4 -translate-y-1/2 p-3 font-bold",
             "transition-all group-focus-within:top-0 group-focus-within:bg-darker group-focus-within:text-xs",
             {
+              "top-1/2": !isStickyLabel,
               "top-0 bg-darker text-xs": isStickyLabel,
               "text-danger": !!errorMessage,
             }
