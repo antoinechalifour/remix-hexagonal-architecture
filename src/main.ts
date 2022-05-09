@@ -12,13 +12,6 @@ import { WebModule } from "web";
         publicBuildFolder: path.join(__dirname, "../../public"),
         serverBuildFolder: path.join(__dirname, "../../build"),
       },
-      sessionConfig: {
-        name: "__session",
-        maxAge: 60 * 60 * 24,
-        httpOnly: true,
-        sameSite: "strict",
-        secrets: [process.env.SESSION_SECRET!],
-      },
     }),
   ],
 })

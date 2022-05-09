@@ -8,7 +8,6 @@ import { SessionManager } from "./SessionManager";
 interface RemixNestOptions {
   handlerModule: any;
   buildConfig: RemixNestBuildConfig;
-  sessionConfig: SessionIdStorageStrategy["cookie"];
 }
 
 @Module({
@@ -18,20 +17,14 @@ export class RemixModule {
   static forRoot({
     handlerModule,
     buildConfig,
-    sessionConfig,
   }: RemixNestOptions): DynamicModule {
     return {
       module: RemixModule,
       imports: [handlerModule],
       providers: [
-        SessionManager,
         {
           provide: BUILD_CONFIG,
           useValue: buildConfig,
-        },
-        {
-          provide: SESSION_CONFIG,
-          useValue: sessionConfig,
         },
       ],
     };
