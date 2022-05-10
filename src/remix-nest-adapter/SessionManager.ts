@@ -28,4 +28,9 @@ export class SessionManager {
   commit(session: Session) {
     return this.storage.commitSession(session);
   }
+
+  async destroy() {
+    const session = await this.storage.getSession(this.request.headers.cookie);
+    return this.storage.destroySession(session);
+  }
 }

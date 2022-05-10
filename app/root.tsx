@@ -1,4 +1,4 @@
-import type { LinksFunction } from "remix";
+import type { LinksFunction, LoaderFunction } from "remix";
 import {
   Link,
   Links,
@@ -8,6 +8,7 @@ import {
   Scripts,
   ScrollRestoration,
   useCatch,
+  useLoaderData,
   useLocation,
 } from "remix";
 
@@ -20,28 +21,33 @@ import {
   ErrorPageHero,
   ErrorPageMessage,
 } from "front/components/ErrorPage";
+import { RemixAppContext } from "web";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];
 };
 
+export const loader: LoaderFunction = (args) =>
+  (args.context as RemixAppContext).loaders.root(args);
+
 export default function App() {
+  const { authenticated } = useLoaderData<{ authenticated: boolean }>();
+
   return (
     <Document>
-      <RootLayout>
+      <RootLayout authenticated={authenticated}>
         <Outlet />
       </RootLayout>
     </Document>
   );
 }
 
-function Document({
-  children,
-  title,
-}: {
+interface DocumentProps {
   children: React.ReactNode;
   title?: string;
-}) {
+}
+
+function Document({ children, title }: DocumentProps) {
   return (
     <html lang="en">
       <head>
@@ -69,7 +75,7 @@ export function CatchBoundary() {
 
   return (
     <Document title={`${caught.status} ${caught.statusText}`}>
-      <RootLayout>
+      <RootLayout authenticated={false}>
         <ErrorPage>
           <ErrorPageHero>404</ErrorPageHero>
           <ErrorPageMessage>
@@ -87,9 +93,10 @@ export function CatchBoundary() {
 
 export function ErrorBoundary({ error }: { error: Error }) {
   console.error(error);
+
   return (
     <Document title="Error!">
-      <RootLayout>
+      <RootLayout authenticated={false}>
         <ErrorPage>
           <ErrorPageHero>😱</ErrorPageHero>
           <ErrorPageMessage>

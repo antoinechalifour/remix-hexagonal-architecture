@@ -36,6 +36,23 @@ export class Loaders {
     );
   }
 
+  @DataFunction()
+  async root() {
+    return json({
+      authenticated: await this.authenticator.isAuthenticated(),
+    });
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async logout() {
+    return redirect("/login", {
+      headers: {
+        "Set-Cookie": await this.sessionManager.destroy(),
+      },
+    });
+  }
+
   @Authenticated()
   @DataFunction()
   async homePage() {
