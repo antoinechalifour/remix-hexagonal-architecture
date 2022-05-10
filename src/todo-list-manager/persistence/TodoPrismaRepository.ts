@@ -1,15 +1,12 @@
-import { Inject, Injectable } from "@nestjs/common";
-import type { PrismaClient } from "@prisma/client";
+import { Injectable } from "@nestjs/common";
 import type { Todos } from "../domain/Todos";
 import type { TodoListId } from "../domain/TodoList";
 import type { Todo, TodoId } from "../domain/Todo";
-import { PRISMA } from "../keys";
 import { OwnerId } from "../domain/OwnerId";
+import { PrismaRepository } from "./PrismaRepository";
 
 @Injectable()
-export class TodoPrismaRepository implements Todos {
-  constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
-
+export class TodoPrismaRepository extends PrismaRepository implements Todos {
   async ofId(todoId: TodoId, ownerId: OwnerId): Promise<Todo> {
     const row = await this.prisma.todo.findFirst({
       where: { id: todoId, ownerId },
