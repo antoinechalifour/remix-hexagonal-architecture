@@ -6,7 +6,7 @@ import { OwnerId } from "../domain/OwnerId";
 import { PrismaRepository } from "./PrismaRepository";
 
 @Injectable()
-export class TodoPrismaRepository extends PrismaRepository implements Todos {
+export class TodoDatabaseRepository extends PrismaRepository implements Todos {
   async ofId(todoId: TodoId, ownerId: OwnerId): Promise<Todo> {
     const row = await this.prisma.todo.findFirst({
       where: { id: todoId, ownerId },

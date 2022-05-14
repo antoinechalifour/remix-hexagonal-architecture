@@ -6,7 +6,7 @@ import {
   Session,
   SessionIdStorageStrategy,
 } from "remix";
-import { SESSION_CONFIG } from "./keys";
+import { SESSION_CONFIG } from "../keys";
 
 @Injectable({ scope: Scope.REQUEST })
 export class SessionManager {

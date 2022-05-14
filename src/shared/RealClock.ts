@@ -1,4 +1,4 @@
-import type { Clock } from "../domain/Clock";
+import type { Clock } from "./Clock";
 import { Injectable } from "@nestjs/common";
 
 @Injectable()

@@ -5,7 +5,7 @@ import type { OwnerId } from "../domain/OwnerId";
 import { PrismaRepository } from "./PrismaRepository";
 
 @Injectable()
-export class TodoListPrismaRepository
+export class TodoListDatabaseRepository
   extends PrismaRepository
   implements TodoLists
 {

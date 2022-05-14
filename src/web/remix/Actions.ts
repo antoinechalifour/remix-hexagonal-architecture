@@ -1,32 +1,33 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { redirect } from "@remix-run/node";
 import { Body, DataFunction, Params, SessionManager } from "remix-nest-adapter";
-import { LoginApplicationService } from "authentication";
+import { Authenticator, LoginApplicationService } from "authentication";
 import {
   TodoApplicationService,
   TodoListApplicationService,
 } from "todo-list-manager";
-import { AddTodoBody, AddTodoParams } from "./dtos/AddTodo";
-import { ArchiveTodoParams } from "./dtos/ArchiveTodo";
+import { AUTHENTICATOR } from "../../keys";
+import { Authenticated } from "../decorators/Authenticated";
+import { AddTodoBody, AddTodoParams } from "../dtos/AddTodo";
+import { ArchiveTodoParams } from "../dtos/ArchiveTodo";
 import {
   ChangeTodoCompletionBody,
   ChangeTodoCompletionParams,
-} from "./dtos/ChangeTodoCompletion";
-import { AddTodoListBody } from "./dtos/AddTodoList";
-import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
-import { LoginBody } from "./dtos/Login";
-import { Authenticated } from "./decorators/Authenticated";
-import { Authenticator } from "./Authenticator";
-import { ReorderTodosBody, ReorderTodosParams } from "./dtos/ReorderTodos";
+} from "../dtos/ChangeTodoCompletion";
+import { AddTodoListBody } from "../dtos/AddTodoList";
+import { ArchiveTodoListParams } from "../dtos/ArchiveTodoList";
+import { LoginBody } from "../dtos/Login";
+import { ReorderTodosBody, ReorderTodosParams } from "../dtos/ReorderTodos";
 
 @Injectable()
 export class Actions {
   constructor(
-    private readonly sessionManager: SessionManager,
+    @Inject(AUTHENTICATOR)
     private readonly authenticator: Authenticator,
-    private readonly loginApplicationService: LoginApplicationService,
+    private readonly sessionManager: SessionManager,
     private readonly todoApplicationService: TodoApplicationService,
-    private readonly todoListApplicationService: TodoListApplicationService
+    private readonly todoListApplicationService: TodoListApplicationService,
+    private readonly loginApplicationService: LoginApplicationService
   ) {}
 
   @DataFunction()

@@ -4,12 +4,12 @@ import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { GenerateUUID } from "shared";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
-import { AccountPrismaRepository } from "../persistence/AccountPrismaRepository";
+import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 
 @Injectable()
 export class LoginApplicationService {
   constructor(
-    private readonly accounts: AccountPrismaRepository,
+    private readonly accounts: AccountDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly passwordHasher: BCryptPasswordHasher
   ) {}

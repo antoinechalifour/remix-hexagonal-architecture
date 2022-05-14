@@ -1,12 +1,9 @@
-import { DynamicModule, Module } from "@nestjs/common";
-import { SessionIdStorageStrategy } from "remix";
+import { DynamicModule, Module, ModuleMetadata } from "@nestjs/common";
 import { RemixController } from "./RemixController";
 import { RemixNestBuildConfig } from "./RemixNestBuildConfig";
-import { BUILD_CONFIG, SESSION_CONFIG } from "./keys";
-import { SessionManager } from "./SessionManager";
+import { BUILD_CONFIG } from "./keys";
 
-interface RemixNestOptions {
-  handlerModule: any;
+export interface RemixNestOptions extends ModuleMetadata {
   buildConfig: RemixNestBuildConfig;
 }
 
@@ -14,14 +11,16 @@ interface RemixNestOptions {
   controllers: [RemixController],
 })
 export class RemixModule {
-  static forRoot({
-    handlerModule,
+  static registerAsync({
     buildConfig,
+    imports = [],
+    providers = [],
   }: RemixNestOptions): DynamicModule {
     return {
       module: RemixModule,
-      imports: [handlerModule],
+      imports: imports,
       providers: [
+        ...providers,
         {
           provide: BUILD_CONFIG,
           useValue: buildConfig,

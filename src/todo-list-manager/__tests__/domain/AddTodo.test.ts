@@ -3,7 +3,7 @@ import type { TodoLists } from "../../domain/TodoLists";
 import { GenerateId } from "shared";
 
 import { AddTodo } from "../../usecase/AddTodo";
-import { Clock } from "../../domain/Clock";
+import { Clock } from "../../../shared/Clock";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { GenerateTestId } from "./fakes/GenerateTestId";

@@ -1,11 +1,15 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { Prisma } from "shared";
+import { PRISMA } from "../../keys";
 import { Accounts } from "../domain/Accounts";
 import { Account } from "../domain/Account";
 
 @Injectable()
-export class AccountPrismaRepository implements Accounts {
-  constructor(private readonly prisma: Prisma) {}
+export class AccountDatabaseRepository implements Accounts {
+  constructor(
+    @Inject(PRISMA)
+    private readonly prisma: Prisma
+  ) {}
 
   async ofEmail(email: string): Promise<Account> {
     const account = await this.prisma.account.findFirst({

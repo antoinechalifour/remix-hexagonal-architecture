@@ -1,12 +1,13 @@
 import { DataFunctionArgs } from "@remix-run/node";
 import { redirect } from "remix";
 import { Inject } from "@nestjs/common";
-import { Authenticator } from "../Authenticator";
+import { AUTHENTICATOR } from "../../keys";
+import { SessionAuthenticator } from "../remix/SessionAuthenticator";
 
 const authenticatorKey = Symbol("authenticator");
 
 export const Authenticated = (): MethodDecorator => {
-  const injectAuthenticator = Inject(Authenticator);
+  const injectAuthenticator = Inject(AUTHENTICATOR);
 
   return (
     target: Object,
@@ -17,7 +18,9 @@ export const Authenticated = (): MethodDecorator => {
     const originalMethod = descriptor.value;
 
     descriptor.value = async function (args: DataFunctionArgs) {
-      const authenticator: Authenticator = (this as any)[authenticatorKey];
+      const authenticator: SessionAuthenticator = (this as any)[
+        authenticatorKey
+      ];
       const isAuthenticated = await authenticator.isAuthenticated();
 
       if (!isAuthenticated) throw redirect("/login");

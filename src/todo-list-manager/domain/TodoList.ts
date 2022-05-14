@@ -3,7 +3,7 @@ import type { GenerateId } from "shared";
 import type { OwnerId } from "./OwnerId";
 
 import { moveArrayItem } from "shared";
-import { Clock } from "./Clock";
+import { Clock } from "../../shared/Clock";
 
 export type TodoListId = string;
 

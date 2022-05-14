@@ -1,21 +1,27 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { json, redirect } from "remix";
-import {
-  FetchHomePagePrismaQuery,
-  FetchTodoListPrismaQuery,
-} from "todo-list-manager";
 import { DataFunction, Params, SessionManager } from "remix-nest-adapter";
-import { FetchTodoListParams } from "./dtos/FetchTodoList";
-import { Authenticated } from "./decorators/Authenticated";
-import { Authenticator } from "./Authenticator";
+import {
+  Authenticator,
+  FetchAuthenticationStatusDatabaseQuery,
+} from "authentication";
+import {
+  FetchHomePageDatabaseQuery,
+  FetchTodoListDatabaseQuery,
+} from "todo-list-manager";
+import { AUTHENTICATOR } from "../../keys";
+import { FetchTodoListParams } from "../dtos/FetchTodoList";
+import { Authenticated } from "../decorators/Authenticated";
 
 @Injectable()
 export class Loaders {
   constructor(
-    private readonly sessionManager: SessionManager,
+    @Inject(AUTHENTICATOR)
     private readonly authenticator: Authenticator,
-    private readonly fetchHomePageQuery: FetchHomePagePrismaQuery,
-    private readonly fetchTodoListQuery: FetchTodoListPrismaQuery
+    private readonly sessionManager: SessionManager,
+    private readonly fetchHomePageQuery: FetchHomePageDatabaseQuery,
+    private readonly fetchTodoListQuery: FetchTodoListDatabaseQuery,
+    private readonly fetchAuthenticationStatus: FetchAuthenticationStatusDatabaseQuery
   ) {}
 
   @DataFunction()
@@ -38,9 +44,7 @@ export class Loaders {
 
   @DataFunction()
   async root() {
-    return json({
-      authenticated: await this.authenticator.isAuthenticated(),
-    });
+    return this.fetchAuthenticationStatus.run();
   }
 
   @Authenticated()

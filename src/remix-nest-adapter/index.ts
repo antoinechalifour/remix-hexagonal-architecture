@@ -6,3 +6,4 @@ export * from "./keys";
 export * from "./decorators/Body";
 export * from "./decorators/Params";
 export * from "./decorators/DataFunction";
+export { SESSION_CONFIG } from "../keys";

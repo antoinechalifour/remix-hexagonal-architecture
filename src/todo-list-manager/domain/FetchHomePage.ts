@@ -1,6 +1,6 @@
 import type { HomePageDto } from "shared";
-import type { OwnerId } from "../domain/OwnerId";
+import type { OwnerId } from "./OwnerId";
 
-export interface FetchHomePageQuery {
+export interface FetchHomePage {
   run(ownerId: OwnerId): Promise<HomePageDto>;
 }

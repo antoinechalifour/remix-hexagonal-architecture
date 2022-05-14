@@ -2,8 +2,8 @@ import type { Todos } from "../../domain/Todos";
 
 import { PrismaClient } from "@prisma/client";
 import {
-  TodoListPrismaRepository,
-  TodoPrismaRepository,
+  TodoListDatabaseRepository,
+  TodoDatabaseRepository,
 } from "todo-list-manager";
 import { updateCompletion } from "../../domain/Todo";
 import { TodoLists } from "../../domain/TodoLists";
@@ -25,8 +25,8 @@ describe("TodoPrismaRepository", () => {
     await prepareDatabase();
 
     prisma = new PrismaClient();
-    todos = new TodoPrismaRepository(prisma);
-    todoLists = new TodoListPrismaRepository(prisma);
+    todos = new TodoDatabaseRepository(prisma);
+    todoLists = new TodoListDatabaseRepository(prisma);
   });
 
   afterEach(() => prisma.$disconnect());

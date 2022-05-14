@@ -2,8 +2,8 @@ import type { PrismaClient } from "@prisma/client";
 import { Inject, Injectable } from "@nestjs/common";
 import type { TodoListDto } from "shared";
 import type { TodoListId } from "../domain/TodoList";
-import { PRISMA } from "../keys";
-import type { FetchTodoListQuery } from "./FetchTodoListQuery";
+import { PRISMA } from "../../keys";
+import type { FetchTodoList } from "../domain/FetchTodoList";
 import type { OwnerId } from "../domain/OwnerId";
 
 type TodoListRow = {
@@ -21,7 +21,7 @@ type TodoRow<Completion extends boolean> = {
 };
 
 @Injectable()
-export class FetchTodoListPrismaQuery implements FetchTodoListQuery {
+export class FetchTodoListDatabaseQuery implements FetchTodoList {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
   async run(todoListId: TodoListId, ownerId: OwnerId): Promise<TodoListDto> {

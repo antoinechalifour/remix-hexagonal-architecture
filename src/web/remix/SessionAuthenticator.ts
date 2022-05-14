@@ -1,8 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { SessionManager } from "remix-nest-adapter";
+import { Authenticator } from "authentication";
 
 @Injectable()
-export class Authenticator {
+export class SessionAuthenticator implements Authenticator {
   constructor(private readonly sessionManager: SessionManager) {}
 
   async isAuthenticated() {

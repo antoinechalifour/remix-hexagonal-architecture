@@ -1,6 +1,6 @@
 import type { GenerateId } from "shared";
 import type { TodoLists } from "../domain/TodoLists";
-import type { Clock } from "../domain/Clock";
+import type { Clock } from "../../shared/Clock";
 import type { OwnerId } from "../domain/OwnerId";
 
 import { makeTodoList } from "../domain/TodoList";

@@ -1,4 +1,3 @@
-export const BUILD_CONFIG = "buildConfig";
-export const SESSION_CONFIG = "sessionConfig";
-export const ACTIONS_CLASS = "actionsClass";
-export const LOADERS_CLASS = "loadersClass";
+export const BUILD_CONFIG = Symbol("buildConfig");
+export const ACTIONS_CLASS = Symbol("actionsClass");
+export const LOADERS_CLASS = Symbol("loadersClass");

@@ -1,7 +1,7 @@
 import type { GenerateId } from "shared";
 import type { Todos } from "../domain/Todos";
 import type { TodoLists } from "../domain/TodoLists";
-import type { Clock } from "../domain/Clock";
+import type { Clock } from "../../shared/Clock";
 import type { OwnerId } from "../domain/OwnerId";
 
 import { addTodo, TodoListId } from "../domain/TodoList";

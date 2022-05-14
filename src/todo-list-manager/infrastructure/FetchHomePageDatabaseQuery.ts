@@ -1,12 +1,12 @@
 import type { PrismaClient } from "@prisma/client";
 import { Inject, Injectable } from "@nestjs/common";
 import type { HomePageDto } from "shared";
-import { PRISMA } from "../keys";
-import type { FetchHomePageQuery } from "./FetchHomePageQuery";
+import { PRISMA } from "../../keys";
+import type { FetchHomePage } from "../domain/FetchHomePage";
 import type { OwnerId } from "../domain/OwnerId";
 
 @Injectable()
-export class FetchHomePagePrismaQuery implements FetchHomePageQuery {
+export class FetchHomePageDatabaseQuery implements FetchHomePage {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
   async run(ownerId: OwnerId): Promise<HomePageDto> {
