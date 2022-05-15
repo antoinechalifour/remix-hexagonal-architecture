@@ -3,8 +3,8 @@ import type { TodoDto } from "shared";
 import React from "react";
 import classNames from "classnames";
 import { Form, useSubmit, useTransition } from "remix";
-import { CheckboxOption } from "../ui/CheckboxOption";
-import { Button } from "../ui/Button";
+import { CheckboxOption } from "front/ui/CheckboxOption";
+import { Button } from "front/ui/Button";
 
 export interface TodoItemProps {
   todoListId: string;

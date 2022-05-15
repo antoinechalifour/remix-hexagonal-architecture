@@ -1,17 +1,11 @@
 import type { AddTodoListErrorDto } from "shared";
-import { Form, useActionData, useTransition } from "remix";
-import { FloatingLabelInput } from "../ui/FloatingLabelInput";
-import { ButtonPrimary } from "../ui/Button";
+
+import { Form, useActionData } from "remix";
+import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
+import { AddTodoListButton } from "./AddTodoListButton";
 
 type ActionData = {
   errors?: AddTodoListErrorDto;
-};
-
-const AddTodoListButton = () => {
-  const transition = useTransition();
-  const isSubmitting = transition.submission?.action === "/?index";
-
-  return <ButtonPrimary disabled={isSubmitting}>Done</ButtonPrimary>;
 };
 
 export const AddTodoListForm = () => {

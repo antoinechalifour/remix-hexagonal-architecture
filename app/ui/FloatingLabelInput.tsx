@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import classNames from "classnames";
 
 interface FloatingLabelInputOptions {
@@ -9,20 +9,31 @@ interface FloatingLabelInputOptions {
   required?: boolean;
 }
 
-export const FloatingLabelInput = ({
-  name,
-  label,
-  errorMessage,
-  type = "text",
-  required,
-}: FloatingLabelInputOptions) => {
+export type FloatingLabelInputImperativeHandle = {
+  focus: () => void;
+  clear: () => void;
+};
+
+export const FloatingLabelInput = forwardRef<
+  FloatingLabelInputImperativeHandle,
+  FloatingLabelInputOptions
+>((props, ref) => {
+  const { name, label, errorMessage, type = "text", required } = props;
+
+  const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
   const isStickyLabel = value.length > 0;
+
+  useImperativeHandle(ref, () => ({
+    focus: () => inputRef.current?.focus(),
+    clear: () => setValue(""),
+  }));
 
   return (
     <label className="group">
       <div className="relative">
         <input
+          ref={inputRef}
           type={type}
           name={name}
           value={value}
@@ -62,4 +73,4 @@ export const FloatingLabelInput = ({
       )}
     </label>
   );
-};
+});

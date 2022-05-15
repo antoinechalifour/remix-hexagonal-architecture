@@ -2,7 +2,7 @@ import type { TodoDto } from "shared";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
-import { EmptyMessage } from "../ui/EmptyMessage";
+import { EmptyMessage } from "front/ui/EmptyMessage";
 
 interface TodoListProps {
   title: string;

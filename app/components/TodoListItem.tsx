@@ -2,8 +2,8 @@ import type { HomePageTodoListDto } from "shared";
 
 import { Form, Link, useTransition } from "remix";
 import classNames from "classnames";
-import { displayDate } from "../Date";
-import { Button } from "../ui/Button";
+import { displayDate } from "front/Date";
+import { Button } from "front/ui/Button";
 
 interface TodoListItemProps {
   todoList: HomePageTodoListDto;

@@ -2,12 +2,12 @@ import type { DoingTodoDto, TodoListDto } from "shared";
 import { moveArrayItem } from "../../src/shared/lib";
 
 import React, { useEffect, useState } from "react";
-import { displayDate } from "../Date";
-import { PageTitle } from "../ui/PageTitle";
-import { AddTodoForm } from "./AddTodoForm";
-import { TodoList } from "./TodoList";
-import { TodoItem } from "./TodoItem";
-import { ReorderableTodoItem } from "./ReorderableTodoItem";
+import { displayDate } from "front/Date";
+import { PageTitle } from "front/ui/PageTitle";
+import { AddTodoForm } from "front/components/AddTodoForm";
+import { TodoList } from "front/components/TodoList";
+import { TodoItem } from "front/components/TodoItem";
+import { ReorderableTodoItem } from "front/components/ReorderableTodoItem";
 
 interface TodosProps {
   todoList: TodoListDto;
@@ -17,20 +17,6 @@ interface TodoOrderPreview {
   todoId: string;
   newIndex: number;
 }
-
-const sortDoingTodos = (
-  todos: DoingTodoDto[],
-  orderPreview: TodoOrderPreview | null
-) => {
-  if (orderPreview == null) return todos;
-
-  const currentIndex = todos.findIndex(
-    (todo) => todo.id === orderPreview.todoId
-  );
-
-  if (currentIndex === -1) return todos;
-  return moveArrayItem(todos, currentIndex, orderPreview.newIndex);
-};
 
 export const Todos = ({ todoList }: TodosProps) => {
   const [todoOrderPreview, setTodoOrderPreview] =
@@ -51,10 +37,7 @@ export const Todos = ({ todoList }: TodosProps) => {
           ↳ You created this list {displayDate(todoList.createdAt)}
         </p>
 
-        <AddTodoForm
-          todoListId={todoList.id}
-          key={todoList.completedTodos.length + todoList.doingTodos.length}
-        />
+        <AddTodoForm todoListId={todoList.id} />
       </div>
 
       <TodoList
@@ -82,3 +65,17 @@ export const Todos = ({ todoList }: TodosProps) => {
     </section>
   );
 };
+
+function sortDoingTodos(
+  todos: DoingTodoDto[],
+  orderPreview: TodoOrderPreview | null
+) {
+  if (orderPreview == null) return todos;
+
+  const currentIndex = todos.findIndex(
+    (todo) => todo.id === orderPreview.todoId
+  );
+
+  if (currentIndex === -1) return todos;
+  return moveArrayItem(todos, currentIndex, orderPreview.newIndex);
+}

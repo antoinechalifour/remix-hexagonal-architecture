@@ -2,10 +2,10 @@ import type { HomePageTodoListDto } from "shared";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
-import { EmptyMessage } from "../ui/EmptyMessage";
-import { PageTitle } from "../ui/PageTitle";
-import { TodoListItem } from "./TodoListItem";
-import { AddTodoListForm } from "./AddTodoListForm";
+import { EmptyMessage } from "front/ui/EmptyMessage";
+import { PageTitle } from "front/ui/PageTitle";
+import { TodoListItem } from "front/components/TodoListItem";
+import { AddTodoListForm } from "front/components/AddTodoListForm";
 
 interface TodoListsProps {
   todoLists: HomePageTodoListDto[];
