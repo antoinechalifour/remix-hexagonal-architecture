@@ -2,32 +2,7 @@ import type { Accounts } from "../../domain/Accounts";
 import type { Account } from "../../domain/Account";
 import type { PasswordHasher } from "../../domain/PasswordHasher";
 import { LoginFlow } from "../../usecase/LoginFlow";
-
-class AccountsInMemory implements Accounts {
-  private _database = new Map<string, Account>();
-
-  async ofEmail(email: string): Promise<Account> {
-    const account = this._database.get(email);
-
-    if (!account) throw new Error("Account not found");
-
-    return account;
-  }
-
-  async save(account: Account): Promise<void> {
-    this._database.set(account.email, account);
-  }
-}
-
-class FakePasswordHasher implements PasswordHasher {
-  async hash(password: string): Promise<string> {
-    return password;
-  }
-
-  async verify(password: string, hash: string): Promise<boolean> {
-    return password === hash;
-  }
-}
+import { InvalidCredentialsError } from "../../domain/InvalidCredentialsError";
 
 interface AccountBuilder {
   account: Account;
@@ -68,16 +43,10 @@ describe("LoginFlow", () => {
 
   it("returns an error when the account cannot be found", async () => {
     // Act
-    const result = await loginFlow.execute(
-      "user-does-exist@example.com",
-      "azerty"
-    );
+    const promise = loginFlow.execute("user-does-exist@example.com", "azerty");
 
     // Assert
-    expect(result).toEqual([
-      new Error("Could not log you in. Make sure your credentials are valid."),
-      null,
-    ]);
+    await expect(promise).rejects.toThrow(InvalidCredentialsError);
   });
 
   it("returns an error when the password is invalid", async () => {
@@ -90,16 +59,10 @@ describe("LoginFlow", () => {
     );
 
     // Act
-    const result = await loginFlow.execute(
-      "jane.doe@example.com",
-      "wrong_password"
-    );
+    const promise = loginFlow.execute("jane.doe@example.com", "wrong_password");
 
     // Assert
-    expect(result).toEqual([
-      new Error("Could not log you in. Make sure your credentials are valid."),
-      null,
-    ]);
+    await expect(promise).rejects.toThrow(InvalidCredentialsError);
   });
 
   it("returns the account id when credentials are valid", async () => {
@@ -117,6 +80,32 @@ describe("LoginFlow", () => {
     );
 
     // Assert
-    expect(result).toEqual([null, theAccount.id]);
+    expect(result).toEqual(theAccount.id);
   });
 });
+
+class AccountsInMemory implements Accounts {
+  private _database = new Map<string, Account>();
+
+  async ofEmail(email: string): Promise<Account> {
+    const account = this._database.get(email);
+
+    if (!account) throw new InvalidCredentialsError("Account not found");
+
+    return account;
+  }
+
+  async save(account: Account): Promise<void> {
+    this._database.set(account.email, account);
+  }
+}
+
+class FakePasswordHasher implements PasswordHasher {
+  async hash(password: string): Promise<string> {
+    return password;
+  }
+
+  async verify(password: string, hash: string): Promise<boolean> {
+    return password === hash;
+  }
+}
