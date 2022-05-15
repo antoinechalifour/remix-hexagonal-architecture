@@ -6,6 +6,7 @@ interface FloatingLabelInputOptions {
   label: string;
   errorMessage?: string;
   type?: string;
+  required?: boolean;
 }
 
 export const FloatingLabelInput = ({
@@ -13,6 +14,7 @@ export const FloatingLabelInput = ({
   label,
   errorMessage,
   type = "text",
+  required,
 }: FloatingLabelInputOptions) => {
   const [value, setValue] = useState("");
   const isStickyLabel = value.length > 0;
@@ -24,6 +26,7 @@ export const FloatingLabelInput = ({
           type={type}
           name={name}
           value={value}
+          required={required}
           onChange={(e) => setValue(e.target.value)}
           className={classNames(
             "block w-full rounded-2xl border bg-transparent py-4 px-6",
