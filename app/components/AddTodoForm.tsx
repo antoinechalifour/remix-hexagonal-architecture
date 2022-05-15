@@ -11,10 +11,10 @@ type ActionData = {
 };
 
 export const AddTodoForm = () => {
-  const { ref, fetcher } = useAddTodoForm();
+  const { ref, addTodo } = useAddTodoForm();
 
   return (
-    <fetcher.Form
+    <addTodo.Form
       method="post"
       replace
       className="grid grid-cols-[1fr_auto] items-center gap-5"
@@ -22,40 +22,40 @@ export const AddTodoForm = () => {
       <FloatingLabelInput
         label="What needs to be done?"
         name="todoTitle"
-        errorMessage={fetcher.data?.errors?.todoTitle}
+        errorMessage={addTodo.data?.errors?.todoTitle}
         ref={ref}
       />
 
-      <ButtonPrimary disabled={fetcher.state === "submitting"}>
+      <ButtonPrimary disabled={addTodo.state === "submitting"}>
         Done
       </ButtonPrimary>
-    </fetcher.Form>
+    </addTodo.Form>
   );
 };
 
 function useAddTodoForm() {
-  const fetcher = useFetcher<ActionData>();
+  const addTodo = useFetcher<ActionData>();
   const isSubmitting = useRef(false);
   const floatingLabelInputRef = useRef<FloatingLabelInputRef>(null);
 
   useEffect(() => {
-    if (fetcher.state === "submitting") {
+    if (addTodo.state === "submitting") {
       isSubmitting.current = true;
       return;
     }
 
-    if (isSubmitting.current && fetcher.state === "idle") {
+    if (isSubmitting.current && addTodo.state === "idle") {
       floatingLabelInputRef.current?.focus();
       isSubmitting.current = false;
       return;
     }
-  }, [fetcher.state]);
+  }, [addTodo.state]);
 
   useEffect(() => {
-    if (fetcher.type === "done") {
+    if (addTodo.type === "done") {
       floatingLabelInputRef.current?.clear();
     }
-  }, [fetcher.type]);
+  }, [addTodo.type]);
 
-  return { ref: floatingLabelInputRef, fetcher };
+  return { ref: floatingLabelInputRef, addTodo };
 }

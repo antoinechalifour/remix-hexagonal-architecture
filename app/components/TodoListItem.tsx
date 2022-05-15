@@ -1,6 +1,7 @@
 import type { HomePageTodoListDto } from "shared";
 
-import { Form, Link, useTransition } from "remix";
+import { Link } from "remix";
+import { useFetcher } from "@remix-run/react";
 import classNames from "classnames";
 import { displayDate } from "front/Date";
 import { Button } from "front/ui/Button";
@@ -10,9 +11,8 @@ interface TodoListItemProps {
 }
 
 export const TodoListItem = ({ todoList }: TodoListItemProps) => {
-  const transition = useTransition();
-  const archiveAction = `/l/${todoList.id}/archive`;
-  const isArchiving = transition.submission?.action === archiveAction;
+  const archiveTodoList = useFetcher();
+  const isArchiving = archiveTodoList.state === "submitting";
 
   return (
     <div
@@ -30,16 +30,18 @@ export const TodoListItem = ({ todoList }: TodoListItemProps) => {
           ({todoList.numberOfTodos})
         </span>
       </h2>
-      <Form
+
+      <archiveTodoList.Form
         method="post"
-        action={archiveAction}
+        action={`/l/${todoList.id}/archive`}
         replace
         className="row-span-2 flex content-center"
       >
         <Button disabled={isArchiving} title="Archive this list">
           🗑
         </Button>
-      </Form>
+      </archiveTodoList.Form>
+
       <p className="pl-4 text-sm text-light">
         ↳ Created {displayDate(todoList.createdAt)}
       </p>
