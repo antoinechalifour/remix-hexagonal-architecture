@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
+import { PrismaRepository } from "../../shared/PrismaRepository";
 import type { TodoList, TodoListId } from "../domain/TodoList";
 import type { TodoLists } from "../domain/TodoLists";
 import type { OwnerId } from "../domain/OwnerId";
-import { PrismaRepository } from "./PrismaRepository";
 
 @Injectable()
 export class TodoListDatabaseRepository

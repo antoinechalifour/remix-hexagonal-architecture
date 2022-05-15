@@ -1,21 +1,21 @@
-import { Inject, Injectable } from "@nestjs/common";
-import { Prisma } from "shared";
-import { PRISMA } from "../../keys";
+import { Injectable } from "@nestjs/common";
+import { PrismaRepository } from "../../shared/PrismaRepository";
 import { Accounts } from "../domain/Accounts";
 import { Account } from "../domain/Account";
+import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
+import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
 
 @Injectable()
-export class AccountDatabaseRepository implements Accounts {
-  constructor(
-    @Inject(PRISMA)
-    private readonly prisma: Prisma
-  ) {}
-
+export class AccountDatabaseRepository
+  extends PrismaRepository
+  implements Accounts
+{
   async ofEmail(email: string): Promise<Account> {
     const account = await this.prisma.account.findFirst({
       where: { email },
-      rejectOnNotFound: true,
     });
+
+    if (account == null) throw new InvalidCredentialsError();
 
     return {
       id: account.id,
@@ -25,12 +25,18 @@ export class AccountDatabaseRepository implements Accounts {
   }
 
   async save(account: Account): Promise<void> {
-    await this.prisma.account.create({
-      data: {
-        id: account.id,
-        email: account.email,
-        hash: account.hash,
-      },
-    });
+    try {
+      await this.prisma.account.create({
+        data: {
+          id: account.id,
+          email: account.email,
+          hash: account.hash,
+        },
+      });
+    } catch (e) {
+      if (this.isUniqueConstraintFailed(e))
+        throw new EmailAlreadyInUseError(account.email);
+      throw e;
+    }
   }
 }

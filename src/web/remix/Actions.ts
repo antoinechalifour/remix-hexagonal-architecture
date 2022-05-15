@@ -32,19 +32,15 @@ export class Actions {
 
   @DataFunction()
   async login(@Body() body: LoginBody) {
-    const session = await this.sessionManager.get();
-    if (body.register != null) {
-      await this.loginApplicationService.register(body.email, body.password);
-    }
-
-    const url = await this.loginApplicationService.login(
-      session,
-      body.email,
-      body.password
-    );
-
+    const { url, cookie } = await this.loginApplicationService.login({
+      email: body.email,
+      password: body.password,
+      registration: body.register != null,
+    });
     return redirect(url, {
-      headers: { "Set-Cookie": await this.sessionManager.commit(session) },
+      headers: {
+        "Set-Cookie": cookie,
+      },
     });
   }
 

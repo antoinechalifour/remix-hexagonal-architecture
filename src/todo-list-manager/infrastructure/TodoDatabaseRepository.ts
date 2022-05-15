@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { PrismaRepository } from "../../shared/PrismaRepository";
 import type { Todos } from "../domain/Todos";
 import type { TodoListId } from "../domain/TodoList";
 import type { Todo, TodoId } from "../domain/Todo";
 import { OwnerId } from "../domain/OwnerId";
-import { PrismaRepository } from "./PrismaRepository";
 
 @Injectable()
 export class TodoDatabaseRepository extends PrismaRepository implements Todos {

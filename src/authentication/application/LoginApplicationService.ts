@@ -1,43 +1,72 @@
 import { Injectable } from "@nestjs/common";
-import { Session } from "remix";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { GenerateUUID } from "shared";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
+import { SessionManager } from "remix-nest-adapter";
+import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
+import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
+
+export type LoginDto = {
+  email: string;
+  password: string;
+  registration: boolean;
+};
 
 @Injectable()
 export class LoginApplicationService {
   constructor(
+    private readonly sessionManager: SessionManager,
     private readonly accounts: AccountDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly passwordHasher: BCryptPasswordHasher
   ) {}
 
-  async login(session: Session, email: string, password: string) {
-    const [error, userId] = await new LoginFlow(
-      this.accounts,
-      this.passwordHasher
-    ).execute(email, password);
+  async login(loginDto: LoginDto) {
+    const session = await this.sessionManager.get();
+    let url = "/";
 
-    let url;
-
-    if (error) {
-      session.flash("error", error.message);
-      url = "/login";
-    } else {
+    try {
+      await this.handleRegistration(loginDto);
+      const userId = await this.handleLogin(loginDto);
       session.set("userId", userId);
-      url = "/";
+    } catch (err: any) {
+      let message: string;
+
+      if (EmailAlreadyInUseError.is(err)) message = err.message;
+      else if (InvalidCredentialsError.is(err))
+        message = "Could not login. Make sure your credentials are valid.";
+      else throw err;
+
+      session.flash("error", message);
+      url = "/login";
     }
 
-    return url;
+    return {
+      url,
+      cookie: await this.sessionManager.commit(session),
+    };
   }
 
-  async register(email: string, password: string) {
+  private async handleRegistration({
+    email,
+    password,
+    registration,
+  }: LoginDto) {
+    if (!registration) return;
+
     await new RegisterFlow(
       this.accounts,
       this.generateId,
       this.passwordHasher
     ).execute(email, password);
+  }
+
+  private handleLogin({ email, password }: LoginDto) {
+    return new LoginFlow(this.accounts, this.passwordHasher).execute(
+      email,
+      password
+    );
   }
 }

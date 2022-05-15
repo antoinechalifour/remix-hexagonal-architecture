@@ -2,6 +2,7 @@ import { GenerateId } from "shared";
 import { Accounts } from "../domain/Accounts";
 import { register } from "../domain/Account";
 import { PasswordHasher } from "../domain/PasswordHasher";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 
 export class RegisterFlow {
   constructor(

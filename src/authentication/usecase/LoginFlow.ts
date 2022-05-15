@@ -1,7 +1,6 @@
 import { Accounts } from "../domain/Accounts";
 import { PasswordHasher } from "../domain/PasswordHasher";
-
-export type LoginResult = [Error, null] | [null, string];
+import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
 
 export class LoginFlow {
   constructor(
@@ -9,25 +8,14 @@ export class LoginFlow {
     private readonly passwordHasher: PasswordHasher
   ) {}
 
-  async execute(email: string, password: string): Promise<LoginResult> {
-    let isValidCredentials = false;
-    const error = new Error(
-      "Could not log you in. Make sure your credentials are valid."
+  async execute(email: string, password: string): Promise<string> {
+    const account = await this.accounts.ofEmail(email);
+    const isValidCredentials = await this.passwordHasher.verify(
+      password,
+      account.hash
     );
 
-    try {
-      const account = await this.accounts.ofEmail(email);
-
-      isValidCredentials = await this.passwordHasher.verify(
-        password,
-        account.hash
-      );
-
-      if (!isValidCredentials) return [error, null];
-
-      return [null, account.id];
-    } catch {
-      return [error, null];
-    }
+    if (!isValidCredentials) throw new InvalidCredentialsError();
+    return account.id;
   }
 }
