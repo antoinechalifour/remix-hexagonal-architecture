@@ -59,7 +59,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
             inputClassName="font-semibold"
           >
             <span
-              className={classNames("font-semibold", {
+              className={classNames("font-semibold sm:ml-2", {
                 "line-through opacity-75": todo.isComplete,
               })}
             >

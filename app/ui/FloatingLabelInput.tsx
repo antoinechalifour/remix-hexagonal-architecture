@@ -7,6 +7,7 @@ interface FloatingLabelInputOptions {
   errorMessage?: string;
   type?: string;
   required?: boolean;
+  maxLength?: number;
 }
 
 export type FloatingLabelInputRef = {
@@ -18,7 +19,14 @@ export const FloatingLabelInput = forwardRef<
   FloatingLabelInputRef,
   FloatingLabelInputOptions
 >(function FloatingLabelInput(props, ref) {
-  const { name, label, errorMessage, type = "text", required } = props;
+  const {
+    name,
+    label,
+    errorMessage,
+    type = "text",
+    required,
+    maxLength,
+  } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
@@ -38,9 +46,10 @@ export const FloatingLabelInput = forwardRef<
           name={name}
           value={value}
           required={required}
+          maxLength={maxLength}
           onChange={(e) => setValue(e.target.value)}
           className={classNames(
-            "block w-full rounded-2xl border bg-transparent py-4 px-6",
+            "block w-full rounded-2xl border bg-transparent py-2 px-3 sm:py-4 sm:px-6",
             "border-2 border border-dark focus:border-primary",
             "text-base text-lighter transition-colors",
             {
@@ -50,7 +59,7 @@ export const FloatingLabelInput = forwardRef<
         />
         <span
           className={classNames(
-            "absolute left-4 -translate-y-1/2 p-3 font-bold",
+            "absolute left-4 -translate-y-1/2 p-1 font-bold sm:p-3",
             "transition-all group-focus-within:top-0 group-focus-within:bg-darker group-focus-within:text-xs",
             {
               "top-1/2": !isStickyLabel,

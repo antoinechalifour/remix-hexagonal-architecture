@@ -1,8 +1,9 @@
-import { IsString, MinLength } from "class-validator";
+import { IsString, MaxLength, MinLength } from "class-validator";
 
 export class RenameTodoListBody {
   @IsString()
   @MinLength(1)
+  @MaxLength(50)
   title!: string;
 }
 

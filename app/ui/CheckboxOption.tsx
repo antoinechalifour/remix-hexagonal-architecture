@@ -14,7 +14,7 @@ export const CheckboxOption = ({
 }: CheckboxOptionProps) => (
   <label
     htmlFor={id}
-    className="grid cursor-pointer grid-cols-[auto_1fr] items-center gap-4"
+    className="grid cursor-pointer grid-cols-[auto_1fr] items-center"
   >
     <input name="isChecked" type="hidden" value="off" />
     <input
@@ -36,6 +36,6 @@ export const CheckboxOption = ({
         "checked:after:cursor-pointer checked:after:text-lighter"
       )}
     />
-    <span className="font-semibold">{label}</span>
+    <span>{label}</span>
   </label>
 );
