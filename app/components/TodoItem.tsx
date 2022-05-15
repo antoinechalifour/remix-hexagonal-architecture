@@ -60,7 +60,11 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           action={`/l/${todoListId}/todo/${todo.id}/archive`}
           replace
         >
-          <Button disabled={isArchiving} title="Archive this todo">
+          <Button
+            type="submit"
+            disabled={isArchiving}
+            title="Archive this todo"
+          >
             🗑
           </Button>
         </archiveTodo.Form>

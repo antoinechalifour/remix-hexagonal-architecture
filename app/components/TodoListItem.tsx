@@ -37,7 +37,7 @@ export const TodoListItem = ({ todoList }: TodoListItemProps) => {
         replace
         className="row-span-2 flex content-center"
       >
-        <Button disabled={isArchiving} title="Archive this list">
+        <Button type="submit" disabled={isArchiving} title="Archive this list">
           🗑
         </Button>
       </archiveTodoList.Form>

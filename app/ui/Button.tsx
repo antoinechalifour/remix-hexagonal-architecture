@@ -4,8 +4,14 @@ import classNames from "classnames";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-export const Button = ({ children, className, ...props }: ButtonProps) => (
+export const Button = ({
+  children,
+  className,
+  type = "button",
+  ...props
+}: ButtonProps) => (
   <button
+    type={type}
     {...props}
     className={classNames(
       "text-sm font-semibold uppercase text-lighter disabled:cursor-not-allowed",

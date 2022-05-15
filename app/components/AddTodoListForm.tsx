@@ -22,7 +22,10 @@ export const AddTodoListForm = () => {
         errorMessage={addTodoList.data?.errors?.title}
       />
 
-      <ButtonPrimary disabled={addTodoList.state === "submitting"}>
+      <ButtonPrimary
+        type="submit"
+        disabled={addTodoList.state === "submitting"}
+      >
         Done
       </ButtonPrimary>
     </addTodoList.Form>

@@ -41,10 +41,10 @@ export const LoginForm = () => {
       />
 
       <div className="flex flex-row-reverse gap-4">
-        <ButtonPrimary className="flex-1" name="login">
+        <ButtonPrimary type="submit" className="flex-1" name="login">
           Login
         </ButtonPrimary>
-        <ButtonSecondary className="flex-1" name="register">
+        <ButtonSecondary type="submit" className="flex-1" name="register">
           Register
         </ButtonSecondary>
       </div>

@@ -26,7 +26,7 @@ export const AddTodoForm = () => {
         ref={ref}
       />
 
-      <ButtonPrimary disabled={addTodo.state === "submitting"}>
+      <ButtonPrimary type="submit" disabled={addTodo.state === "submitting"}>
         Done
       </ButtonPrimary>
     </addTodo.Form>
