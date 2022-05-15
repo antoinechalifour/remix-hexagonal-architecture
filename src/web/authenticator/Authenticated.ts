@@ -2,7 +2,7 @@ import { DataFunctionArgs } from "@remix-run/node";
 import { redirect } from "remix";
 import { Inject } from "@nestjs/common";
 import { AUTHENTICATOR } from "../../keys";
-import { SessionAuthenticator } from "../remix/SessionAuthenticator";
+import { SessionAuthenticator } from "./SessionAuthenticator";
 
 const authenticatorKey = Symbol("authenticator");
 

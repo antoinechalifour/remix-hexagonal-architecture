@@ -6,6 +6,8 @@ import { useLoaderData } from "remix";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { Todos } from "front/components/Todos";
+import { useEffect } from "react";
+import { useFetcher } from "@remix-run/react";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
   title: `TLM | ${todoList?.title} (${todoList?.doingTodos.length})`,
@@ -19,11 +21,30 @@ export const action: ActionFunction = async (args) =>
   (args.context as RemixAppContext).actions.addTodo(args);
 
 export default function TodoListPage() {
-  const todoList = useLoaderData<TodoListDto>();
+  const { todoList } = useTodoListPage();
 
   return (
     <DndProvider backend={HTML5Backend}>
       <Todos todoList={todoList} />
     </DndProvider>
   );
+}
+
+function useTodoListPage() {
+  const loaderData = useLoaderData<TodoListDto>();
+  const refresher = useFetcher<TodoListDto>();
+  const todoList = refresher.data || loaderData;
+  const load = refresher.load;
+
+  useEffect(() => {
+    const source = new EventSource(`/events/l/${todoList.id}`);
+
+    source.addEventListener("update", () => {
+      load(window.location.pathname);
+    });
+
+    return () => source.close();
+  }, [load, todoList.id]);
+
+  return { todoList };
 }

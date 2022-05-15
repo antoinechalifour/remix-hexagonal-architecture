@@ -7,7 +7,10 @@ import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRe
 import { TodoDatabaseRepository } from "../infrastructure/TodoDatabaseRepository";
 import { RealClock } from "../../shared/RealClock";
 import { PRISMA } from "../../keys";
+import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { NestEvents } from "../../shared/NestEvents";
 import { RenameTodo } from "../usecase/RenameTodo";
+import { CurrentUser } from "authentication";
 
 @Injectable()
 export class TodoApplicationService {
@@ -16,44 +19,66 @@ export class TodoApplicationService {
     private readonly todos: TodoDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
-    @Inject(PRISMA) private readonly prisma: Prisma
+    @Inject(PRISMA) private readonly prisma: Prisma,
+    private readonly events: NestEvents
   ) {}
 
-  add(todoListId: string, title: string, ownerId: string) {
-    return this.prisma.$transaction((prisma) =>
+  async add(todoListId: string, title: string, currentUser: CurrentUser) {
+    await this.prisma.$transaction((prisma) =>
       new AddTodo(
         new TodoDatabaseRepository(prisma),
         new TodoListDatabaseRepository(prisma),
         this.generateId,
         this.clock
-      ).execute(todoListId, title, ownerId)
+      ).execute(todoListId, title, currentUser.id)
+    );
+
+    this.events.publish(
+      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
-  archive(todoListId: string, todoId: string, ownerId: string) {
-    return this.prisma.$transaction((prisma) =>
+  async archive(todoListId: string, todoId: string, currentUser: CurrentUser) {
+    await this.prisma.$transaction((prisma) =>
       new ArchiveTodo(
         new TodoListDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma)
-      ).execute(todoListId, todoId, ownerId)
+      ).execute(todoListId, todoId, currentUser.id)
+    );
+
+    this.events.publish(
+      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
-  changeTodoCompletion(
+  async changeTodoCompletion(
     todoListId: string,
     todoId: string,
     isChecked: string,
-    ownerId: string
+    currentUser: CurrentUser
   ) {
-    return this.prisma.$transaction((prisma) =>
+    await this.prisma.$transaction((prisma) =>
       new ChangeTodoCompletion(
         new TodoListDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma)
-      ).execute(todoListId, todoId, isChecked, ownerId)
+      ).execute(todoListId, todoId, isChecked, currentUser.id)
+    );
+
+    this.events.publish(
+      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
-  async renameTodo(todoId: string, title: string, ownerId: string) {
-    return new RenameTodo(this.todos).execute(todoId, title, ownerId);
+  async renameTodo(
+    todoListId: string,
+    todoId: string,
+    title: string,
+    currentUser: CurrentUser
+  ) {
+    await new RenameTodo(this.todos).execute(todoId, title, currentUser.id);
+
+    this.events.publish(
+      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
+    );
   }
 }
