@@ -14,7 +14,7 @@ export const EditableContentDisplayMode = ({
 }: EditableContentDisplayModeProps) => (
   <div className="group grid grid-cols-[auto_1fr] items-center gap-4">
     <div>{children}</div>
-    <div className="opacity-0 transition group-hover:opacity-100">
+    <div className="opacity-0 transition group-focus-within:opacity-100 group-hover:opacity-100">
       <Button aria-label="Edit" onClick={onEdit}>
         ✍️
       </Button>
