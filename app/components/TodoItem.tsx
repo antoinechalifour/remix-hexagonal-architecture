@@ -45,7 +45,9 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           <CheckboxOption
             id={`todo-${todo.id}`}
             isChecked={todo.isComplete}
-            label={<span className="sr-only">{todo.title}</span>}
+            label={
+              <span className="sr-only">{todo.title} (click to toggle)</span>
+            }
           />
         </completeTodo.Form>
 

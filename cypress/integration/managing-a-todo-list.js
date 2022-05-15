@@ -33,14 +33,14 @@ function theyCanAddATodo(todo) {
   cy.findByLabelText("What needs to be done?").click().type(todo);
   cy.findByRole("button", { name: "Done" }).click();
   cy.wait("@todosLoaded");
-  cy.findByText(todo).should("be.visible");
+  cy.findByText(`${todo} (click to toggle)`).should("be.visible");
 }
 
 function theyCanCompleteTheTodo(todo) {
   cy.findByText(/^Things to do/)
     .parent()
     .within(() => {
-      cy.findByText(todo).click();
+      cy.findByText(`${todo} (click to toggle)`).click({ force: true });
     });
 }
 
@@ -48,12 +48,12 @@ function theyCanUncompleteTheTodo(todo) {
   cy.findByText(/^Things done/)
     .parent()
     .within(() => {
-      cy.findByText(todo).click();
+      cy.findByText(`${todo} (click to toggle)`).click({ force: true });
     });
   cy.wait(500);
   cy.findByText(/^Things to do/)
     .parent()
     .within(() => {
-      cy.findByText(todo).should("exist");
+      cy.findByText(`${todo} (click to toggle)`).should("exist");
     });
 }
