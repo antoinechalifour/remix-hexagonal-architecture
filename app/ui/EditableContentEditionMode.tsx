@@ -1,16 +1,19 @@
 import React, { useRef, useState } from "react";
 import { Button } from "front/ui/Button";
+import classNames from "classnames";
 
 export interface EditableContentEditionModeProps {
   inputName: string;
   initialValue: string;
   onCancel: () => void;
+  inputClassName?: string;
 }
 
 export const EditableContentEditionMode = ({
   inputName,
   initialValue,
   onCancel,
+  inputClassName,
 }: EditableContentEditionModeProps) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [size, setSize] = useState(computeSize(initialValue));
@@ -22,7 +25,10 @@ export const EditableContentEditionMode = ({
     <div className="flex gap-4">
       <input
         type="text"
-        className="max-w-1/2 overflow-x-auto bg-transparent text-2xl font-semibold text-lighter"
+        className={classNames(
+          "max-w-1/2 overflow-x-auto rounded bg-transparent",
+          inputClassName
+        )}
         ref={inputRef}
         defaultValue={initialValue}
         onChange={onChange}

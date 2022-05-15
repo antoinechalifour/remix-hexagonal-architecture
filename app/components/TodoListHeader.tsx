@@ -20,7 +20,8 @@ export const TodoListHeader = ({ todoList }: TodoListHeaderProps) => {
       >
         <EditableContent
           initialValue={todoList.title}
-          inputName="todoListTitle"
+          inputName="title"
+          inputClassName="text-2xl font-semibold text-lighter"
         >
           <PageTitle>{todoList.title}</PageTitle>
         </EditableContent>

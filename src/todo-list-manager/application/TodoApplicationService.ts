@@ -7,6 +7,7 @@ import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRe
 import { TodoDatabaseRepository } from "../infrastructure/TodoDatabaseRepository";
 import { RealClock } from "../../shared/RealClock";
 import { PRISMA } from "../../keys";
+import { RenameTodo } from "../usecase/RenameTodo";
 
 @Injectable()
 export class TodoApplicationService {
@@ -50,5 +51,9 @@ export class TodoApplicationService {
         new TodoDatabaseRepository(prisma)
       ).execute(todoListId, todoId, isChecked, ownerId)
     );
+  }
+
+  async renameTodo(todoId: string, title: string, ownerId: string) {
+    return new RenameTodo(this.todos).execute(todoId, title, ownerId);
   }
 }

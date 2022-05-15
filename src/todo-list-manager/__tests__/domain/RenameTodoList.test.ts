@@ -3,12 +3,12 @@ import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { aTodoList } from "./builders/TodoList";
 
 describe("Renaming a todo list", () => {
-  let todoListsInMemory: TodoListsInMemory;
+  let todoLists: TodoListsInMemory;
   let renameTodoList: RenameTodoList;
 
   beforeEach(() => {
-    todoListsInMemory = new TodoListsInMemory();
-    renameTodoList = new RenameTodoList(todoListsInMemory);
+    todoLists = new TodoListsInMemory();
+    renameTodoList = new RenameTodoList(todoLists);
   });
 
   it("renames the todo list", async () => {
@@ -18,14 +18,12 @@ describe("Renaming a todo list", () => {
       .ownedBy("owner/1")
       .withTitle("Current title")
       .build();
-    await todoListsInMemory.save(theTodoList);
+    await todoLists.save(theTodoList);
 
     // Act
     await renameTodoList.execute("todoList/1", "Updated title", "owner/1");
 
     // Assert
-    expect((await todoListsInMemory.ofId("todoList/1")).title).toEqual(
-      "Updated title"
-    );
+    expect((await todoLists.ofId("todoList/1")).title).toEqual("Updated title");
   });
 });

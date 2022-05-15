@@ -16,3 +16,8 @@ export const updateCompletion = (todo: Todo, isComplete: boolean) => ({
   ...todo,
   isComplete,
 });
+
+export const renameTodo = (todo: Todo, title: string) => ({
+  ...todo,
+  title,
+});

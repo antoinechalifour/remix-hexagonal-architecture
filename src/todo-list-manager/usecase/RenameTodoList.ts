@@ -7,7 +7,6 @@ export class RenameTodoList {
 
   async execute(todoListId: TodoListId, title: string, ownerId: OwnerId) {
     const todoList = await this.todoLists.ofId(todoListId, ownerId);
-
     await this.todoLists.save(renameTodoList(todoList, title));
   }
 }

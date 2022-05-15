@@ -19,9 +19,10 @@ import { ArchiveTodoListParams } from "../dtos/ArchiveTodoList";
 import { LoginBody } from "../dtos/Login";
 import { ReorderTodosBody, ReorderTodosParams } from "../dtos/ReorderTodos";
 import {
-  RenameTodoListDto,
+  RenameTodoListBody,
   RenameTodoListParams,
 } from "../dtos/RenameTodoList";
+import { RenameTodoBody, RenameTodoParams } from "../dtos/RenameTodo";
 
 @Injectable()
 export class Actions {
@@ -87,6 +88,21 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
+  async renameTodo(
+    @Params() params: RenameTodoParams,
+    @Body() body: RenameTodoBody
+  ) {
+    await this.todoApplicationService.renameTodo(
+      params.todoId,
+      body.title,
+      await this.authenticator.currentUser()
+    );
+
+    return null;
+  }
+
+  @Authenticated()
+  @DataFunction()
   async addTodoList(@Body() body: AddTodoListBody) {
     const url = await this.todoListApplicationService.add(
       body.title,
@@ -99,11 +115,11 @@ export class Actions {
   @DataFunction()
   async renameTodoList(
     @Params() params: RenameTodoListParams,
-    @Body() body: RenameTodoListDto
+    @Body() body: RenameTodoListBody
   ) {
     await this.todoListApplicationService.rename(
       params.todoListId,
-      body.todoListTitle,
+      body.title,
       await this.authenticator.currentUser()
     );
 

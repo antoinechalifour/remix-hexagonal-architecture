@@ -1,9 +1,9 @@
 import { IsString, MinLength } from "class-validator";
 
-export class RenameTodoListDto {
+export class RenameTodoListBody {
   @IsString()
   @MinLength(1)
-  todoListTitle!: string;
+  title!: string;
 }
 
 export class RenameTodoListParams {

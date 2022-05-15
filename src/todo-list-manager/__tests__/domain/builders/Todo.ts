@@ -3,6 +3,7 @@ import type { Todo } from "../../../domain/Todo";
 interface TodoBuilder {
   todo: Todo;
   withId(id: string): TodoBuilder;
+  withTitle(title: string): TodoBuilder;
   ofTodoList(todoListId: string): TodoBuilder;
   ownedBy(ownerId: string): TodoBuilder;
   build(): Todo;
@@ -23,6 +24,10 @@ export const anUncompletedTodo = (): TodoBuilder => ({
   },
   ofTodoList(todoListId: string): TodoBuilder {
     this.todo.todoListId = todoListId;
+    return this;
+  },
+  withTitle(title: string): TodoBuilder {
+    this.todo.title = title;
     return this;
   },
   ownedBy(ownerId: string): TodoBuilder {
@@ -49,6 +54,10 @@ export const aTodo = (): TodoBuilder => ({
   },
   ofTodoList(todoListId: string): TodoBuilder {
     this.todo.todoListId = todoListId;
+    return this;
+  },
+  withTitle(title: string): TodoBuilder {
+    this.todo.title = title;
     return this;
   },
   ownedBy(ownerId: string): TodoBuilder {

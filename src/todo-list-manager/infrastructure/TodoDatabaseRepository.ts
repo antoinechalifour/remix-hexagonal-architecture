@@ -44,7 +44,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
   async save(todo: Todo): Promise<void> {
     await this.prisma.todo.upsert({
       where: { id: todo.id },
-      update: { isComplete: todo.isComplete },
+      update: { isComplete: todo.isComplete, title: todo.title },
       create: {
         id: todo.id,
         title: todo.title,

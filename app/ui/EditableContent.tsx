@@ -7,12 +7,14 @@ export interface EditableContentProps {
   children: ReactElement<{ className?: string }>;
   initialValue: string;
   inputName: string;
+  inputClassName?: string;
 }
 
 export const EditableContent = ({
   children,
   initialValue,
   inputName,
+  inputClassName,
 }: EditableContentProps) => {
   const { isEditionMode, switchToDisplayMode, switchToEditionMode } =
     useEditableContent(initialValue);
@@ -21,6 +23,7 @@ export const EditableContent = ({
     return (
       <EditableContentEditionMode
         inputName={inputName}
+        inputClassName={inputClassName}
         initialValue={initialValue}
         onCancel={switchToDisplayMode}
       />
