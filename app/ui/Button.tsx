@@ -22,6 +22,9 @@ export const Button = ({
   </button>
 );
 
+const CLASSES_COLORED_BUTTONS =
+  "rounded-2xl py-2 px-4 sm:py-4 sm:px-6 shadow transition-colors";
+
 export const ButtonPrimary = ({
   children,
   className,
@@ -30,7 +33,8 @@ export const ButtonPrimary = ({
   <Button
     {...props}
     className={classNames(
-      "rounded-2xl bg-primary py-4 px-6 shadow transition-colors disabled:bg-primary-lighter",
+      CLASSES_COLORED_BUTTONS,
+      "bg-primary  disabled:bg-primary-lighter",
       className
     )}
   >
@@ -46,7 +50,8 @@ export const ButtonSecondary = ({
   <Button
     {...props}
     className={classNames(
-      "rounded-2xl border-2 border-primary py-4 px-6 shadow transition-colors",
+      CLASSES_COLORED_BUTTONS,
+      "border-2 border-primary",
       className
     )}
   >

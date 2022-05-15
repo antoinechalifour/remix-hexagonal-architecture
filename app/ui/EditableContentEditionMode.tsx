@@ -26,7 +26,7 @@ export const EditableContentEditionMode = ({
       <input
         type="text"
         className={classNames(
-          "max-w-1/2 overflow-x-auto rounded bg-transparent",
+          "max-w-prose overflow-x-auto rounded bg-transparent",
           inputClassName
         )}
         ref={inputRef}
@@ -35,6 +35,7 @@ export const EditableContentEditionMode = ({
         size={size}
         name={inputName}
         autoFocus
+        maxLength={50}
       />
       <Button type="submit">✅</Button>
       <Button onClick={onCancel}>❌</Button>

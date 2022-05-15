@@ -14,12 +14,13 @@ export const AddTodoListForm = () => {
   return (
     <addTodoList.Form
       method="post"
-      className="grid grid-cols-[1fr_auto] items-center gap-5"
+      className="grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-5"
     >
       <FloatingLabelInput
         name="title"
         label="Add a new todo list"
         errorMessage={addTodoList.data?.errors?.title}
+        maxLength={50}
       />
 
       <ButtonPrimary

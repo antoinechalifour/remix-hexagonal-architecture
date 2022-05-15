@@ -17,13 +17,14 @@ export const AddTodoForm = () => {
     <addTodo.Form
       method="post"
       replace
-      className="grid grid-cols-[1fr_auto] items-center gap-5"
+      className="grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-5"
     >
       <FloatingLabelInput
         label="What needs to be done?"
         name="todoTitle"
         errorMessage={addTodo.data?.errors?.todoTitle}
         ref={ref}
+        maxLength={50}
       />
 
       <ButtonPrimary type="submit" disabled={addTodo.state === "submitting"}>
