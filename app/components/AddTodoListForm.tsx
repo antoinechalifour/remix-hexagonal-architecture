@@ -1,28 +1,30 @@
 import type { AddTodoListErrorDto } from "shared";
 
-import { Form, useActionData } from "remix";
+import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
-import { AddTodoListButton } from "./AddTodoListButton";
+import { ButtonPrimary } from "front/ui/Button";
 
 type ActionData = {
   errors?: AddTodoListErrorDto;
 };
 
 export const AddTodoListForm = () => {
-  const actionData = useActionData<ActionData>();
+  const fetcher = useFetcher<ActionData>();
 
   return (
-    <Form
+    <fetcher.Form
       method="post"
       className="grid grid-cols-[1fr_auto] items-center gap-5"
     >
       <FloatingLabelInput
         name="title"
         label="Add a new todo list"
-        errorMessage={actionData?.errors?.title}
+        errorMessage={fetcher.data?.errors?.title}
       />
 
-      <AddTodoListButton />
-    </Form>
+      <ButtonPrimary disabled={fetcher.state === "submitting"}>
+        Done
+      </ButtonPrimary>
+    </fetcher.Form>
   );
 };
