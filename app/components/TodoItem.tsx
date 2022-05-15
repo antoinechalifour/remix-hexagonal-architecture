@@ -53,7 +53,11 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           method="post"
           action={`/l/${todoListId}/todo/${todo.id}/rename`}
         >
-          <EditableContent initialValue={todo.title} inputName="title">
+          <EditableContent
+            initialValue={todo.title}
+            inputName="title"
+            inputClassName="font-semibold"
+          >
             <span
               className={classNames("font-semibold", {
                 "line-through opacity-75": todo.isComplete,
