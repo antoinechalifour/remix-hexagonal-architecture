@@ -7,18 +7,19 @@ export interface RemixNestOptions extends ModuleMetadata {
   buildConfig: RemixNestBuildConfig;
 }
 
-@Module({
-  controllers: [RemixController],
-})
+@Module({})
 export class RemixModule {
   static registerAsync({
     buildConfig,
     imports = [],
+    controllers = [],
     providers = [],
+    exports = [],
   }: RemixNestOptions): DynamicModule {
     return {
       module: RemixModule,
       imports: imports,
+      controllers: [...controllers, RemixController],
       providers: [
         ...providers,
         {
@@ -26,6 +27,7 @@ export class RemixModule {
           useValue: buildConfig,
         },
       ],
+      exports: exports,
     };
   }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { SessionManager } from "remix-nest-adapter";
-import { Authenticator } from "authentication";
+import { CurrentUser, Authenticator } from "authentication";
 
 @Injectable()
 export class SessionAuthenticator implements Authenticator {
@@ -8,11 +8,14 @@ export class SessionAuthenticator implements Authenticator {
 
   async isAuthenticated() {
     const session = await this.sessionManager.get();
-    return session.has("userId");
+    return session.has("userId") && session.has("sessionId");
   }
 
-  async currentUser(): Promise<string> {
+  async currentUser(): Promise<CurrentUser> {
     const session = await this.sessionManager.get();
-    return session.get("userId");
+    return {
+      id: session.get("userId"),
+      sessionId: session.get("sessionId"),
+    };
   }
 }

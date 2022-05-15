@@ -10,8 +10,8 @@ import {
   FetchTodoListDatabaseQuery,
 } from "todo-list-manager";
 import { AUTHENTICATOR } from "../../keys";
-import { FetchTodoListParams } from "../dtos/FetchTodoList";
-import { Authenticated } from "../decorators/Authenticated";
+import { FetchTodoListParams } from "./dtos/FetchTodoList";
+import { Authenticated } from "../authenticator/Authenticated";
 
 @Injectable()
 export class Loaders {
@@ -60,15 +60,14 @@ export class Loaders {
   @Authenticated()
   @DataFunction()
   async homePage() {
-    return this.fetchHomePageQuery.run(await this.authenticator.currentUser());
+    const currentUser = await this.authenticator.currentUser();
+    return this.fetchHomePageQuery.run(currentUser.id);
   }
 
   @Authenticated()
   @DataFunction()
   async todoList(@Params() params: FetchTodoListParams) {
-    return this.fetchTodoListQuery.run(
-      params.todoListId,
-      await this.authenticator.currentUser()
-    );
+    const currentUser = await this.authenticator.currentUser();
+    return this.fetchTodoListQuery.run(params.todoListId, currentUser.id);
   }
 }

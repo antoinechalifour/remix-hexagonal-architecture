@@ -1,12 +1,13 @@
 import { Injectable } from "@nestjs/common";
+import { v4 as uuid } from "uuid";
+import { SessionManager } from "remix-nest-adapter";
+import { GenerateUUID } from "shared";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
-import { GenerateUUID } from "shared";
-import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
-import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
-import { SessionManager } from "remix-nest-adapter";
 import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
+import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
+import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 
 export type LoginDto = {
   email: string;
@@ -31,6 +32,7 @@ export class LoginApplicationService {
       await this.handleRegistration(loginDto);
       const userId = await this.handleLogin(loginDto);
       session.set("userId", userId);
+      session.set("sessionId", uuid());
     } catch (err: any) {
       let message: string;
 

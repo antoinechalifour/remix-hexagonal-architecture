@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { EventEmitterModule } from "@nestjs/event-emitter";
 import {
   AccountDatabaseRepository,
   BCryptPasswordHasher,
@@ -6,7 +7,7 @@ import {
   LoginApplicationService,
 } from "authentication";
 import { AUTHENTICATOR, PRISMA } from "../keys";
-import { SessionAuthenticator } from "./remix/SessionAuthenticator";
+import { SessionAuthenticator } from "./authenticator/SessionAuthenticator";
 import {
   FetchHomePageDatabaseQuery,
   FetchTodoListDatabaseQuery,
@@ -25,6 +26,7 @@ import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
 import { GenerateUUID, Prisma } from "shared";
 import { RealClock } from "../shared/RealClock";
+import { NestEvents } from "../shared/NestEvents";
 
 const RemixSessionConfig = {
   name: "__session",
@@ -35,7 +37,7 @@ const RemixSessionConfig = {
 };
 
 @Module({
-  imports: [],
+  imports: [EventEmitterModule.forRoot()],
   providers: [
     // Authentication
     LoginApplicationService,
@@ -72,12 +74,13 @@ const RemixSessionConfig = {
 
     // Infrastructure
     GenerateUUID,
+    NestEvents,
     RealClock,
     {
       provide: PRISMA,
       useClass: Prisma,
     },
   ],
-  exports: [ACTIONS_CLASS, LOADERS_CLASS],
+  exports: [ACTIONS_CLASS, LOADERS_CLASS, AUTHENTICATOR],
 })
 export class CoreModule {}

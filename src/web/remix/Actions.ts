@@ -7,22 +7,22 @@ import {
   TodoListApplicationService,
 } from "todo-list-manager";
 import { AUTHENTICATOR } from "../../keys";
-import { Authenticated } from "../decorators/Authenticated";
-import { AddTodoBody, AddTodoParams } from "../dtos/AddTodo";
-import { ArchiveTodoParams } from "../dtos/ArchiveTodo";
+import { Authenticated } from "../authenticator/Authenticated";
+import { AddTodoBody, AddTodoParams } from "./dtos/AddTodo";
+import { ArchiveTodoParams } from "./dtos/ArchiveTodo";
 import {
   ChangeTodoCompletionBody,
   ChangeTodoCompletionParams,
-} from "../dtos/ChangeTodoCompletion";
-import { AddTodoListBody } from "../dtos/AddTodoList";
-import { ArchiveTodoListParams } from "../dtos/ArchiveTodoList";
-import { LoginBody } from "../dtos/Login";
-import { ReorderTodosBody, ReorderTodosParams } from "../dtos/ReorderTodos";
+} from "./dtos/ChangeTodoCompletion";
+import { AddTodoListBody } from "./dtos/AddTodoList";
+import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
+import { LoginBody } from "./dtos/Login";
+import { ReorderTodosBody, ReorderTodosParams } from "./dtos/ReorderTodos";
 import {
   RenameTodoListBody,
   RenameTodoListParams,
-} from "../dtos/RenameTodoList";
-import { RenameTodoBody, RenameTodoParams } from "../dtos/RenameTodo";
+} from "./dtos/RenameTodoList";
+import { RenameTodoBody, RenameTodoParams } from "./dtos/RenameTodo";
 
 @Injectable()
 export class Actions {
@@ -93,6 +93,7 @@ export class Actions {
     @Body() body: RenameTodoBody
   ) {
     await this.todoApplicationService.renameTodo(
+      params.todoListId,
       params.todoId,
       body.title,
       await this.authenticator.currentUser()
