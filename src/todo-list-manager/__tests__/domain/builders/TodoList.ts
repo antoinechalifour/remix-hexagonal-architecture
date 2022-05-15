@@ -5,6 +5,7 @@ interface TodoListBuilder {
   todoList: TodoList;
   withId(id: string): TodoListBuilder;
   ownedBy(ownerId: string): TodoListBuilder;
+  withTitle(title: string): TodoListBuilder;
   withTodosOrder(...todoIds: TodoId[]): TodoListBuilder;
   build(): TodoList;
 }
@@ -23,6 +24,10 @@ export const aTodoList = (): TodoListBuilder => ({
   },
   ownedBy(ownerId: string): TodoListBuilder {
     this.todoList.ownerId = ownerId;
+    return this;
+  },
+  withTitle(title: string): TodoListBuilder {
+    this.todoList.title = title;
     return this;
   },
   withTodosOrder(...todoIds: TodoId[]): TodoListBuilder {

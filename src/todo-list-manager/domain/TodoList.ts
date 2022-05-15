@@ -83,3 +83,8 @@ export const reorderTodoList = (
 
 export const orderAsFirstTodo = () => 0;
 export const orderAsLastTodo = (todoOrder: string[]) => todoOrder.length - 1;
+
+export const renameTodoList = (todoList: TodoList, title: string) => ({
+  ...todoList,
+  title,
+});

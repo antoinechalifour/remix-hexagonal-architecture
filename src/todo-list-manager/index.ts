@@ -6,3 +6,4 @@ export * from "./infrastructure/TodoListDatabaseRepository";
 export * from "./infrastructure/TodoDatabaseRepository";
 export * from "./infrastructure/FetchHomePageDatabaseQuery";
 export * from "./infrastructure/FetchTodoListDatabaseQuery";
+export { RenameTodoList } from "./usecase/RenameTodoList";

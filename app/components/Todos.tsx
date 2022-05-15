@@ -1,13 +1,11 @@
 import type { DoingTodoDto, TodoListDto } from "shared";
 import { moveArrayItem } from "../../src/shared/lib";
 
-import React, { useEffect, useState } from "react";
-import { displayDate } from "front/Date";
-import { PageTitle } from "front/ui/PageTitle";
-import { AddTodoForm } from "front/components/AddTodoForm";
+import React, { useEffect, useMemo, useState } from "react";
 import { TodoList } from "front/components/TodoList";
 import { TodoItem } from "front/components/TodoItem";
 import { ReorderableTodoItem } from "front/components/ReorderableTodoItem";
+import { TodoListHeader } from "front/components/TodoListHeader";
 
 interface TodosProps {
   todoList: TodoListDto;
@@ -19,30 +17,15 @@ interface TodoOrderPreview {
 }
 
 export const Todos = ({ todoList }: TodosProps) => {
-  const [todoOrderPreview, setTodoOrderPreview] =
-    useState<TodoOrderPreview | null>(null);
-  const moveForPreview = (todoId: string, newIndex: number) =>
-    setTodoOrderPreview({ todoId, newIndex });
-
-  useEffect(() => {
-    setTodoOrderPreview(null);
-  }, [todoList]);
+  const { moveForPreview, doingTodos } = useTodos(todoList);
 
   return (
     <section className="space-y-10">
-      <div className="space-y-4">
-        <PageTitle>{todoList.title}</PageTitle>
-
-        <p className="pl-3 text-xs">
-          ↳ You created this list {displayDate(todoList.createdAt)}
-        </p>
-
-        <AddTodoForm />
-      </div>
+      <TodoListHeader todoList={todoList} />
 
       <TodoList
         title="Things to do"
-        todos={sortDoingTodos(todoList.doingTodos, todoOrderPreview)}
+        todos={doingTodos}
         emptyMessage="Come on! Don't you have anything to do?"
         renderTodo={(todoItem, index) => (
           <ReorderableTodoItem
@@ -65,6 +48,24 @@ export const Todos = ({ todoList }: TodosProps) => {
     </section>
   );
 };
+
+function useTodos(todoList: TodoListDto) {
+  const [todoOrderPreview, setTodoOrderPreview] =
+    useState<TodoOrderPreview | null>(null);
+  const moveForPreview = (todoId: string, newIndex: number) =>
+    setTodoOrderPreview({ todoId, newIndex });
+
+  useEffect(() => {
+    setTodoOrderPreview(null);
+  }, [todoList]);
+
+  const doingTodos = useMemo(
+    () => sortDoingTodos(todoList.doingTodos, todoOrderPreview),
+    [todoList.doingTodos, todoOrderPreview]
+  );
+
+  return { doingTodos, moveForPreview };
+}
 
 function sortDoingTodos(
   todos: DoingTodoDto[],

@@ -18,6 +18,10 @@ import { AddTodoListBody } from "../dtos/AddTodoList";
 import { ArchiveTodoListParams } from "../dtos/ArchiveTodoList";
 import { LoginBody } from "../dtos/Login";
 import { ReorderTodosBody, ReorderTodosParams } from "../dtos/ReorderTodos";
+import {
+  RenameTodoListDto,
+  RenameTodoListParams,
+} from "../dtos/RenameTodoList";
 
 @Injectable()
 export class Actions {
@@ -89,6 +93,21 @@ export class Actions {
       await this.authenticator.currentUser()
     );
     return redirect(url);
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async renameTodoList(
+    @Params() params: RenameTodoListParams,
+    @Body() body: RenameTodoListDto
+  ) {
+    await this.todoListApplicationService.rename(
+      params.todoListId,
+      body.todoListTitle,
+      await this.authenticator.currentUser()
+    );
+
+    return null;
   }
 
   @Authenticated()
