@@ -5,6 +5,8 @@ import { useFetcher } from "@remix-run/react";
 import classNames from "classnames";
 import { displayDate } from "front/Date";
 import { Button } from "front/ui/Button";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import React from "react";
 
 interface TodoListItemProps {
   todoList: HomePageTodoListDto;
@@ -38,7 +40,11 @@ export const TodoListItem = ({ todoList }: TodoListItemProps) => {
         className="row-span-2 flex content-center"
       >
         <Button type="submit" disabled={isArchiving} title="Archive this list">
-          🗑
+          <CrossCircledIcon
+            className="text-danger-lighter"
+            width={20}
+            height={20}
+          />
         </Button>
       </archiveTodoList.Form>
 

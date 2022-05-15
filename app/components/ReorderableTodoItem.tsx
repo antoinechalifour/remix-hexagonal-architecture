@@ -4,6 +4,7 @@ import type { TodoItemProps } from "./TodoItem";
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { useDrag, useDrop } from "react-dnd";
+import { DragHandleHorizontalIcon } from "@radix-ui/react-icons";
 import classNames from "classnames";
 import { TodoItem } from "./TodoItem";
 
@@ -58,7 +59,7 @@ const useReorderTodo = (
 
   const [, drop] = useDrop<DragItem, DropResult>({
     accept: DragTypeTodo,
-    hover: (item, monitor) => {
+    hover: (item) => {
       onPreviewMove(item.todoId, currentIndex);
     },
     drop: () => ({
@@ -104,7 +105,7 @@ export const ReorderableTodoItem = ({
         className="absolute right-0 top-0 flex h-full w-16 cursor-pointer place-content-center items-center"
         ref={ref}
       >
-        <span>↕</span>
+        <DragHandleHorizontalIcon width={20} height={20} />
       </div>
     </div>
   );

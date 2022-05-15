@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import { Button } from "front/ui/Button";
 import classNames from "classnames";
+import { CheckIcon, Cross1Icon } from "@radix-ui/react-icons";
 
 export interface EditableContentEditionModeProps {
   inputName: string;
@@ -37,8 +38,12 @@ export const EditableContentEditionMode = ({
         autoFocus
         maxLength={50}
       />
-      <Button type="submit">✅</Button>
-      <Button onClick={onCancel}>❌</Button>
+      <Button onClick={onCancel}>
+        <Cross1Icon width={15} height={15} />
+      </Button>
+      <Button type="submit">
+        <CheckIcon width={18} height={18} />
+      </Button>
     </div>
   );
 };

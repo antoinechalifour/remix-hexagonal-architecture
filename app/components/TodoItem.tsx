@@ -3,6 +3,7 @@ import type { TodoDto } from "shared";
 import React from "react";
 import classNames from "classnames";
 import { useFetcher } from "@remix-run/react";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { CheckboxOption } from "front/ui/CheckboxOption";
 import { Button } from "front/ui/Button";
 import { EditableContent } from "front/ui/EditableContent";
@@ -74,13 +75,18 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           method="post"
           action={`/l/${todoListId}/todo/${todo.id}/archive`}
           replace
+          className="flex items-center"
         >
           <Button
             type="submit"
             disabled={isArchiving}
             title="Archive this todo"
           >
-            🗑
+            <CrossCircledIcon
+              className="text-danger-lighter"
+              width={20}
+              height={20}
+            />
           </Button>
         </archiveTodo.Form>
       </div>
