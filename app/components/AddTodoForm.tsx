@@ -4,17 +4,13 @@ import type { FloatingLabelInputImperativeHandle } from "front/ui/FloatingLabelI
 import { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
-import { AddTodoButton } from "./AddTodoButton";
+import { ButtonPrimary } from "front/ui/Button";
 
 type ActionData = {
   errors?: AddTodoErrorDto;
 };
 
-export interface AddTodoFormProps {
-  todoListId: string;
-}
-
-export const AddTodoForm = ({ todoListId }: AddTodoFormProps) => {
+export const AddTodoForm = () => {
   const { ref, fetcher } = useAddTodoForm();
 
   return (
@@ -30,7 +26,9 @@ export const AddTodoForm = ({ todoListId }: AddTodoFormProps) => {
         ref={ref}
       />
 
-      <AddTodoButton todoListId={todoListId} />
+      <ButtonPrimary disabled={fetcher.state === "submitting"}>
+        Done
+      </ButtonPrimary>
     </fetcher.Form>
   );
 };

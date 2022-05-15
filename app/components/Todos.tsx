@@ -37,7 +37,7 @@ export const Todos = ({ todoList }: TodosProps) => {
           ↳ You created this list {displayDate(todoList.createdAt)}
         </p>
 
-        <AddTodoForm todoListId={todoList.id} />
+        <AddTodoForm />
       </div>
 
       <TodoList
