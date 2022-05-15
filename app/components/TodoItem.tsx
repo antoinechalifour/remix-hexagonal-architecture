@@ -58,7 +58,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           <EditableContent
             initialValue={todo.title}
             inputName="title"
-            inputClassName="font-semibold"
+            inputClassName="font-semibold sm:ml-2"
           >
             <span
               className={classNames("font-semibold sm:ml-2", {
