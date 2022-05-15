@@ -1,5 +1,5 @@
 import type { AddTodoErrorDto } from "shared";
-import type { FloatingLabelInputImperativeHandle } from "front/ui/FloatingLabelInput";
+import type { FloatingLabelInputRef } from "front/ui/FloatingLabelInput";
 
 import { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
@@ -36,8 +36,7 @@ export const AddTodoForm = () => {
 function useAddTodoForm() {
   const fetcher = useFetcher<ActionData>();
   const isSubmitting = useRef(false);
-  const floatingLabelInputRef =
-    useRef<FloatingLabelInputImperativeHandle>(null);
+  const floatingLabelInputRef = useRef<FloatingLabelInputRef>(null);
 
   useEffect(() => {
     if (fetcher.state === "submitting") {

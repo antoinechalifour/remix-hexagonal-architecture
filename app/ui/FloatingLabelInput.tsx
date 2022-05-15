@@ -9,15 +9,15 @@ interface FloatingLabelInputOptions {
   required?: boolean;
 }
 
-export type FloatingLabelInputImperativeHandle = {
+export type FloatingLabelInputRef = {
   focus: () => void;
   clear: () => void;
 };
 
 export const FloatingLabelInput = forwardRef<
-  FloatingLabelInputImperativeHandle,
+  FloatingLabelInputRef,
   FloatingLabelInputOptions
->((props, ref) => {
+>(function FloatingLabelInput(props, ref) {
   const { name, label, errorMessage, type = "text", required } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
