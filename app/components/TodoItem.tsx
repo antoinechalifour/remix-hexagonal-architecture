@@ -4,6 +4,7 @@ import React from "react";
 import classNames from "classnames";
 import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { CheckboxOption } from "front/ui/CheckboxOption";
 import { Button } from "front/ui/Button";
 import { EditableContent } from "front/ui/EditableContent";
@@ -71,24 +72,32 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           </EditableContent>
         </renameTodo.Form>
 
-        <archiveTodo.Form
-          method="post"
-          action={`/l/${todoListId}/todo/${todo.id}/archive`}
-          replace
-          className="flex items-center"
-        >
-          <Button
-            type="submit"
-            disabled={isArchiving}
-            title="Archive this todo"
-          >
-            <CrossCircledIcon
-              className="text-danger-lighter"
-              width={20}
-              height={20}
-            />
-          </Button>
-        </archiveTodo.Form>
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger asChild>x</DropdownMenu.Trigger>
+
+          <DropdownMenu.Content className="min-w-[220px] bg-lighter p-4 text-dark">
+            <archiveTodo.Form
+              method="post"
+              action={`/l/${todoListId}/todo/${todo.id}/archive`}
+              replace
+              className="flex items-center"
+            >
+              <Button
+                type="submit"
+                disabled={isArchiving}
+                className="flex w-full text-inherit"
+                title="Archive this todo"
+              >
+                Archive
+                <CrossCircledIcon
+                  className="ml-auto text-danger-lighter"
+                  width={20}
+                  height={20}
+                />
+              </Button>
+            </archiveTodo.Form>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
       </div>
     );
   }
