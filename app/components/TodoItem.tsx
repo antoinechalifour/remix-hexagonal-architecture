@@ -3,11 +3,12 @@ import type { TodoDto } from "shared";
 import React from "react";
 import classNames from "classnames";
 import { useFetcher } from "@remix-run/react";
-import { CrossCircledIcon } from "@radix-ui/react-icons";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
+import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { CheckboxOption } from "front/ui/CheckboxOption";
-import { Button } from "front/ui/Button";
+import { PlainButton } from "front/ui/Button";
 import { EditableContent } from "front/ui/EditableContent";
+import { Popover } from "front/ui/Popover";
+import { TodoPopoverContent } from "front/components/TodoPopoverContent";
 
 export interface TodoItemProps {
   todoListId: string;
@@ -19,9 +20,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
   function TodoItem(props, ref) {
     const { todoListId, todo, className } = props;
     const completeTodo = useFetcher();
-    const archiveTodo = useFetcher();
     const renameTodo = useFetcher();
-    const isArchiving = archiveTodo.state === "submitting";
     const isCompleting = completeTodo.state === "submitting";
 
     const handleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
@@ -34,7 +33,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           "grid grid-cols-[auto_1fr_auto] items-center gap-3",
           "rounded-2xl py-4 px-6",
           "bg-dark shadow",
-          { "opacity-50": isArchiving || isCompleting },
+          { "opacity-50": isCompleting },
           className
         )}
       >
@@ -72,32 +71,15 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           </EditableContent>
         </renameTodo.Form>
 
-        <DropdownMenu.Root>
-          <DropdownMenu.Trigger asChild>x</DropdownMenu.Trigger>
+        <Popover.Root>
+          <Popover.Trigger asChild>
+            <PlainButton>
+              <DotsVerticalIcon />
+            </PlainButton>
+          </Popover.Trigger>
 
-          <DropdownMenu.Content className="min-w-[220px] bg-lighter p-4 text-dark">
-            <archiveTodo.Form
-              method="post"
-              action={`/l/${todoListId}/todo/${todo.id}/archive`}
-              replace
-              className="flex items-center"
-            >
-              <Button
-                type="submit"
-                disabled={isArchiving}
-                className="flex w-full text-inherit"
-                title="Archive this todo"
-              >
-                Archive
-                <CrossCircledIcon
-                  className="ml-auto text-danger-lighter"
-                  width={20}
-                  height={20}
-                />
-              </Button>
-            </archiveTodo.Form>
-          </DropdownMenu.Content>
-        </DropdownMenu.Root>
+          <TodoPopoverContent todoListId={todoListId} todo={todo} />
+        </Popover.Root>
       </div>
     );
   }
