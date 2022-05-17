@@ -1,0 +1,40 @@
+import type { ReactNode } from "react";
+import React from "react";
+import * as BasePopover from "@radix-ui/react-popover";
+import classNames from "classnames";
+
+export type ContentProps = { children: ReactNode };
+export const Content = ({ children }: ContentProps) => (
+  <BasePopover.Content className="min-w-[220px] rounded bg-lighter py-2 text-dark shadow">
+    {children}
+  </BasePopover.Content>
+);
+
+export type ItemProps = { children: ReactNode };
+export const Item = ({ children }: ItemProps) => (
+  <div className="px-3 py-1">{children}</div>
+);
+
+export type LabelProps = { children: ReactNode; className?: string };
+export const SectionTitle = ({ children, className }: LabelProps) => (
+  <p className={classNames("px-3 py-1 text-sm", className)}>{children}</p>
+);
+
+export const Separator = () => (
+  <div
+    role="separator"
+    aria-orientation="horizontal"
+    className="mx-1 my-2 h-px bg-gray-200"
+  />
+);
+
+export const Arrow = () => <BasePopover.Arrow fill="white" offset={10} />;
+
+export const Popover = {
+  ...BasePopover,
+  Content,
+  Item,
+  SectionTitle,
+  Separator,
+  Arrow,
+};

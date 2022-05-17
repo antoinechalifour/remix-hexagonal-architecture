@@ -1,8 +1,26 @@
 import type { ButtonHTMLAttributes } from "react";
 
 import classNames from "classnames";
+import { forwardRef } from "react";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
+
+export const PlainButton = forwardRef<HTMLButtonElement, ButtonProps>(
+  function PlainButton(props, ref) {
+    const { children, className, type = "button", ...buttonProps } = props;
+
+    return (
+      <button
+        {...buttonProps}
+        type={type}
+        className={classNames("", className)}
+        ref={ref}
+      >
+        {children}
+      </button>
+    );
+  }
+);
 
 export const Button = ({
   children,
