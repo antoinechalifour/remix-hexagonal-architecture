@@ -6,6 +6,7 @@ interface TodoBuilder {
   withTitle(title: string): TodoBuilder;
   ofTodoList(todoListId: string): TodoBuilder;
   ownedBy(ownerId: string): TodoBuilder;
+  taggedAs(...tags: string[]): TodoBuilder;
   build(): Todo;
 }
 
@@ -33,6 +34,10 @@ export const anUncompletedTodo = (): TodoBuilder => ({
   },
   ownedBy(ownerId: string): TodoBuilder {
     this.todo.ownerId = ownerId;
+    return this;
+  },
+  taggedAs(...tags): TodoBuilder {
+    this.todo.tags = tags;
     return this;
   },
   build(): Todo {
@@ -64,6 +69,10 @@ export const aTodo = (): TodoBuilder => ({
   },
   ownedBy(ownerId: string): TodoBuilder {
     this.todo.ownerId = ownerId;
+    return this;
+  },
+  taggedAs(...tags): TodoBuilder {
+    this.todo.tags = tags;
     return this;
   },
   build(): Todo {

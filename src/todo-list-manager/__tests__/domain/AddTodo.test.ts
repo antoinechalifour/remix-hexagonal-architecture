@@ -49,6 +49,7 @@ describe("Adding a todo", () => {
       title: "Buy cereals",
       todoListId: "todoList/1",
       ownerId: "owner/1",
+      tags: [],
     });
 
     const updatedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);

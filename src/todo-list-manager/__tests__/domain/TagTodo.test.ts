@@ -1,7 +1,7 @@
-import { TodosInMemory } from "./fakes/TodosInMemory";
 import { Todos } from "../../domain/Todos";
-import { aTodo } from "./builders/Todo";
 import { TagTodo } from "../../usecase/TagTodo";
+import { TodosInMemory } from "./fakes/TodosInMemory";
+import { aTodo } from "./builders/Todo";
 
 describe("Tagging a todo", () => {
   let todos: Todos;

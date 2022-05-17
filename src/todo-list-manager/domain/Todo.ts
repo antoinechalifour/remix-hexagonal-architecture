@@ -31,3 +31,8 @@ export const tagTodo = (todo: Todo, tag: string) => {
     tags: [...todo.tags, tag],
   };
 };
+
+export const untagTodo = (todo: Todo, tagToRemove: string) => ({
+  ...todo,
+  tags: todo.tags.filter((tag) => tag !== tagToRemove),
+});
