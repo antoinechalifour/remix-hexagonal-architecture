@@ -17,6 +17,7 @@ export const anUncompletedTodo = (): TodoBuilder => ({
     isComplete: false,
     title: "Buy beer",
     createdAt: "2022-01-13T18:00:00.000Z",
+    tags: [],
   },
   withId(id: string): TodoBuilder {
     this.todo.id = id;
@@ -47,6 +48,7 @@ export const aTodo = (): TodoBuilder => ({
     todoListId: "3608ffe6-c397-416d-8b49-a17340c5fde4",
     ownerId: "ae178415-c990-4298-b7b9-3feb6eba5db3",
     isComplete: false,
+    tags: [],
   },
   withId(id: string): TodoBuilder {
     this.todo.id = id;

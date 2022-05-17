@@ -39,13 +39,14 @@ export const addTodo = (
     ...todoList,
     todosOrder: [...todoList.todosOrder, newTodoId],
   };
-  const createdTodo = {
+  const createdTodo: Todo = {
     id: newTodoId,
     createdAt: clock.now().toISOString(),
     title,
     isComplete: false,
     todoListId: todoList.id,
     ownerId: todoList.ownerId,
+    tags: [],
   };
 
   return [updatedTodoList, createdTodo];
