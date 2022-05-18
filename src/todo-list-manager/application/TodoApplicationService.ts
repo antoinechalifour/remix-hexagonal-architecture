@@ -11,6 +11,7 @@ import { TodoListUpdated } from "../domain/TodoListUpdated";
 import { NestEvents } from "../../shared/NestEvents";
 import { RenameTodo } from "../usecase/RenameTodo";
 import { CurrentUser } from "authentication";
+import { TagTodo } from "../usecase/TagTodo";
 
 @Injectable()
 export class TodoApplicationService {
@@ -76,6 +77,19 @@ export class TodoApplicationService {
     currentUser: CurrentUser
   ) {
     await new RenameTodo(this.todos).execute(todoId, title, currentUser.id);
+
+    this.events.publish(
+      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
+    );
+  }
+
+  async tagTogo(
+    todoListId: string,
+    todoId: string,
+    tag: string,
+    currentUser: CurrentUser
+  ) {
+    await new TagTodo(this.todos).execute(todoId, currentUser.id, tag);
 
     this.events.publish(
       new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
