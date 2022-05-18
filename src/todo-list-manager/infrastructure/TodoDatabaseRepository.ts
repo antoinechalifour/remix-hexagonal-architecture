@@ -20,7 +20,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       createdAt: row.createdAt.toISOString(),
       todoListId: row.todoListId,
       ownerId,
-      tags: [],
+      tags: row.tags as string[],
     };
   }
 
@@ -39,14 +39,18 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       createdAt: row.createdAt.toISOString(),
       todoListId,
       ownerId,
-      tags: [],
+      tags: row.tags as string[],
     }));
   }
 
   async save(todo: Todo): Promise<void> {
     await this.prisma.todo.upsert({
       where: { id: todo.id },
-      update: { isComplete: todo.isComplete, title: todo.title },
+      update: {
+        isComplete: todo.isComplete,
+        title: todo.title,
+        tags: todo.tags,
+      },
       create: {
         id: todo.id,
         title: todo.title,
@@ -54,6 +58,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
         createdAt: new Date(todo.createdAt),
         todoListId: todo.todoListId,
         ownerId: todo.ownerId,
+        tags: todo.tags,
       },
     });
   }
