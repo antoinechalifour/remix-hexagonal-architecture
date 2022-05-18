@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
   previewFeatures = ["interactiveTransactions"]
 }
 
@@ -16,6 +16,7 @@ model Todo {
   TodoList   TodoList @relation(fields: [todoListId], references: [id])
   todoListId String   @db.Uuid
   ownerId    String   @db.Uuid
+  tags       Json     @default("[]")
 }
 
 model TodoList {
