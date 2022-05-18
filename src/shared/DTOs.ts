@@ -10,6 +10,7 @@ export interface CompletedTodoDto {
   title: string;
   isComplete: true;
   createdAt: string;
+  tags: string[];
 }
 
 export interface DoingTodoDto {
@@ -17,6 +18,7 @@ export interface DoingTodoDto {
   title: string;
   isComplete: false;
   createdAt: string;
+  tags: string[];
 }
 
 export type TodoDto = CompletedTodoDto | DoingTodoDto;

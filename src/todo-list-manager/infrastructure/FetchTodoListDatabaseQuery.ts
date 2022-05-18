@@ -18,6 +18,7 @@ type TodoRow<Completion extends boolean> = {
   title: string;
   isComplete: Completion;
   createdAt: string;
+  tags: string[];
 };
 
 @Injectable()
@@ -54,14 +55,14 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
 
   private fetchDoingTodos(todoListId: TodoListId, ownerId: OwnerId) {
     return this.prisma.$queryRaw<TodoRow<false>[]>`
-        SELECT id, title, "isComplete", "createdAt" FROM "Todo"
+        SELECT id, title, "isComplete", "createdAt", tags FROM "Todo"
         WHERE "isComplete" IS false AND "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
     `;
   }
 
   private fetchCompleteTodos(todoListId: TodoListId, ownerId: OwnerId) {
     return this.prisma.$queryRaw<TodoRow<true>[]>`
-        SELECT id, title, "isComplete", "createdAt" FROM "Todo"
+        SELECT id, title, "isComplete", "createdAt", tags FROM "Todo"
         WHERE "isComplete" IS true AND "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
     `;
   }
