@@ -23,6 +23,7 @@ import {
   RenameTodoListParams,
 } from "./dtos/RenameTodoList";
 import { RenameTodoBody, RenameTodoParams } from "./dtos/RenameTodo";
+import { TagTodoBody, TagTodoParams } from "./dtos/TagTodo";
 
 @Injectable()
 export class Actions {
@@ -96,6 +97,19 @@ export class Actions {
       params.todoListId,
       params.todoId,
       body.title,
+      await this.authenticator.currentUser()
+    );
+
+    return null;
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async tagTodo(@Params() params: TagTodoParams, @Body() body: TagTodoBody) {
+    await this.todoApplicationService.tagTogo(
+      params.todoListId,
+      params.todoId,
+      body.tag,
       await this.authenticator.currentUser()
     );
 

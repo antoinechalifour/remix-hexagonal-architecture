@@ -7,3 +7,5 @@ export { RenameTodoListBody } from "./remix/dtos/RenameTodoList";
 export { RenameTodoBody } from "./remix/dtos/RenameTodo";
 export { RenameTodoParams } from "./remix/dtos/RenameTodo";
 export { TodoListEventsController } from "./controllers/TodoListEventsController";
+export { TagTodoBody } from "./remix/dtos/TagTodo";
+export { TagTodoParams } from "./remix/dtos/TagTodo";

@@ -15,26 +15,34 @@ export const TodoPopoverContent = ({
   todo,
 }: TodoPopoverContentProps) => {
   const archiveTodo = useFetcher();
+  const tagTodo = useFetcher();
   const isArchiving = archiveTodo.state === "submitting";
 
   return (
     <Popover.Content>
       <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
-      <Popover.Item>
-        <TodoTag className="ml-2">Feature</TodoTag>
-      </Popover.Item>
-      <Popover.Item>
-        <TodoTag className="ml-2">Tech task</TodoTag>
-      </Popover.Item>
-      <Popover.Item>
-        <TodoTag className="ml-2">Discovery</TodoTag>
-      </Popover.Item>
+
+      {todo.tags.map((tag) => (
+        <Popover.Item key={tag}>
+          <TodoTag className="ml-2">{tag}</TodoTag>
+        </Popover.Item>
+      ))}
 
       <Popover.Item>
-        <input
-          className="ml-2 w-[15ch] rounded bg-gray-200 py-1 px-2 font-mono text-xs text-gray-700"
-          placeholder="New tag..."
-        />
+        <tagTodo.Form
+          method="post"
+          action={`/l/${todoListId}/todo/${todo.id}/tag`}
+        >
+          <input
+            className="ml-2 w-[15ch] rounded bg-gray-200 py-1 px-2 font-mono text-xs text-gray-700"
+            placeholder="New tag..."
+            name="tag"
+          />
+
+          <button type="submit" className="sr-only">
+            Tag
+          </button>
+        </tagTodo.Form>
       </Popover.Item>
 
       <Popover.Separator />
