@@ -9,6 +9,7 @@ import { PlainButton } from "front/ui/Button";
 import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
 import { TodoPopoverContent } from "front/components/TodoPopoverContent";
+import { TodoTag } from "front/components/TodoTag";
 
 export interface TodoItemProps {
   todoListId: string;
@@ -80,6 +81,17 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
 
           <TodoPopoverContent todoListId={todoListId} todo={todo} />
         </Popover.Root>
+
+        {todo.tags.length > 0 && (
+          <>
+            <div />
+            <div className="flex space-x-2 sm:ml-2">
+              {todo.tags.map((tag) => (
+                <TodoTag key={tag}>{tag}</TodoTag>
+              ))}
+            </div>
+          </>
+        )}
       </div>
     );
   }
