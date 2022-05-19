@@ -26,10 +26,10 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
   async run(todoListId: TodoListId, ownerId: OwnerId): Promise<TodoListDto> {
-    const { todosOrder, ...todoList } = await this.fetchTodoList(
-      todoListId,
-      ownerId
-    );
+    const [{ todosOrder, ...todoList }, tags] = await Promise.all([
+      this.fetchTodoList(todoListId, ownerId),
+      this.fetchTodoListTags(todoListId, ownerId),
+    ]);
     const [doingTodos, completedTodos] = await Promise.all([
       this.fetchDoingTodos(todoListId, ownerId),
       this.fetchCompleteTodos(todoListId, ownerId),
@@ -40,6 +40,7 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
 
     return {
       ...todoList,
+      tags,
       doingTodos: this.sortTodos(doingTodos, todosOrder),
       completedTodos: this.sortTodos(completedTodos, todosOrder),
     };
@@ -65,6 +66,16 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
         SELECT id, title, "isComplete", "createdAt", tags FROM "Todo"
         WHERE "isComplete" IS true AND "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
     `;
+  }
+
+  private async fetchTodoListTags(todoListId: TodoListId, ownerId: OwnerId) {
+    const rows = await this.prisma.$queryRaw<{ tag: string }[]>`
+        SELECT DISTINCT jsonb_array_elements_text(tags) AS tag 
+        FROM "Todo"
+        WHERE "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
+    `;
+
+    return rows.map((row) => row.tag);
   }
 
   private sortTodos<T extends boolean>(todos: TodoRow<T>[], order: string[]) {
