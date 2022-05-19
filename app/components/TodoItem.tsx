@@ -22,7 +22,8 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
     const { todoList, todo, className } = props;
     const completeTodo = useFetcher();
     const renameTodo = useFetcher();
-    const isCompleting = completeTodo.state === "submitting";
+    const isCompleting =
+      completeTodo.state === "submitting" || completeTodo.state === "loading";
 
     const handleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
       completeTodo.submit(e.currentTarget);
