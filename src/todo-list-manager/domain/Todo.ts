@@ -25,6 +25,8 @@ export const renameTodo = (todo: Todo, title: string) => ({
 
 export const tagTodo = (todo: Todo, tag: string) => {
   if (todo.tags.includes(tag)) return todo;
+  if (todo.tags.length === 3)
+    throw new Error("Todos can only have at most 3 tags");
 
   return {
     ...todo,

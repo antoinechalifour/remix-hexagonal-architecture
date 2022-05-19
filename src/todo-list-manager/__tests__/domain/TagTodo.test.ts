@@ -30,4 +30,24 @@ describe("Tagging a todo", () => {
       "top priority",
     ]);
   });
+
+  it("is limited to 3 tags", async () => {
+    // Arrange
+    const theTodoId = "todo/1";
+    const theOwnerId = "owner/1";
+    const theTodo = aTodo()
+      .withId(theTodoId)
+      .ownedBy(theOwnerId)
+      .taggedAs("tag 1", "tag 2", "tag 3")
+      .build();
+    await todos.save(theTodo);
+
+    // Act
+    const result = tagTodo.execute(theTodoId, theOwnerId, "tag 4");
+
+    // Assert
+    await expect(result).rejects.toEqual(
+      new Error("Todos can only have at most 3 tags")
+    );
+  });
 });
