@@ -29,7 +29,7 @@ export const Todos = ({ todoList }: TodosProps) => {
         emptyMessage="Come on! Don't you have anything to do?"
         renderTodo={(todoItem, index) => (
           <ReorderableTodoItem
-            todoListId={todoList.id}
+            todoList={todoList}
             todo={todoItem}
             index={index}
             onPreviewMove={moveForPreview}
@@ -42,7 +42,7 @@ export const Todos = ({ todoList }: TodosProps) => {
         todos={todoList.completedTodos}
         emptyMessage="Alright let's get to work!"
         renderTodo={(todoItem) => (
-          <TodoItem todoListId={todoList.id} todo={todoItem} />
+          <TodoItem todoList={todoList} todo={todoItem} />
         )}
       />
     </section>

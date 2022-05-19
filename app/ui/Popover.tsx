@@ -10,9 +10,9 @@ export const Content = ({ children }: ContentProps) => (
   </BasePopover.Content>
 );
 
-export type ItemProps = { children: ReactNode };
-export const Item = ({ children }: ItemProps) => (
-  <div className="px-3 py-1">{children}</div>
+export type ItemProps = { children: ReactNode; className?: string };
+export const Item = ({ children, className }: ItemProps) => (
+  <div className={classNames("px-3 py-1", className)}>{children}</div>
 );
 
 export type LabelProps = { children: ReactNode; className?: string };
