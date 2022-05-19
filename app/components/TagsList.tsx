@@ -20,7 +20,7 @@ const SelectedTag = ({ tag, todoList, todo }: SelectedTagProps) => {
         action={`/l/${todoList.id}/todo/${todo.id}/untag`}
       >
         <input type="hidden" name="tag" value={tag} />
-        <PlainButton type="submit">
+        <PlainButton type="submit" className="rounded">
           <TodoTag className="cursor-pointer">{tag}</TodoTag>
         </PlainButton>
       </untagTodo.Form>
@@ -42,12 +42,13 @@ const SelectableTag = ({
   return (
     <Popover.Item>
       <tagTodo.Form
+        className="ml-4"
         method="post"
         action={`/l/${todoList.id}/todo/${todo.id}/tag`}
       >
         <input type="hidden" name="tag" value={tag} />
-        <PlainButton type="submit">
-          <TodoTag className="ml-4 cursor-pointer">{tag}</TodoTag>
+        <PlainButton type="submit" className="rounded">
+          <TodoTag className="cursor-pointer">{tag}</TodoTag>
         </PlainButton>
       </tagTodo.Form>
     </Popover.Item>

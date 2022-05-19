@@ -15,7 +15,7 @@
 
 @layer base {
   *:focus-visible {
-    @apply outline-2 outline-lighter outline-dashed outline-offset-4;
+    @apply outline-2 outline-light outline-dashed outline-offset-4;
   }
 
   body {
