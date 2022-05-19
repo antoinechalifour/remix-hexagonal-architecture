@@ -32,6 +32,7 @@ export interface TodoListDto {
   createdAt: string;
   doingTodos: Array<DoingTodoDto>;
   completedTodos: Array<CompletedTodoDto>;
+  tags: string[];
 }
 
 export interface AddTodoListErrorDto {
