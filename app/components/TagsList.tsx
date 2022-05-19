@@ -5,6 +5,7 @@ import { Popover } from "front/ui/Popover";
 import { TodoTag } from "front/components/TodoTag";
 import { useFetcher } from "@remix-run/react";
 import { PlainButton } from "front/ui/Button";
+import classNames from "classnames";
 
 type SelectedTagProps = { tag: string; todoList: TodoListDto; todo: TodoDto };
 const SelectedTag = ({ tag, todoList, todo }: SelectedTagProps) => {
@@ -38,6 +39,7 @@ const SelectableTag = ({
   todo: TodoDto;
 }) => {
   const tagTodo = useFetcher();
+  const disabled = todo.tags.length === 3;
 
   return (
     <Popover.Item>
@@ -46,9 +48,16 @@ const SelectableTag = ({
         method="post"
         action={`/l/${todoList.id}/todo/${todo.id}/tag`}
       >
-        <input type="hidden" name="tag" value={tag} />
+        <input type="hidden" name="tag" value={tag} disabled={disabled} />
         <PlainButton type="submit" className="rounded">
-          <TodoTag className="cursor-pointer">{tag}</TodoTag>
+          <TodoTag
+            className={classNames({
+              "cursor-pointer": !disabled,
+              "cursor-not-allowed": disabled,
+            })}
+          >
+            {tag}
+          </TodoTag>
         </PlainButton>
       </tagTodo.Form>
     </Popover.Item>

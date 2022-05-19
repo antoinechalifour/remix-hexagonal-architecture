@@ -20,6 +20,8 @@ export const AddTag = ({ todoList, todo }: AddTagProps) => {
     input.value = "";
   }, [tagTodo.type]);
 
+  if (todo.tags.length === 3) return null;
+
   return (
     <Popover.Item>
       <tagTodo.Form
