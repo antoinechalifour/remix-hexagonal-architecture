@@ -95,14 +95,14 @@ export const ReorderableTodoItem = ({
     <div className="relative">
       <TodoItem
         {...props}
-        className={classNames({
+        className={classNames("pl-16", {
           "opacity-25": isDragging,
         })}
         ref={preview}
       />
 
       <div
-        className="absolute -right-16 top-0 hidden h-full w-16 cursor-pointer items-center justify-center py-4 sm:flex"
+        className="absolute left-0 top-0 hidden h-full w-16 cursor-pointer justify-center py-4 sm:flex"
         ref={ref}
       >
         <DragHandleHorizontalIcon width={20} height={20} />

@@ -31,7 +31,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
       <div
         ref={ref}
         className={classNames(
-          "grid grid-cols-[auto_1fr_auto] items-center gap-3",
+          "grid grid-cols-[auto_1fr_auto_auto] items-center gap-3",
           "rounded-2xl py-4 px-6",
           "bg-dark shadow",
           { "opacity-50": isCompleting },
@@ -72,6 +72,11 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           </EditableContent>
         </renameTodo.Form>
 
+        <div className="space-x-2 ">
+          {todo.tags.length > 0 &&
+            todo.tags.map((tag) => <TodoTag key={tag}>{tag}</TodoTag>)}
+        </div>
+
         <Popover.Root>
           <Popover.Trigger asChild>
             <PlainButton>
@@ -81,17 +86,6 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
 
           <TodoPopoverContent todoListId={todoListId} todo={todo} />
         </Popover.Root>
-
-        {todo.tags.length > 0 && (
-          <>
-            <div />
-            <div className="flex space-x-2 sm:ml-2">
-              {todo.tags.map((tag) => (
-                <TodoTag key={tag}>{tag}</TodoTag>
-              ))}
-            </div>
-          </>
-        )}
       </div>
     );
   }
