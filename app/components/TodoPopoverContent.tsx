@@ -34,7 +34,7 @@ export const TodoPopoverContent = ({
       <Popover.Item>
         <archiveTodo.Form
           method="post"
-          action={`/l/${todoList}/todo/${todo.id}/archive`}
+          action={`/l/${todoList.id}/todo/${todo.id}/archive`}
           replace
           className="flex items-center"
         >
