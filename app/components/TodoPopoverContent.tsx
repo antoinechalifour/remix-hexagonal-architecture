@@ -1,49 +1,29 @@
-import type { TodoDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared";
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Popover } from "front/ui/Popover";
-import { TodoTag } from "front/components/TodoTag";
 import { PlainButton } from "front/ui/Button";
+import { TagsList } from "front/components/TagsList";
+import { AddTag } from "front/components/AddTag";
 
 export type TodoPopoverContentProps = {
-  todoListId: string;
+  todoList: TodoListDto;
   todo: TodoDto;
 };
 export const TodoPopoverContent = ({
-  todoListId,
+  todoList,
   todo,
 }: TodoPopoverContentProps) => {
   const archiveTodo = useFetcher();
-  const tagTodo = useFetcher();
   const isArchiving = archiveTodo.state === "submitting";
 
   return (
     <Popover.Content>
       <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
 
-      {todo.tags.map((tag) => (
-        <Popover.Item key={tag}>
-          <TodoTag className="ml-2">{tag}</TodoTag>
-        </Popover.Item>
-      ))}
-
-      <Popover.Item>
-        <tagTodo.Form
-          method="post"
-          action={`/l/${todoListId}/todo/${todo.id}/tag`}
-        >
-          <input
-            className="ml-2 w-[15ch] rounded bg-gray-200 py-1 px-2 font-mono text-xs text-gray-700"
-            placeholder="New tag..."
-            name="tag"
-          />
-
-          <button type="submit" className="sr-only">
-            Tag
-          </button>
-        </tagTodo.Form>
-      </Popover.Item>
+      <TagsList todo={todo} todoList={todoList} />
+      <AddTag todo={todo} todoList={todoList} />
 
       <Popover.Separator />
 
@@ -54,7 +34,7 @@ export const TodoPopoverContent = ({
       <Popover.Item>
         <archiveTodo.Form
           method="post"
-          action={`/l/${todoListId}/todo/${todo.id}/archive`}
+          action={`/l/${todoList}/todo/${todo.id}/archive`}
           replace
           className="flex items-center"
         >

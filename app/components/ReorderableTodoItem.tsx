@@ -85,7 +85,7 @@ export const ReorderableTodoItem = ({
   ...props
 }: ReorderableTodoItemProps) => {
   const { ref, preview, isDragging } = useReorderTodo(
-    props.todoListId,
+    props.todoList.id,
     props.todo,
     index,
     onPreviewMove
