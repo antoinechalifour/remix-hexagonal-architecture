@@ -95,7 +95,7 @@ export const ReorderableTodoItem = ({
     <div className="relative">
       <TodoItem
         {...props}
-        className={classNames("pl-16", {
+        className={classNames("sm:pl-16", {
           "opacity-25": isDragging,
         })}
         ref={preview}
