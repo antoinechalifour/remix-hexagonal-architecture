@@ -72,7 +72,8 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
     const rows = await this.prisma.$queryRaw<{ tag: string }[]>`
         SELECT DISTINCT jsonb_array_elements_text(tags) AS tag 
         FROM "Todo"
-        WHERE "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
+        WHERE "todoListId" = ${todoListId} AND "ownerId" = ${ownerId}
+        ORDER BY tag;
     `;
 
     return rows.map((row) => row.tag);
