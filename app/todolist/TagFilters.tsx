@@ -1,5 +1,6 @@
 import React from "react";
 import classNames from "classnames";
+import { isEmpty } from "fp-ts/Array";
 import { PlainButton } from "front/ui/Button";
 import { TodoTag } from "front/todolist/TodoTag";
 
@@ -16,39 +17,46 @@ type TagFiltersProps = {
   filter: Filter;
 };
 
-export const TagFilters = ({ tags, filter }: TagFiltersProps) => (
-  <nav className="space-y-2">
-    <p>
-      Filter by tag{" "}
-      {filter.isFiltered() && (
-        <PlainButton className="ml-1 text-xs underline" onClick={filter.reset}>
-          clear
-        </PlainButton>
-      )}
-    </p>
+export const TagFilters = ({ tags, filter }: TagFiltersProps) => {
+  if (isEmpty(tags)) return null;
 
-    <ul className="flex w-full flex-wrap">
-      {tags.map((tag) => {
-        const active = filter.isSelected(tag);
-        const handler = active ? filter.unselect : filter.select;
+  return (
+    <nav className="space-y-2">
+      <p>
+        Filter by tag{" "}
+        {filter.isFiltered() && (
+          <PlainButton
+            className="ml-1 text-xs underline"
+            onClick={filter.reset}
+          >
+            clear
+          </PlainButton>
+        )}
+      </p>
 
-        return (
-          <li key={tag} className="p-1">
-            <PlainButton
-              onClick={() => handler(tag)}
-              className={"cursor-pointer rounded"}
-            >
-              <TodoTag
-                className={classNames("transition-opacity", {
-                  "opacity-30": !active,
-                })}
+      <ul className="flex w-full flex-wrap">
+        {tags.map((tag) => {
+          const active = filter.isSelected(tag);
+          const handler = active ? filter.unselect : filter.select;
+
+          return (
+            <li key={tag} className="p-1">
+              <PlainButton
+                onClick={() => handler(tag)}
+                className={"cursor-pointer rounded"}
               >
-                {tag}
-              </TodoTag>
-            </PlainButton>
-          </li>
-        );
-      })}
-    </ul>
-  </nav>
-);
+                <TodoTag
+                  className={classNames("transition-opacity", {
+                    "opacity-30": !active,
+                  })}
+                >
+                  {tag}
+                </TodoTag>
+              </PlainButton>
+            </li>
+          );
+        })}
+      </ul>
+    </nav>
+  );
+};

@@ -74,12 +74,11 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         </renameTodo.Form>
 
         <ul className="flex flex-col space-y-2 sm:flex-row  sm:space-y-0 sm:space-x-2">
-          {todo.tags.length > 0 &&
-            todo.tags.map((tag) => (
-              <li key={tag}>
-                <TodoTag>{tag}</TodoTag>
-              </li>
-            ))}
+          {todo.tags.map((tag) => (
+            <li key={tag}>
+              <TodoTag>{tag}</TodoTag>
+            </li>
+          ))}
         </ul>
 
         <Popover.Root>
