@@ -14,6 +14,8 @@ export const RootLayout = ({
       </div>
     </header>
 
-    <main className="mx-auto w-full max-w-5xl py-2 px-3">{children}</main>
+    <main className="mx-auto w-full max-w-5xl py-2 px-3  pb-20">
+      {children}
+    </main>
   </div>
 );
