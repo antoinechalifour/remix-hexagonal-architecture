@@ -4,19 +4,19 @@ import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "front/ui/EmptyMessage";
 
-interface TodoListProps {
+interface TodosProps {
   title: string;
   todos: TodoDto[];
   emptyMessage: string;
   renderTodo: (todoItem: TodoDto, index: number) => React.ReactNode;
 }
 
-export const TodoList = ({
+export const Todos = ({
   title,
   todos,
   emptyMessage,
   renderTodo,
-}: TodoListProps) => {
+}: TodosProps) => {
   return (
     <section className="mt-8">
       <h2 className="text-lg text-lighter">

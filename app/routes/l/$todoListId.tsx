@@ -5,7 +5,7 @@ import type { RemixAppContext } from "web";
 import { useLoaderData } from "remix";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { Todos } from "front/components/Todos";
+import { TodoList } from "front/todolist/TodoList";
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
@@ -25,7 +25,7 @@ export default function TodoListPage() {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <Todos todoList={todoList} />
+      <TodoList todoList={todoList} />
     </DndProvider>
   );
 }

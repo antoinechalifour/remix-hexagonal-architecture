@@ -5,7 +5,7 @@ import { useFetcher } from "@remix-run/react";
 import { EditableContent } from "front/ui/EditableContent";
 import { PageTitle } from "front/ui/PageTitle";
 import { displayDate } from "front/Date";
-import { AddTodoForm } from "front/components/AddTodoForm";
+import { AddTodoForm } from "front/todolist/AddTodoForm";
 
 export type TodoListHeaderProps = { todoList: TodoListDto };
 

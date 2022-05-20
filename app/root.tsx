@@ -20,8 +20,8 @@ import {
   ErrorPage,
   ErrorPageHero,
   ErrorPageMessage,
-} from "front/components/ErrorPage";
-import { RemixAppContext } from "web";
+} from "front/error/ErrorPage";
+import type { RemixAppContext } from "web";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: styles }];

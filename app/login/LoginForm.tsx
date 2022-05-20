@@ -13,14 +13,6 @@ type LoginFormErrors = {
   };
 };
 
-const getSubmittingState = (
-  transition: Transition
-): null | "register" | "login" => {
-  if (transition.state !== "submitting") return null;
-
-  return transition.submission.formData.has("register") ? "register" : "login";
-};
-
 export const LoginForm = () => {
   const loaderData = useLoaderData<AuthenticationErrorDto>();
   const actionData = useActionData<LoginFormErrors>();
@@ -76,3 +68,11 @@ export const LoginForm = () => {
     </Form>
   );
 };
+
+function getSubmittingState(
+  transition: Transition
+): null | "register" | "login" {
+  if (transition.state !== "submitting") return null;
+
+  return transition.submission.formData.has("register") ? "register" : "login";
+}

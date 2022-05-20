@@ -3,7 +3,7 @@ import type { HomePageDto } from "shared";
 import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";
-import { TodoLists } from "front/components/TodoLists";
+import { TodoLists } from "front/homepage/TodoLists";
 
 export const meta: MetaFunction = ({ data: homePage }) => ({
   title: `TLM | Your todo lists (${homePage.totalNumberOfDoingTodos})`,
