@@ -1,16 +1,16 @@
 import type { TodoDto, TodoListDto } from "shared";
 import { moveArrayItem } from "../../src/shared/lib";
 
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
-import { TodoList } from "front/components/TodoList";
-import { TodoItem } from "front/components/TodoItem";
-import { ReorderableTodoItem } from "front/components/ReorderableTodoItem";
-import { TodoListHeader } from "front/components/TodoListHeader";
-import { TodoTag } from "front/components/TodoTag";
+import { Todos } from "front/todolist/Todos";
+import { TodoItem } from "front/todolist/TodoItem";
+import { ReorderableTodoItem } from "front/todolist/ReorderableTodoItem";
+import { TodoListHeader } from "front/todolist/TodoListHeader";
+import { TodoTag } from "front/todolist/TodoTag";
 import { PlainButton } from "front/ui/Button";
 
-interface TodosProps {
+interface TodoListProps {
   todoList: TodoListDto;
 }
 
@@ -19,11 +19,11 @@ interface TodoOrderPreview {
   newIndex: number;
 }
 
-export const Todos = ({ todoList }: TodosProps) => {
+export const TodoList = ({ todoList }: TodoListProps) => {
   const {
     doingTodos,
     completedTodos,
-    filterTags,
+    selectedTags,
     resetFilter,
     reorderForPreview,
     selectTag,
@@ -40,7 +40,7 @@ export const Todos = ({ todoList }: TodosProps) => {
         </p>
         <ul className="flex w-full flex-wrap">
           {todoList.tags.map((tag) => {
-            const active = filterTags.includes(tag);
+            const active = selectedTags.includes(tag);
 
             return (
               <li key={tag} className="p-1">
@@ -62,7 +62,7 @@ export const Todos = ({ todoList }: TodosProps) => {
         </ul>
       </nav>
 
-      <TodoList
+      <Todos
         title="Things to do"
         todos={doingTodos}
         emptyMessage="Come on! Don't you have anything to do?"
@@ -76,7 +76,7 @@ export const Todos = ({ todoList }: TodosProps) => {
         )}
       />
 
-      <TodoList
+      <Todos
         title="Things done"
         todos={completedTodos}
         emptyMessage="Alright let's get to work!"
@@ -88,98 +88,40 @@ export const Todos = ({ todoList }: TodosProps) => {
   );
 };
 
-interface TodosState {
-  selectedTags: string[];
-  doingTodos: TodoDto[];
-  completedTodos: TodoDto[];
-}
-
-function filterTagsInitialState(todoList: TodoListDto): TodosState {
-  return {
-    selectedTags: [],
-    doingTodos: todoList.doingTodos,
-    completedTodos: todoList.completedTodos,
-  };
-}
-
-type SelectTagAction = {
-  type: "SelectTag";
-  tag: string;
-};
-
-type UnselectTagAction = {
-  type: "UnselectTag";
-  tag: string;
-};
-
-type ResetFilter = {
-  type: "ResetFilter";
-};
-
-const createReducer =
-  (todoList: TodoListDto) =>
-  (
-    state: TodosState,
-    action: SelectTagAction | UnselectTagAction | ResetFilter
-  ): TodosState => {
-    let selectedTags: string[] = [];
-
-    if (action.type === "SelectTag") {
-      selectedTags = [...state.selectedTags, action.tag];
-    }
-
-    if (action.type === "UnselectTag") {
-      selectedTags = state.selectedTags.filter((tag) => tag !== action.tag);
-    }
-
-    return {
-      selectedTags: selectedTags,
-      doingTodos: todoList.doingTodos.filter((todo) =>
-        hasTagIn(todo, selectedTags)
-      ),
-      completedTodos: todoList.completedTodos.filter((todo) =>
-        hasTagIn(todo, selectedTags)
-      ),
-    };
-  };
-
 function hasTagIn(todo: TodoDto, tags: string[]) {
   if (tags.length === 0) return true;
   return todo.tags.some((tag) => tags.includes(tag));
 }
 
 function useTodos(todoList: TodoListDto) {
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [todoOrderPreview, setTodoOrderPreview] =
     useState<TodoOrderPreview | null>(null);
   const reorderForPreview = (todoId: string, newIndex: number) =>
     setTodoOrderPreview({ todoId, newIndex });
-  const [state, dispatch] = useReducer(
-    createReducer(todoList),
-    filterTagsInitialState(todoList)
-  );
 
   useEffect(() => {
     setTodoOrderPreview(null);
+    setSelectedTags([]);
   }, [todoList]);
 
-  const selectTag = (tag: string) =>
-    dispatch({
-      type: "SelectTag",
-      tag,
-    });
+  const selectTag = (tagToSelect: string) =>
+    setSelectedTags((tags) => [...tags, tagToSelect]);
+  const unselectTag = (tagToUnselect: string) =>
+    setSelectedTags((tags) => tags.filter((tag) => tagToUnselect !== tag));
+  const resetFilter = () => setSelectedTags([]);
 
-  const unselectTag = (tag: string) =>
-    dispatch({
-      type: "UnselectTag",
-      tag,
-    });
-
-  const resetFilter = () => dispatch({ type: "ResetFilter" });
+  const doingTodos = todoList.doingTodos.filter((todo) =>
+    hasTagIn(todo, selectedTags)
+  );
+  const completedTodos = todoList.completedTodos.filter((todo) =>
+    hasTagIn(todo, selectedTags)
+  );
 
   return {
-    doingTodos: sortDoingTodos(state.doingTodos, todoOrderPreview),
-    completedTodos: state.completedTodos,
-    filterTags: state.selectedTags,
+    doingTodos: sortDoingTodos(doingTodos, todoOrderPreview),
+    completedTodos,
+    selectedTags,
     reorderForPreview,
     selectTag,
     unselectTag,

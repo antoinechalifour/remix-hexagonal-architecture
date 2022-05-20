@@ -8,8 +8,8 @@ import { CheckboxOption } from "front/ui/CheckboxOption";
 import { PlainButton } from "front/ui/Button";
 import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
-import { TodoPopoverContent } from "front/components/TodoPopoverContent";
-import { TodoTag } from "front/components/TodoTag";
+import { TodoPopoverContent } from "front/todolist/TodoPopoverContent";
+import { TodoTag } from "front/todolist/TodoTag";
 
 export interface TodoItemProps {
   todoList: TodoListDto;

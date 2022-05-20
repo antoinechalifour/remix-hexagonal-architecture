@@ -2,7 +2,7 @@ import type { TodoDto, TodoListDto } from "shared";
 import React from "react";
 import { DotFilledIcon } from "@radix-ui/react-icons";
 import { Popover } from "front/ui/Popover";
-import { TodoTag } from "front/components/TodoTag";
+import { TodoTag } from "front/todolist/TodoTag";
 import { useFetcher } from "@remix-run/react";
 import { PlainButton } from "front/ui/Button";
 import classNames from "classnames";

@@ -4,8 +4,8 @@ import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Popover } from "front/ui/Popover";
 import { PlainButton } from "front/ui/Button";
-import { TagsList } from "front/components/TagsList";
-import { AddTag } from "front/components/AddTag";
+import { TagsList } from "front/todolist/TagsList";
+import { AddTag } from "front/todolist/AddTag";
 
 export type TodoPopoverContentProps = {
   todoList: TodoListDto;

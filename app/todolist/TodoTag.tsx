@@ -2,6 +2,7 @@ import React from "react";
 import classNames from "classnames";
 
 export type TodoTagProps = { children: string; className?: string };
+
 export const TodoTag = ({ children, className }: TodoTagProps) => (
   <span
     className={classNames(

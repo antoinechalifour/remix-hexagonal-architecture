@@ -4,8 +4,8 @@ import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "front/ui/EmptyMessage";
 import { PageTitle } from "front/ui/PageTitle";
-import { TodoListItem } from "front/components/TodoListItem";
-import { AddTodoListForm } from "front/components/AddTodoListForm";
+import { TodoListItem } from "front/homepage/TodoListItem";
+import { AddTodoListForm } from "front/homepage/AddTodoListForm";
 
 interface TodoListsProps {
   todoLists: HomePageTodoListDto[];
