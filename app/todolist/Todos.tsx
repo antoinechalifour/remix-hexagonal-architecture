@@ -5,7 +5,7 @@ import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "front/ui/EmptyMessage";
 
 interface TodosProps {
-  title: string;
+  title: React.ReactNode;
   todos: TodoDto[];
   emptyMessage: string;
   renderTodo: (todoItem: TodoDto, index: number) => React.ReactNode;
@@ -16,22 +16,18 @@ export const Todos = ({
   todos,
   emptyMessage,
   renderTodo,
-}: TodosProps) => {
-  return (
-    <section className="mt-8">
-      <h2 className="text-lg text-lighter">
-        {title} ({todos.length})
-      </h2>
+}: TodosProps) => (
+  <section className="mt-8">
+    {title}
 
-      {isEmpty(todos) ? (
-        <EmptyMessage>{emptyMessage}</EmptyMessage>
-      ) : (
-        <ol className="mt-4 space-y-2">
-          {todos.map((todo, index) => (
-            <li key={todo.id}>{renderTodo(todo, index)}</li>
-          ))}
-        </ol>
-      )}
-    </section>
-  );
-};
+    {isEmpty(todos) ? (
+      <EmptyMessage>{emptyMessage}</EmptyMessage>
+    ) : (
+      <ol className="mt-4 space-y-2">
+        {todos.map((todo, index) => (
+          <li key={todo.id}>{renderTodo(todo, index)}</li>
+        ))}
+      </ol>
+    )}
+  </section>
+);
