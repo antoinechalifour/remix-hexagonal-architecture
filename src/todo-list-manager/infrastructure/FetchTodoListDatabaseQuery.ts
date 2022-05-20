@@ -82,6 +82,6 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
   private sortTodos<T extends boolean>(todos: TodoRow<T>[], order: string[]) {
     const position = (idToCheck: string) =>
       order.findIndex((id) => idToCheck === id) ?? 0;
-    return todos.sort((t1, t2) => position(t1.id) - position(t2.id));
+    return todos.sortForPreview((t1, t2) => position(t1.id) - position(t2.id));
   }
 }
