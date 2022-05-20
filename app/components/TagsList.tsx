@@ -74,14 +74,18 @@ export const TagsList = ({
   const isTaggedWith = (tagToCheck: string) => todo.tags.includes(tagToCheck);
 
   return (
-    <>
+    <ul className="max-h-[210px] overflow-y-auto">
       {todoList.tags.map((tag) =>
         isTaggedWith(tag) ? (
-          <SelectedTag key={tag} tag={tag} todo={todo} todoList={todoList} />
+          <li key={tag}>
+            <SelectedTag tag={tag} todo={todo} todoList={todoList} />
+          </li>
         ) : (
-          <SelectableTag key={tag} tag={tag} todo={todo} todoList={todoList} />
+          <li key={tag}>
+            <SelectableTag tag={tag} todo={todo} todoList={todoList} />
+          </li>
         )
       )}
-    </>
+    </ul>
   );
 };

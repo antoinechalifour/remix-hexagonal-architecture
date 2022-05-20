@@ -19,7 +19,7 @@ export const TodoPopoverContent = ({
   const isArchiving = archiveTodo.state === "submitting";
 
   return (
-    <Popover.Content>
+    <Popover.Content side="right">
       <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
 
       <TagsList todo={todo} todoList={todoList} />

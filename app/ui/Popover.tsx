@@ -1,11 +1,15 @@
 import type { ReactNode } from "react";
+import type { PopoverContentProps } from "@radix-ui/react-popover";
 import React from "react";
 import * as BasePopover from "@radix-ui/react-popover";
 import classNames from "classnames";
 
-export type ContentProps = { children: ReactNode };
-export const Content = ({ children }: ContentProps) => (
-  <BasePopover.Content className="min-w-[220px] rounded bg-lighter py-2 text-dark shadow">
+export type ContentProps = PopoverContentProps;
+export const Content = ({ children, ...props }: ContentProps) => (
+  <BasePopover.Content
+    {...props}
+    className="min-w-[220px] rounded bg-lighter py-2 text-dark shadow"
+  >
     {children}
   </BasePopover.Content>
 );
