@@ -10,6 +10,7 @@ import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 import { NestEvents } from "../../shared/NestEvents";
 import { UserRegistered } from "../domain/UserRegistered";
+import { VerifyAccount } from "../usecase/VerifyAccount";
 
 export type LoginDto = {
   email: string;
@@ -18,7 +19,7 @@ export type LoginDto = {
 };
 
 @Injectable()
-export class LoginApplicationService {
+export class AuthenticationApplicationService {
   constructor(
     private readonly sessionManager: SessionManager,
     private readonly accounts: AccountDatabaseRepository,
@@ -77,5 +78,9 @@ export class LoginApplicationService {
       email,
       password
     );
+  }
+
+  async verifyAccount(email: string, token: string) {
+    return new VerifyAccount(this.accounts).execute(email, token);
   }
 }

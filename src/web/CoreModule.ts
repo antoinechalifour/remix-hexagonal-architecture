@@ -4,7 +4,7 @@ import {
   AccountDatabaseRepository,
   BCryptPasswordHasher,
   FetchAuthenticationStatusDatabaseQuery,
-  LoginApplicationService,
+  AuthenticationApplicationService,
 } from "authentication";
 import { AUTHENTICATOR, PRISMA } from "../keys";
 import { SessionAuthenticator } from "./authenticator/SessionAuthenticator";
@@ -43,7 +43,7 @@ const RemixSessionConfig = {
   imports: [EventEmitterModule.forRoot()],
   providers: [
     // Authentication
-    LoginApplicationService,
+    AuthenticationApplicationService,
     AccountDatabaseRepository,
     FetchAuthenticationStatusDatabaseQuery,
     BCryptPasswordHasher,

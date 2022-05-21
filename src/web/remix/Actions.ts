@@ -1,7 +1,10 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { redirect } from "@remix-run/node";
 import { Body, DataFunction, Params, SessionManager } from "remix-nest-adapter";
-import { Authenticator, LoginApplicationService } from "authentication";
+import {
+  Authenticator,
+  AuthenticationApplicationService,
+} from "authentication";
 import {
   TodoApplicationService,
   TodoListApplicationService,
@@ -32,14 +35,14 @@ export class Actions {
     @Inject(AUTHENTICATOR)
     private readonly authenticator: Authenticator,
     private readonly sessionManager: SessionManager,
+    private readonly authenticationApplicationService: AuthenticationApplicationService,
     private readonly todoApplicationService: TodoApplicationService,
-    private readonly todoListApplicationService: TodoListApplicationService,
-    private readonly loginApplicationService: LoginApplicationService
+    private readonly todoListApplicationService: TodoListApplicationService
   ) {}
 
   @DataFunction()
   async login(@Body() body: LoginBody) {
-    const { url, cookie } = await this.loginApplicationService.login({
+    const { url, cookie } = await this.authenticationApplicationService.login({
       email: body.email,
       password: body.password,
       registration: body.register != null,
