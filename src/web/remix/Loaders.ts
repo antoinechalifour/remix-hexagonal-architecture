@@ -1,5 +1,4 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { IsString } from "class-validator";
 import { json, redirect } from "remix";
 import {
   DataFunction,
@@ -8,9 +7,9 @@ import {
   SessionManager,
 } from "remix-nest-adapter";
 import {
+  AuthenticationApplicationService,
   Authenticator,
   FetchAuthenticationStatusDatabaseQuery,
-  AuthenticationApplicationService,
 } from "authentication";
 import {
   FetchHomePageDatabaseQuery,
@@ -19,14 +18,7 @@ import {
 import { AUTHENTICATOR } from "../../keys";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
 import { Authenticated } from "../authenticator/Authenticated";
-
-class VerifyAccountQuery {
-  @IsString()
-  email!: string;
-
-  @IsString()
-  token!: string;
-}
+import { VerifyAccountQuery } from "./dtos/VerifyAccount";
 
 @Injectable()
 export class Loaders {
