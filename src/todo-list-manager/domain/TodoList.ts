@@ -1,9 +1,9 @@
-import type { GenerateId } from "shared";
+import type { GenerateId } from "shared/id";
 import type { Clock } from "shared/time";
 import type { Todo, TodoId } from "./Todo";
 import type { OwnerId } from "./OwnerId";
 
-import { moveArrayItem } from "shared";
+import { moveArrayItem } from "shared/lib";
 
 export type TodoListId = string;
 
