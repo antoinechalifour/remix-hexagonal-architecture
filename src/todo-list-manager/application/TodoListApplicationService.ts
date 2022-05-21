@@ -2,13 +2,13 @@ import { Injectable } from "@nestjs/common";
 import { CurrentUser } from "authentication";
 import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
-import { GenerateUUID } from "shared";
+import { GenerateUUID } from "shared/id";
 import { AddTodoList } from "../usecase/AddTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
-import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { ReorderTodos } from "../usecase/ReorderTodos";
 import { RenameTodoList } from "../usecase/RenameTodoList";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 
 @Injectable()
 export class TodoListApplicationService {

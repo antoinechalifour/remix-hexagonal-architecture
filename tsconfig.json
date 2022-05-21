@@ -18,6 +18,8 @@
       "shared/mail": ["./src/shared/mail"],
       "shared/time": ["./src/shared/time"],
       "shared/events": ["./src/shared/events"],
+      "shared/id": ["./src/shared/id"],
+      "shared/lib": ["./src/shared/lib"],
       "infrastructure": ["./src/infrastructure"],
       "authentication": ["./src/authentication"],
       "todo-list-manager": ["./src/todo-list-manager"]

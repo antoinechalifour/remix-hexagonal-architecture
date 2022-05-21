@@ -1,7 +1,8 @@
-import { GenerateId } from "shared";
-import { Accounts } from "../domain/Accounts";
+import type { GenerateId } from "shared/id";
+import type { Accounts } from "../domain/Accounts";
+import type { PasswordHasher } from "../domain/PasswordHasher";
+
 import { register } from "../domain/Account";
-import { PasswordHasher } from "../domain/PasswordHasher";
 
 export class RegisterFlow {
   constructor(

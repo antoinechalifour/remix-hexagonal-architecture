@@ -1,8 +1,8 @@
-import type { GenerateId } from "shared";
+import type { GenerateId } from "shared/id";
 import type { TodoLists } from "../../domain/TodoLists";
 
-import { AddTodoList } from "../../usecase/AddTodoList";
 import { Clock, FixedClock } from "shared/time";
+import { AddTodoList } from "../../usecase/AddTodoList";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { GenerateTestId } from "./fakes/GenerateTestId";
 

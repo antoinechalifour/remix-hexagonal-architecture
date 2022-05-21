@@ -1,5 +1,6 @@
-import type { GenerateId } from "shared";
+import type { GenerateId } from "shared/id";
 import type { PasswordHasher } from "./PasswordHasher";
+
 import { InvalidVerificationTokenError } from "./InvalidVerificationTokenError";
 
 export type BaseAccount = {

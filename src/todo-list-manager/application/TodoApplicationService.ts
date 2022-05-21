@@ -3,17 +3,17 @@ import { CurrentUser } from "authentication";
 import { Prisma } from "shared/database";
 import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
-import { GenerateUUID } from "shared";
+import { GenerateUUID } from "shared/id";
+import { PRISMA } from "../../keys";
 import { AddTodo } from "../usecase/AddTodo";
 import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
 import { ArchiveTodo } from "../usecase/ArchiveTodo";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoDatabaseRepository } from "../infrastructure/TodoDatabaseRepository";
-import { PRISMA } from "../../keys";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
 import { RenameTodo } from "../usecase/RenameTodo";
 import { TagTodo } from "../usecase/TagTodo";
 import { UntagTodo } from "../usecase/UntagTodo";
+import { TodoListUpdated } from "../domain/TodoListUpdated";
 
 @Injectable()
 export class TodoApplicationService {
