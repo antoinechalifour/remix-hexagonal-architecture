@@ -1,6 +1,8 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { CurrentUser } from "authentication";
 import { Prisma } from "shared/database";
 import { RealClock } from "shared/time";
+import { NestEvents } from "shared/events";
 import { GenerateUUID } from "shared";
 import { AddTodo } from "../usecase/AddTodo";
 import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
@@ -9,9 +11,7 @@ import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRe
 import { TodoDatabaseRepository } from "../infrastructure/TodoDatabaseRepository";
 import { PRISMA } from "../../keys";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
-import { NestEvents } from "../../shared/NestEvents";
 import { RenameTodo } from "../usecase/RenameTodo";
-import { CurrentUser } from "authentication";
 import { TagTodo } from "../usecase/TagTodo";
 import { UntagTodo } from "../usecase/UntagTodo";
 

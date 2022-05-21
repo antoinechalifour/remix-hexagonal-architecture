@@ -1,6 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { EventEmitter2 } from "@nestjs/event-emitter";
-import { Events, Event } from "./Events";
+import { Events } from "./Events";
+import { Event } from "./Event";
 
 @Injectable()
 export class NestEvents implements Events {
