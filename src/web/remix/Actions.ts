@@ -41,17 +41,10 @@ export class Actions {
   ) {}
 
   @DataFunction()
-  async login(@Body() body: LoginBody) {
-    const { url, cookie } = await this.authenticationApplicationService.login({
-      email: body.email,
-      password: body.password,
-      registration: body.register != null,
-    });
-    return redirect(url, {
-      headers: {
-        "Set-Cookie": cookie,
-      },
-    });
+  async loginOrRegister(@Body() body: LoginBody) {
+    if (body.register != null) return this.register(body);
+
+    return this.login(body);
   }
 
   @Authenticated()
@@ -185,5 +178,29 @@ export class Actions {
     );
 
     return null;
+  }
+
+  private async register({ email, password }: LoginBody) {
+    const { url, cookie } =
+      await this.authenticationApplicationService.register(email, password);
+
+    return redirect(url, {
+      headers: {
+        "Set-Cookie": cookie,
+      },
+    });
+  }
+
+  private async login({ email, password }: LoginBody) {
+    const { url, cookie } = await this.authenticationApplicationService.login(
+      email,
+      password
+    );
+
+    return redirect(url, {
+      headers: {
+        "Set-Cookie": cookie,
+      },
+    });
   }
 }

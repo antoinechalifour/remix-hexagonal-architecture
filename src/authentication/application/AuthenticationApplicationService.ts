@@ -17,12 +17,6 @@ import { UserRegistered } from "../domain/UserRegistered";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 
-export type LoginDto = {
-  email: string;
-  password: string;
-  registration: boolean;
-};
-
 @Injectable()
 export class AuthenticationApplicationService {
   constructor(
@@ -33,20 +27,22 @@ export class AuthenticationApplicationService {
     private readonly events: NestEvents
   ) {}
 
-  async login(loginDto: LoginDto) {
+  async login(email: string, password: string) {
     const session = await this.sessionManager.get();
     let url = "/";
 
     try {
-      await this.handleRegistration(loginDto);
-      const userId = await this.handleLogin(loginDto);
+      const userId = await new LoginFlow(
+        this.accounts,
+        this.passwordHasher
+      ).execute(email, password);
+
       session.set("userId", userId);
       session.set("sessionId", uuid());
     } catch (err: any) {
       let message: string;
 
-      if (EmailAlreadyInUseError.is(err)) message = err.message;
-      else if (AccountNotVerifiedError.is(err)) message = err.message;
+      if (AccountNotVerifiedError.is(err)) message = err.message;
       else if (InvalidCredentialsError.is(err))
         message = "Could not login. Make sure your credentials are valid.";
       else throw err;
@@ -61,29 +57,34 @@ export class AuthenticationApplicationService {
     };
   }
 
-  private async handleRegistration({
-    email,
-    password,
-    registration,
-  }: LoginDto) {
-    if (!registration) return;
+  async register(email: string, password: string) {
+    const session = await this.sessionManager.get();
+    let url = "/welcome";
 
-    const account = await new RegisterFlow(
-      this.accounts,
-      this.generateId,
-      this.passwordHasher
-    ).execute(email, password);
+    try {
+      const account = await new RegisterFlow(
+        this.accounts,
+        this.generateId,
+        this.passwordHasher
+      ).execute(email, password);
 
-    this.events.publish(
-      new UserRegistered(account.email, account.verificationToken)
-    );
-  }
+      this.events.publish(
+        new UserRegistered(account.email, account.verificationToken)
+      );
+    } catch (err) {
+      let message: string;
 
-  private handleLogin({ email, password }: LoginDto) {
-    return new LoginFlow(this.accounts, this.passwordHasher).execute(
-      email,
-      password
-    );
+      if (EmailAlreadyInUseError.is(err)) message = err.message;
+      else throw err;
+
+      session.flash("error", message);
+      url = "/login";
+    }
+
+    return {
+      url,
+      cookie: await this.sessionManager.commit(session),
+    };
   }
 
   async verifyAccount(email: string, token: string) {
