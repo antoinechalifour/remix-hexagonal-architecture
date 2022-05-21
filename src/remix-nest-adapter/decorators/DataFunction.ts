@@ -3,6 +3,7 @@ import { validateSync, ValidationError } from "class-validator";
 import { METADATA_BODY } from "./Body";
 import { METADATA_PARAMS } from "./Params";
 import { plainToClass } from "class-transformer";
+import { METADATA_QUERY } from "./Query";
 
 class DecoratorValidationError extends Error {
   constructor(message: string, public validationErrors: ValidationError[]) {
@@ -49,6 +50,11 @@ export const DataFunction =
       target,
       propertyKey
     );
+    const queryParameterIndex = Reflect.getOwnMetadata(
+      METADATA_QUERY,
+      target,
+      propertyKey
+    );
     const ParamTypes = Reflect.getMetadata(
       "design:paramtypes",
       target,
@@ -74,18 +80,32 @@ export const DataFunction =
     }
 
     async function parseParams(args: DataFunctionArgs) {
-      const params = new ParamTypes[paramsParameterIndex]();
-      Object.assign(params, args.params);
+      const params = plainToClass<any, any>(
+        ParamTypes[paramsParameterIndex],
+        args.params
+      );
       const validationErrors = validateSync(params);
 
       if (validationErrors.length > 0) {
-        throw new DecoratorValidationError(
-          "Params validation failed",
-          validationErrors
-        );
+        throw new Response(null, { status: 400 });
       }
 
       return params;
+    }
+
+    async function parseQuery(args: DataFunctionArgs) {
+      const searchParams = new URL(args.request.url).searchParams;
+      const query = plainToClass<any, any>(
+        ParamTypes[queryParameterIndex],
+        Object.fromEntries(searchParams.entries())
+      );
+      const validationErrors = validateSync(query);
+
+      if (validationErrors.length > 0) {
+        throw new Response(null, { status: 400 });
+      }
+
+      return query;
     }
 
     descriptor.value = async function (args: DataFunctionArgs) {
@@ -96,6 +116,8 @@ export const DataFunction =
           newArgs[bodyParameterIndex] = await parseBody(args);
         if (paramsParameterIndex != null)
           newArgs[paramsParameterIndex] = await parseParams(args);
+        if (queryParameterIndex != null)
+          newArgs[queryParameterIndex] = await parseQuery(args);
       } catch (e) {
         if (!(e instanceof DecoratorValidationError)) throw e;
 
