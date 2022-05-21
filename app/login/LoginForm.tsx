@@ -1,7 +1,7 @@
 import type { AuthenticationErrorDto } from "shared/client";
 import type { Transition } from "@remix-run/react/transition";
 
-import { Form, useActionData, useLoaderData, useTransition } from "remix";
+import { Form, Link, useActionData, useLoaderData, useTransition } from "remix";
 import { UpdateIcon } from "@radix-ui/react-icons";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary, ButtonSecondary } from "front/ui/Button";
@@ -49,6 +49,12 @@ export const LoginForm = () => {
         required
         errorMessage={actionData?.errors.password}
       />
+
+      <div>
+        <Link to="/forgot-password" className="-mt-1 mb-4 text-sm underline">
+          Forgot your password?
+        </Link>
+      </div>
 
       <div className="flex flex-row-reverse gap-4">
         <ButtonPrimary {...submitButtonsProps} name="login">
