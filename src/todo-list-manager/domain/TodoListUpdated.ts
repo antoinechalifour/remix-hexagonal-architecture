@@ -1,4 +1,4 @@
-import { Event } from "../../shared/Events";
+import { Event } from "shared/events";
 
 export class TodoListUpdated extends Event {
   static TYPE = "todoList.updated";

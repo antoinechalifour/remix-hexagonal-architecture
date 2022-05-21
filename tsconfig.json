@@ -17,6 +17,7 @@
       "shared/database": ["./src/shared/database"],
       "shared/mail": ["./src/shared/mail"],
       "shared/time": ["./src/shared/time"],
+      "shared/events": ["./src/shared/events"],
       "infrastructure": ["./src/infrastructure"],
       "authentication": ["./src/authentication"],
       "todo-list-manager": ["./src/todo-list-manager"]

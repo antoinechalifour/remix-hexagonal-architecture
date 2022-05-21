@@ -1,4 +1,4 @@
-import { Event } from "../../shared/Events";
+import { Event } from "shared/events";
 
 export class UserRegistered extends Event {
   static TYPE = "user.registered";

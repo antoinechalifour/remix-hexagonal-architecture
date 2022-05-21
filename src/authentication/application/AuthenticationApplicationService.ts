@@ -3,7 +3,7 @@ import { json } from "remix";
 import { v4 as uuid } from "uuid";
 import { SessionManager } from "remix-nest-adapter";
 import { GenerateUUID } from "shared";
-import { NestEvents } from "../../shared/NestEvents";
+import { NestEvents } from "shared/events";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { VerifyAccount } from "../usecase/VerifyAccount";

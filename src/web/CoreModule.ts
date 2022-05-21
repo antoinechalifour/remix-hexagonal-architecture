@@ -24,11 +24,11 @@ import {
 } from "remix-nest-adapter";
 import { Prisma } from "shared/database";
 import { RealClock } from "shared/time";
+import { NestEvents } from "shared/events";
 import { MAILER, FakeMailer, SendGridMailer } from "shared/mail";
 import { GenerateUUID } from "shared";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
-import { NestEvents } from "../shared/NestEvents";
 import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
 import { RegistrationEventsConsumer } from "../authentication/application/RegistrationEventsConsumer";
 
