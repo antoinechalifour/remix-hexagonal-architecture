@@ -19,5 +19,7 @@ export class RegisterFlow {
     );
 
     await this.credentials.save(account);
+
+    return account;
   }
 }

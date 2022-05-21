@@ -29,7 +29,9 @@ model TodoList {
 }
 
 model Account {
-  id    String @id @db.Uuid
-  email String @unique
-  hash  String
+  id                String  @id @db.Uuid
+  email             String  @unique
+  hash              String
+  verified          Boolean
+  verificationToken String?
 }

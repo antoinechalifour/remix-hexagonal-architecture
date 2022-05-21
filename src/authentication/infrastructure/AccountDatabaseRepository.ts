@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "../../shared/PrismaRepository";
 import { Accounts } from "../domain/Accounts";
-import { Account } from "../domain/Account";
+import { VerifiedAccount, UnverifiedAccount } from "../domain/Account";
 import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
 
@@ -10,9 +10,9 @@ export class AccountDatabaseRepository
   extends PrismaRepository
   implements Accounts
 {
-  async ofEmail(email: string): Promise<Account> {
+  async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
     const account = await this.prisma.account.findFirst({
-      where: { email },
+      where: { email, verified: true },
     });
 
     if (account == null) throw new InvalidCredentialsError();
@@ -21,16 +21,28 @@ export class AccountDatabaseRepository
       id: account.id,
       email: account.email,
       hash: account.hash,
+      verified: true,
     };
   }
 
-  async save(account: Account): Promise<void> {
+  async save(account: VerifiedAccount | UnverifiedAccount): Promise<void> {
     try {
-      await this.prisma.account.create({
-        data: {
+      await this.prisma.account.upsert({
+        create: {
           id: account.id,
           email: account.email,
           hash: account.hash,
+          verified: account.verified,
+          verificationToken:
+            "verificationToken" in account ? account.verificationToken : null,
+        },
+        update: {
+          verified: account.verified,
+          verificationToken:
+            "verificationToken" in account ? account.verificationToken : null,
+        },
+        where: {
+          email: account.email,
         },
       });
     } catch (e) {

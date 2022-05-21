@@ -8,6 +8,7 @@ async function doSeed() {
       id: "051cef90-ee3a-4046-a9dd-f5cdc303d073",
       email: "john.doe@example.com",
       hash: "$2b$10$kcHThCk3LngaUT4JxSGlc.b4rkXZvoKAaYQsyBW6empf5bYwmHXgy", // Password is azerty :)
+      verified: true,
     },
   });
 }

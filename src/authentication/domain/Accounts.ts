@@ -1,6 +1,6 @@
-import { Account } from "./Account";
+import { UnverifiedAccount, VerifiedAccount } from "./Account";
 
 export interface Accounts {
-  ofEmail(email: string): Promise<Account>;
-  save(account: Account): Promise<void>;
+  verifiedAccountOfEmail(email: string): Promise<VerifiedAccount>;
+  save(account: UnverifiedAccount | VerifiedAccount): Promise<void>;
 }
