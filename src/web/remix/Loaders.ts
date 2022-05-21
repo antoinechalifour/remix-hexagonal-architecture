@@ -78,12 +78,15 @@ export class Loaders {
     const isAuthenticated = await this.authenticator.isAuthenticated();
     if (isAuthenticated) return redirect("/");
 
-    await this.authenticationApplicationService.verifyAccount(
-      query.email,
-      query.token
-    );
+    const { cookie } =
+      await this.authenticationApplicationService.verifyAccount(
+        query.email,
+        query.token
+      );
 
-    return null;
+    return new Response(null, {
+      headers: { "Set-Cookie": cookie },
+    });
   }
 
   @Authenticated()
