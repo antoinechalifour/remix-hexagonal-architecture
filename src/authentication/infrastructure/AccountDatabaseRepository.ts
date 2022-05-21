@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaRepository } from "../../shared/PrismaRepository";
+import { PrismaRepository } from "shared/database";
 import { Accounts } from "../domain/Accounts";
 import { UnverifiedAccount, VerifiedAccount } from "../domain/Account";
 import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";

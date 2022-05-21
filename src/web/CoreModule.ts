@@ -22,9 +22,10 @@ import {
   SESSION_CONFIG,
   SessionManager,
 } from "remix-nest-adapter";
+import { Prisma } from "shared/database";
+import { GenerateUUID } from "shared";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
-import { GenerateUUID, Prisma } from "shared";
 import { RealClock } from "../shared/RealClock";
 import { NestEvents } from "../shared/NestEvents";
 import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";

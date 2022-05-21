@@ -1,7 +1,7 @@
 import { PrismaClient } from "@prisma/client";
 import { PrismaClientKnownRequestError } from "@prisma/client/runtime";
 import { Inject } from "@nestjs/common";
-import { PRISMA } from "../keys";
+import { PRISMA } from "../../keys";
 
 export type PrismaQueryRunner = Omit<
   PrismaClient,
