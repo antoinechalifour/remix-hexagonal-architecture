@@ -1,6 +1,12 @@
 import { Inject, Injectable } from "@nestjs/common";
+import { IsString } from "class-validator";
 import { json, redirect } from "remix";
-import { DataFunction, Params, SessionManager } from "remix-nest-adapter";
+import {
+  DataFunction,
+  Params,
+  Query,
+  SessionManager,
+} from "remix-nest-adapter";
 import {
   Authenticator,
   FetchAuthenticationStatusDatabaseQuery,
@@ -12,6 +18,14 @@ import {
 import { AUTHENTICATOR } from "../../keys";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
 import { Authenticated } from "../authenticator/Authenticated";
+
+class VerifyAccountQuery {
+  @IsString()
+  email!: string;
+
+  @IsString()
+  token!: string;
+}
 
 @Injectable()
 export class Loaders {
@@ -55,6 +69,12 @@ export class Loaders {
         "Set-Cookie": await this.sessionManager.destroy(),
       },
     });
+  }
+
+  @DataFunction()
+  async verifyAccount(@Query() query: VerifyAccountQuery) {
+    console.log("Query:", query);
+    return null;
   }
 
   @Authenticated()
