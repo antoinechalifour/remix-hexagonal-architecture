@@ -15,7 +15,7 @@ export class RegistrationEventsConsumer {
     await this.mailer.send({
       to: event.email,
       subject: "TodoListManager - Please verify your account",
-      content: `/accounts/verify?token=${event.verificationToken}`,
+      content: `/verify-account?email=${event.email}&token=${event.verificationToken}`,
     });
   }
 }

@@ -1,35 +1,8 @@
-import type { Accounts } from "../../domain/Accounts";
-import type { VerifiedAccount } from "../../domain/Account";
-import type { PasswordHasher } from "../../domain/PasswordHasher";
 import { LoginFlow } from "../../usecase/LoginFlow";
 import { InvalidCredentialsError } from "../../domain/InvalidCredentialsError";
-
-interface AccountBuilder {
-  account: VerifiedAccount;
-  forEmail(email: string): AccountBuilder;
-  usingPassword(password: string): AccountBuilder;
-  build(): VerifiedAccount;
-}
-
-const anAccount = (): AccountBuilder => ({
-  account: {
-    id: "5719c982-060e-483d-9ade-bf4420b7273e",
-    email: "john.doe@example.com",
-    hash: "$2b$10$kcHThCk3LngaUT4JxSGlc.b4rkXZvoKAaYQsyBW6empf5bYwmHXgy", // Password is azerty :)
-    verified: true,
-  },
-  forEmail(email: string): AccountBuilder {
-    this.account.email = email;
-    return this;
-  },
-  usingPassword(password: string): AccountBuilder {
-    this.account.hash = password;
-    return this;
-  },
-  build(): VerifiedAccount {
-    return this.account;
-  },
-});
+import { AccountsInMemory } from "./fakes/AccountsInMemory";
+import { FakePasswordHasher } from "./fakes/FakePasswordHasher";
+import { aVerifiedAccount } from "./builders/Account";
 
 describe("LoginFlow", () => {
   let passwordHasher: FakePasswordHasher;
@@ -53,7 +26,7 @@ describe("LoginFlow", () => {
   it("returns an error when the password is invalid", async () => {
     // Arrange
     await accounts.save(
-      anAccount()
+      aVerifiedAccount()
         .forEmail("jane.doe@example.com")
         .usingPassword("jane_password")
         .build()
@@ -68,7 +41,7 @@ describe("LoginFlow", () => {
 
   it("returns the account id when credentials are valid", async () => {
     // Arrange
-    const theAccount = anAccount()
+    const theAccount = aVerifiedAccount()
       .forEmail("jane.doe@example.com")
       .usingPassword("jane_password")
       .build();
@@ -84,29 +57,3 @@ describe("LoginFlow", () => {
     expect(result).toEqual(theAccount.id);
   });
 });
-
-class AccountsInMemory implements Accounts {
-  private _database = new Map<string, VerifiedAccount>();
-
-  async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
-    const account = this._database.get(email);
-
-    if (!account) throw new InvalidCredentialsError("Account not found");
-
-    return account;
-  }
-
-  async save(account: VerifiedAccount): Promise<void> {
-    this._database.set(account.email, account);
-  }
-}
-
-class FakePasswordHasher implements PasswordHasher {
-  async hash(password: string): Promise<string> {
-    return password;
-  }
-
-  async verify(password: string, hash: string): Promise<boolean> {
-    return password === hash;
-  }
-}

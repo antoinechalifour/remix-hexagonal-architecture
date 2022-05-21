@@ -25,6 +25,23 @@ export class AccountDatabaseRepository
     };
   }
 
+  async unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount> {
+    const account = await this.prisma.account.findFirst({
+      where: { email, verified: false },
+    });
+
+    if (account == null) throw new Error(`Account ${email} not found`);
+    const unverifiedAccount = account as UnverifiedAccount;
+
+    return {
+      id: unverifiedAccount.id,
+      email: unverifiedAccount.email,
+      verified: false,
+      verificationToken: unverifiedAccount.verificationToken,
+      hash: unverifiedAccount.hash,
+    };
+  }
+
   async save(account: VerifiedAccount | UnverifiedAccount): Promise<void> {
     try {
       await this.prisma.account.upsert({

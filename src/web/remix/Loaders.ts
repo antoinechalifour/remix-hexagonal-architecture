@@ -10,6 +10,7 @@ import {
 import {
   Authenticator,
   FetchAuthenticationStatusDatabaseQuery,
+  AuthenticationApplicationService,
 } from "authentication";
 import {
   FetchHomePageDatabaseQuery,
@@ -33,6 +34,7 @@ export class Loaders {
     @Inject(AUTHENTICATOR)
     private readonly authenticator: Authenticator,
     private readonly sessionManager: SessionManager,
+    private readonly authenticationApplicationService: AuthenticationApplicationService,
     private readonly fetchHomePageQuery: FetchHomePageDatabaseQuery,
     private readonly fetchTodoListQuery: FetchTodoListDatabaseQuery,
     private readonly fetchAuthenticationStatus: FetchAuthenticationStatusDatabaseQuery
@@ -73,7 +75,14 @@ export class Loaders {
 
   @DataFunction()
   async verifyAccount(@Query() query: VerifyAccountQuery) {
-    console.log("Query:", query);
+    const isAuthenticated = await this.authenticator.isAuthenticated();
+    if (isAuthenticated) return redirect("/");
+
+    await this.authenticationApplicationService.verifyAccount(
+      query.email,
+      query.token
+    );
+
     return null;
   }
 

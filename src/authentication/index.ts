@@ -1,4 +1,4 @@
-export * from "./application/LoginApplicationService";
+export * from "./application/AuthenticationApplicationService";
 export * from "./domain/Authenticator";
 export * from "./domain/FetchAuthenticationStatus";
 export * from "./infrastructure/AccountDatabaseRepository";
