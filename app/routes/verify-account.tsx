@@ -1,8 +1,12 @@
-import type { LoaderFunction, ThrownResponse } from "remix";
+import type { LoaderFunction, MetaFunction, ThrownResponse } from "remix";
 import type { RemixAppContext } from "web";
 import { useCatch, useNavigate } from "remix";
 import { PageTitle } from "front/ui/PageTitle";
 import { useEffect } from "react";
+
+export const meta: MetaFunction = () => ({
+  title: "TLM | Verifying your account...",
+});
 
 export const loader: LoaderFunction = (args) =>
   (args.context as RemixAppContext).loaders.verifyAccount(args);

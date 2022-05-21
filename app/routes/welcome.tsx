@@ -1,4 +1,9 @@
+import type { MetaFunction } from "remix";
 import { PageTitle } from "front/ui/PageTitle";
+
+export const meta: MetaFunction = () => ({
+  title: "TLM | Welcome",
+});
 
 export default function Welcome() {
   return (
