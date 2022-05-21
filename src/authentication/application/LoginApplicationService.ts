@@ -8,6 +8,8 @@ import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
+import { NestEvents } from "../../shared/NestEvents";
+import { UserRegistered } from "../domain/UserRegistered";
 
 export type LoginDto = {
   email: string;
@@ -21,7 +23,8 @@ export class LoginApplicationService {
     private readonly sessionManager: SessionManager,
     private readonly accounts: AccountDatabaseRepository,
     private readonly generateId: GenerateUUID,
-    private readonly passwordHasher: BCryptPasswordHasher
+    private readonly passwordHasher: BCryptPasswordHasher,
+    private readonly events: NestEvents
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -63,6 +66,8 @@ export class LoginApplicationService {
       this.generateId,
       this.passwordHasher
     ).execute(email, password);
+
+    this.events.publish(new UserRegistered(email));
   }
 
   private handleLogin({ email, password }: LoginDto) {

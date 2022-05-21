@@ -1,8 +1,5 @@
 export class Event {
-  constructor(
-    public readonly type: string,
-    public readonly sessionId: string
-  ) {}
+  constructor(public readonly type: string) {}
 }
 
 export interface Events {
