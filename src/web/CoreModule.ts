@@ -23,6 +23,7 @@ import {
   SessionManager,
 } from "remix-nest-adapter";
 import { Prisma } from "shared/database";
+import { MAILER, FakeMailer, SendGridMailer } from "shared/mail";
 import { GenerateUUID } from "shared";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
@@ -30,7 +31,6 @@ import { RealClock } from "../shared/RealClock";
 import { NestEvents } from "../shared/NestEvents";
 import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
 import { RegistrationEventsConsumer } from "../authentication/application/RegistrationEventsConsumer";
-import { FakeMailer, MAILER, SendGridMailer } from "../shared/Mailer";
 
 const RemixSessionConfig = {
   name: "__session",
