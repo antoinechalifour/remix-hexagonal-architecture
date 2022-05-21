@@ -7,5 +7,6 @@ export class VerifyAccount {
   async execute(email: string, token: string) {
     const account = await this.accounts.unverifiedAccountOfEmail(email);
     await this.accounts.save(verify(account, token));
+    return account.id;
   }
 }

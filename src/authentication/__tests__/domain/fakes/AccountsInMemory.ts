@@ -1,6 +1,8 @@
 import { Accounts } from "../../../domain/Accounts";
 import { UnverifiedAccount, VerifiedAccount } from "../../../domain/Account";
 import { InvalidCredentialsError } from "../../../domain/InvalidCredentialsError";
+import { AccountAlreadyVerifiedError } from "../../../domain/AccountAlreadyVerifiedError";
+import { AccountNotVerifiedError } from "../../../domain/AccountNotVerifiedError";
 
 export class AccountsInMemory implements Accounts {
   private _database = new Map<string, VerifiedAccount | UnverifiedAccount>();
@@ -9,7 +11,7 @@ export class AccountsInMemory implements Accounts {
     const account = this._database.get(email);
 
     if (!account) throw new InvalidCredentialsError("Account not found");
-    if (!account.verified) throw new Error("Account not verified");
+    if (!account.verified) throw new AccountNotVerifiedError(account.email);
 
     return account;
   }
@@ -18,7 +20,7 @@ export class AccountsInMemory implements Accounts {
     const account = this._database.get(email);
 
     if (!account) throw new InvalidCredentialsError("Account not found");
-    if (account.verified) throw new Error("Account is verified verified");
+    if (account.verified) throw new AccountAlreadyVerifiedError(account.email);
 
     return account;
   }

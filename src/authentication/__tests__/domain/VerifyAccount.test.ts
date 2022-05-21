@@ -15,12 +15,16 @@ describe("Verifying an account", () => {
     await accounts.save(theAccount);
 
     // Act
-    await verifyAccount.execute(theAccount.email, theAccount.verificationToken);
+    const accountId = await verifyAccount.execute(
+      theAccount.email,
+      theAccount.verificationToken
+    );
 
     // Assert
     expect(await accounts.verifiedAccountOfEmail(theAccount.email)).toEqual(
       aVerifiedAccount().forEmail(theAccount.email).build()
     );
+    expect(accountId).toEqual(theAccount.id);
   });
 
   it("throws an error when the token is invalid", async () => {

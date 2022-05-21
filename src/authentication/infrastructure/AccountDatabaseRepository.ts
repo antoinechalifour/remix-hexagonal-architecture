@@ -1,9 +1,12 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "../../shared/PrismaRepository";
 import { Accounts } from "../domain/Accounts";
-import { VerifiedAccount, UnverifiedAccount } from "../domain/Account";
+import { UnverifiedAccount, VerifiedAccount } from "../domain/Account";
 import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
+import { AccountAlreadyVerifiedError } from "../domain/AccountAlreadyVerifiedError";
+import { AccountNotVerifiedError } from "../domain/AccountNotVerifiedError";
+import { AccountNotFoundError } from "../domain/AccountNotFoundError";
 
 @Injectable()
 export class AccountDatabaseRepository
@@ -12,10 +15,11 @@ export class AccountDatabaseRepository
 {
   async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
     const account = await this.prisma.account.findFirst({
-      where: { email, verified: true },
+      where: { email },
     });
 
     if (account == null) throw new InvalidCredentialsError();
+    if (!account.verified) throw new AccountNotVerifiedError(account.email);
 
     return {
       id: account.id,
@@ -27,10 +31,11 @@ export class AccountDatabaseRepository
 
   async unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount> {
     const account = await this.prisma.account.findFirst({
-      where: { email, verified: false },
+      where: { email },
     });
 
-    if (account == null) throw new Error(`Account ${email} not found`);
+    if (account == null) throw new AccountNotFoundError(email);
+    if (account.verified) throw new AccountAlreadyVerifiedError(account.email);
     const unverifiedAccount = account as UnverifiedAccount;
 
     return {
