@@ -1,4 +1,4 @@
-import type { TodoListDto } from "shared";
+import type { TodoListDto } from "shared/client";
 import type { TodoListId } from "./TodoList";
 import type { OwnerId } from "./OwnerId";
 

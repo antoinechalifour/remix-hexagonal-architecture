@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared/client";
 
 import React from "react";
 import classNames from "classnames";

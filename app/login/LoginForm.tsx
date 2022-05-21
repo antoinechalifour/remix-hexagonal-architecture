@@ -1,6 +1,7 @@
-import type { AuthenticationErrorDto } from "shared";
-import { Form, useActionData, useLoaderData, useTransition } from "remix";
+import type { AuthenticationErrorDto } from "shared/client";
 import type { Transition } from "@remix-run/react/transition";
+
+import { Form, useActionData, useLoaderData, useTransition } from "remix";
 import { UpdateIcon } from "@radix-ui/react-icons";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary, ButtonSecondary } from "front/ui/Button";

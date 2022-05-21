@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared/client";
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";

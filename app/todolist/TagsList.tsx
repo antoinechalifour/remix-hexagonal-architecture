@@ -1,4 +1,5 @@
-import type { TodoDto, TodoListDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared/client";
+
 import React from "react";
 import { DotFilledIcon } from "@radix-ui/react-icons";
 import { Popover } from "front/ui/Popover";
