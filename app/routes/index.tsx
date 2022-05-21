@@ -2,7 +2,6 @@ import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
 import type { HomePageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
-import { useLoaderData } from "remix";
 import { TodoLists } from "front/homepage/TodoLists";
 
 export const meta: MetaFunction = ({ data: homePage }) => ({
@@ -16,8 +15,4 @@ export const loader: LoaderFunction = async (args): Promise<HomePageDto> =>
 export const action: ActionFunction = async (args) =>
   (args.context as RemixAppContext).actions.addTodoList(args);
 
-export default function IndexPage() {
-  const { todoLists } = useLoaderData<HomePageDto>();
-
-  return <TodoLists todoLists={todoLists} />;
-}
+export default TodoLists;

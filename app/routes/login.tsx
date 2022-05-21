@@ -13,6 +13,4 @@ export const loader: LoaderFunction = (args) =>
 export const action: ActionFunction = (args) =>
   (args.context as RemixAppContext).actions.loginOrRegister(args);
 
-export default function LoginPage() {
-  return <LoginForm />;
-}
+export default LoginForm;
