@@ -2,12 +2,11 @@ import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
 import { GenerateId } from "shared";
 
+import { Clock, FixedClock } from "shared/time";
 import { AddTodo } from "../../usecase/AddTodo";
-import { Clock } from "../../../shared/Clock";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { GenerateTestId } from "./fakes/GenerateTestId";
-import { FixedClock } from "./fakes/FixedClock";
 import { aTodoList } from "./builders/TodoList";
 
 describe("Adding a todo", () => {
