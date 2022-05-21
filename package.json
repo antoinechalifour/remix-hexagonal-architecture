@@ -49,6 +49,7 @@
     "@remix-run/express": "1.4.1",
     "@remix-run/node": "1.4.1",
     "@remix-run/react": "1.4.1",
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "5.0.1",
     "class-transformer": "0.5.1",
     "class-validator": "0.13.2",

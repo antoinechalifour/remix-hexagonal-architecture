@@ -3,7 +3,6 @@ import path from "path";
 import { RemixModule } from "remix-nest-adapter";
 import { CoreModule } from "./CoreModule";
 import { TodoListEventsController } from "./controllers/TodoListEventsController";
-import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
 
 const RemixBuildConfig = {
   publicBuildFolder: path.join(__dirname, "../../../public"),
@@ -18,8 +17,7 @@ export class ApplicationModule {
       imports: [
         RemixModule.registerAsync({
           buildConfig: RemixBuildConfig,
-          imports: [CoreModule],
-          providers: [TodoListEventsConsumer],
+          imports: [CoreModule.register()],
           controllers: [TodoListEventsController],
           exports: [CoreModule],
         }),

@@ -1,4 +1,4 @@
-import { Module } from "@nestjs/common";
+import { DynamicModule, Module } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import {
   AccountDatabaseRepository,
@@ -27,6 +27,9 @@ import { Loaders } from "./remix/Loaders";
 import { GenerateUUID, Prisma } from "shared";
 import { RealClock } from "../shared/RealClock";
 import { NestEvents } from "../shared/NestEvents";
+import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
+import { RegistrationEventsConsumer } from "../authentication/application/RegistrationEventsConsumer";
+import { FakeMailer, MAILER, SendGridMailer } from "../shared/Mailer";
 
 const RemixSessionConfig = {
   name: "__session",
@@ -80,7 +83,32 @@ const RemixSessionConfig = {
       provide: PRISMA,
       useClass: Prisma,
     },
+
+    TodoListEventsConsumer,
+    RegistrationEventsConsumer,
   ],
-  exports: [ACTIONS_CLASS, LOADERS_CLASS, AUTHENTICATOR],
+  exports: [
+    ACTIONS_CLASS,
+    LOADERS_CLASS,
+    AUTHENTICATOR,
+    TodoListEventsConsumer,
+    RegistrationEventsConsumer,
+  ],
 })
-export class CoreModule {}
+export class CoreModule {
+  static register(): DynamicModule {
+    const MailerClass = process.env.SENDGRID_API_KEY
+      ? SendGridMailer
+      : FakeMailer;
+
+    return {
+      module: CoreModule,
+      providers: [
+        {
+          provide: MAILER,
+          useClass: MailerClass,
+        },
+      ],
+    };
+  }
+}
