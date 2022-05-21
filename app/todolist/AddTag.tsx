@@ -1,4 +1,5 @@
-import type { TodoDto, TodoListDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared/client";
+
 import React, { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { Popover } from "front/ui/Popover";

@@ -1,4 +1,4 @@
-import type { HomePageTodoListDto } from "shared";
+import type { HomePageTodoListDto } from "shared/client";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";

@@ -1,4 +1,4 @@
-import type { TodoDto } from "shared";
+import type { TodoDto } from "shared/client";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";

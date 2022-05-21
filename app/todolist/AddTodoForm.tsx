@@ -1,4 +1,4 @@
-import type { AddTodoErrorDto } from "shared";
+import type { AddTodoErrorDto } from "shared/client";
 import type { FloatingLabelInputRef } from "front/ui/FloatingLabelInput";
 
 import { useEffect, useRef } from "react";

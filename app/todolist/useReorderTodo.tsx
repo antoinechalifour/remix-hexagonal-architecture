@@ -1,4 +1,4 @@
-import type { TodoDto } from "shared";
+import type { TodoDto } from "shared/client";
 
 import { useFetcher } from "@remix-run/react";
 import { useDrag, useDrop } from "react-dnd";

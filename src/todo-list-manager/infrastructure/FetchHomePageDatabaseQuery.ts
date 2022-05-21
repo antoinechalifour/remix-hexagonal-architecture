@@ -1,6 +1,6 @@
 import type { PrismaClient } from "@prisma/client";
 import { Inject, Injectable } from "@nestjs/common";
-import type { HomePageDto } from "shared";
+import type { HomePageDto } from "shared/client";
 import { PRISMA } from "../../keys";
 import type { FetchHomePage } from "../domain/FetchHomePage";
 import type { OwnerId } from "../domain/OwnerId";

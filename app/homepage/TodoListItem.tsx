@@ -1,4 +1,4 @@
-import type { HomePageTodoListDto } from "shared";
+import type { HomePageTodoListDto } from "shared/client";
 
 import { Link } from "remix";
 import { useFetcher } from "@remix-run/react";

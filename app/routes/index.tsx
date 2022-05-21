@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import type { HomePageDto } from "shared";
+import type { HomePageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";

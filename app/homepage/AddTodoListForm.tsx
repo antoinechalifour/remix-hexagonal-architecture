@@ -1,4 +1,4 @@
-import type { AddTodoListErrorDto } from "shared";
+import type { AddTodoListErrorDto } from "shared/client";
 
 import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";

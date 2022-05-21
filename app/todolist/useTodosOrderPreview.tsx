@@ -1,4 +1,5 @@
-import type { TodoDto, TodoListDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared/client";
+
 import { moveArrayItem } from "shared/lib";
 import { useEffect, useState } from "react";
 

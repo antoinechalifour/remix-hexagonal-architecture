@@ -1,4 +1,4 @@
-import type { HomePageDto } from "shared";
+import type { HomePageDto } from "shared/client";
 import type { OwnerId } from "./OwnerId";
 
 export interface FetchHomePage {

@@ -1,5 +1,5 @@
 import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
-import type { TodoListDto } from "shared";
+import type { TodoListDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";

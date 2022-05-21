@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared";
+import type { TodoDto, TodoListDto } from "shared/client";
 import type { Filter } from "front/todolist/TagFilters";
 
 import { useState } from "react";

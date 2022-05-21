@@ -1,4 +1,4 @@
-import type { TodoListDto } from "shared";
+import type { TodoListDto } from "shared/client";
 
 import React from "react";
 import { useFetcher } from "@remix-run/react";
