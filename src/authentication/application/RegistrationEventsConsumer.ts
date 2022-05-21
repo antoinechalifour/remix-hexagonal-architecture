@@ -1,7 +1,7 @@
 import assert from "assert";
 import { Inject, Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
-import { MAILER, Mailer } from "../../shared/Mailer";
+import { MAILER, Mailer } from "shared/mail";
 import { UserRegistered } from "../domain/UserRegistered";
 
 @Injectable()
