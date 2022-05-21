@@ -1,5 +1,5 @@
 import type { TodoDto, TodoListDto } from "shared";
-import { moveArrayItem } from "../../src/shared/lib";
+import { moveArrayItem } from "shared/lib";
 import { useEffect, useState } from "react";
 
 interface TodoOrderPreview {
