@@ -2,6 +2,7 @@ import { Injectable } from "@nestjs/common";
 import sgMail from "@sendgrid/mail";
 
 interface Mail {
+  to: string;
   subject: string;
   content: string;
 }

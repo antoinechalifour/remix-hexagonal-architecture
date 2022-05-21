@@ -61,13 +61,15 @@ export class LoginApplicationService {
   }: LoginDto) {
     if (!registration) return;
 
-    await new RegisterFlow(
+    const account = await new RegisterFlow(
       this.accounts,
       this.generateId,
       this.passwordHasher
     ).execute(email, password);
 
-    this.events.publish(new UserRegistered(email));
+    this.events.publish(
+      new UserRegistered(account.email, account.verificationToken)
+    );
   }
 
   private handleLogin({ email, password }: LoginDto) {

@@ -9,7 +9,7 @@ export class LoginFlow {
   ) {}
 
   async execute(email: string, password: string): Promise<string> {
-    const account = await this.accounts.ofEmail(email);
+    const account = await this.accounts.verifiedAccountOfEmail(email);
     const isValidCredentials = await this.passwordHasher.verify(
       password,
       account.hash

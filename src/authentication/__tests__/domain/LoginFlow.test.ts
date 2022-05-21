@@ -1,14 +1,14 @@
 import type { Accounts } from "../../domain/Accounts";
-import type { Account } from "../../domain/Account";
+import type { VerifiedAccount } from "../../domain/Account";
 import type { PasswordHasher } from "../../domain/PasswordHasher";
 import { LoginFlow } from "../../usecase/LoginFlow";
 import { InvalidCredentialsError } from "../../domain/InvalidCredentialsError";
 
 interface AccountBuilder {
-  account: Account;
+  account: VerifiedAccount;
   forEmail(email: string): AccountBuilder;
   usingPassword(password: string): AccountBuilder;
-  build(): Account;
+  build(): VerifiedAccount;
 }
 
 const anAccount = (): AccountBuilder => ({
@@ -16,6 +16,7 @@ const anAccount = (): AccountBuilder => ({
     id: "5719c982-060e-483d-9ade-bf4420b7273e",
     email: "john.doe@example.com",
     hash: "$2b$10$kcHThCk3LngaUT4JxSGlc.b4rkXZvoKAaYQsyBW6empf5bYwmHXgy", // Password is azerty :)
+    verified: true,
   },
   forEmail(email: string): AccountBuilder {
     this.account.email = email;
@@ -25,7 +26,7 @@ const anAccount = (): AccountBuilder => ({
     this.account.hash = password;
     return this;
   },
-  build(): Account {
+  build(): VerifiedAccount {
     return this.account;
   },
 });
@@ -85,9 +86,9 @@ describe("LoginFlow", () => {
 });
 
 class AccountsInMemory implements Accounts {
-  private _database = new Map<string, Account>();
+  private _database = new Map<string, VerifiedAccount>();
 
-  async ofEmail(email: string): Promise<Account> {
+  async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
     const account = this._database.get(email);
 
     if (!account) throw new InvalidCredentialsError("Account not found");
@@ -95,7 +96,7 @@ class AccountsInMemory implements Accounts {
     return account;
   }
 
-  async save(account: Account): Promise<void> {
+  async save(account: VerifiedAccount): Promise<void> {
     this._database.set(account.email, account);
   }
 }

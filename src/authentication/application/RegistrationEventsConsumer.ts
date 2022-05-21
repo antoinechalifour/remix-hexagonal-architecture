@@ -13,8 +13,9 @@ export class RegistrationEventsConsumer {
   @OnEvent(UserRegistered.TYPE)
   async subscribe(event: UserRegistered) {
     await this.mailer.send({
-      content: "Hello toi",
-      subject: "Ca marche ?",
+      to: event.email,
+      subject: "TodoListManager - Please verify your account",
+      content: `/accounts/verify?token=${event.verificationToken}`,
     });
   }
 }
