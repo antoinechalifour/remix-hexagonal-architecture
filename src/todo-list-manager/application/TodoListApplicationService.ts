@@ -1,9 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { RealClock } from "shared/time";
 import { GenerateUUID } from "shared";
 import { AddTodoList } from "../usecase/AddTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
-import { RealClock } from "../../shared/RealClock";
 import { NestEvents } from "../../shared/NestEvents";
 import { ReorderTodos } from "../usecase/ReorderTodos";
 import { RenameTodoList } from "../usecase/RenameTodoList";

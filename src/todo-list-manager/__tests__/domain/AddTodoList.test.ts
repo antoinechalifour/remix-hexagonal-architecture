@@ -1,10 +1,9 @@
 import type { GenerateId } from "shared";
 import type { TodoLists } from "../../domain/TodoLists";
-import type { Clock } from "../../../shared/Clock";
 
 import { AddTodoList } from "../../usecase/AddTodoList";
+import { Clock, FixedClock } from "shared/time";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
-import { FixedClock } from "./fakes/FixedClock";
 import { GenerateTestId } from "./fakes/GenerateTestId";
 
 describe("Adding a todo list", () => {
