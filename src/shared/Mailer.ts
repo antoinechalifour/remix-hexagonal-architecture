@@ -1,10 +1,11 @@
+import assert from "assert";
 import { Injectable } from "@nestjs/common";
 import sgMail from "@sendgrid/mail";
 
 interface Mail {
   to: string;
-  subject: string;
-  content: string;
+  templateId: string;
+  data: Record<string, any>;
 }
 
 export const MAILER = Symbol("MAILER");
@@ -15,34 +16,34 @@ export interface Mailer {
 
 @Injectable()
 export class FakeMailer implements Mailer {
-  send(mail: Mail): Promise<void> {
+  async send(mail: Mail): Promise<void> {
     console.log(mail);
-    return Promise.resolve(undefined);
   }
 }
 
 @Injectable()
 export class SendGridMailer implements Mailer {
+  private readonly sender: string;
+
   constructor() {
+    assert(process.env.SENDGRID_API_KEY, "No api key configured");
+    assert(process.env.SENDGRID_SENDER, "No sender configured");
+
     sgMail.setApiKey(process.env.SENDGRID_API_KEY!);
+    this.sender = process.env.SENDGRID_SENDER;
   }
 
   async send(mail: Mail): Promise<void> {
-    const msg = {
-      to: "antoine.chalifour@gmail.com", // Change to your recipient
-      from: "antoine.chalifour@gmail.com", // Change to your verified sender
-      subject: mail.subject,
-      html: mail.content,
-    };
-
-    await sgMail
-      .send(msg)
-      .then((response) => {
-        console.log(response[0].statusCode);
-        console.log(response[0].headers);
-      })
-      .catch((error) => {
-        console.error(error);
+    try {
+      await sgMail.send({
+        to: mail.to, // Change to your recipient
+        from: this.sender, // Change to your verified sender
+        templateId: mail.templateId,
+        dynamicTemplateData: mail.data,
+        hideWarnings: true,
       });
+    } catch (error) {
+      console.error(error);
+    }
   }
 }
