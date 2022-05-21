@@ -39,7 +39,7 @@ export class AuthenticationApplicationService {
 
       session.set("userId", userId);
       session.set("sessionId", uuid());
-    } catch (err: any) {
+    } catch (err) {
       let message: string;
 
       if (AccountNotVerifiedError.is(err)) message = err.message;
