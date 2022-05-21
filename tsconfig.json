@@ -14,6 +14,7 @@
       "remix-nest-adapter": ["./src/remix-nest-adapter"],
       "web": ["./src/web"],
       "shared": ["./src/shared"],
+      "shared/database": ["./src/shared/database"],
       "infrastructure": ["./src/infrastructure"],
       "authentication": ["./src/authentication"],
       "todo-list-manager": ["./src/todo-list-manager"]

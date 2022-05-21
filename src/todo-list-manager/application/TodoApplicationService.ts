@@ -1,5 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { GenerateUUID, Prisma } from "shared";
+import { Prisma } from "shared/database";
+import { GenerateUUID } from "shared";
 import { AddTodo } from "../usecase/AddTodo";
 import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
 import { ArchiveTodo } from "../usecase/ArchiveTodo";
