@@ -64,7 +64,7 @@ export class AccountDatabaseRepository
             "verificationToken" in account ? account.verificationToken : null,
         },
         where: {
-          email: account.email,
+          id: account.id,
         },
       });
     } catch (e) {
