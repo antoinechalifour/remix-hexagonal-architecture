@@ -7,6 +7,7 @@ import {
 import { InvalidCredentialsError } from "../../../domain/InvalidCredentialsError";
 import { AccountAlreadyVerifiedError } from "../../../domain/AccountAlreadyVerifiedError";
 import { AccountNotVerifiedError } from "../../../domain/AccountNotVerifiedError";
+import { AccountNotFoundError } from "../../../domain/AccountNotFoundError";
 
 export class AccountsInMemory implements Accounts {
   private _database = new Map<
@@ -27,7 +28,7 @@ export class AccountsInMemory implements Accounts {
   async unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount> {
     const account = this._database.get(email);
 
-    if (account == null) throw new InvalidCredentialsError("Account not found");
+    if (account == null) throw new AccountNotFoundError(email);
     if (account.type !== "unverified")
       throw new AccountAlreadyVerifiedError(account.email);
 
@@ -39,8 +40,9 @@ export class AccountsInMemory implements Accounts {
   ): Promise<AccountForgotPassword> {
     const account = this._database.get(email);
 
-    if (account == null) throw new Error("Account not found");
-    if (account.type !== "forgot-password") throw new Error("TODO");
+    if (account == null) throw new AccountNotFoundError(email);
+    if (account.type !== "forgot-password")
+      throw new Error("Error in test setup");
 
     return account;
   }
