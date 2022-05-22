@@ -36,7 +36,7 @@ describe("Resetting a password", () => {
 
     // Assert
     await expect(result).rejects.toEqual(
-      new Error("Invalid token invalid-token")
+      new Error("Invalid password reset token invalid-token")
     );
   });
 
@@ -56,7 +56,9 @@ describe("Resetting a password", () => {
     const result = resetPassword.execute(theEmail, theToken, theNewPassword);
 
     // Assert
-    await expect(result).rejects.toEqual(new Error("Token expired"));
+    await expect(result).rejects.toEqual(
+      new Error("Password reset token the-token is expired")
+    );
   });
 
   it("resets the password when the token and expiration date are OK", async () => {

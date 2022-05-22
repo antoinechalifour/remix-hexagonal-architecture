@@ -13,12 +13,14 @@ export const ResetPasswordForm = () => {
   return (
     <div className="py-8">
       <PageTitle>Reset your password</PageTitle>
+
       <resetPassword.Form method="post" className="mt-8">
         <input
           type="hidden"
           name="email"
           value={searchParams.get("email") as string}
         />
+
         <input
           type="hidden"
           name="token"
