@@ -1,9 +1,13 @@
-import type { ActionFunction } from "remix";
+import type { ActionFunction, MetaFunction } from "remix";
 import type { RemixAppContext } from "web";
 
 import { useCatch } from "remix";
 import { ResetPasswordForm } from "front/authentication/ResetPasswordForm";
 import { PageTitle } from "front/ui/PageTitle";
+
+export const meta: MetaFunction = () => ({
+  title: "TLM | Reset your password",
+});
 
 export const action: ActionFunction = (args) =>
   (args.context as RemixAppContext).actions.resetPassword(args);
