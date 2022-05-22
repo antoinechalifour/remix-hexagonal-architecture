@@ -11,9 +11,7 @@ export class ResetPassword {
   ) {}
 
   async execute(email: string, token: string, newPassword: string) {
-    const account = await this.accounts.accountForPasswordResettingOfEmail(
-      email
-    );
+    const account = await this.accounts.accountForgotPasswordOfEmail(email);
 
     await this.accounts.save(
       await resetPassword(

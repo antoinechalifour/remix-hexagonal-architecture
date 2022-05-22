@@ -4,10 +4,7 @@ import { PasswordHasher } from "../../domain/PasswordHasher";
 import { ResetPassword } from "../../usecase/ResetPassword";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { FakePasswordHasher } from "./fakes/FakePasswordHasher";
-import {
-  anAccountForPasswordResetting,
-  aVerifiedAccount,
-} from "./builders/Account";
+import { anAccountForgotPassword, aVerifiedAccount } from "./builders/Account";
 
 describe("Resetting a password", () => {
   let resetPassword: ResetPassword;
@@ -27,7 +24,7 @@ describe("Resetting a password", () => {
     const theEmail = "jane.doe@example.com";
     const theToken = "invalid-token";
     const theNewPassword = "the-new-password";
-    const theAccount = anAccountForPasswordResetting()
+    const theAccount = anAccountForgotPassword()
       .forEmail(theEmail)
       .withPasswordResetToken("the-token")
       .withPasswordResetExpiration(new Date("2022-05-29T12:00:00.000Z"))
@@ -48,7 +45,7 @@ describe("Resetting a password", () => {
     const theEmail = "jane.doe@example.com";
     const theToken = "the-token";
     const theNewPassword = "the-new-password";
-    const theAccount = anAccountForPasswordResetting()
+    const theAccount = anAccountForgotPassword()
       .forEmail(theEmail)
       .withPasswordResetToken("the-token")
       .withPasswordResetExpiration(new Date("2022-05-22T11:59:00.000Z"))
@@ -67,7 +64,7 @@ describe("Resetting a password", () => {
     const theEmail = "jane.doe@example.com";
     const theToken = "some-valid-token";
     const theNewPassword = "the-new-password";
-    const theAccount = anAccountForPasswordResetting()
+    const theAccount = anAccountForgotPassword()
       .forEmail(theEmail)
       .withPasswordResetToken(theToken)
       .withPasswordResetExpiration(new Date("2022-05-29T12:00:00.000Z"))

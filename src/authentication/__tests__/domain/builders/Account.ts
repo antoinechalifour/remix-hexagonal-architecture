@@ -1,5 +1,5 @@
 import {
-  AccountForPasswordResetting,
+  AccountForgotPassword,
   UnverifiedAccount,
   VerifiedAccount,
 } from "../../../domain/Account";
@@ -59,38 +59,35 @@ export const aUnverifiedAccount = (): UnverifiedAccountBuilder => ({
   },
 });
 
-interface AccountForPasswordResettingBuilder {
-  account: AccountForPasswordResetting;
-  forEmail(email: string): AccountForPasswordResettingBuilder;
-  withPasswordResetToken(token: string): AccountForPasswordResettingBuilder;
-  withPasswordResetExpiration(date: Date): AccountForPasswordResettingBuilder;
-  build(): AccountForPasswordResetting;
+interface AccountForgotPasswordBuilder {
+  account: AccountForgotPassword;
+  forEmail(email: string): AccountForgotPasswordBuilder;
+  withPasswordResetToken(token: string): AccountForgotPasswordBuilder;
+  withPasswordResetExpiration(date: Date): AccountForgotPasswordBuilder;
+  build(): AccountForgotPassword;
 }
 
-export const anAccountForPasswordResetting =
-  (): AccountForPasswordResettingBuilder => ({
-    account: {
-      type: "password-reset",
-      id: "5719c982-060e-483d-9ade-bf4420b7273e",
-      email: "john.doe@example.com",
-      passwordResetToken: "password-reset-token",
-      passwordResetExpiration: new Date(),
-    },
-    forEmail(email: string): AccountForPasswordResettingBuilder {
-      this.account.email = email;
-      return this;
-    },
-    withPasswordResetToken(token: string): AccountForPasswordResettingBuilder {
-      this.account.passwordResetToken = token;
-      return this;
-    },
-    withPasswordResetExpiration(
-      date: Date
-    ): AccountForPasswordResettingBuilder {
-      this.account.passwordResetExpiration = date;
-      return this;
-    },
-    build(): AccountForPasswordResetting {
-      return this.account;
-    },
-  });
+export const anAccountForgotPassword = (): AccountForgotPasswordBuilder => ({
+  account: {
+    type: "forgot-password",
+    id: "5719c982-060e-483d-9ade-bf4420b7273e",
+    email: "john.doe@example.com",
+    passwordResetToken: "password-reset-token",
+    passwordResetExpiration: new Date(),
+  },
+  forEmail(email: string): AccountForgotPasswordBuilder {
+    this.account.email = email;
+    return this;
+  },
+  withPasswordResetToken(token: string): AccountForgotPasswordBuilder {
+    this.account.passwordResetToken = token;
+    return this;
+  },
+  withPasswordResetExpiration(date: Date): AccountForgotPasswordBuilder {
+    this.account.passwordResetExpiration = date;
+    return this;
+  },
+  build(): AccountForgotPassword {
+    return this.account;
+  },
+});
