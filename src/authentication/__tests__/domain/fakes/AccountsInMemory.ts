@@ -45,7 +45,9 @@ export class AccountsInMemory implements Accounts {
     return account;
   }
 
-  async save(account: VerifiedAccount | UnverifiedAccount): Promise<void> {
+  async save(
+    account: VerifiedAccount | UnverifiedAccount | AccountForPasswordResetting
+  ): Promise<void> {
     this._database.set(account.email, account);
   }
 }

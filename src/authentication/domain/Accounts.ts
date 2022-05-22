@@ -8,7 +8,7 @@ export interface Accounts {
   verifiedAccountOfEmail(email: string): Promise<VerifiedAccount>;
   unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount>;
   accountForPasswordResettingOfEmail(
-    theEmail: string
+    email: string
   ): Promise<AccountForPasswordResetting>;
   save(
     account: UnverifiedAccount | VerifiedAccount | AccountForPasswordResetting

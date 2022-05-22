@@ -17,7 +17,6 @@ export const aVerifiedAccount = (): VerifiedAccountBuilder => ({
     id: "5719c982-060e-483d-9ade-bf4420b7273e",
     email: "john.doe@example.com",
     hash: "$2b$10$kcHThCk3LngaUT4JxSGlc.b4rkXZvoKAaYQsyBW6empf5bYwmHXgy", // Password is azerty :)
-    verified: true,
   },
   forEmail(email: string): VerifiedAccountBuilder {
     this.account.email = email;
@@ -45,7 +44,6 @@ export const aUnverifiedAccount = (): UnverifiedAccountBuilder => ({
     id: "5719c982-060e-483d-9ade-bf4420b7273e",
     email: "john.doe@example.com",
     hash: "$2b$10$kcHThCk3LngaUT4JxSGlc.b4rkXZvoKAaYQsyBW6empf5bYwmHXgy", // Password is azerty :)
-    verified: false,
     verificationToken: "veirifcation-token",
   },
   forEmail(email: string): UnverifiedAccountBuilder {
