@@ -19,7 +19,7 @@ describe("The user can manage a todo list", () => {
 
 function givenALoggedInUser() {
   cy.findByLabelText("Email address").click().type("john.doe@example.com");
-  cy.findByLabelText("Password").click().type("azerty");
+  cy.findByLabelText("Password").click().type("azertyuiop");
   cy.findByRole("button", { name: "Login" }).click();
 }
 
