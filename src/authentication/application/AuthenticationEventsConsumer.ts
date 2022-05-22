@@ -32,7 +32,7 @@ export class AuthenticationEventsConsumer {
   async onPasswordForgotten(event: PasswordForgotten) {
     await this.mailer.send({
       to: event.email,
-      templateId: "",
+      templateId: "d-3ded8d05f2bf47c0a74e7246dd997242",
       data: {
         reset_password_url: `${this.baseUrl}/reset-password?email=${event.email}&token=${event.passwordResetToken}`,
       },
