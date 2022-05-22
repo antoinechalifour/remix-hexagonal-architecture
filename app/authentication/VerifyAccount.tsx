@@ -9,8 +9,8 @@ export const VerifyAccount = () => {
       <PageTitle>You're all set !</PageTitle>
 
       <p>
-        Your account has been verified. You'll be redirected to the app in a
-        fews seconds.
+        Your account has been verified. You'll be redirected to the app in a few
+        seconds.
       </p>
     </div>
   );
