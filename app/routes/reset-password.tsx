@@ -34,6 +34,8 @@ export default function ResetPassword() {
           label="Your new password"
           type="password"
           required
+          minLength={8}
+          maxLength={64}
         />
 
         <ButtonPrimary className="mt-4" type="submit">

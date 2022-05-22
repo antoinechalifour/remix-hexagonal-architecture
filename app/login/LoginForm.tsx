@@ -47,6 +47,8 @@ export const LoginForm = () => {
         label="Password"
         type="password"
         required
+        minLength={8}
+        maxLength={64}
         errorMessage={actionData?.errors.password}
       />
 
