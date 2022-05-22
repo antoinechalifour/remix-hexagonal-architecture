@@ -1,8 +1,8 @@
 import type { LoaderFunction, MetaFunction } from "remix";
 import type { RemixAppContext } from "web";
 
-import { VerifyAccount } from "front/verify-account/VerifyAccount";
-import { VerifyAccountError } from "front/verify-account/VerifyAccountError";
+import { VerifyAccount } from "front/authentication/VerifyAccount";
+import { VerifyAccountError } from "front/authentication/VerifyAccountError";
 
 export const meta: MetaFunction = () => ({
   title: "TLM | Verifying your account...",

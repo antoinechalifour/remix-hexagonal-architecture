@@ -1,5 +1,5 @@
 import { PageTitle } from "front/ui/PageTitle";
-import { useVerifyAccount } from "front/verify-account/useVerifyAccount";
+import { useVerifyAccount } from "front/authentication/useVerifyAccount";
 
 export const VerifyAccount = () => {
   useVerifyAccount();
