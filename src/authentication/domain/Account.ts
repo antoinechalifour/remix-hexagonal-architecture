@@ -1,9 +1,9 @@
 import type { GenerateId } from "shared/id";
 import type { PasswordHasher } from "./PasswordHasher";
 
-import { InvalidVerificationTokenError } from "./InvalidVerificationTokenError";
-import { Clock } from "shared/time";
 import { add, isAfter } from "date-fns";
+import { Clock } from "shared/time";
+import { InvalidVerificationTokenError } from "./InvalidVerificationTokenError";
 
 export type UnverifiedAccount = {
   type: "unverified";
@@ -20,8 +20,8 @@ export type VerifiedAccount = {
   hash: string;
 };
 
-export type AccountForPasswordResetting = {
-  type: "password-reset";
+export type AccountForgotPassword = {
+  type: "forgot-password";
   id: string;
   email: string;
   passwordResetToken: string;
@@ -62,9 +62,9 @@ export function generateResetPasswordToken(
   account: VerifiedAccount,
   generateId: GenerateId,
   clock: Clock
-): AccountForPasswordResetting {
+): AccountForgotPassword {
   return {
-    type: "password-reset",
+    type: "forgot-password",
     id: account.id,
     email: account.email,
     passwordResetToken: generateId.generate(),
@@ -73,7 +73,7 @@ export function generateResetPasswordToken(
 }
 
 export async function resetPassword(
-  account: AccountForPasswordResetting,
+  account: AccountForgotPassword,
   token: string,
   newPassword: string,
   passwordHasher: PasswordHasher,

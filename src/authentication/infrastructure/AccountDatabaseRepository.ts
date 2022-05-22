@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
 import { Accounts } from "../domain/Accounts";
 import {
-  AccountForPasswordResetting,
+  AccountForgotPassword,
   UnverifiedAccount,
   VerifiedAccount,
 } from "../domain/Account";
@@ -55,9 +55,9 @@ export class AccountDatabaseRepository
     };
   }
 
-  async accountForPasswordResettingOfEmail(
+  async accountForgotPasswordOfEmail(
     email: string
-  ): Promise<AccountForPasswordResetting> {
+  ): Promise<AccountForgotPassword> {
     const account = await this.prisma.account.findFirst({
       where: { email },
     });
@@ -74,7 +74,7 @@ export class AccountDatabaseRepository
     );
 
     return {
-      type: "password-reset",
+      type: "forgot-password",
       id: account.id,
       email: account.email,
       passwordResetToken: account.passwordResetToken,
@@ -83,7 +83,7 @@ export class AccountDatabaseRepository
   }
 
   async save(
-    account: VerifiedAccount | UnverifiedAccount | AccountForPasswordResetting
+    account: VerifiedAccount | UnverifiedAccount | AccountForgotPassword
   ): Promise<void> {
     try {
       switch (account.type) {
@@ -93,8 +93,8 @@ export class AccountDatabaseRepository
         case "unverified":
           await this.saveUnverifiedAccount(account);
           break;
-        case "password-reset":
-          await this.saveAccountForPasswordResetting(account);
+        case "forgot-password":
+          await this.saveAccountForgotPassword(account);
           break;
       }
     } catch (e) {
@@ -129,9 +129,7 @@ export class AccountDatabaseRepository
     });
   }
 
-  private saveAccountForPasswordResetting(
-    account: AccountForPasswordResetting
-  ) {
+  private saveAccountForgotPassword(account: AccountForgotPassword) {
     return this.prisma.account.update({
       where: { id: account.id },
       data: {

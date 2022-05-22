@@ -1,6 +1,6 @@
 import { Accounts } from "../../../domain/Accounts";
 import {
-  AccountForPasswordResetting,
+  AccountForgotPassword,
   UnverifiedAccount,
   VerifiedAccount,
 } from "../../../domain/Account";
@@ -11,7 +11,7 @@ import { AccountNotVerifiedError } from "../../../domain/AccountNotVerifiedError
 export class AccountsInMemory implements Accounts {
   private _database = new Map<
     string,
-    VerifiedAccount | UnverifiedAccount | AccountForPasswordResetting
+    VerifiedAccount | UnverifiedAccount | AccountForgotPassword
   >();
 
   async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
@@ -34,19 +34,19 @@ export class AccountsInMemory implements Accounts {
     return account;
   }
 
-  async accountForPasswordResettingOfEmail(
+  async accountForgotPasswordOfEmail(
     email: string
-  ): Promise<AccountForPasswordResetting> {
+  ): Promise<AccountForgotPassword> {
     const account = this._database.get(email);
 
     if (account == null) throw new Error("Account not found");
-    if (account.type !== "password-reset") throw new Error("TODO");
+    if (account.type !== "forgot-password") throw new Error("TODO");
 
     return account;
   }
 
   async save(
-    account: VerifiedAccount | UnverifiedAccount | AccountForPasswordResetting
+    account: VerifiedAccount | UnverifiedAccount | AccountForgotPassword
   ): Promise<void> {
     this._database.set(account.email, account);
   }

@@ -3,7 +3,7 @@ import { Accounts } from "../domain/Accounts";
 import { generateResetPasswordToken } from "../domain/Account";
 import { Clock } from "shared/time";
 
-export class GenerateResetPasswordToken {
+export class ForgotPassword {
   constructor(
     private readonly accounts: Accounts,
     private readonly generateId: GenerateId,

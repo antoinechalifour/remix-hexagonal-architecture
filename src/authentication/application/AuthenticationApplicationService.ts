@@ -18,7 +18,7 @@ import { UserRegistered } from "../domain/UserRegistered";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 import { PasswordForgotten } from "../domain/PasswordForgotten";
-import { GenerateResetPasswordToken } from "../usecase/GenerateResetPasswordToken";
+import { ForgotPassword } from "../usecase/ForgotPassword";
 import { ResetPassword } from "../usecase/ResetPassword";
 
 @Injectable()
@@ -105,8 +105,8 @@ export class AuthenticationApplicationService {
       return { cookie: await this.sessionManager.commit(session) };
     } catch (err) {
       let message: string;
-      if (InvalidVerificationTokenError.is(err)) message = "token is not valid";
-      else if (AccountNotFoundError.is(err)) message = "account was not found";
+      if (InvalidVerificationTokenError.is(err) || AccountNotFoundError.is(err))
+        message = "the verification token is invalid";
       else if (AccountAlreadyVerifiedError.is(err))
         message = "account is already verified";
       else throw err;
@@ -117,7 +117,7 @@ export class AuthenticationApplicationService {
 
   async forgotPassword(email: string) {
     try {
-      const account = await new GenerateResetPasswordToken(
+      const account = await new ForgotPassword(
         this.accounts,
         this.generateId,
         this.clock
