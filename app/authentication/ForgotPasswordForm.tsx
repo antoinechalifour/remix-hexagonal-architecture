@@ -13,7 +13,8 @@ export const ForgotPasswordForm = () => {
 
       {resetPassword.type === "done" && (
         <p className="my-8 rounded-2xl border-2 border-primary bg-primary-lighter p-4 text-inverse">
-          An email containing the instructions has been sent.
+          If an account is link to this email address, an email will be sent
+          shortly.
         </p>
       )}
 
