@@ -74,7 +74,11 @@ describe("Resetting a password", () => {
     await accounts.save(theAccount);
 
     // Act
-    await resetPassword.execute(theEmail, theToken, theNewPassword);
+    await resetPassword.execute(
+      "JANE.DOE@EXAMPLE.COM",
+      theToken,
+      theNewPassword
+    );
 
     // Assert
     expect(await accounts.verifiedAccountOfEmail(theEmail)).toEqual(

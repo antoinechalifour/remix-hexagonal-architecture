@@ -49,7 +49,7 @@ describe("LoginFlow", () => {
 
     // Act
     const result = await loginFlow.execute(
-      "jane.doe@example.com",
+      "Jane.Doe@example.COM",
       "jane_password"
     );
 

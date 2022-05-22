@@ -16,7 +16,7 @@ describe("Verifying an account", () => {
 
     // Act
     const accountId = await verifyAccount.execute(
-      theAccount.email,
+      "JOHN.DOE@EXAMPLE.COM",
       theAccount.verificationToken
     );
 

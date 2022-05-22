@@ -19,9 +19,7 @@ export class AccountDatabaseRepository
   implements Accounts
 {
   async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
-    const account = await this.prisma.account.findFirst({
-      where: { email },
-    });
+    const account = await this.findAccount(email);
 
     if (account == null) throw new InvalidCredentialsError();
     if (!account.verified) throw new AccountNotVerifiedError(account.email);
@@ -35,9 +33,7 @@ export class AccountDatabaseRepository
   }
 
   async unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount> {
-    const account = await this.prisma.account.findFirst({
-      where: { email },
-    });
+    const account = await this.findAccount(email);
 
     if (account == null) throw new AccountNotFoundError(email);
     if (account.verified) throw new AccountAlreadyVerifiedError(account.email);
@@ -58,9 +54,7 @@ export class AccountDatabaseRepository
   async accountForgotPasswordOfEmail(
     email: string
   ): Promise<AccountForgotPassword> {
-    const account = await this.prisma.account.findFirst({
-      where: { email },
-    });
+    const account = await this.findAccount(email);
 
     if (account == null) throw new AccountNotFoundError(email);
 
@@ -102,6 +96,12 @@ export class AccountDatabaseRepository
         throw new EmailAlreadyInUseError(account.email);
       throw e;
     }
+  }
+
+  private findAccount(email: string) {
+    return this.prisma.account.findFirst({
+      where: { email: email.toLowerCase() },
+    });
   }
 
   private saveVerifiedAccount(account: VerifiedAccount) {

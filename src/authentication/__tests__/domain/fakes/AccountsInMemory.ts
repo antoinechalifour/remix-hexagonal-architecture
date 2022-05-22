@@ -16,7 +16,7 @@ export class AccountsInMemory implements Accounts {
   >();
 
   async verifiedAccountOfEmail(email: string): Promise<VerifiedAccount> {
-    const account = this._database.get(email);
+    const account = this.getAccount(email);
 
     if (account == null) throw new InvalidCredentialsError("Account not found");
     if (account.type !== "verified")
@@ -26,7 +26,7 @@ export class AccountsInMemory implements Accounts {
   }
 
   async unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount> {
-    const account = this._database.get(email);
+    const account = this.getAccount(email);
 
     if (account == null) throw new AccountNotFoundError(email);
     if (account.type !== "unverified")
@@ -38,7 +38,7 @@ export class AccountsInMemory implements Accounts {
   async accountForgotPasswordOfEmail(
     email: string
   ): Promise<AccountForgotPassword> {
-    const account = this._database.get(email);
+    const account = this.getAccount(email);
 
     if (account == null) throw new AccountNotFoundError(email);
     if (account.type !== "forgot-password")
@@ -47,9 +47,13 @@ export class AccountsInMemory implements Accounts {
     return account;
   }
 
+  private getAccount(email: string) {
+    return this._database.get(email.toLowerCase());
+  }
+
   async save(
     account: VerifiedAccount | UnverifiedAccount | AccountForgotPassword
   ): Promise<void> {
-    this._database.set(account.email, account);
+    this._database.set(account.email.toLowerCase(), account);
   }
 }

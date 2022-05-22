@@ -39,7 +39,7 @@ export async function register(
   return {
     type: "unverified",
     id: generateId.generate(),
-    email,
+    email: email.toLowerCase(),
     hash: await passwordHasher.hash(password),
     verificationToken: generateId.generate(),
   };

@@ -23,7 +23,7 @@ describe("Forgot password", () => {
     await accounts.save(theAccount);
 
     // Act
-    await forgotPassword.execute(theEmail);
+    await forgotPassword.execute("John.Doe@example.COM");
 
     // Arrange
     expect(await accounts.accountForgotPasswordOfEmail(theEmail)).toEqual(
