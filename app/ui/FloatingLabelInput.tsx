@@ -7,6 +7,7 @@ interface FloatingLabelInputOptions {
   errorMessage?: string;
   type?: string;
   required?: boolean;
+  minLength?: number;
   maxLength?: number;
 }
 
@@ -25,6 +26,7 @@ export const FloatingLabelInput = forwardRef<
     errorMessage,
     type = "text",
     required,
+    minLength,
     maxLength,
   } = props;
 
@@ -46,6 +48,7 @@ export const FloatingLabelInput = forwardRef<
           name={name}
           value={value}
           required={required}
+          minLength={minLength}
           maxLength={maxLength}
           onChange={(e) => setValue(e.target.value)}
           className={classNames(
