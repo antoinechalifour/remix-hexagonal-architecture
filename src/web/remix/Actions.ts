@@ -29,6 +29,7 @@ import { RenameTodoBody, RenameTodoParams } from "./dtos/RenameTodo";
 import { TagTodoBody, TagTodoParams } from "./dtos/TagTodo";
 import { UntagTodoBody, UntagTodoParams } from "./dtos/UntagTodo";
 import { ForgotPasswordBody } from "./dtos/ForgotPassword";
+import { ResetPasswordBody } from "./dtos/ResetPassword";
 
 @Injectable()
 export class Actions {
@@ -52,6 +53,17 @@ export class Actions {
   async forgotPassword(@Body() body: ForgotPasswordBody) {
     this.authenticationApplicationService.forgotPassword(body.email);
     return null;
+  }
+
+  @DataFunction()
+  async resetPassword(@Body() body: ResetPasswordBody) {
+    await this.authenticationApplicationService.resetPassword(
+      body.email,
+      body.token,
+      body.password
+    );
+
+    return redirect("/login");
   }
 
   @Authenticated()
