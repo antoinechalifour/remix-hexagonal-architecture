@@ -3,7 +3,7 @@ import { Inject, Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { MAILER, Mailer } from "shared/mail";
 import { UserRegistered } from "../domain/UserRegistered";
-import { PasswordForgotten } from "authentication";
+import { PasswordChanged, PasswordForgotten } from "authentication";
 
 @Injectable()
 export class AuthenticationEventsConsumer {
@@ -36,6 +36,14 @@ export class AuthenticationEventsConsumer {
       data: {
         reset_password_url: `${this.baseUrl}/reset-password?email=${event.email}&token=${event.passwordResetToken}`,
       },
+    });
+  }
+
+  @OnEvent(PasswordChanged.TYPE)
+  async onPasswordChanged(event: PasswordChanged) {
+    await this.mailer.send({
+      to: event.email,
+      templateId: "d-6a6964c87a234750a1aec4cc4c342f46",
     });
   }
 }
