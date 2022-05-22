@@ -5,3 +5,4 @@ export * from "./infrastructure/AccountDatabaseRepository";
 export * from "./infrastructure/FetchAuthenticationStatusDatabaseQuery";
 export * from "./infrastructure/BCryptPasswordHasher";
 export { PasswordForgotten } from "./domain/PasswordForgotten";
+export { PasswordChanged } from "./domain/PasswordChanged";

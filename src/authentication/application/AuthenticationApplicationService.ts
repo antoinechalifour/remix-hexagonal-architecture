@@ -22,6 +22,7 @@ import { ForgotPassword } from "../usecase/ForgotPassword";
 import { ResetPassword } from "../usecase/ResetPassword";
 import { InvalidPasswordResetTokenError } from "../domain/InvalidPasswordResetTokenError";
 import { PasswordResetTokenExpiredError } from "../domain/PasswordResetTokenExpiredError";
+import { PasswordChanged } from "../domain/PasswordChanged";
 
 @Injectable()
 export class AuthenticationApplicationService {
@@ -143,6 +144,8 @@ export class AuthenticationApplicationService {
         this.passwordHasher,
         this.clock
       ).execute(email, token, newPassword);
+
+      this.events.publish(new PasswordChanged(email));
     } catch (err) {
       if (InvalidPasswordResetTokenError.is(err))
         throw json(
