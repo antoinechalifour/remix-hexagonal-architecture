@@ -2,8 +2,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import { redirect } from "@remix-run/node";
 import { Body, DataFunction, Params, SessionManager } from "remix-nest-adapter";
 import {
-  Authenticator,
   AuthenticationApplicationService,
+  Authenticator,
 } from "authentication";
 import {
   TodoApplicationService,
@@ -28,6 +28,7 @@ import {
 import { RenameTodoBody, RenameTodoParams } from "./dtos/RenameTodo";
 import { TagTodoBody, TagTodoParams } from "./dtos/TagTodo";
 import { UntagTodoBody, UntagTodoParams } from "./dtos/UntagTodo";
+import { ForgotPasswordBody } from "./dtos/ForgotPassword";
 
 @Injectable()
 export class Actions {
@@ -45,6 +46,12 @@ export class Actions {
     if (body.register != null) return this.register(body);
 
     return this.login(body);
+  }
+
+  @DataFunction()
+  async forgotPassword(@Body() body: ForgotPasswordBody) {
+    this.authenticationApplicationService.forgotPassword(body.email);
+    return null;
   }
 
   @Authenticated()

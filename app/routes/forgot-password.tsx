@@ -1,24 +1,17 @@
 import type { ActionFunction, MetaFunction } from "remix";
+import type { RemixAppContext } from "web";
 
 import { PageTitle } from "front/ui/PageTitle";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { useFetcher } from "@remix-run/react";
-import { json } from "remix";
 
 export const meta: MetaFunction = () => ({
   title: "TLM | Forgot your password?",
 });
 
-export const action: ActionFunction = async (args) => {
-  const message = await args.request.formData();
-  console.log(message);
-
-  if (message.get("email") == "antoine.chalifour@gmail.com")
-    throw json({ hello: "world" }, 400);
-
-  return null;
-};
+export const action: ActionFunction = (args) =>
+  (args.context as RemixAppContext).actions.forgotPassword(args);
 
 export default function ForgotPassword() {
   const resetPassword = useFetcher();

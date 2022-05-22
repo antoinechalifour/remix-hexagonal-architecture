@@ -3,10 +3,10 @@ import type { TodoLists } from "../../domain/TodoLists";
 import type { GenerateId } from "shared/id";
 
 import { Clock, FixedClock } from "shared/time";
+import { GenerateTestId } from "shared/id";
 import { AddTodo } from "../../usecase/AddTodo";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";
-import { GenerateTestId } from "./fakes/GenerateTestId";
 import { aTodoList } from "./builders/TodoList";
 
 describe("Adding a todo", () => {

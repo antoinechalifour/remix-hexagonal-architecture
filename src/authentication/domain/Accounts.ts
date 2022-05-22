@@ -1,7 +1,16 @@
-import { UnverifiedAccount, VerifiedAccount } from "./Account";
+import {
+  AccountForPasswordResetting,
+  UnverifiedAccount,
+  VerifiedAccount,
+} from "./Account";
 
 export interface Accounts {
   verifiedAccountOfEmail(email: string): Promise<VerifiedAccount>;
   unverifiedAccountOfEmail(email: string): Promise<UnverifiedAccount>;
-  save(account: UnverifiedAccount | VerifiedAccount): Promise<void>;
+  accountForPasswordResettingOfEmail(
+    theEmail: string
+  ): Promise<AccountForPasswordResetting>;
+  save(
+    account: UnverifiedAccount | VerifiedAccount | AccountForPasswordResetting
+  ): Promise<void>;
 }

@@ -4,6 +4,7 @@ import { v4 as uuid } from "uuid";
 import { SessionManager } from "remix-nest-adapter";
 import { GenerateUUID } from "shared/id";
 import { NestEvents } from "shared/events";
+import { RealClock } from "shared/time";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { VerifyAccount } from "../usecase/VerifyAccount";
@@ -16,6 +17,8 @@ import { AccountNotFoundError } from "../domain/AccountNotFoundError";
 import { UserRegistered } from "../domain/UserRegistered";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
+import { PasswordForgotten } from "../domain/PasswordForgotten";
+import { GenerateResetPasswordToken } from "../usecase/GenerateResetPasswordToken";
 
 @Injectable()
 export class AuthenticationApplicationService {
@@ -23,6 +26,7 @@ export class AuthenticationApplicationService {
     private readonly sessionManager: SessionManager,
     private readonly accounts: AccountDatabaseRepository,
     private readonly generateId: GenerateUUID,
+    private readonly clock: RealClock,
     private readonly passwordHasher: BCryptPasswordHasher,
     private readonly events: NestEvents
   ) {}
@@ -107,6 +111,25 @@ export class AuthenticationApplicationService {
       else throw err;
 
       throw json({ message }, { status: 400 });
+    }
+  }
+
+  async forgotPassword(email: string) {
+    try {
+      const account = await new GenerateResetPasswordToken(
+        this.accounts,
+        this.generateId,
+        this.clock
+      ).execute(email);
+
+      this.events.publish(
+        new PasswordForgotten(account.email, account.passwordResetToken)
+      );
+    } catch (err) {
+      if (AccountNotFoundError.is(err)) return;
+      if (AccountNotVerifiedError.is(err)) return;
+
+      throw err;
     }
   }
 }
