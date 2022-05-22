@@ -31,7 +31,6 @@ export class AccountDatabaseRepository
       id: account.id,
       email: account.email,
       hash: account.hash,
-      verified: true,
     };
   }
 
@@ -51,7 +50,6 @@ export class AccountDatabaseRepository
       type: "unverified",
       id: account.id,
       email: account.email,
-      verified: false,
       verificationToken: account.verificationToken,
       hash: account.hash,
     };
@@ -113,6 +111,8 @@ export class AccountDatabaseRepository
         verified: true,
         hash: account.hash,
         verificationToken: null,
+        passwordResetExpiration: null,
+        passwordResetToken: null,
       },
     });
   }

@@ -19,6 +19,7 @@ import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 import { PasswordForgotten } from "../domain/PasswordForgotten";
 import { GenerateResetPasswordToken } from "../usecase/GenerateResetPasswordToken";
+import { ResetPassword } from "../usecase/ResetPassword";
 
 @Injectable()
 export class AuthenticationApplicationService {
@@ -131,5 +132,13 @@ export class AuthenticationApplicationService {
 
       throw err;
     }
+  }
+
+  async resetPassword(email: string, token: string, newPassword: string) {
+    await new ResetPassword(
+      this.accounts,
+      this.passwordHasher,
+      this.clock
+    ).execute(email, token, newPassword);
   }
 }

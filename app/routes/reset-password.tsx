@@ -4,12 +4,10 @@ import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import type { ActionFunction } from "remix";
 import { useLocation } from "remix";
+import type { RemixAppContext } from "web";
 
-export const action: ActionFunction = async (args) => {
-  console.log(await args.request.formData());
-
-  return null;
-};
+export const action: ActionFunction = (args) =>
+  (args.context as RemixAppContext).actions.resetPassword(args);
 
 export default function ResetPassword() {
   const resetPassword = useFetcher();
