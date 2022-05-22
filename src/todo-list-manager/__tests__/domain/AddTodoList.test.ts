@@ -2,9 +2,9 @@ import type { GenerateId } from "shared/id";
 import type { TodoLists } from "../../domain/TodoLists";
 
 import { Clock, FixedClock } from "shared/time";
+import { GenerateTestId } from "shared/id";
 import { AddTodoList } from "../../usecase/AddTodoList";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
-import { GenerateTestId } from "./fakes/GenerateTestId";
 
 describe("Adding a todo list", () => {
   let addTodoList: AddTodoList;

@@ -30,7 +30,7 @@ import { MAILER, FakeMailer, SendGridMailer } from "shared/mail";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
 import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
-import { RegistrationEventsConsumer } from "../authentication/application/RegistrationEventsConsumer";
+import { AuthenticationEventsConsumer } from "../authentication/application/AuthenticationEventsConsumer";
 
 const RemixSessionConfig = {
   name: "__session",
@@ -86,14 +86,14 @@ const RemixSessionConfig = {
     },
 
     TodoListEventsConsumer,
-    RegistrationEventsConsumer,
+    AuthenticationEventsConsumer,
   ],
   exports: [
     ACTIONS_CLASS,
     LOADERS_CLASS,
     AUTHENTICATOR,
     TodoListEventsConsumer,
-    RegistrationEventsConsumer,
+    AuthenticationEventsConsumer,
   ],
 })
 export class CoreModule {
