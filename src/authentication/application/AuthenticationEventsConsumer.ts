@@ -34,7 +34,7 @@ export class AuthenticationEventsConsumer {
       to: event.email,
       templateId: "",
       data: {
-        reset_password_url: `/${this.baseUrl}/reset-password?email=${event.email}&code=${event.passwordResetToken}`,
+        reset_password_url: `${this.baseUrl}/reset-password?email=${event.email}&token=${event.passwordResetToken}`,
       },
     });
   }
