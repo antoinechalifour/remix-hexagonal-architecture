@@ -3,14 +3,13 @@ import type { PasswordHasher } from "./PasswordHasher";
 
 import { InvalidVerificationTokenError } from "./InvalidVerificationTokenError";
 import { Clock } from "shared/time";
-import { add } from "date-fns";
+import { add, isAfter } from "date-fns";
 
 export type UnverifiedAccount = {
   type: "unverified";
   id: string;
   email: string;
   hash: string;
-  verified: false;
   verificationToken: string;
 };
 
@@ -19,7 +18,6 @@ export type VerifiedAccount = {
   id: string;
   email: string;
   hash: string;
-  verified: true;
 };
 
 export type AccountForPasswordResetting = {
@@ -41,7 +39,6 @@ export async function register(
     id: generateId.generate(),
     email,
     hash: await passwordHasher.hash(password),
-    verified: false,
     verificationToken: generateId.generate(),
   };
 }
@@ -58,7 +55,6 @@ export function verify(
     id: account.id,
     email: account.email,
     hash: account.hash,
-    verified: true,
   };
 }
 
@@ -73,5 +69,25 @@ export function generateResetPasswordToken(
     email: account.email,
     passwordResetToken: generateId.generate(),
     passwordResetExpiration: add(clock.now(), { days: 7 }),
+  };
+}
+
+export async function resetPassword(
+  account: AccountForPasswordResetting,
+  token: string,
+  newPassword: string,
+  passwordHasher: PasswordHasher,
+  clock: Clock
+): Promise<VerifiedAccount> {
+  if (token !== account.passwordResetToken)
+    throw new Error(`Invalid token ${token}`);
+  if (isAfter(clock.now(), account.passwordResetExpiration))
+    throw new Error("Token expired");
+
+  return {
+    type: "verified",
+    id: account.id,
+    email: account.email,
+    hash: await passwordHasher.hash(newPassword),
   };
 }
