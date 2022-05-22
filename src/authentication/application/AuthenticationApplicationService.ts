@@ -20,6 +20,8 @@ import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepo
 import { PasswordForgotten } from "../domain/PasswordForgotten";
 import { ForgotPassword } from "../usecase/ForgotPassword";
 import { ResetPassword } from "../usecase/ResetPassword";
+import { InvalidPasswordResetTokenError } from "../domain/InvalidPasswordResetTokenError";
+import { PasswordResetTokenExpiredError } from "../domain/PasswordResetTokenExpiredError";
 
 @Injectable()
 export class AuthenticationApplicationService {
@@ -135,10 +137,34 @@ export class AuthenticationApplicationService {
   }
 
   async resetPassword(email: string, token: string, newPassword: string) {
-    await new ResetPassword(
-      this.accounts,
-      this.passwordHasher,
-      this.clock
-    ).execute(email, token, newPassword);
+    try {
+      await new ResetPassword(
+        this.accounts,
+        this.passwordHasher,
+        this.clock
+      ).execute(email, token, newPassword);
+    } catch (err) {
+      if (InvalidPasswordResetTokenError.is(err))
+        throw json(
+          {
+            message:
+              "Invalid password reset code. Have you copied the link correctly?",
+          },
+          { status: 400 }
+        );
+
+      if (PasswordResetTokenExpiredError.is(err))
+        throw json(
+          {
+            message:
+              'The reset code has expired. Please ask a new one by using the "Forgot your password" page.',
+          },
+          {
+            status: 400,
+          }
+        );
+
+      throw err;
+    }
   }
 }

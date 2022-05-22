@@ -4,6 +4,8 @@ import type { PasswordHasher } from "./PasswordHasher";
 import { add, isAfter } from "date-fns";
 import { Clock } from "shared/time";
 import { InvalidVerificationTokenError } from "./InvalidVerificationTokenError";
+import { PasswordResetTokenExpiredError } from "./PasswordResetTokenExpiredError";
+import { InvalidPasswordResetTokenError } from "./InvalidPasswordResetTokenError";
 
 export type UnverifiedAccount = {
   type: "unverified";
@@ -80,9 +82,9 @@ export async function resetPassword(
   clock: Clock
 ): Promise<VerifiedAccount> {
   if (token !== account.passwordResetToken)
-    throw new Error(`Invalid token ${token}`);
+    throw new InvalidPasswordResetTokenError(token);
   if (isAfter(clock.now(), account.passwordResetExpiration))
-    throw new Error("Token expired");
+    throw new PasswordResetTokenExpiredError(token);
 
   return {
     type: "verified",
