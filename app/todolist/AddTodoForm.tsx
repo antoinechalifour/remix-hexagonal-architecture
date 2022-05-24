@@ -24,7 +24,7 @@ export const AddTodoForm = () => {
         name="todoTitle"
         errorMessage={addTodo.data?.errors?.todoTitle}
         ref={ref}
-        maxLength={50}
+        inputProps={{ maxLength: 50 }}
       />
 
       <ButtonPrimary type="submit" disabled={addTodo.state === "submitting"}>
