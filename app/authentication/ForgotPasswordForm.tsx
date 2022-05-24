@@ -20,8 +20,11 @@ export const ForgotPasswordForm = () => {
         <FloatingLabelInput
           name="email"
           label="Email address"
-          type="email"
-          required
+          inputProps={{
+            type: "email",
+            required: true,
+            autoComplete: "username",
+          }}
         />
 
         <ButtonPrimary type="submit">Reset my password</ButtonPrimary>

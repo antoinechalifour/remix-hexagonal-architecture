@@ -28,19 +28,25 @@ export const LoginForm = () => {
         <FloatingLabelInput
           name="email"
           label="Email address"
-          type="email"
-          required
           errorMessage={actionData?.errors.email}
+          inputProps={{
+            type: "email",
+            required: true,
+            autoComplete: "username",
+          }}
         />
 
         <FloatingLabelInput
           name="password"
           label="Password"
-          type="password"
-          required
-          minLength={8}
-          maxLength={64}
           errorMessage={actionData?.errors.password}
+          inputProps={{
+            type: "password",
+            required: true,
+            minLength: 8,
+            maxLength: 64,
+            autoComplete: "current-password",
+          }}
         />
 
         <ButtonPrimary

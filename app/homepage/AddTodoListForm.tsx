@@ -20,7 +20,9 @@ export const AddTodoListForm = () => {
         name="title"
         label="Add a new todo list"
         errorMessage={addTodoList.data?.errors?.title}
-        maxLength={50}
+        inputProps={{
+          maxLength: 50,
+        }}
       />
 
       <ButtonPrimary
