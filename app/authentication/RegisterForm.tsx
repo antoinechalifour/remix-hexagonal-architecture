@@ -5,6 +5,7 @@ import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { FormCard } from "front/authentication/FormCard";
 import { Notification } from "front/authentication/Notification";
+import { usePasswordConfirmation } from "front/authentication/usePasswordConfirmation";
 
 type RegistrationFormErrors = {
   errors: {
@@ -17,6 +18,7 @@ export const RegisterForm = () => {
   const loaderData = useLoaderData<AuthenticationErrorDto>();
   const actionData = useActionData<RegistrationFormErrors>();
   const transition = useTransition();
+  const { password, confirmation, matches } = usePasswordConfirmation();
 
   return (
     <FormCard title="Register">
@@ -46,12 +48,13 @@ export const RegisterForm = () => {
             maxLength: 64,
             autoComplete: "new-password",
           }}
+          inputRef={password}
         />
 
         <FloatingLabelInput
           name="password-confirmation"
           label="Confirm your password"
-          errorMessage={actionData?.errors.password}
+          errorMessage={!matches ? "Passwords do not match" : undefined}
           inputProps={{
             type: "password",
             required: true,
@@ -59,6 +62,7 @@ export const RegisterForm = () => {
             maxLength: 64,
             autoComplete: "new-password",
           }}
+          inputRef={confirmation}
         />
 
         <ButtonPrimary
