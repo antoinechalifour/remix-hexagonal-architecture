@@ -1,9 +1,8 @@
 import { useFetcher } from "@remix-run/react";
 import { useLocation } from "remix";
-
-import { PageTitle } from "front/ui/PageTitle";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
+import { FormCard } from "front/authentication/FormCard";
 
 export const ResetPasswordForm = () => {
   const resetPassword = useFetcher();
@@ -11,10 +10,8 @@ export const ResetPasswordForm = () => {
   const searchParams = new URLSearchParams(location.search);
 
   return (
-    <div className="py-8">
-      <PageTitle>Reset your password</PageTitle>
-
-      <resetPassword.Form method="post" className="mt-8">
+    <FormCard title="Reset your password">
+      <resetPassword.Form method="post" className="grid gap-4">
         <input
           type="hidden"
           name="email"
@@ -36,10 +33,17 @@ export const ResetPasswordForm = () => {
           maxLength={64}
         />
 
-        <ButtonPrimary className="mt-4" type="submit">
-          Set new password
-        </ButtonPrimary>
+        <FloatingLabelInput
+          name="password-confirmation"
+          label="Confirm your new password"
+          type="password"
+          required
+          minLength={8}
+          maxLength={64}
+        />
+
+        <ButtonPrimary type="submit">Set new password</ButtonPrimary>
       </resetPassword.Form>
-    </div>
+    </FormCard>
   );
 };
