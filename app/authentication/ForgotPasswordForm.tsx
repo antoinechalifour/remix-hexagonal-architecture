@@ -2,6 +2,7 @@ import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { FormCard } from "front/authentication/FormCard";
+import { Notification } from "front/authentication/Notification";
 
 export const ForgotPasswordForm = () => {
   const resetPassword = useFetcher();
@@ -10,10 +11,10 @@ export const ForgotPasswordForm = () => {
     <FormCard title="Forgot your password?">
       <resetPassword.Form method="post" className="grid gap-4">
         {resetPassword.type === "done" && (
-          <p className="my-8 rounded-2xl border-2 border-primary bg-primary-lighter p-4 text-inverse">
+          <Notification>
             If an account is link to this email address, an email will be sent
             shortly.
-          </p>
+          </Notification>
         )}
 
         <FloatingLabelInput
