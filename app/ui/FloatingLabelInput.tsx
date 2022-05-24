@@ -1,3 +1,4 @@
+import type { HTMLProps } from "react";
 import { forwardRef, useImperativeHandle, useRef, useState } from "react";
 import classNames from "classnames";
 
@@ -5,10 +6,7 @@ interface FloatingLabelInputOptions {
   name: string;
   label: string;
   errorMessage?: string;
-  type?: string;
-  required?: boolean;
-  minLength?: number;
-  maxLength?: number;
+  inputProps: HTMLProps<HTMLInputElement>;
 }
 
 export type FloatingLabelInputRef = {
@@ -20,15 +18,7 @@ export const FloatingLabelInput = forwardRef<
   FloatingLabelInputRef,
   FloatingLabelInputOptions
 >(function FloatingLabelInput(props, ref) {
-  const {
-    name,
-    label,
-    errorMessage,
-    type = "text",
-    required,
-    minLength,
-    maxLength,
-  } = props;
+  const { name, label, errorMessage, inputProps } = props;
 
   const inputRef = useRef<HTMLInputElement>(null);
   const [value, setValue] = useState("");
@@ -43,13 +33,10 @@ export const FloatingLabelInput = forwardRef<
     <label className="group">
       <div className="relative">
         <input
+          {...inputProps}
           ref={inputRef}
-          type={type}
           name={name}
           value={value}
-          required={required}
-          minLength={minLength}
-          maxLength={maxLength}
           onChange={(e) => setValue(e.target.value)}
           className={classNames(
             "block w-full rounded-2xl border bg-transparent py-2 px-3 sm:py-4 sm:px-6",
@@ -57,7 +44,8 @@ export const FloatingLabelInput = forwardRef<
             "text-base text-lighter transition-colors",
             {
               "border-danger": !!errorMessage,
-            }
+            },
+            inputProps.className
           )}
         />
         <span

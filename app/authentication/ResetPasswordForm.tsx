@@ -27,19 +27,25 @@ export const ResetPasswordForm = () => {
         <FloatingLabelInput
           name="password"
           label="Your new password"
-          type="password"
-          required
-          minLength={8}
-          maxLength={64}
+          inputProps={{
+            type: "password",
+            required: true,
+            minLength: 8,
+            maxLength: 64,
+            autoComplete: "new-password",
+          }}
         />
 
         <FloatingLabelInput
           name="password-confirmation"
           label="Confirm your new password"
-          type="password"
-          required
-          minLength={8}
-          maxLength={64}
+          inputProps={{
+            type: "password",
+            required: true,
+            minLength: 8,
+            maxLength: 64,
+            autoComplete: "new-password",
+          }}
         />
 
         <ButtonPrimary type="submit">Set new password</ButtonPrimary>
