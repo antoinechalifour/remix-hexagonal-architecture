@@ -56,7 +56,7 @@ export const LoginForm = () => {
           )}
         </ButtonPrimary>
 
-        <div className="flex justify-between space-x-1 text-center">
+        <div className="flex flex-col space-y-2 text-center sm:flex-row sm:justify-between sm:space-x-1 sm:space-y-0">
           <Link to="/forgot-password" className="text-sm underline">
             Forgot your password?
           </Link>
