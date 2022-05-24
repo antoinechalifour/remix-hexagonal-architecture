@@ -32,7 +32,7 @@ export const LoginForm = () => {
           inputProps={{
             type: "email",
             required: true,
-            autoComplete: "username",
+            autoComplete: "email",
           }}
         />
 
