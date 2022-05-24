@@ -38,10 +38,26 @@ export class Loaders {
     if (isAuthenticated) return redirect("/");
 
     const session = await this.sessionManager.get();
-    const error = session.get("error");
 
     return json(
-      { error },
+      { error: session.get("error") },
+      {
+        headers: {
+          "Set-Cookie": await this.sessionManager.commit(session),
+        },
+      }
+    );
+  }
+
+  @DataFunction()
+  async register() {
+    const isAuthenticated = await this.authenticator.isAuthenticated();
+    if (isAuthenticated) return redirect("/");
+
+    const session = await this.sessionManager.get();
+
+    return json(
+      { error: session.get("error") },
       {
         headers: {
           "Set-Cookie": await this.sessionManager.commit(session),

@@ -86,7 +86,7 @@ export class AuthenticationApplicationService {
       else throw err;
 
       session.flash("error", message);
-      url = "/login";
+      url = "/register";
     }
 
     return {

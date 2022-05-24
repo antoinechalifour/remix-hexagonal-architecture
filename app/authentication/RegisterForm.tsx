@@ -6,16 +6,16 @@ import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { PageTitle } from "front/ui/PageTitle";
 
-type LoginFormErrors = {
+type RegistrationFormErrors = {
   errors: {
     email: string;
     password: string;
   };
 };
 
-export const LoginForm = () => {
+export const RegisterForm = () => {
   const loaderData = useLoaderData<AuthenticationErrorDto>();
-  const actionData = useActionData<LoginFormErrors>();
+  const actionData = useActionData<RegistrationFormErrors>();
   const transition = useTransition();
 
   return (
@@ -23,7 +23,7 @@ export const LoginForm = () => {
       method="post"
       className="my-8 mx-auto grid max-w-md gap-4 rounded-lg bg-dark/30 p-8 shadow-xl"
     >
-      <PageTitle className="text-center">Login</PageTitle>
+      <PageTitle className="text-center">Register</PageTitle>
 
       {loaderData?.error && (
         <p className="my-8 rounded-2xl border-2 border-danger bg-danger-lighter p-4 text-inverse">
@@ -49,25 +49,32 @@ export const LoginForm = () => {
         errorMessage={actionData?.errors.password}
       />
 
+      <FloatingLabelInput
+        name="password-confirmation"
+        label="Confirm your password"
+        type="password"
+        required
+        minLength={8}
+        maxLength={64}
+        errorMessage={actionData?.errors.password}
+      />
+
       <ButtonPrimary
         type="submit"
-        disabled={transition.state === "submitting"}
         className="flex-1"
-        name="login"
+        disabled={transition.state === "submitting"}
+        name="register"
       >
         {transition.state === "submitting" ? (
           <UpdateIcon className="mx-auto animate-spin" />
         ) : (
-          "Login"
+          "Register"
         )}
       </ButtonPrimary>
 
-      <div className="flex justify-between space-x-1 text-center">
-        <Link to="/forgot-password" className="text-sm underline">
-          Forgot your password?
-        </Link>
-        <Link to="/register" className="text-sm underline">
-          Don't have an account yet?
+      <div className="text-right">
+        <Link to="/login" className="text-sm underline">
+          Already have an account?
         </Link>
       </div>
     </Form>

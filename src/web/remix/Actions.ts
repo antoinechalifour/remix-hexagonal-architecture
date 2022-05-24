@@ -30,6 +30,7 @@ import { TagTodoBody, TagTodoParams } from "./dtos/TagTodo";
 import { UntagTodoBody, UntagTodoParams } from "./dtos/UntagTodo";
 import { ForgotPasswordBody } from "./dtos/ForgotPassword";
 import { ResetPasswordBody } from "./dtos/ResetPassword";
+import { RegisterBody } from "./dtos/Register";
 
 @Injectable()
 export class Actions {
@@ -43,10 +44,32 @@ export class Actions {
   ) {}
 
   @DataFunction()
-  async loginOrRegister(@Body() body: LoginBody) {
-    if (body.register != null) return this.register(body);
+  async login(@Body() body: LoginBody) {
+    const { url, cookie } = await this.authenticationApplicationService.login(
+      body.email,
+      body.password
+    );
 
-    return this.login(body);
+    return redirect(url, {
+      headers: {
+        "Set-Cookie": cookie,
+      },
+    });
+  }
+
+  @DataFunction()
+  async register(@Body() body: RegisterBody) {
+    const { url, cookie } =
+      await this.authenticationApplicationService.register(
+        body.email,
+        body.password
+      );
+
+    return redirect(url, {
+      headers: {
+        "Set-Cookie": cookie,
+      },
+    });
   }
 
   @DataFunction()
@@ -197,29 +220,5 @@ export class Actions {
     );
 
     return null;
-  }
-
-  private async register({ email, password }: LoginBody) {
-    const { url, cookie } =
-      await this.authenticationApplicationService.register(email, password);
-
-    return redirect(url, {
-      headers: {
-        "Set-Cookie": cookie,
-      },
-    });
-  }
-
-  private async login({ email, password }: LoginBody) {
-    const { url, cookie } = await this.authenticationApplicationService.login(
-      email,
-      password
-    );
-
-    return redirect(url, {
-      headers: {
-        "Set-Cookie": cookie,
-      },
-    });
   }
 }
