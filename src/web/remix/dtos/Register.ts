@@ -1,6 +1,6 @@
 import { IsEmail, IsString, MaxLength, MinLength } from "class-validator";
 
-export class LoginBody {
+export class RegisterBody {
   @IsEmail(undefined, { message: "This email doesn't seem to be valid." })
   email!: string;
 
