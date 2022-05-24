@@ -1,6 +1,5 @@
 import type { ActionFunction, MetaFunction } from "remix";
 import type { RemixAppContext } from "web";
-
 import { ForgotPasswordForm } from "front/authentication/ForgotPasswordForm";
 
 export const meta: MetaFunction = () => ({
