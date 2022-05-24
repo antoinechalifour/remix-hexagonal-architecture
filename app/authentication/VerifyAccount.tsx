@@ -1,17 +1,16 @@
-import { PageTitle } from "front/ui/PageTitle";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
 import { useVerifyAccount } from "front/authentication/useVerifyAccount";
+import { InfoPageTemplate } from "front/authentication/InfoPageTemplate";
 
 export const VerifyAccount = () => {
   useVerifyAccount();
 
   return (
-    <div className="my-10 space-y-6 text-center">
-      <PageTitle>You're all set !</PageTitle>
-
+    <InfoPageTemplate title="You're all set !" iconComponent={CheckCircledIcon}>
       <p>
         Your account has been verified. You'll be redirected to the app in a few
         seconds.
       </p>
-    </div>
+    </InfoPageTemplate>
   );
 };

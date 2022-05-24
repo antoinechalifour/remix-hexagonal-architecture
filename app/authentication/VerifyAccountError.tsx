@@ -1,18 +1,18 @@
 import type { ThrownResponse } from "remix";
 import { useCatch } from "remix";
-import { PageTitle } from "front/ui/PageTitle";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { InfoPageTemplate } from "front/authentication/InfoPageTemplate";
 
 export const VerifyAccountError = () => {
   const error = useCatch<ThrownResponse<number, { message: string }>>();
 
   return (
-    <div className="my-10 space-y-6 text-center">
-      <PageTitle>Oupsie 💩</PageTitle>
+    <InfoPageTemplate title="Oupsie 🙈" iconComponent={CrossCircledIcon}>
       <p>
         An error occurred while verifying your account :{" "}
         <span className="font-semibold text-lighter">{error.data.message}</span>
         .
       </p>
-    </div>
+    </InfoPageTemplate>
   );
 };

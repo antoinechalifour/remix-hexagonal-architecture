@@ -1,14 +1,11 @@
-import { PageTitle } from "front/ui/PageTitle";
+import { RocketIcon } from "@radix-ui/react-icons";
+import { InfoPageTemplate } from "front/authentication/InfoPageTemplate";
 
-export const Welcome = () => {
-  return (
-    <div className="my-6 space-y-6 text-center">
-      <PageTitle>You're almost there...</PageTitle>
-
-      <p>
-        A email containing a verification link has been sent to your address.
-        You'll be ready when your account will be verified!
-      </p>
-    </div>
-  );
-};
+export const Welcome = () => (
+  <InfoPageTemplate title="You're almost there..." iconComponent={RocketIcon}>
+    <p>
+      A email containing a verification link has been sent to your address.
+      You'll be ready when your account will be verified!
+    </p>
+  </InfoPageTemplate>
+);
