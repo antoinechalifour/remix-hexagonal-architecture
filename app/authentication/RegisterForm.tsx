@@ -4,6 +4,7 @@ import { UpdateIcon } from "@radix-ui/react-icons";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { FormCard } from "front/authentication/FormCard";
+import { Notification } from "front/authentication/Notification";
 
 type RegistrationFormErrors = {
   errors: {
@@ -21,9 +22,7 @@ export const RegisterForm = () => {
     <FormCard title="Register">
       <Form method="post" className="grid gap-4">
         {loaderData?.error && (
-          <p className="my-8 rounded-2xl border-2 border-danger bg-danger-lighter p-4 text-inverse">
-            {loaderData.error}
-          </p>
+          <Notification level="error">{loaderData.error}</Notification>
         )}
 
         <FloatingLabelInput
