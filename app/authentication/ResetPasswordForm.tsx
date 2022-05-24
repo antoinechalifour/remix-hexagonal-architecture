@@ -1,13 +1,15 @@
-import { useFetcher } from "@remix-run/react";
 import { useLocation } from "remix";
+import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
 import { FormCard } from "front/authentication/FormCard";
+import { usePasswordConfirmation } from "front/authentication/usePasswordConfirmation";
 
 export const ResetPasswordForm = () => {
   const resetPassword = useFetcher();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const { password, confirmation, matches } = usePasswordConfirmation();
 
   return (
     <FormCard title="Reset your password">
@@ -34,6 +36,7 @@ export const ResetPasswordForm = () => {
             maxLength: 64,
             autoComplete: "new-password",
           }}
+          inputRef={password}
         />
 
         <FloatingLabelInput
@@ -46,6 +49,8 @@ export const ResetPasswordForm = () => {
             maxLength: 64,
             autoComplete: "new-password",
           }}
+          inputRef={confirmation}
+          errorMessage={!matches ? "Passwords do not match" : undefined}
         />
 
         <ButtonPrimary type="submit">Set new password</ButtonPrimary>
