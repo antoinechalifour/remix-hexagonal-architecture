@@ -13,7 +13,7 @@ export const PlainButton = forwardRef<HTMLButtonElement, ButtonProps>(
       <button
         {...buttonProps}
         type={type}
-        className={classNames("", className)}
+        className={classNames("rounded", className)}
         ref={ref}
       >
         {children}

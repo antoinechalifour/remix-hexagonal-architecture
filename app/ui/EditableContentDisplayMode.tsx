@@ -16,7 +16,7 @@ export const EditableContentDisplayMode = ({
   <div className="group flex items-center gap-4">
     <div>{children}</div>
     <Button
-      className="opacity-0 transition group-focus-within:opacity-100 group-hover:opacity-100"
+      className="rounded opacity-0 transition group-focus-within:opacity-100 group-hover:opacity-100"
       aria-label="Edit"
       onClick={onEdit}
     >

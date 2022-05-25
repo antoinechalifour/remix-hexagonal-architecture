@@ -33,9 +33,9 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         ref={ref}
         className={classNames(
           "grid items-center gap-x-3 gap-y-1",
-          "grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_auto_auto]",
-          "grid-rows-[auto_auto] sm:grid-rows-1",
-          "rounded-2xl p-3 sm:px-6 sm:py-4",
+          "grid-cols-[auto_1fr_auto] md:grid-cols-[auto_1fr_auto_auto]",
+          "grid-rows-[auto_auto] md:grid-rows-1",
+          "rounded-2xl p-3 md:px-6 md:py-4",
           "bg-dark shadow",
           { "opacity-50": isCompleting },
           className
@@ -45,7 +45,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           method="post"
           action={`/l/${todoList.id}/todo/${todo.id}`}
           onChange={handleChange}
-          className="row-span-2 self-start sm:row-span-1"
+          className="row-span-2 self-start md:row-span-1"
           replace
         >
           <CheckboxOption
@@ -64,10 +64,10 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           <EditableContent
             initialValue={todo.title}
             inputName="title"
-            inputClassName="font-semibold sm:ml-2"
+            inputClassName="font-semibold md:ml-2"
           >
             <span
-              className={classNames("font-semibold sm:ml-2", {
+              className={classNames("font-semibold md:ml-2", {
                 "line-through opacity-75": todo.isComplete,
               })}
             >
@@ -78,7 +78,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
 
         <ul
           className={classNames(
-            "col-start-2 row-start-2 sm:col-start-3 sm:row-start-1",
+            "col-start-2 row-start-2 md:col-start-3 md:row-start-1",
             "flex space-x-2"
           )}
         >
@@ -90,9 +90,12 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         </ul>
 
         <Popover.Root>
-          <Popover.Trigger asChild className="row-span-2 sm:row-span-1">
-            <PlainButton>
-              <DotsVerticalIcon />
+          <Popover.Trigger
+            asChild
+            className="row-span-2 self-start md:row-span-1 md:self-center"
+          >
+            <PlainButton className="h-6 w-6">
+              <DotsVerticalIcon className="mx-auto" />
             </PlainButton>
           </Popover.Trigger>
 

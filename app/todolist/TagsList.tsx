@@ -22,7 +22,7 @@ const SelectedTag = ({ tag, todoList, todo }: SelectedTagProps) => {
         action={`/l/${todoList.id}/todo/${todo.id}/untag`}
       >
         <input type="hidden" name="tag" value={tag} />
-        <PlainButton type="submit" className="rounded">
+        <PlainButton type="submit">
           <TodoTag className="cursor-pointer">{tag}</TodoTag>
         </PlainButton>
       </untagTodo.Form>
@@ -50,7 +50,7 @@ const SelectableTag = ({
         action={`/l/${todoList.id}/todo/${todo.id}/tag`}
       >
         <input type="hidden" name="tag" value={tag} disabled={disabled} />
-        <PlainButton type="submit" className="rounded">
+        <PlainButton type="submit">
           <TodoTag
             className={classNames({
               "cursor-pointer": !disabled,
