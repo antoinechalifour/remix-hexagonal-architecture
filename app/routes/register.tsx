@@ -3,7 +3,7 @@ import type { RemixAppContext } from "web";
 import { RegisterForm } from "front/authentication/RegisterForm";
 
 export const meta: MetaFunction = () => ({
-  title: "TLM | Register",
+  title: "Todos | Register",
 });
 
 export const loader: LoaderFunction = (args) =>

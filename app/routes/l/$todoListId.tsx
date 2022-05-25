@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
 export const meta: MetaFunction = ({ data: todoList }) => ({
-  title: `TLM | ${todoList?.title} (${todoList?.doingTodos.length})`,
+  title: `Todos | ${todoList?.title} (${todoList?.doingTodos.length})`,
   description: `Created by you on ${todoList?.createdAt}`,
 });
 

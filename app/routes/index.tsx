@@ -5,7 +5,7 @@ import type { RemixAppContext } from "web";
 import { TodoLists } from "front/homepage/TodoLists";
 
 export const meta: MetaFunction = ({ data: homePage }) => ({
-  title: `TLM | Your todo lists (${homePage.totalNumberOfDoingTodos})`,
+  title: `Todos | Your todo lists (${homePage.totalNumberOfDoingTodos})`,
   description: "Welcome to Todo List Manager!",
 });
 

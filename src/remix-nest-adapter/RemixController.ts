@@ -41,7 +41,7 @@ export class RemixController {
     return this.staticMiddleware(request, response, next);
   }
 
-  @Get("/fonts/*")
+  @Get("/assets/*")
   serveFonts(
     @Req() request: Request,
     @Res() response: Response,

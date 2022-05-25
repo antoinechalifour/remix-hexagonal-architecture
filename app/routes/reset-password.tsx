@@ -6,7 +6,7 @@ import { ResetPasswordForm } from "front/authentication/ResetPasswordForm";
 import { PageTitle } from "front/ui/PageTitle";
 
 export const meta: MetaFunction = () => ({
-  title: "TLM | Reset your password",
+  title: "Todos | Reset your password",
 });
 
 export const action: ActionFunction = (args) =>

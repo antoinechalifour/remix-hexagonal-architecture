@@ -4,7 +4,7 @@ import type { RemixAppContext } from "web";
 import { LoginForm } from "front/authentication/LoginForm";
 
 export const meta: MetaFunction = () => ({
-  title: "TLM | Login",
+  title: "Todos | Login",
 });
 
 export const loader: LoaderFunction = (args) =>

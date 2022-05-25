@@ -5,7 +5,7 @@ import { VerifyAccount } from "front/authentication/VerifyAccount";
 import { VerifyAccountError } from "front/authentication/VerifyAccountError";
 
 export const meta: MetaFunction = () => ({
-  title: "TLM | Verifying your account...",
+  title: "Todos | Verifying your account...",
 });
 
 export const loader: LoaderFunction = (args) =>
