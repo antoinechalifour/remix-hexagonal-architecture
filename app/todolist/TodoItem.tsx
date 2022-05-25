@@ -32,8 +32,10 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
       <div
         ref={ref}
         className={classNames(
-          "grid grid-cols-[auto_1fr_auto_auto] items-center gap-3",
-          "rounded-2xl py-4 px-6",
+          "grid items-center gap-x-3 gap-y-1",
+          "grid-cols-[auto_1fr_auto] sm:grid-cols-[auto_1fr_auto_auto]",
+          "grid-rows-[auto_auto] sm:grid-rows-1",
+          "rounded-2xl p-3 sm:px-6 sm:py-4",
           "bg-dark shadow",
           { "opacity-50": isCompleting },
           className
@@ -43,6 +45,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           method="post"
           action={`/l/${todoList.id}/todo/${todo.id}`}
           onChange={handleChange}
+          className="row-span-2 self-start sm:row-span-1"
           replace
         >
           <CheckboxOption
@@ -73,7 +76,12 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           </EditableContent>
         </renameTodo.Form>
 
-        <ul className="flex flex-col space-y-2 sm:flex-row  sm:space-y-0 sm:space-x-2">
+        <ul
+          className={classNames(
+            "col-start-2 row-start-2 sm:col-start-3 sm:row-start-1",
+            "flex space-x-2"
+          )}
+        >
           {todo.tags.map((tag) => (
             <li key={tag}>
               <TodoTag>{tag}</TodoTag>
@@ -82,7 +90,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         </ul>
 
         <Popover.Root>
-          <Popover.Trigger asChild>
+          <Popover.Trigger asChild className="row-span-2 sm:row-span-1">
             <PlainButton>
               <DotsVerticalIcon />
             </PlainButton>
