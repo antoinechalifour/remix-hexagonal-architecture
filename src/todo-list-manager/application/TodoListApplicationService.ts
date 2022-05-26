@@ -9,13 +9,13 @@ import { ReorderTodos } from "../usecase/ReorderTodos";
 import { RenameTodoList } from "../usecase/RenameTodoList";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
-import { TodoListPermissions } from "../domain/TodoListPermissions";
+import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
 
 @Injectable()
 export class TodoListApplicationService {
   constructor(
     private readonly todoLists: TodoListDatabaseRepository,
-    private readonly todoListPermissions: TodoListPermissions,
+    private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
     private readonly events: NestEvents

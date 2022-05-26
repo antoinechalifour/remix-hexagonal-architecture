@@ -37,3 +37,8 @@ model Account {
   passwordResetToken      String?
   passwordResetExpiration DateTime?
 }
+
+model TodoListPermission {
+  todoListId String @unique @db.Uuid
+  ownerId    String @db.Uuid
+}
