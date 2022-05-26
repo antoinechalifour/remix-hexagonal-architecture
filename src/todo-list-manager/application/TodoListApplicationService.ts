@@ -31,10 +31,10 @@ export class TodoListApplicationService {
   }
 
   archive(todoListId: string, currentUser: CurrentUser) {
-    return new ArchiveTodoList(this.todoLists).execute(
-      todoListId,
-      currentUser.id
-    );
+    return new ArchiveTodoList(
+      this.todoLists,
+      this.todoListPermissions
+    ).execute(todoListId, currentUser.id);
   }
 
   async rename(

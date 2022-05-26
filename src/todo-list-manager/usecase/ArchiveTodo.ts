@@ -5,7 +5,7 @@ import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { removeTodo } from "../domain/TodoList";
-import { canArchive } from "../domain/TodoListPermission";
+import { canArchiveTodo } from "../domain/TodoListPermission";
 
 export class ArchiveTodo {
   constructor(
@@ -20,7 +20,7 @@ export class ArchiveTodo {
     collaboratorId: CollaboratorId
   ) {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
-    canArchive(permission, collaboratorId);
+    canArchiveTodo(permission, collaboratorId);
 
     const todoList = await this.todoLists.ofId(todoListId, collaboratorId);
 

@@ -1,11 +1,19 @@
 import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListId } from "../domain/TodoList";
-import type { OwnerId } from "../domain/OwnerId";
+import type { TodoListPermissions } from "../domain/TodoListPermissions";
+import type { CollaboratorId } from "../domain/CollaboratorId";
+import { canArchiveTodoList } from "../domain/TodoListPermission";
 
 export class ArchiveTodoList {
-  constructor(private readonly todoLists: TodoLists) {}
+  constructor(
+    private readonly todoLists: TodoLists,
+    private readonly todoListPermissions: TodoListPermissions
+  ) {}
 
-  async execute(todoListId: TodoListId, ownerId: OwnerId) {
-    await this.todoLists.remove(todoListId, ownerId);
+  async execute(todoListId: TodoListId, collaboratorId: CollaboratorId) {
+    const permission = await this.todoListPermissions.ofTodoList(todoListId);
+    canArchiveTodoList(permission, collaboratorId);
+
+    await this.todoLists.remove(todoListId, collaboratorId);
   }
 }
