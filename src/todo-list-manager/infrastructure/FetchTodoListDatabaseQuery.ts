@@ -48,32 +48,38 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
 
   private fetchTodoList(todoListId: TodoListId, ownerId: OwnerId) {
     return this.prisma.$queryRaw<TodoListRow[]>`
-        SELECT TL.id, TL.title, TL."createdAt", TL."todosOrder"
-        FROM "TodoList" TL
-        WHERE TL.id = ${todoListId} AND TL."ownerId" = ${ownerId};
+      SELECT TL.id, TL.title, TL."createdAt", TL."todosOrder"
+      FROM "TodoList" TL
+      INNER JOIN "TodoListPermission" TLP on TL."id" = TLP."todoListId"
+      WHERE TL.id = ${todoListId} AND TLP."ownerId" = ${ownerId};
     `.then((rows) => rows[0]);
   }
 
   private fetchDoingTodos(todoListId: TodoListId, ownerId: OwnerId) {
     return this.prisma.$queryRaw<TodoRow<false>[]>`
-        SELECT id, title, "isComplete", "createdAt", tags FROM "Todo"
-        WHERE "isComplete" IS false AND "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
+      SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
+      INNER JOIN "TodoListPermission" TLP on T."todoListId" = TLP."todoListId"
+      WHERE T."isComplete" IS false
+      AND T."todoListId" = ${todoListId} AND TLP."ownerId" = ${ownerId};
     `;
   }
 
   private fetchCompleteTodos(todoListId: TodoListId, ownerId: OwnerId) {
     return this.prisma.$queryRaw<TodoRow<true>[]>`
-        SELECT id, title, "isComplete", "createdAt", tags FROM "Todo"
-        WHERE "isComplete" IS true AND "todoListId" = ${todoListId} AND "ownerId" = ${ownerId};
+      SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
+      INNER JOIN "TodoListPermission" TLP on T."todoListId" = TLP."todoListId"
+      WHERE T."isComplete" IS true
+      AND T."todoListId" = ${todoListId} AND TLP."ownerId" = ${ownerId};
     `;
   }
 
   private async fetchTodoListTags(todoListId: TodoListId, ownerId: OwnerId) {
     const rows = await this.prisma.$queryRaw<{ tag: string }[]>`
-        SELECT DISTINCT jsonb_array_elements_text(tags) AS tag 
-        FROM "Todo"
-        WHERE "todoListId" = ${todoListId} AND "ownerId" = ${ownerId}
-        ORDER BY tag;
+      SELECT DISTINCT jsonb_array_elements_text(T.tags) AS tag
+      FROM "Todo" T
+      INNER JOIN "TodoListPermission" TLP on T."todoListId" = TLP."todoListId"
+      WHERE T."todoListId" = ${todoListId} AND TLP."ownerId" = ${ownerId}
+      ORDER BY tag;
     `;
 
     return rows.map((row) => row.tag);
