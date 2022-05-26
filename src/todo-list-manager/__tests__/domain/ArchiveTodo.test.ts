@@ -8,6 +8,7 @@ import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { aTodoListPermission } from "./builders/TodoListPermission";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 
 describe("Archiving a todo", () => {
   let archiveTodo: ArchiveTodo;
@@ -41,7 +42,9 @@ describe("Archiving a todo", () => {
     );
 
     // Assert
-    await expect(result).rejects.toEqual(new Error("Do not have permission"));
+    await expect(result).rejects.toEqual(
+      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
+    );
   });
 
   it("should remove the todo from the todo list", async () => {

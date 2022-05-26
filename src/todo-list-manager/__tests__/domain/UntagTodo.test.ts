@@ -5,6 +5,7 @@ import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo } from "./builders/Todo";
 import { aTodoListPermission } from "./builders/TodoListPermission";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 
 describe("Untagging a todo", () => {
   let todos: Todos;
@@ -38,7 +39,9 @@ describe("Untagging a todo", () => {
     );
 
     // Assert
-    await expect(result).rejects.toEqual(new Error("Do not have permission"));
+    await expect(result).rejects.toEqual(
+      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
+    );
   });
 
   it("remove the given tag from the tags", async () => {

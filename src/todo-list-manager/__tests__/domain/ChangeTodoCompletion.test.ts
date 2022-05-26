@@ -9,6 +9,7 @@ import { aTodoList } from "./builders/TodoList";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { aTodoListPermission } from "./builders/TodoListPermission";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 
 describe("Changing a todo completion status", () => {
   let changeTodoCompletion: ChangeTodoCompletion;
@@ -48,7 +49,9 @@ describe("Changing a todo completion status", () => {
     );
 
     // Assert
-    await expect(result).rejects.toEqual(new Error("Do not have permission"));
+    await expect(result).rejects.toEqual(
+      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
+    );
   });
 
   it("should complete the todo and move it to the end of the list", async () => {
