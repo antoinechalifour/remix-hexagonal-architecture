@@ -1,5 +1,6 @@
 import { TodoList, TodoListId } from "./TodoList";
 import { OwnerId } from "./OwnerId";
+import { CollaboratorId } from "./CollaboratorId";
 
 export type TodoListPermission = {
   todoListId: TodoListId;
@@ -11,10 +12,13 @@ export const createPermissions = (todoList: TodoList): TodoListPermission => ({
   ownerId: todoList.ownerId,
 });
 
-export const canArchive = (
+const isOwner = (
   todoListPermission: TodoListPermission,
-  userId: string
+  collaboratorId: CollaboratorId
 ) => {
-  if (todoListPermission.ownerId !== userId)
+  if (todoListPermission.ownerId !== collaboratorId)
     throw new Error("Do not have permission");
 };
+
+export const canArchive = isOwner;
+export const canAddTodo = isOwner;

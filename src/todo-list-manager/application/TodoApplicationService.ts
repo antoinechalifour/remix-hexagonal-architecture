@@ -10,6 +10,7 @@ import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
 import { ArchiveTodo } from "../usecase/ArchiveTodo";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoDatabaseRepository } from "../infrastructure/TodoDatabaseRepository";
+import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
 import { RenameTodo } from "../usecase/RenameTodo";
 import { TagTodo } from "../usecase/TagTodo";
 import { UntagTodo } from "../usecase/UntagTodo";
@@ -20,6 +21,7 @@ export class TodoApplicationService {
   constructor(
     private readonly todoLists: TodoListDatabaseRepository,
     private readonly todos: TodoDatabaseRepository,
+    private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
     @Inject(PRISMA) private readonly prisma: Prisma,
@@ -31,6 +33,7 @@ export class TodoApplicationService {
       new AddTodo(
         new TodoDatabaseRepository(prisma),
         new TodoListDatabaseRepository(prisma),
+        new TodoListPermissionsDatabaseRepository(prisma),
         this.generateId,
         this.clock
       ).execute(todoListId, title, currentUser.id)
@@ -45,6 +48,7 @@ export class TodoApplicationService {
     await this.prisma.$transaction((prisma) =>
       new ArchiveTodo(
         new TodoListDatabaseRepository(prisma),
+        new TodoListPermissionsDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma)
       ).execute(todoListId, todoId, currentUser.id)
     );

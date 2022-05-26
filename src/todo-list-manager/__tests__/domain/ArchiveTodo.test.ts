@@ -22,7 +22,7 @@ describe("Archiving a todo", () => {
     archiveTodo = new ArchiveTodo(todoLists, todoListPermissions, todos);
   });
 
-  it("should reject the user when they do not have permission", async () => {
+  it("should reject the collaborator when they do not have permission", async () => {
     // Arrange
     const theOwnerId = "owner/1";
     const theCollaboratorId = "collaborator/unauthorized";
