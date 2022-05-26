@@ -24,3 +24,4 @@ export const canArchiveTodo = isOwner;
 export const canArchiveTodoList = isOwner;
 export const canAddTodo = isOwner;
 export const canChangeTodoCompletion = isOwner;
+export const canRenameTodo = isOwner;
