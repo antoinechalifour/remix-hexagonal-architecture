@@ -69,7 +69,7 @@ describe("Untagging a todo", () => {
     );
 
     // Assert
-    expect((await todos.ofId(theTodoId, theOwnerId)).tags).toEqual([
+    expect((await todos.ofId(theTodoId)).tags).toEqual([
       "feature",
       "research required",
     ]);

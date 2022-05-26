@@ -68,8 +68,6 @@ describe("Renaming a todo", () => {
     );
 
     // Assert
-    expect((await todos.ofId("todo/1", "owner/1")).title).toEqual(
-      "Updated title"
-    );
+    expect((await todos.ofId("todo/1")).title).toEqual("Updated title");
   });
 });

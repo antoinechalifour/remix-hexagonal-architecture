@@ -75,16 +75,14 @@ describe("Archiving a todo", () => {
       todos.save(theTodoRemoved),
       todos.save(theTodoNotRemoved),
     ]);
-    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(2);
+    expect(await todos.ofTodoList(theTodoListId)).toHaveLength(2);
 
     // Act
     await archiveTodo.execute(theTodoListId, "todos/1", theOwnerId);
 
     // Assert
-    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toEqual([
-      theTodoNotRemoved,
-    ]);
-    const updatedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);
+    expect(await todos.ofTodoList(theTodoListId)).toEqual([theTodoNotRemoved]);
+    const updatedTodoList = await todoLists.ofId(theTodoListId);
     expect(updatedTodoList.todosOrder).toEqual(["todos/2"]);
   });
 });

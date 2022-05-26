@@ -62,7 +62,7 @@ describe("Tagging a todo", () => {
     await tagTodo.execute(theTodoListId, theTodoId, theOwnerId, "feature");
 
     // Assert
-    expect((await todos.ofId(theTodoId, theOwnerId)).tags).toEqual([
+    expect((await todos.ofId(theTodoId)).tags).toEqual([
       "feature",
       "top priority",
     ]);

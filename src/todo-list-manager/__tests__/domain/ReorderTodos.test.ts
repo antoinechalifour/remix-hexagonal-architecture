@@ -62,7 +62,7 @@ describe("ReorderTodos", () => {
     await reorderTodos.execute(theTodoListId, theOwnerId, "todo/2", 3);
 
     // Assert
-    const reorderedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);
+    const reorderedTodoList = await todoLists.ofId(theTodoListId);
     expect(reorderedTodoList.todosOrder).toEqual([
       "todo/1",
       "todo/3",

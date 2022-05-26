@@ -29,8 +29,8 @@ export class ChangeTodoCompletion {
     canEditTodoList(permission, collaboratorId);
 
     const [todo, todoList] = await Promise.all([
-      this.todos.ofId(todoId, collaboratorId),
-      this.todoLists.ofId(todoListId, collaboratorId),
+      this.todos.ofId(todoId),
+      this.todoLists.ofId(todoListId),
     ]);
 
     const newTodoOrder = completed

@@ -84,10 +84,12 @@ describe("Changing a todo completion status", () => {
     );
 
     // Assert
-    expect((await todos.ofId(theTodoId, theOwnerId)).isComplete).toBe(true);
-    expect(
-      (await todoLists.ofId(theTodoListId, theOwnerId)).todosOrder
-    ).toEqual(["todo/2", "todo/3", "todo/1"]);
+    expect((await todos.ofId(theTodoId)).isComplete).toBe(true);
+    expect((await todoLists.ofId(theTodoListId)).todosOrder).toEqual([
+      "todo/2",
+      "todo/3",
+      "todo/1",
+    ]);
   });
 
   it("should uncomplete the todo and move it to the beggining of the list", async () => {
@@ -123,9 +125,11 @@ describe("Changing a todo completion status", () => {
     );
 
     // Assert
-    expect((await todos.ofId(theTodoId, theOwnerId)).isComplete).toBe(false);
-    expect(
-      (await todoLists.ofId(theTodoListId, theOwnerId)).todosOrder
-    ).toEqual(["todo/1", "todo/3", "todo/2"]);
+    expect((await todos.ofId(theTodoId)).isComplete).toBe(false);
+    expect((await todoLists.ofId(theTodoListId)).todosOrder).toEqual([
+      "todo/1",
+      "todo/3",
+      "todo/2",
+    ]);
   });
 });

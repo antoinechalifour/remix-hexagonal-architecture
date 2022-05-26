@@ -61,7 +61,7 @@ describe("Renaming a todo list", () => {
     await renameTodoList.execute(theTodoListId, "Updated title", theOwnerId);
 
     // Assert
-    expect((await todoLists.ofId(theTodoListId, theOwnerId)).title).toEqual(
+    expect((await todoLists.ofId(theTodoListId)).title).toEqual(
       "Updated title"
     );
   });
