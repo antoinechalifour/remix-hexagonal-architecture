@@ -1,28 +1,12 @@
 import type { GenerateId } from "shared/id";
-import { GenerateTestId } from "shared/id";
 import type { TodoLists } from "../../domain/TodoLists";
+import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 
+import { GenerateTestId } from "shared/id";
 import { Clock, FixedClock } from "shared/time";
 import { AddTodoList } from "../../usecase/AddTodoList";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
-import { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermission } from "../../domain/TodoListPermission";
-import { TodoListId } from "../../domain/TodoList";
-
-class TodoListPermissionsInMemory implements TodoListPermissions {
-  private __database = new Map<TodoListId, TodoListPermission>();
-
-  async ofTodoList(todoListId: TodoListId): Promise<TodoListPermission> {
-    const todoListPermission = this.__database.get(todoListId);
-    if (!todoListPermission) throw new Error("That's really bad!");
-
-    return todoListPermission;
-  }
-
-  async save(todoListPermission: TodoListPermission): Promise<void> {
-    this.__database.set(todoListPermission.todoListId, todoListPermission);
-  }
-}
+import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 
 describe("Adding a todo list", () => {
   let addTodoList: AddTodoList;
