@@ -1,14 +1,43 @@
+import type { TodoLists } from "../../domain/TodoLists";
+import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { ReorderTodos } from "../../usecase/ReorderTodos";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
+import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodoList } from "./builders/TodoList";
+import { aTodoListPermission } from "./builders/TodoListPermission";
 
 describe("ReorderTodos", () => {
   let reorderTodos: ReorderTodos;
-  let todoLists: TodoListsInMemory;
+  let todoLists: TodoLists;
+  let todoListPermissions: TodoListPermissions;
 
   beforeEach(() => {
     todoLists = new TodoListsInMemory();
-    reorderTodos = new ReorderTodos(todoLists);
+    todoListPermissions = new TodoListPermissionsInMemory();
+    reorderTodos = new ReorderTodos(todoLists, todoListPermissions);
+  });
+
+  it("only the owner can reorder todos", async () => {
+    // Arrange
+    const theTodoListId = "todoList/1";
+    const theOwnerId = "owner/1";
+    const theCollaboratorId = "collaborator/1";
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await todoListPermissions.save(thePermissions);
+
+    // Act
+    const result = reorderTodos.execute(
+      theTodoListId,
+      theCollaboratorId,
+      "todo/2",
+      3
+    );
+
+    // Assert
+    await expect(result).rejects.toEqual(new Error("Do not have permission"));
   });
 
   it("places the todo at the given index", async () => {
@@ -20,13 +49,20 @@ describe("ReorderTodos", () => {
       .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2", "todo/3", "todo/4")
       .build();
-    await todoLists.save(theTodoList);
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await Promise.all([
+      todoLists.save(theTodoList),
+      todoListPermissions.save(thePermissions),
+    ]);
 
     // Act
     await reorderTodos.execute(theTodoListId, theOwnerId, "todo/2", 3);
 
     // Assert
-    const reorderedTodoList = await todoLists.ofId(theTodoListId);
+    const reorderedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);
     expect(reorderedTodoList.todosOrder).toEqual([
       "todo/1",
       "todo/3",
@@ -44,7 +80,14 @@ describe("ReorderTodos", () => {
       .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2")
       .build();
-    await todoLists.save(theTodoList);
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await Promise.all([
+      todoLists.save(theTodoList),
+      todoListPermissions.save(thePermissions),
+    ]);
 
     // Act Assert
     return expect(() =>
@@ -61,7 +104,14 @@ describe("ReorderTodos", () => {
       .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2")
       .build();
-    await todoLists.save(theTodoList);
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await Promise.all([
+      todoLists.save(theTodoList),
+      todoListPermissions.save(thePermissions),
+    ]);
 
     // Act Assert
     return expect(() =>
@@ -78,7 +128,14 @@ describe("ReorderTodos", () => {
       .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2")
       .build();
-    await todoLists.save(theTodoList);
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await Promise.all([
+      todoLists.save(theTodoList),
+      todoListPermissions.save(thePermissions),
+    ]);
 
     // Act Assert
     return expect(() =>
