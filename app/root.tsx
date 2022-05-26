@@ -24,7 +24,34 @@ import {
 import type { RemixAppContext } from "web";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: styles }];
+  return [
+    { rel: "stylesheet", href: styles },
+    { rel: "icon", href: "/assets/images/favicon.ico" },
+    {
+      rel: "icon",
+      href: "/assets/images/favicon-16x16.png",
+      type: "image/png",
+      sizes: "16x16",
+    },
+    {
+      rel: "icon",
+      href: "/assets/images/favicon-32x32.png",
+      type: "image/png",
+      sizes: "32x32",
+    },
+    {
+      rel: "icon",
+      href: "/assets/images/favicon-96x96.png",
+      type: "image/png",
+      sizes: "96x96",
+    },
+    {
+      rel: "icon",
+      href: "/assets/images/favicon-256x256.png",
+      type: "image/png",
+      sizes: "256x256",
+    },
+  ];
 };
 
 export const loader: LoaderFunction = (args) =>
@@ -53,7 +80,6 @@ function Document({ children, title }: DocumentProps) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="icon" href="/assets/images/favicon.ico" />
         {title ? <title>{title}</title> : null}
         <Meta />
         <Links />
