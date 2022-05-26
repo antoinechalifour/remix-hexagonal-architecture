@@ -83,7 +83,12 @@ export class TodoApplicationService {
     title: string,
     currentUser: CurrentUser
   ) {
-    await new RenameTodo(this.todos).execute(todoId, title, currentUser.id);
+    await new RenameTodo(this.todos, this.todoListPermissions).execute(
+      todoListId,
+      todoId,
+      title,
+      currentUser.id
+    );
 
     this.events.publish(
       new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)

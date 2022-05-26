@@ -1,29 +1,75 @@
-import { RenameTodo } from "todo-list-manager";
+import type { TodoListPermissions } from "../../domain/TodoListPermissions";
+import type { Todos } from "../../domain/Todos";
+import { RenameTodo } from "../../usecase/RenameTodo";
 import { TodosInMemory } from "./fakes/TodosInMemory";
+import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo } from "./builders/Todo";
+import { aTodoListPermission } from "./builders/TodoListPermission";
 
 describe("Renaming a todo", () => {
-  let todos: TodosInMemory;
+  let todos: Todos;
+  let todoListPermissions: TodoListPermissions;
   let renameTodo: RenameTodo;
 
   beforeEach(() => {
     todos = new TodosInMemory();
-    renameTodo = new RenameTodo(todos);
+    todoListPermissions = new TodoListPermissionsInMemory();
+    renameTodo = new RenameTodo(todos, todoListPermissions);
+  });
+
+  it("only the owner can rename a todo list", async () => {
+    // Arrange
+    let theTodoListId = "todoList/1";
+    let theOwnerId = "owner/1";
+    let theCollaboratorId = "collaborator/1";
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await todoListPermissions.save(thePermissions);
+
+    // Act
+    const result = renameTodo.execute(
+      theTodoListId,
+      "todo/1",
+      "Updated title",
+      theCollaboratorId
+    );
+
+    // Assert
+    await expect(result).rejects.toEqual(new Error("Do not have permission"));
   });
 
   it("renames the todo list", async () => {
     // Arrange
+    const theOwnerId = "owner/1";
+    const theTodoListId = "todoList/1";
+    const theTodoId = "todo/1";
     const theTodo = aTodo()
-      .withId("todo/1")
-      .ownedBy("owner/1")
+      .withId(theTodoId)
+      .ownedBy(theOwnerId)
       .withTitle("Current title")
       .build();
-    await todos.save(theTodo);
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await Promise.all([
+      todoListPermissions.save(thePermissions),
+      todos.save(theTodo),
+    ]);
 
     // Act
-    await renameTodo.execute("todo/1", "Updated title", "owner/1");
+    await renameTodo.execute(
+      theTodoListId,
+      theTodoId,
+      "Updated title",
+      theOwnerId
+    );
 
     // Assert
-    expect((await todos.ofId("todo/1")).title).toEqual("Updated title");
+    expect((await todos.ofId("todo/1", "owner/1")).title).toEqual(
+      "Updated title"
+    );
   });
 });
