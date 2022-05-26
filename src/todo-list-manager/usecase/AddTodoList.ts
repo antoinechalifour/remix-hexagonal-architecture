@@ -19,10 +19,8 @@ export class AddTodoList {
     const todoList = makeTodoList(title, ownerId, this.generateId, this.clock);
     const todoListPermissions = createPermissions(todoList);
 
-    await Promise.all([
-      this.todoLists.save(todoList),
-      this.todoListPermissions.save(todoListPermissions),
-    ]);
+    await this.todoLists.save(todoList);
+    await this.todoListPermissions.save(todoListPermissions);
 
     return `/l/${todoList.id}`;
   }
