@@ -6,7 +6,7 @@ import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 
 import { addTodo, TodoListId } from "../domain/TodoList";
-import { canAddTodo } from "../domain/TodoListPermission";
+import { canEditTodoList } from "../domain/TodoListPermission";
 
 export class AddTodo {
   constructor(
@@ -23,7 +23,7 @@ export class AddTodo {
     collaboratorId: CollaboratorId
   ) {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
-    canAddTodo(permission, collaboratorId);
+    canEditTodoList(permission, collaboratorId);
 
     const todoList = await this.todoLists.ofId(todoListId, collaboratorId);
     const [updatedTodoList, createdTodo] = addTodo(

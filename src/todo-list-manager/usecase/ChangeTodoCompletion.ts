@@ -1,15 +1,15 @@
 import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { Todos } from "../domain/Todos";
 import type { TodoId } from "../domain/Todo";
-import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { updateCompletion } from "../domain/Todo";
+import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { TodoLists } from "../domain/TodoLists";
 import {
   orderAsFirstTodo,
   orderAsLastTodo,
   reorderTodoList,
 } from "../domain/TodoList";
-import { canChangeTodoCompletion } from "../domain/TodoListPermission";
+import { canEditTodoList } from "../domain/TodoListPermission";
 
 export class ChangeTodoCompletion {
   constructor(
@@ -26,7 +26,7 @@ export class ChangeTodoCompletion {
   ) {
     const completed = isChecked === "on";
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
-    canChangeTodoCompletion(permission, collaboratorId);
+    canEditTodoList(permission, collaboratorId);
 
     const [todo, todoList] = await Promise.all([
       this.todos.ofId(todoId, collaboratorId),
