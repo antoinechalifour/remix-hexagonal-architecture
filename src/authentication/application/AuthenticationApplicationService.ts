@@ -1,10 +1,10 @@
 import { Injectable } from "@nestjs/common";
 import { json } from "remix";
 import { v4 as uuid } from "uuid";
-import { SessionManager } from "remix-nest-adapter";
 import { GenerateUUID } from "shared/id";
 import { NestEvents } from "shared/events";
 import { RealClock } from "shared/time";
+import { SessionManager } from "../../web/authenticator/SessionManager";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { VerifyAccount } from "../usecase/VerifyAccount";

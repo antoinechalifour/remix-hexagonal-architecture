@@ -40,6 +40,7 @@
     "@nestjs/core": "8.4.4",
     "@nestjs/event-emitter": "1.1.1",
     "@nestjs/platform-express": "8.4.4",
+    "@nestjs/serve-static": "^2.2.2",
     "@prisma/client": "3.8.1",
     "@radix-ui/react-checkbox": "^0.1.5",
     "@radix-ui/react-dropdown-menu": "0.1.6",
