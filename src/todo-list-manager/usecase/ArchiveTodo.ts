@@ -1,3 +1,4 @@
+import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoId } from "../domain/Todo";
 import type { Todos } from "../domain/Todos";
 import type { TodoLists } from "../domain/TodoLists";
@@ -5,13 +6,12 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { removeTodo } from "../domain/TodoList";
 import { canArchive } from "../domain/TodoListPermission";
-import { CollaboratorId } from "../domain/CollaboratorId";
 
 export class ArchiveTodo {
   constructor(
-    private todoLists: TodoLists,
+    private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
-    private todos: Todos
+    private readonly todos: Todos
   ) {}
 
   async execute(
@@ -19,8 +19,9 @@ export class ArchiveTodo {
     todoId: TodoId,
     collaboratorId: CollaboratorId
   ) {
-    const permissions = await this.todoListPermissions.ofTodoList(todoListId);
-    canArchive(permissions, collaboratorId);
+    const permission = await this.todoListPermissions.ofTodoList(todoListId);
+    canArchive(permission, collaboratorId);
+
     const todoList = await this.todoLists.ofId(todoListId, collaboratorId);
 
     await Promise.all([
