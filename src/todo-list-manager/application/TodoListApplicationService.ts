@@ -59,7 +59,7 @@ export class TodoListApplicationService {
     todoId: string,
     newIndex: number
   ) {
-    await new ReorderTodos(this.todoLists).execute(
+    await new ReorderTodos(this.todoLists, this.todoListPermissions).execute(
       todoListId,
       currentUser.id,
       todoId,

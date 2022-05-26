@@ -18,7 +18,7 @@ export class RenameTodoList {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
     canEditTodoList(permission, collaboratorId);
 
-    const todoList = await this.todoLists.ofId(todoListId, collaboratorId);
+    const todoList = await this.todoLists.ofId(todoListId);
     await this.todoLists.save(renameTodoList(todoList, title));
   }
 }

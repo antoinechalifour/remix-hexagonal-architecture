@@ -22,11 +22,11 @@ export class ArchiveTodo {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
     canEditTodoList(permission, collaboratorId);
 
-    const todoList = await this.todoLists.ofId(todoListId, collaboratorId);
+    const todoList = await this.todoLists.ofId(todoListId);
 
     await Promise.all([
       this.todoLists.save(removeTodo(todoList, todoId)),
-      this.todos.remove(todoId, collaboratorId),
+      this.todos.remove(todoId),
     ]);
   }
 }

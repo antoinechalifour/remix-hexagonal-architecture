@@ -1,15 +1,14 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaRepository } from "shared/database";
 import type { Todos } from "../domain/Todos";
 import type { TodoListId } from "../domain/TodoList";
 import type { Todo, TodoId } from "../domain/Todo";
-import { OwnerId } from "../domain/OwnerId";
+import { Injectable } from "@nestjs/common";
+import { PrismaRepository } from "shared/database";
 
 @Injectable()
 export class TodoDatabaseRepository extends PrismaRepository implements Todos {
-  async ofId(todoId: TodoId, ownerId: OwnerId): Promise<Todo> {
+  async ofId(todoId: TodoId): Promise<Todo> {
     const row = await this.prisma.todo.findFirst({
-      where: { id: todoId, ownerId },
+      where: { id: todoId },
       rejectOnNotFound: true,
     });
 
@@ -19,17 +18,14 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       isComplete: row.isComplete,
       createdAt: row.createdAt.toISOString(),
       todoListId: row.todoListId,
-      ownerId,
+      ownerId: row.ownerId,
       tags: row.tags as string[],
     };
   }
 
-  async ofTodoList(todoListId: TodoListId, ownerId: OwnerId): Promise<Todo[]> {
+  async ofTodoList(todoListId: TodoListId): Promise<Todo[]> {
     const todos = await this.prisma.todo.findMany({
-      where: {
-        todoListId,
-        ownerId,
-      },
+      where: { todoListId },
     });
 
     return todos.map((row) => ({
@@ -38,7 +34,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       isComplete: row.isComplete,
       createdAt: row.createdAt.toISOString(),
       todoListId,
-      ownerId,
+      ownerId: row.ownerId,
       tags: row.tags as string[],
     }));
   }
@@ -63,9 +59,9 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
     });
   }
 
-  async remove(todoId: TodoId, ownerId: OwnerId): Promise<void> {
+  async remove(todoId: string): Promise<void> {
     await this.prisma.todo.deleteMany({
-      where: { id: todoId, ownerId },
+      where: { id: todoId },
     });
   }
 }

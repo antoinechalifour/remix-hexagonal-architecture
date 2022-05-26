@@ -14,6 +14,6 @@ export class ArchiveTodoList {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
     canArchiveTodoList(permission, collaboratorId);
 
-    await this.todoLists.remove(todoListId, collaboratorId);
+    await this.todoLists.remove(todoListId);
   }
 }

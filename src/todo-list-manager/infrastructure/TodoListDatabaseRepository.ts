@@ -9,12 +9,9 @@ export class TodoListDatabaseRepository
   extends PrismaRepository
   implements TodoLists
 {
-  async ofId(todoListId: TodoListId, ownerId: OwnerId): Promise<TodoList> {
+  async ofId(todoListId: TodoListId): Promise<TodoList> {
     const todoList = await this.prisma.todoList.findFirst({
-      where: {
-        id: todoListId,
-        ownerId,
-      },
+      where: { id: todoListId },
     });
 
     if (!todoList) throw new Error(`Todolist ${todoListId} was not found`);
@@ -23,7 +20,7 @@ export class TodoListDatabaseRepository
       id: todoList.id,
       createdAt: todoList.createdAt.toISOString(),
       title: todoList.title,
-      ownerId,
+      ownerId: todoList.ownerId,
       todosOrder: todoList.todosOrder as string[],
     };
   }
@@ -59,12 +56,12 @@ export class TodoListDatabaseRepository
     });
   }
 
-  async remove(todoListId: TodoListId, ownerId: OwnerId): Promise<void> {
+  async remove(todoListId: TodoListId): Promise<void> {
     await this.prisma.todo.deleteMany({
-      where: { todoListId, ownerId },
+      where: { todoListId },
     });
     await this.prisma.todoList.deleteMany({
-      where: { id: todoListId, ownerId },
+      where: { id: todoListId },
     });
   }
 }

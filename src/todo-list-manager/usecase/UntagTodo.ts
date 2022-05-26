@@ -21,7 +21,7 @@ export class UntagTodo {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
     canEditTodoList(permission, collaboratorId);
 
-    const todo = await this.todos.ofId(todoId, collaboratorId);
+    const todo = await this.todos.ofId(todoId);
     await this.todos.save(untagTodo(todo, tag));
   }
 }

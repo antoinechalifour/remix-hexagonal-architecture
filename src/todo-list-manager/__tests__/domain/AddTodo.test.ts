@@ -73,13 +73,13 @@ describe("Adding a todo", () => {
       todoLists.save(theTodoList),
       todoListPermissions.save(thePermissions),
     ]);
-    expect(await todos.ofTodoList(theTodoListId, theOwnerId)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoListId)).toHaveLength(0);
 
     // Act
     await addTodo.execute(theTodoListId, "Buy cereals", theOwnerId);
 
     // Assert
-    const [todo] = await todos.ofTodoList(theTodoListId, theOwnerId);
+    const [todo] = await todos.ofTodoList(theTodoListId);
     expect(todo).toEqual({
       id: "todo/1",
       createdAt: "2022-01-05T12:00:00.000Z",
@@ -90,7 +90,7 @@ describe("Adding a todo", () => {
       tags: [],
     });
 
-    const updatedTodoList = await todoLists.ofId(theTodoListId, theOwnerId);
+    const updatedTodoList = await todoLists.ofId(theTodoListId);
     expect(updatedTodoList.todosOrder).toEqual(["todo/0", "todo/1"]);
   });
 });

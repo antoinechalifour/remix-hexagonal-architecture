@@ -45,7 +45,7 @@ describe("TodoListPrismaRepository", () => {
     await todoLists.save(todoList);
 
     // Arrange
-    expect(await todoLists.ofId(theTodoListId, theOwnerId)).toEqual(todoList);
+    expect(await todoLists.ofId(theTodoListId)).toEqual(todoList);
   });
 
   it("should be able to remove todo lists and their associated todos", async () => {
@@ -71,29 +71,20 @@ describe("TodoListPrismaRepository", () => {
     );
 
     // Act
-    await todoLists.remove(theTodoListToRemoveId, theOwnerId);
+    await todoLists.remove(theTodoListToRemoveId);
 
     // Assert
-    await expect(() =>
-      todoLists.ofId(theTodoListToRemoveId, theOwnerId)
-    ).rejects.toThrow(
+    await expect(() => todoLists.ofId(theTodoListToRemoveId)).rejects.toThrow(
       "Todolist 78d492f1-f182-41b9-81a4-b117ceadcca7 was not found"
     );
-    expect(
-      await todos.ofTodoList(theTodoListToRemoveId, theOwnerId)
-    ).toHaveLength(0);
-    expect(
-      await todos.ofTodoList(theTodoListToKeepId, theOwnerId)
-    ).toHaveLength(1);
+    expect(await todos.ofTodoList(theTodoListToRemoveId)).toHaveLength(0);
+    expect(await todos.ofTodoList(theTodoListToKeepId)).toHaveLength(1);
   });
 
   it("should throw an error when trying to access a non-existing todo list", () => {
-    const theOwnerId = "637e34ce-2680-41d3-b283-d390063536df";
     const theTodoListToRemoveId = "141c8f3e-b68e-45a0-9f0e-01e77009d801";
 
-    return expect(() =>
-      todoLists.ofId(theTodoListToRemoveId, theOwnerId)
-    ).rejects.toThrow(
+    return expect(() => todoLists.ofId(theTodoListToRemoveId)).rejects.toThrow(
       "Todolist 141c8f3e-b68e-45a0-9f0e-01e77009d801 was not found"
     );
   });
