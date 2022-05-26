@@ -20,5 +20,6 @@ const isOwner = (
     throw new Error("Do not have permission");
 };
 
-export const canArchive = isOwner;
+export const canArchiveTodo = isOwner;
+export const canArchiveTodoList = isOwner;
 export const canAddTodo = isOwner;

@@ -2,7 +2,6 @@ import type { GenerateId } from "shared/id";
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
-
 import { Clock, FixedClock } from "shared/time";
 import { GenerateTestId } from "shared/id";
 import { AddTodo } from "../../usecase/AddTodo";
@@ -35,7 +34,7 @@ describe("Adding a todo", () => {
     );
   });
 
-  it("should reject the collaborator when they do not have permission", async () => {
+  it("only the owner can add a todo", async () => {
     // Arrange
     const theOwnerId = "owner/1";
     const theCollaboratorId = "collaborator/unauthorized";
