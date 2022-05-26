@@ -3,7 +3,8 @@ import { Inject, Injectable } from "@nestjs/common";
 import { OnEvent } from "@nestjs/event-emitter";
 import { MAILER, Mailer } from "shared/mail";
 import { UserRegistered } from "../domain/UserRegistered";
-import { PasswordChanged, PasswordForgotten } from "authentication";
+import { PasswordForgotten } from "../domain/PasswordForgotten";
+import { PasswordChanged } from "../domain/PasswordChanged";
 
 @Injectable()
 export class AuthenticationEventsConsumer {
