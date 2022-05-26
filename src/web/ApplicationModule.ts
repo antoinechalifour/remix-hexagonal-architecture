@@ -38,6 +38,7 @@ import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
 import { RemixController } from "./remix/RemixController";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
+import { TodoListPermissionsDatabaseRepository } from "../todo-list-manager/infrastructure/TodoListPermissionsDatabaseRepository";
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { Loaders } from "./remix/Loaders";
     TodoListApplicationService,
     TodoDatabaseRepository,
     TodoListDatabaseRepository,
+    TodoListPermissionsDatabaseRepository,
     FetchHomePageDatabaseQuery,
     FetchTodoListDatabaseQuery,
 

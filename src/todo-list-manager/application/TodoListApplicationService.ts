@@ -9,21 +9,25 @@ import { ReorderTodos } from "../usecase/ReorderTodos";
 import { RenameTodoList } from "../usecase/RenameTodoList";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
+import { TodoListPermissions } from "../domain/TodoListPermissions";
 
 @Injectable()
 export class TodoListApplicationService {
   constructor(
     private readonly todoLists: TodoListDatabaseRepository,
+    private readonly todoListPermissions: TodoListPermissions,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
     private readonly events: NestEvents
   ) {}
 
   add(title: string, currentUser: CurrentUser) {
-    return new AddTodoList(this.todoLists, this.generateId, this.clock).execute(
-      title,
-      currentUser.id
-    );
+    return new AddTodoList(
+      this.todoLists,
+      this.todoListPermissions,
+      this.generateId,
+      this.clock
+    ).execute(title, currentUser.id);
   }
 
   archive(todoListId: string, currentUser: CurrentUser) {
