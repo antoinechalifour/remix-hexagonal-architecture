@@ -6,7 +6,15 @@ export type TodoListPermission = {
   ownerId: OwnerId;
 };
 
-export const createForTodoList = (todoList: TodoList): TodoListPermission => ({
+export const createPermissions = (todoList: TodoList): TodoListPermission => ({
   todoListId: todoList.id,
   ownerId: todoList.ownerId,
 });
+
+export const canArchive = (
+  todoListPermission: TodoListPermission,
+  userId: string
+) => {
+  if (todoListPermission.ownerId !== userId)
+    throw new Error("Do not have permission");
+};

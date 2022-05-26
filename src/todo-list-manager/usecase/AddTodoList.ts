@@ -5,7 +5,7 @@ import type { OwnerId } from "../domain/OwnerId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 
 import { makeTodoList } from "../domain/TodoList";
-import { createForTodoList } from "../domain/TodoListPermission";
+import { createPermissions } from "../domain/TodoListPermission";
 
 export class AddTodoList {
   constructor(
@@ -17,7 +17,7 @@ export class AddTodoList {
 
   async execute(title: string, ownerId: OwnerId) {
     const todoList = makeTodoList(title, ownerId, this.generateId, this.clock);
-    const todoListPermissions = createForTodoList(todoList);
+    const todoListPermissions = createPermissions(todoList);
 
     await Promise.all([
       this.todoLists.save(todoList),
