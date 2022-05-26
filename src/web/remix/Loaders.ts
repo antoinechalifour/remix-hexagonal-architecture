@@ -84,14 +84,23 @@ export class Loaders {
     const isAuthenticated = await this.authenticator.isAuthenticated();
     if (isAuthenticated) return redirect("/");
 
-    const { cookie } =
+    const session = await this.sessionManager.get();
+
+    const [err, sessionData] =
       await this.authenticationApplicationService.verifyAccount(
         query.email,
         query.token
       );
 
+    if (err) {
+      throw json({ message: err.message }, { status: 400 });
+    }
+
+    session.set("userId", sessionData.userId);
+    session.set("sessionId", sessionData.id);
+
     return new Response(null, {
-      headers: { "Set-Cookie": cookie },
+      headers: { "Set-Cookie": await this.sessionManager.commit(session) },
     });
   }
 

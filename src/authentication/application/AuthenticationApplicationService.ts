@@ -4,7 +4,6 @@ import { v4 as uuid } from "uuid";
 import { GenerateUUID } from "shared/id";
 import { NestEvents } from "shared/events";
 import { RealClock } from "shared/time";
-import { SessionManager } from "../../web/authenticator/SessionManager";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { VerifyAccount } from "../usecase/VerifyAccount";
@@ -24,10 +23,13 @@ import { InvalidPasswordResetTokenError } from "../domain/InvalidPasswordResetTo
 import { PasswordResetTokenExpiredError } from "../domain/PasswordResetTokenExpiredError";
 import { PasswordChanged } from "../domain/PasswordChanged";
 
+type LoginResult =
+  | [{ message: string }, null]
+  | [null, { userId: string; id: string }];
+
 @Injectable()
 export class AuthenticationApplicationService {
   constructor(
-    private readonly sessionManager: SessionManager,
     private readonly accounts: AccountDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
@@ -35,18 +37,14 @@ export class AuthenticationApplicationService {
     private readonly events: NestEvents
   ) {}
 
-  async login(email: string, password: string) {
-    const session = await this.sessionManager.get();
-    let url = "/";
-
+  async login(email: string, password: string): Promise<LoginResult> {
     try {
       const userId = await new LoginFlow(
         this.accounts,
         this.passwordHasher
       ).execute(email, password);
 
-      session.set("userId", userId);
-      session.set("sessionId", uuid());
+      return [null, { id: uuid(), userId }];
     } catch (err) {
       let message: string;
 
@@ -55,20 +53,11 @@ export class AuthenticationApplicationService {
         message = "Could not login. Make sure your credentials are valid.";
       else throw err;
 
-      session.flash("error", message);
-      url = "/login";
+      return [{ message }, null];
     }
-
-    return {
-      url,
-      cookie: await this.sessionManager.commit(session),
-    };
   }
 
   async register(email: string, password: string) {
-    const session = await this.sessionManager.get();
-    let url = "/welcome";
-
     try {
       const account = await new RegisterFlow(
         this.accounts,
@@ -85,27 +74,18 @@ export class AuthenticationApplicationService {
       if (EmailAlreadyInUseError.is(err)) message = err.message;
       else throw err;
 
-      session.flash("error", message);
-      url = "/register";
+      return { message };
     }
-
-    return {
-      url,
-      cookie: await this.sessionManager.commit(session),
-    };
   }
 
-  async verifyAccount(email: string, token: string) {
-    const session = await this.sessionManager.get();
+  async verifyAccount(email: string, token: string): Promise<LoginResult> {
     try {
       const userId = await new VerifyAccount(this.accounts).execute(
         email,
         token
       );
-      session.set("userId", userId);
-      session.set("sessionId", uuid());
 
-      return { cookie: await this.sessionManager.commit(session) };
+      return [null, { userId, id: uuid() }];
     } catch (err) {
       let message: string;
       if (InvalidVerificationTokenError.is(err) || AccountNotFoundError.is(err))
@@ -114,7 +94,7 @@ export class AuthenticationApplicationService {
         message = "account is already verified";
       else throw err;
 
-      throw json({ message }, { status: 400 });
+      return [{ message }, null];
     }
   }
 

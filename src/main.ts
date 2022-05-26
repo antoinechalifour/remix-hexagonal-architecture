@@ -14,7 +14,7 @@ async function bootstrap() {
   const app = await NestFactory.create(
     ApplicationModule.register({
       session,
-      remixHandlerPath: path.join(__dirname, "../build"),
+      remixHandlerPath: path.join(__dirname, "../../build"),
     }),
     {
       bodyParser: false,
