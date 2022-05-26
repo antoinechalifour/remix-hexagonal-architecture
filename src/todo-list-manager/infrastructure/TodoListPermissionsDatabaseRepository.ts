@@ -10,10 +10,25 @@ export class TodoListPermissionsDatabaseRepository
   implements TodoListPermissions
 {
   async ofTodoList(todoListId: TodoListId): Promise<TodoListPermission> {
-    return Promise.resolve(undefined as any);
+    const row = await this.prisma.todoListPermission.findFirst({
+      where: { todoListId },
+      rejectOnNotFound: true,
+    });
+
+    return {
+      todoListId: row.todoListId,
+      ownerId: row.ownerId,
+    };
   }
 
   async save(todoListPermission: TodoListPermission): Promise<void> {
-    return Promise.resolve(undefined);
+    await this.prisma.todoListPermission.upsert({
+      where: { todoListId: todoListPermission.todoListId },
+      create: {
+        todoListId: todoListPermission.todoListId,
+        ownerId: todoListPermission.ownerId,
+      },
+      update: { ownerId: todoListPermission.ownerId },
+    });
   }
 }
