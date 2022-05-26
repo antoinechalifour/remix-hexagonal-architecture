@@ -119,7 +119,12 @@ export class TodoApplicationService {
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new UntagTodo(this.todos).execute(todoId, currentUser.id, tag);
+    await new UntagTodo(this.todos, this.todoListPermissions).execute(
+      todoListId,
+      todoId,
+      currentUser.id,
+      tag
+    );
 
     this.events.publish(
       new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
