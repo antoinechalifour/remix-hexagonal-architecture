@@ -48,29 +48,50 @@ export class Actions {
 
   @DataFunction()
   async login(@Body() body: LoginBody) {
-    const { url, cookie } = await this.authenticationApplicationService.login(
-      body.email,
-      body.password
-    );
+    const session = await this.sessionManager.get();
+    const [err, sessionData] =
+      await this.authenticationApplicationService.login(
+        body.email,
+        body.password
+      );
+
+    let url: string;
+    if (err) {
+      url = "/login";
+      session.flash("error", err.message);
+    } else {
+      url = "/";
+
+      session.set("userId", sessionData.userId);
+      session.set("sessionId", sessionData.id);
+    }
 
     return redirect(url, {
       headers: {
-        "Set-Cookie": cookie,
+        "Set-Cookie": await this.sessionManager.commit(session),
       },
     });
   }
 
   @DataFunction()
   async register(@Body() body: RegisterBody) {
-    const { url, cookie } =
-      await this.authenticationApplicationService.register(
-        body.email,
-        body.password
-      );
+    const session = await this.sessionManager.get();
+    const err = await this.authenticationApplicationService.register(
+      body.email,
+      body.password
+    );
+
+    let url: string;
+    if (err) {
+      session.flash("error", err.message);
+      url = "/register";
+    } else {
+      url = "/welcome";
+    }
 
     return redirect(url, {
       headers: {
-        "Set-Cookie": cookie,
+        "Set-Cookie": await this.sessionManager.commit(session),
       },
     });
   }
