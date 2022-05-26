@@ -6,16 +6,49 @@ import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { anUncompletedTodo } from "./builders/Todo";
 import { aTodoList } from "./builders/TodoList";
+import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
+import { TodoListPermissions } from "../../domain/TodoListPermissions";
+import { aTodoListPermission } from "./builders/TodoListPermission";
 
 describe("Changing a todo completion status", () => {
   let changeTodoCompletion: ChangeTodoCompletion;
   let todoLists: TodoLists;
+  let todoListPermissions: TodoListPermissions;
   let todos: Todos;
 
   beforeEach(() => {
     todos = new TodosInMemory();
     todoLists = new TodoListsInMemory();
-    changeTodoCompletion = new ChangeTodoCompletion(todoLists, todos);
+    todoListPermissions = new TodoListPermissionsInMemory();
+    changeTodoCompletion = new ChangeTodoCompletion(
+      todoLists,
+      todoListPermissions,
+      todos
+    );
+  });
+
+  it("only the owner can change todo completion", async () => {
+    // Arrange
+    const theTodoListId = "todoList/1";
+    const theTodoId = "todo/1";
+    const theOwnerId = "owner/1";
+    const theCollaboratorId = "collaborator/1";
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
+    await todoListPermissions.save(thePermissions);
+
+    // Act
+    const result = changeTodoCompletion.execute(
+      theTodoListId,
+      theTodoId,
+      "on",
+      theCollaboratorId
+    );
+
+    // Assert
+    await expect(result).rejects.toEqual(new Error("Do not have permission"));
   });
 
   it("should complete the todo and move it to the end of the list", async () => {
@@ -27,12 +60,20 @@ describe("Changing a todo completion status", () => {
       .withId(theTodoListId)
       .withTodosOrder("todo/1", "todo/2", "todo/3")
       .build();
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
     const theTodo = anUncompletedTodo()
       .withId(theTodoId)
       .ofTodoList(theTodoListId)
       .ownedBy(theOwnerId)
       .build();
-    await Promise.all([todos.save(theTodo), todoLists.save(theTodoList)]);
+    await Promise.all([
+      todoListPermissions.save(thePermissions),
+      todos.save(theTodo),
+      todoLists.save(theTodoList),
+    ]);
 
     // Act
     await changeTodoCompletion.execute(
@@ -58,12 +99,20 @@ describe("Changing a todo completion status", () => {
       .withId(theTodoListId)
       .withTodosOrder("todo/3", "todo/2", "todo/1")
       .build();
+    const thePermissions = aTodoListPermission()
+      .forTodoList(theTodoListId)
+      .forOwner(theOwnerId)
+      .build();
     const theTodo = anUncompletedTodo()
       .withId(theTodoId)
       .ofTodoList(theTodoListId)
       .ownedBy(theOwnerId)
       .build();
-    await Promise.all([todoLists.save(theTodoList), todos.save(theTodo)]);
+    await Promise.all([
+      todoListPermissions.save(thePermissions),
+      todoLists.save(theTodoList),
+      todos.save(theTodo),
+    ]);
 
     // Act
     await changeTodoCompletion.execute(

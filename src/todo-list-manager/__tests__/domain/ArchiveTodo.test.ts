@@ -27,18 +27,11 @@ describe("Archiving a todo", () => {
     const theOwnerId = "owner/1";
     const theCollaboratorId = "collaborator/unauthorized";
     const theTodoListId = "todoLists/1";
-    const theTodoList = aTodoList()
-      .withId(theTodoListId)
-      .ownedBy(theOwnerId)
-      .build();
     const thePermissions = aTodoListPermission()
       .forTodoList(theTodoListId)
       .forOwner(theOwnerId)
       .build();
-    await Promise.all([
-      todoLists.save(theTodoList),
-      todoListPermissions.save(thePermissions),
-    ]);
+    await todoListPermissions.save(thePermissions);
 
     // Act
     const result = archiveTodo.execute(
