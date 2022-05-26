@@ -5,6 +5,7 @@ import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo } from "./builders/Todo";
 import { aTodoListPermission } from "./builders/TodoListPermission";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 
 describe("Renaming a todo", () => {
   let todos: Todos;
@@ -37,7 +38,9 @@ describe("Renaming a todo", () => {
     );
 
     // Assert
-    await expect(result).rejects.toEqual(new Error("Do not have permission"));
+    await expect(result).rejects.toEqual(
+      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
+    );
   });
 
   it("renames the todo list", async () => {

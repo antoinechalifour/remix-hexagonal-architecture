@@ -5,6 +5,7 @@ import { aTodo } from "./builders/Todo";
 import { aTodoListPermission } from "./builders/TodoListPermission";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 
 describe("Tagging a todo", () => {
   let todos: Todos;
@@ -38,7 +39,9 @@ describe("Tagging a todo", () => {
     );
 
     // Assert
-    await expect(result).rejects.toEqual(new Error("Do not have permission"));
+    await expect(result).rejects.toEqual(
+      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
+    );
   });
 
   it("adds new tags to the todo", async () => {
