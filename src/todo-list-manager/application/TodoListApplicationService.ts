@@ -42,7 +42,7 @@ export class TodoListApplicationService {
     todoListTitle: string,
     currentUser: CurrentUser
   ) {
-    await new RenameTodoList(this.todoLists).execute(
+    await new RenameTodoList(this.todoLists, this.todoListPermissions).execute(
       todoListId,
       todoListTitle,
       currentUser.id

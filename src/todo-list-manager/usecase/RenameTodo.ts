@@ -3,7 +3,7 @@ import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoListId } from "../domain/TodoList";
 import { renameTodo, TodoId } from "../domain/Todo";
-import { canRenameTodo } from "../domain/TodoListPermission";
+import { canEditTodoList } from "../domain/TodoListPermission";
 
 export class RenameTodo {
   constructor(
@@ -18,7 +18,7 @@ export class RenameTodo {
     collaboratorId: CollaboratorId
   ) {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
-    canRenameTodo(permission, collaboratorId);
+    canEditTodoList(permission, collaboratorId);
 
     const todo = await this.todos.ofId(todoId, collaboratorId);
     await this.todos.save(renameTodo(todo, title));
