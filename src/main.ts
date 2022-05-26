@@ -1,6 +1,6 @@
+import path from "path";
 import { NestFactory } from "@nestjs/core";
 import { ApplicationModule } from "web";
-import path from "path";
 
 const session = {
   name: "__session",

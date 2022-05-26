@@ -1,4 +1,5 @@
 import path from "path";
+import { SessionIdStorageStrategy } from "remix";
 import { DynamicModule, Module } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ServeStaticModule } from "@nestjs/serve-static";
@@ -10,6 +11,7 @@ import { Prisma } from "shared/database";
 import {
   AccountDatabaseRepository,
   AuthenticationApplicationService,
+  AuthenticationEventsConsumer,
   BCryptPasswordHasher,
   FetchAuthenticationStatusDatabaseQuery,
 } from "authentication";
@@ -29,15 +31,13 @@ import {
   REMIX_HANDLER,
   SESSION_CONFIG,
 } from "../keys";
+import { SessionAuthenticator } from "./authenticator/SessionAuthenticator";
+import { SessionManager } from "./authenticator/SessionManager";
 import { TodoListEventsController } from "./controllers/TodoListEventsController";
 import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
-import { AuthenticationEventsConsumer } from "../authentication/application/AuthenticationEventsConsumer";
 import { RemixController } from "./remix/RemixController";
-import { SessionAuthenticator } from "./authenticator/SessionAuthenticator";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
-import { SessionManager } from "./authenticator/SessionManager";
-import { SessionIdStorageStrategy } from "remix";
 
 @Module({
   imports: [
