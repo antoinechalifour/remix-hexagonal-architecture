@@ -67,6 +67,7 @@ export class TodoApplicationService {
     await this.prisma.$transaction((prisma) =>
       new ChangeTodoCompletion(
         new TodoListDatabaseRepository(prisma),
+        new TodoListPermissionsDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma)
       ).execute(todoListId, todoId, isChecked, currentUser.id)
     );
