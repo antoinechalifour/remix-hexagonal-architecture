@@ -1,5 +1,4 @@
 import type { TodoListId } from "./TodoList";
-import type { OwnerId } from "./OwnerId";
 
 export type TodoId = string;
 
@@ -9,7 +8,6 @@ export type Todo = {
   isComplete: boolean;
   createdAt: string;
   todoListId: TodoListId;
-  ownerId: OwnerId;
   tags: string[];
 };
 

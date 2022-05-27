@@ -34,10 +34,8 @@ describe("TodoListPrismaRepository", () => {
   it("should be able to save todo lists", async () => {
     // Arrange
     const theTodoListId = "85b02c5f-312a-46bb-8770-09b9b98abde3";
-    const theOwnerId = "03dbad14-8a50-43e3-90d6-ecd4ae0e0d64";
     const todoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todos/2", "todo/1")
       .build();
 
@@ -50,7 +48,6 @@ describe("TodoListPrismaRepository", () => {
 
   it("should be able to remove todo lists and their associated todos", async () => {
     // Arrange
-    const theOwnerId = "0410dc49-24d5-4d84-a928-3f1d075f7bb1";
     const theTodoListToRemoveId = "78d492f1-f182-41b9-81a4-b117ceadcca7";
     const theTodoToRemoveId = "66f7f65f-412e-44a8-babd-d9a464a2f3a8";
     const theTodoListToKeepId = "703f7440-2102-4c61-9e60-d1de142d711f";
@@ -59,15 +56,13 @@ describe("TodoListPrismaRepository", () => {
       todoLists,
       todos,
       theTodoListToRemoveId,
-      theTodoToRemoveId,
-      theOwnerId
+      theTodoToRemoveId
     );
     await saveATodoListWithATodo(
       todoLists,
       todos,
       theTodoListToKeepId,
-      theTodoToKeepId,
-      theOwnerId
+      theTodoToKeepId
     );
 
     // Act
@@ -94,15 +89,10 @@ async function saveATodoListWithATodo(
   todoLists: TodoLists,
   todos: Todos,
   todoListId: string,
-  todoId: string,
-  ownerId: string
+  todoId: string
 ) {
-  const todoList = aTodoList().withId(todoListId).ownedBy(ownerId).build();
-  const todo = aTodo()
-    .withId(todoId)
-    .ofTodoList(todoList.id)
-    .ownedBy(ownerId)
-    .build();
+  const todoList = aTodoList().withId(todoListId).build();
+  const todo = aTodo().withId(todoId).ofTodoList(todoList.id).build();
   await todoLists.save(todoList);
   await todos.save(todo);
 }

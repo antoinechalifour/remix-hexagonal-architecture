@@ -1,8 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { PrismaRepository } from "shared/database";
 import type { TodoList, TodoListId } from "../domain/TodoList";
 import type { TodoLists } from "../domain/TodoLists";
-import type { OwnerId } from "../domain/OwnerId";
+import { Injectable } from "@nestjs/common";
+import { PrismaRepository } from "shared/database";
 
 @Injectable()
 export class TodoListDatabaseRepository
@@ -20,23 +19,8 @@ export class TodoListDatabaseRepository
       id: todoList.id,
       createdAt: todoList.createdAt.toISOString(),
       title: todoList.title,
-      ownerId: todoList.ownerId,
       todosOrder: todoList.todosOrder as string[],
     };
-  }
-
-  async all(ownerId: OwnerId): Promise<TodoList[]> {
-    const todoLists = await this.prisma.todoList.findMany({
-      where: { ownerId },
-    });
-
-    return todoLists.map((row) => ({
-      id: row.id,
-      createdAt: row.createdAt.toISOString(),
-      title: row.title,
-      ownerId,
-      todosOrder: row.todosOrder as string[],
-    }));
   }
 
   async save(todoList: TodoList): Promise<void> {
@@ -50,7 +34,6 @@ export class TodoListDatabaseRepository
         id: todoList.id,
         title: todoList.title,
         createdAt: new Date(todoList.createdAt),
-        ownerId: todoList.ownerId,
         todosOrder: todoList.todosOrder,
       },
     });

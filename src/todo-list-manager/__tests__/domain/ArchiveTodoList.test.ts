@@ -42,10 +42,7 @@ describe("Archiving a todo list", () => {
     // Arrange
     const theTodoListId = "todoList/1";
     const theOwnerId = "owner/1";
-    const theTodoList = aTodoList()
-      .withId(theTodoListId)
-      .ownedBy(theOwnerId)
-      .build();
+    const theTodoList = aTodoList().withId(theTodoListId).build();
     const thePermissions = aTodoListPermission()
       .forTodoList(theTodoListId)
       .forOwner(theOwnerId)
@@ -54,12 +51,13 @@ describe("Archiving a todo list", () => {
       todoLists.save(theTodoList),
       todoListPermissions.save(thePermissions),
     ]);
-    expect(await todoLists.all(theOwnerId)).toHaveLength(1);
 
     // Act
     await archiveTodoList.execute(theTodoListId, theOwnerId);
 
     // Assert
-    expect(await todoLists.all(theOwnerId)).toHaveLength(0);
+    expect(() => todoLists.ofId(theTodoListId)).toThrow(
+      new Error(`Todolist todoList/1 not found`)
+    );
   });
 });

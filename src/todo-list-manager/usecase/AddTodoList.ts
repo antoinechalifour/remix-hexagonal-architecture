@@ -16,8 +16,8 @@ export class AddTodoList {
   ) {}
 
   async execute(title: string, ownerId: OwnerId) {
-    const todoList = makeTodoList(title, ownerId, this.generateId, this.clock);
-    const todoListPermissions = createPermissions(todoList);
+    const todoList = makeTodoList(title, this.generateId, this.clock);
+    const todoListPermissions = createPermissions(todoList, ownerId);
 
     await this.todoLists.save(todoList);
     await this.todoListPermissions.save(todoListPermissions);

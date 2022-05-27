@@ -49,7 +49,7 @@ describe("Tagging a todo", () => {
     const theTodoListId = "todoList/1";
     const theTodoId = "todo/1";
     const theOwnerId = "owner/1";
-    const theTodo = aTodo().withId(theTodoId).ownedBy(theOwnerId).build();
+    const theTodo = aTodo().withId(theTodoId).build();
     const thePermissions = aTodoListPermission()
       .forTodoList(theTodoListId)
       .forOwner(theOwnerId)
@@ -78,7 +78,6 @@ describe("Tagging a todo", () => {
     const theOwnerId = "owner/1";
     const theTodo = aTodo()
       .withId(theTodoId)
-      .ownedBy(theOwnerId)
       .taggedAs("tag 1", "tag 2", "tag 3")
       .build();
     const thePermissions = aTodoListPermission()

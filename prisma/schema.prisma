@@ -15,7 +15,6 @@ model Todo {
   isComplete Boolean
   TodoList   TodoList @relation(fields: [todoListId], references: [id])
   todoListId String   @db.Uuid
-  ownerId    String   @db.Uuid
   tags       Json     @default("[]")
 }
 
@@ -24,7 +23,6 @@ model TodoList {
   createdAt  DateTime
   title      String
   todos      Todo[]
-  ownerId    String   @db.Uuid
   todosOrder Json
 }
 

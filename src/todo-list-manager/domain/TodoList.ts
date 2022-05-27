@@ -1,7 +1,6 @@
 import type { GenerateId } from "shared/id";
 import type { Clock } from "shared/time";
 import type { Todo, TodoId } from "./Todo";
-import type { OwnerId } from "./OwnerId";
 
 import { moveArrayItem } from "shared/lib";
 
@@ -11,20 +10,17 @@ export type TodoList = {
   id: TodoListId;
   title: string;
   createdAt: string;
-  ownerId: OwnerId;
   todosOrder: TodoId[];
 };
 
 export const makeTodoList = (
   title: string,
-  ownerId: OwnerId,
   generateId: GenerateId,
   clock: Clock
 ): TodoList => ({
   id: generateId.generate(),
   createdAt: clock.now().toISOString(),
   title,
-  ownerId,
   todosOrder: [],
 });
 
@@ -45,7 +41,6 @@ export const addTodo = (
     title,
     isComplete: false,
     todoListId: todoList.id,
-    ownerId: todoList.ownerId,
     tags: [],
   };
 

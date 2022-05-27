@@ -51,7 +51,6 @@ describe("Untagging a todo", () => {
     const theOwnerId = "owner/1";
     const theTodo = aTodo()
       .withId(theTodoId)
-      .ownedBy(theOwnerId)
       .taggedAs("feature", "top priority", "research required")
       .build();
     const thePermissions = aTodoListPermission()

@@ -49,7 +49,6 @@ describe("ReorderTodos", () => {
     const theOwnerId = "owner/1";
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2", "todo/3", "todo/4")
       .build();
     const thePermissions = aTodoListPermission()
@@ -80,7 +79,6 @@ describe("ReorderTodos", () => {
     const theOwnerId = "owner/1";
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2")
       .build();
     const thePermissions = aTodoListPermission()
@@ -104,7 +102,6 @@ describe("ReorderTodos", () => {
     const theOwnerId = "owner/1";
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2")
       .build();
     const thePermissions = aTodoListPermission()
@@ -128,7 +125,6 @@ describe("ReorderTodos", () => {
     const theOwnerId = "owner/1";
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todo/1", "todo/2")
       .build();
     const thePermissions = aTodoListPermission()
