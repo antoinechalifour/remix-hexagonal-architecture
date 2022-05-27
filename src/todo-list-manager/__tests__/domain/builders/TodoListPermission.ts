@@ -13,7 +13,7 @@ export const aTodoListPermission = (): TodoListPermissionBuilder => ({
   todoListPermission: {
     todoListId: "todoList/1",
     ownerId: "owner/1",
-    collaboratorIds: [],
+    collaboratorsIds: [],
   },
   forTodoList(todoListId: TodoListId): TodoListPermissionBuilder {
     this.todoListPermission.todoListId = todoListId;

@@ -37,6 +37,7 @@ model Account {
 }
 
 model TodoListPermission {
-  todoListId String @unique @db.Uuid
-  ownerId    String @db.Uuid
+  todoListId       String @unique @db.Uuid
+  ownerId          String @db.Uuid
+  collaboratorsIds Json   @default("[]")
 }
