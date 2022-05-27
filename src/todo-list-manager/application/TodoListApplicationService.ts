@@ -3,15 +3,18 @@ import { CurrentUser } from "authentication";
 import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
 import { GenerateUUID } from "shared/id";
+import { Prisma } from "shared/database";
+import { PRISMA } from "../../keys";
+import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoListShared } from "../domain/TodoListShared";
 import { AddTodoList } from "../usecase/AddTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
 import { ReorderTodos } from "../usecase/ReorderTodos";
 import { RenameTodoList } from "../usecase/RenameTodoList";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { ShareTodoList } from "../usecase/ShareTodoList";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
-import { PRISMA } from "../../keys";
-import { Prisma } from "shared/database";
+import { CollaboratorsAdapter } from "../infrastructure/CollaboratorsAdapter";
 
 @Injectable()
 export class TodoListApplicationService {
@@ -19,6 +22,7 @@ export class TodoListApplicationService {
     @Inject(PRISMA) private readonly prisma: Prisma,
     private readonly todoLists: TodoListDatabaseRepository,
     private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
+    private readonly collaborators: CollaboratorsAdapter,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
     private readonly events: NestEvents
@@ -76,5 +80,18 @@ export class TodoListApplicationService {
     this.events.publish(
       new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
+  }
+
+  async share(
+    todoListId: string,
+    collaboratorEmail: string,
+    currentUser: CurrentUser
+  ) {
+    await new ShareTodoList(
+      this.todoListPermissions,
+      this.collaborators
+    ).execute(todoListId, currentUser.id, collaboratorEmail);
+
+    this.events.publish(new TodoListShared(todoListId, collaboratorEmail));
   }
 }
