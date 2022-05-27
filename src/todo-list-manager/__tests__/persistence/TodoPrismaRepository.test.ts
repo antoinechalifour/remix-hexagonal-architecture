@@ -32,16 +32,14 @@ describe("TodoPrismaRepository", () => {
   afterEach(() => prisma.$disconnect());
 
   it("persists and retrieves todos", async () => {
-    const theOwnerId = "feff99e6-875f-4cf6-9c5a-40ee20008fc2";
     const theTodoId = "eb7531dd-0e2b-47b6-9bca-47182995f3ab";
-    const todoList = aTodoList().ownedBy(theOwnerId).build();
+    const todoList = aTodoList().build();
     await todoLists.save(todoList);
 
     // Persist todos
     let todo = anUncompletedTodo()
       .withId(theTodoId)
       .ofTodoList(todoList.id)
-      .ownedBy(theOwnerId)
       .build();
     await todos.save(todo);
     expect(await todos.ofId(theTodoId)).toEqual(todo);

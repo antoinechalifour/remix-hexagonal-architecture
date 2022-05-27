@@ -32,18 +32,16 @@ describe("Adding a todo list", () => {
     // Arrange
     const theTitle = "Things to do @ home";
     const theOwnerId = "owner/1";
-    expect(await todoLists.all(theOwnerId)).toHaveLength(0);
 
     // Act
     await addTodoList.execute(theTitle, theOwnerId);
 
     // Assert
-    const [todoList] = await todoLists.all(theOwnerId);
+    const todoList = await todoLists.ofId("todoList/1");
     expect(todoList).toEqual({
       id: "todoList/1",
       createdAt: "2022-01-05T12:00:00.000Z",
       title: "Things to do @ home",
-      ownerId: "owner/1",
       todosOrder: [],
     });
 

@@ -8,9 +8,12 @@ export type TodoListPermission = {
   ownerId: OwnerId;
 };
 
-export const createPermissions = (todoList: TodoList): TodoListPermission => ({
+export const createPermissions = (
+  todoList: TodoList,
+  ownerId: OwnerId
+): TodoListPermission => ({
   todoListId: todoList.id,
-  ownerId: todoList.ownerId,
+  ownerId: ownerId,
 });
 
 const isOwner = (

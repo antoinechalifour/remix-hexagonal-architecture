@@ -70,7 +70,6 @@ describe("Changing a todo completion status", () => {
     const theTodo = anUncompletedTodo()
       .withId(theTodoId)
       .ofTodoList(theTodoListId)
-      .ownedBy(theOwnerId)
       .build();
     await Promise.all([
       todoListPermissions.save(thePermissions),
@@ -111,7 +110,6 @@ describe("Changing a todo completion status", () => {
     const theTodo = anUncompletedTodo()
       .withId(theTodoId)
       .ofTodoList(theTodoListId)
-      .ownedBy(theOwnerId)
       .build();
     await Promise.all([
       todoListPermissions.save(thePermissions),

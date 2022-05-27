@@ -65,7 +65,6 @@ describe("Adding a todo", () => {
     const theOwnerId = "owner/1";
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todo/0")
       .build();
     const thePermissions = aTodoListPermission()
@@ -89,7 +88,6 @@ describe("Adding a todo", () => {
       isComplete: false,
       title: "Buy cereals",
       todoListId: "todoList/1",
-      ownerId: "owner/1",
       tags: [],
     });
 

@@ -50,7 +50,6 @@ describe("Renaming a todo", () => {
     const theTodoId = "todo/1";
     const theTodo = aTodo()
       .withId(theTodoId)
-      .ownedBy(theOwnerId)
       .withTitle("Current title")
       .build();
     const thePermissions = aTodoListPermission()

@@ -48,7 +48,6 @@ describe("Renaming a todo list", () => {
     let theOwnerId = "owner/1";
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTitle("Current title")
       .build();
     const thePermissions = aTodoListPermission()

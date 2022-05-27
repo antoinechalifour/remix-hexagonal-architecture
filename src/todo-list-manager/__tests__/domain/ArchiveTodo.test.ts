@@ -54,7 +54,6 @@ describe("Archiving a todo", () => {
 
     const theTodoList = aTodoList()
       .withId(theTodoListId)
-      .ownedBy(theOwnerId)
       .withTodosOrder("todos/1", "todos/2")
       .build();
     const thePermissions = aTodoListPermission()
@@ -63,12 +62,10 @@ describe("Archiving a todo", () => {
       .build();
     const theTodoRemoved = aTodo()
       .withId("todos/1")
-      .ownedBy(theOwnerId)
       .ofTodoList(theTodoListId)
       .build();
     const theTodoNotRemoved = aTodo()
       .withId("todos/2")
-      .ownedBy(theOwnerId)
       .ofTodoList(theTodoListId)
       .build();
 
