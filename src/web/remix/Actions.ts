@@ -34,6 +34,7 @@ import { UntagTodoBody, UntagTodoParams } from "./dtos/UntagTodo";
 import { ForgotPasswordBody } from "./dtos/ForgotPassword";
 import { ResetPasswordBody } from "./dtos/ResetPassword";
 import { RegisterBody } from "./dtos/Register";
+import { ShareTodoListBody, ShareTodoListParams } from "./dtos/ShareTodoList";
 
 @Injectable()
 export class Actions {
@@ -241,6 +242,21 @@ export class Actions {
       await this.authenticator.currentUser(),
       body.todoId,
       body.newIndex
+    );
+
+    return null;
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async shareTodoList(
+    @Params() params: ShareTodoListParams,
+    @Body() body: ShareTodoListBody
+  ) {
+    await this.todoListApplicationService.share(
+      params.todoListId,
+      body.email,
+      await this.authenticator.currentUser()
     );
 
     return null;

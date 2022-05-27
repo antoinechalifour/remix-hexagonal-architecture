@@ -16,6 +16,7 @@ import {
   FetchAuthenticationStatusDatabaseQuery,
 } from "authentication";
 import {
+  CollaboratorsAdapter,
   FetchHomePageDatabaseQuery,
   FetchTodoListDatabaseQuery,
   TodoApplicationService,
@@ -64,6 +65,7 @@ import { TodoListPermissionsDatabaseRepository } from "../todo-list-manager/infr
     },
 
     // TodoListManager
+    CollaboratorsAdapter,
     TodoApplicationService,
     TodoListApplicationService,
     TodoDatabaseRepository,
