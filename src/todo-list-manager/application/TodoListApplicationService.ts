@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable } from "@nestjs/common";
 import { CurrentUser } from "authentication";
 import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
@@ -10,10 +10,13 @@ import { RenameTodoList } from "../usecase/RenameTodoList";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
+import { PRISMA } from "../../keys";
+import { Prisma } from "shared/database";
 
 @Injectable()
 export class TodoListApplicationService {
   constructor(
+    @Inject(PRISMA) private readonly prisma: Prisma,
     private readonly todoLists: TodoListDatabaseRepository,
     private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
     private readonly generateId: GenerateUUID,
@@ -22,19 +25,23 @@ export class TodoListApplicationService {
   ) {}
 
   add(title: string, currentUser: CurrentUser) {
-    return new AddTodoList(
-      this.todoLists,
-      this.todoListPermissions,
-      this.generateId,
-      this.clock
-    ).execute(title, currentUser.id);
+    return this.prisma.$transaction((prisma) =>
+      new AddTodoList(
+        new TodoListDatabaseRepository(prisma),
+        new TodoListPermissionsDatabaseRepository(prisma),
+        this.generateId,
+        this.clock
+      ).execute(title, currentUser.id)
+    );
   }
 
-  archive(todoListId: string, currentUser: CurrentUser) {
-    return new ArchiveTodoList(
-      this.todoLists,
-      this.todoListPermissions
-    ).execute(todoListId, currentUser.id);
+  async archive(todoListId: string, currentUser: CurrentUser) {
+    await this.prisma.$transaction((prisma) =>
+      new ArchiveTodoList(
+        new TodoListDatabaseRepository(prisma),
+        new TodoListPermissionsDatabaseRepository(prisma)
+      ).execute(todoListId, currentUser.id)
+    );
   }
 
   async rename(

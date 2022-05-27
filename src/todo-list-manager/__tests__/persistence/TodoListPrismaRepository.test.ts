@@ -69,7 +69,7 @@ describe("TodoListPrismaRepository", () => {
     await todoLists.remove(theTodoListToRemoveId);
 
     // Assert
-    await expect(() => todoLists.ofId(theTodoListToRemoveId)).rejects.toThrow(
+    await expect(todoLists.ofId(theTodoListToRemoveId)).rejects.toThrow(
       "Todolist 78d492f1-f182-41b9-81a4-b117ceadcca7 was not found"
     );
     expect(await todos.ofTodoList(theTodoListToRemoveId)).toHaveLength(0);

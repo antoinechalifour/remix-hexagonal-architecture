@@ -31,4 +31,10 @@ export class TodoListPermissionsDatabaseRepository
       update: { ownerId: todoListPermission.ownerId },
     });
   }
+
+  async remove(todoListPermission: TodoListPermission): Promise<void> {
+    await this.prisma.todoListPermission.delete({
+      where: { todoListId: todoListPermission.todoListId },
+    });
+  }
 }

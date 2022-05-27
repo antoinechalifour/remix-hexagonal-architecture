@@ -56,8 +56,11 @@ describe("Archiving a todo list", () => {
     await archiveTodoList.execute(theTodoListId, theOwnerId);
 
     // Assert
-    expect(() => todoLists.ofId(theTodoListId)).toThrow(
-      new Error(`Todolist todoList/1 not found`)
+    await expect(todoLists.ofId(theTodoListId)).rejects.toThrow(
+      new Error("Todolist todoList/1 not found")
+    );
+    await expect(todoListPermissions.ofTodoList(theTodoListId)).rejects.toThrow(
+      new Error("Not permissions found for todolist todoList/1")
     );
   });
 });
