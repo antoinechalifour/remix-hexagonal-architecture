@@ -1,10 +1,10 @@
 import type { PrismaClient } from "@prisma/client";
-import { Inject, Injectable } from "@nestjs/common";
 import type { TodoListDto } from "shared/client";
 import type { TodoListId } from "../domain/TodoList";
-import { PRISMA } from "../../keys";
 import type { FetchTodoList } from "../domain/FetchTodoList";
 import type { OwnerId } from "../domain/OwnerId";
+import { Inject, Injectable } from "@nestjs/common";
+import { PRISMA } from "../../keys";
 
 type TodoListRow = {
   id: string;
