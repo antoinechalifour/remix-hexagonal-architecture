@@ -6,7 +6,7 @@ import { TodoListPermissionDenied } from "./TodoListPermissionDenied";
 export type TodoListPermission = {
   todoListId: TodoListId;
   ownerId: OwnerId;
-  collaboratorIds: CollaboratorId[];
+  collaboratorsIds: CollaboratorId[];
 };
 
 export const createPermissions = (
@@ -15,7 +15,7 @@ export const createPermissions = (
 ): TodoListPermission => ({
   todoListId: todoList.id,
   ownerId: ownerId,
-  collaboratorIds: [],
+  collaboratorsIds: [],
 });
 
 export const shareWithCollaborator = (
@@ -23,7 +23,7 @@ export const shareWithCollaborator = (
   collaboratorId: CollaboratorId
 ): TodoListPermission => ({
   ...permission,
-  collaboratorIds: [...permission.collaboratorIds, collaboratorId],
+  collaboratorsIds: [...permission.collaboratorsIds, collaboratorId],
 });
 
 const isOwner = (

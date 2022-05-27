@@ -18,7 +18,7 @@ export class TodoListPermissionsDatabaseRepository
     return {
       todoListId: row.todoListId,
       ownerId: row.ownerId,
-      collaboratorIds: [],
+      collaboratorsIds: row.collaboratorsIds as string[],
     };
   }
 
