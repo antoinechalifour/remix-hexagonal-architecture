@@ -19,12 +19,11 @@ import { TodoListUpdated } from "../domain/TodoListUpdated";
 @Injectable()
 export class TodoApplicationService {
   constructor(
-    private readonly todoLists: TodoListDatabaseRepository,
+    @Inject(PRISMA) private readonly prisma: Prisma,
     private readonly todos: TodoDatabaseRepository,
     private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
-    @Inject(PRISMA) private readonly prisma: Prisma,
     private readonly events: NestEvents
   ) {}
 

@@ -51,7 +51,7 @@ describe("TodoPrismaRepository", () => {
 
     // Removes todos
     await todos.remove(theTodoId);
-    await expect(() => todos.ofId(theTodoId)).rejects.toThrow(
+    await expect(todos.ofId(theTodoId)).rejects.toThrow(
       new Error("No Todo found")
     );
   });
