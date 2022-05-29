@@ -49,6 +49,7 @@ describe("Adding a todo list", () => {
     expect(permissions).toEqual({
       todoListId: "todoList/1",
       ownerId: "owner/1",
+      collaboratorsIds: [],
     });
   });
 });
