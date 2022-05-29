@@ -4,6 +4,7 @@ import type { Collaborators } from "../domain/Collaborators";
 import type { CollaboratorId } from "../domain/CollaboratorId";
 import {
   canShareTodoList,
+  isCollaborator,
   shareWithCollaborator,
 } from "../domain/TodoListPermission";
 
@@ -21,9 +22,14 @@ export class ShareTodoList {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
     canShareTodoList(permission, collaboratorId);
 
-    const collaborator = await this.collaborators.ofEmail(newCollaboratorEmail);
-    await this.todoListPermissions.save(
-      shareWithCollaborator(permission, collaborator.id)
+    const collaboratorToShareWith = await this.collaborators.ofEmail(
+      newCollaboratorEmail
     );
+
+    if (!isCollaborator(permission, collaboratorToShareWith.id)) {
+      await this.todoListPermissions.save(
+        shareWithCollaborator(permission, collaboratorToShareWith.id)
+      );
+    }
   }
 }

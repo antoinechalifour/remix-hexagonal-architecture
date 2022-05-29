@@ -80,6 +80,11 @@ describe("ShareTodoList", () => {
       theCollaboratorId,
       "john.doe@example.com"
     );
+    await shareTodoList.execute(
+      theTodoListId,
+      theCollaboratorId,
+      "john.doe@example.com"
+    );
 
     // Assert
     expect(await todoListPermissions.ofTodoList(theTodoListId)).toEqual({
