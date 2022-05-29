@@ -1,11 +1,11 @@
-import { TodoListId } from "../domain/TodoList";
-import { OwnerId } from "../domain/OwnerId";
-import { TodoListPermissions } from "../domain/TodoListPermissions";
+import type { TodoListId } from "../domain/TodoList";
+import type { TodoListPermissions } from "../domain/TodoListPermissions";
+import type { Collaborators } from "../domain/Collaborators";
+import type { CollaboratorId } from "../domain/CollaboratorId";
 import {
   canShareTodoList,
   shareWithCollaborator,
 } from "../domain/TodoListPermission";
-import { Collaborators } from "../domain/Collaborators";
 
 export class ShareTodoList {
   constructor(
@@ -15,11 +15,11 @@ export class ShareTodoList {
 
   async execute(
     todoListId: TodoListId,
-    ownerId: OwnerId,
+    collaboratorId: CollaboratorId,
     newCollaboratorEmail: string
   ) {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
-    canShareTodoList(permission, ownerId);
+    canShareTodoList(permission, collaboratorId);
 
     const collaborator = await this.collaborators.ofEmail(newCollaboratorEmail);
     await this.todoListPermissions.save(
