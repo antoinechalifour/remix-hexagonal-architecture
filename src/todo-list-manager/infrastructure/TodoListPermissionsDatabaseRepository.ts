@@ -52,8 +52,9 @@ export class TodoListPermissionsDatabaseRepository
       create: {
         todoListId: todoListPermission.todoListId,
         ownerId: todoListPermission.ownerId,
+        collaboratorsIds: todoListPermission.collaboratorsIds,
       },
-      update: { ownerId: todoListPermission.ownerId },
+      update: { collaboratorsIds: todoListPermission.collaboratorsIds },
     });
   }
 
