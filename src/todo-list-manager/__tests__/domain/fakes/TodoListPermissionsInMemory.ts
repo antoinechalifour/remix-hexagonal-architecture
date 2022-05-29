@@ -1,7 +1,7 @@
 import type { TodoListPermissions } from "../../../domain/TodoListPermissions";
 import type { TodoListId } from "../../../domain/TodoList";
 import type { TodoListPermission } from "../../../domain/TodoListPermission";
-import { CollaboratorId } from "../../../domain/CollaboratorId";
+import type { CollaboratorId } from "../../../domain/CollaboratorId";
 
 export class TodoListPermissionsInMemory implements TodoListPermissions {
   private __database = new Map<TodoListId, TodoListPermission>();
