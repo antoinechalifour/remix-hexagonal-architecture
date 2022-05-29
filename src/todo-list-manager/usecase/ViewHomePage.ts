@@ -1,11 +1,11 @@
 import { CollaboratorId } from "../domain/CollaboratorId";
 import { TodoListPermissions } from "../domain/TodoListPermissions";
-import { TodoListsSummaryQuery } from "todo-list-manager";
+import { TodoListQuery } from "../domain/TodoListQuery";
 
 export class ViewHomePage {
   constructor(
     private readonly todoListPermissions: TodoListPermissions,
-    private readonly todoListsSummaryQuery: TodoListsSummaryQuery
+    private readonly todoListQuery: TodoListQuery
   ) {}
 
   async execute(collaboratorId: CollaboratorId) {
@@ -13,7 +13,7 @@ export class ViewHomePage {
       collaboratorId
     );
 
-    return this.todoListsSummaryQuery.ofTodoLists(
+    return this.todoListQuery.summaryOfTodoLists(
       permissions.map((permission) => permission.todoListId)
     );
   }

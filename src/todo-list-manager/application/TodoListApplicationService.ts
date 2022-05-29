@@ -17,7 +17,6 @@ import { ViewTodoList } from "../usecase/ViewTodoList";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
 import { CollaboratorsAdapter } from "../infrastructure/CollaboratorsAdapter";
-import { TodoListsSummaryDatabaseQuery } from "../infrastructure/TodoListsSummaryDatabaseQuery";
 import { TodoListDatabaseQuery } from "../infrastructure/TodoListDatabaseQuery";
 
 @Injectable()
@@ -26,7 +25,6 @@ export class TodoListApplicationService {
     @Inject(PRISMA) private readonly prisma: Prisma,
     private readonly todoLists: TodoListDatabaseRepository,
     private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
-    private readonly todoListsSummaryQuery: TodoListsSummaryDatabaseQuery,
     private readonly todoListQuery: TodoListDatabaseQuery,
     private readonly collaborators: CollaboratorsAdapter,
     private readonly generateId: GenerateUUID,
@@ -104,7 +102,7 @@ export class TodoListApplicationService {
   viewHomePage(collaboratorId: string) {
     return new ViewHomePage(
       this.todoListPermissions,
-      this.todoListsSummaryQuery
+      this.todoListQuery
     ).execute(collaboratorId);
   }
 

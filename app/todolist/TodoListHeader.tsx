@@ -1,4 +1,4 @@
-import type { TodoListDto } from "shared/client";
+import type { TodoListDetailsDto } from "shared/client";
 
 import React from "react";
 import { useFetcher } from "@remix-run/react";
@@ -7,7 +7,7 @@ import { PageTitle } from "front/ui/PageTitle";
 import { displayDate } from "front/Date";
 import { AddTodoForm } from "front/todolist/AddTodoForm";
 
-export type TodoListHeaderProps = { todoList: TodoListDto };
+export type TodoListHeaderProps = { todoList: TodoListDetailsDto };
 
 export const TodoListHeader = ({ todoList }: TodoListHeaderProps) => {
   const updateTodoListTitle = useFetcher();

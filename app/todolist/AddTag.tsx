@@ -1,11 +1,11 @@
-import type { TodoDto, TodoListDto } from "shared/client";
+import type { TodoDto, TodoListDetailsDto } from "shared/client";
 
 import React, { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { Popover } from "front/ui/Popover";
 
 export type AddTagProps = {
-  todoList: TodoListDto;
+  todoList: TodoListDetailsDto;
   todo: TodoDto;
 };
 

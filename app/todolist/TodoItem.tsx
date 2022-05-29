@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared/client";
+import type { TodoDto, TodoListDetailsDto } from "shared/client";
 
 import React from "react";
 import classNames from "classnames";
@@ -12,7 +12,7 @@ import { TodoPopoverContent } from "front/todolist/TodoPopoverContent";
 import { TodoTag } from "front/todolist/TodoTag";
 
 export interface TodoItemProps {
-  todoList: TodoListDto;
+  todoList: TodoListDetailsDto;
   todo: TodoDto;
   className?: string;
 }

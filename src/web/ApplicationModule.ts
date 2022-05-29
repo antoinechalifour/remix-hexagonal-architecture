@@ -17,7 +17,6 @@ import {
 } from "authentication";
 import {
   CollaboratorsAdapter,
-  TodoListsSummaryDatabaseQuery,
   TodoListDatabaseQuery,
   TodoApplicationService,
   TodoDatabaseRepository,
@@ -71,7 +70,6 @@ import { Loaders } from "./remix/Loaders";
     TodoDatabaseRepository,
     TodoListDatabaseRepository,
     TodoListPermissionsDatabaseRepository,
-    TodoListsSummaryDatabaseQuery,
     TodoListDatabaseQuery,
 
     // Remix stuff

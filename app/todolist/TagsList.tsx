@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared/client";
+import type { TodoDto, TodoListDetailsDto } from "shared/client";
 
 import React from "react";
 import { DotFilledIcon } from "@radix-ui/react-icons";
@@ -8,7 +8,11 @@ import { useFetcher } from "@remix-run/react";
 import { PlainButton } from "front/ui/Button";
 import classNames from "classnames";
 
-type SelectedTagProps = { tag: string; todoList: TodoListDto; todo: TodoDto };
+type SelectedTagProps = {
+  tag: string;
+  todoList: TodoListDetailsDto;
+  todo: TodoDto;
+};
 const SelectedTag = ({ tag, todoList, todo }: SelectedTagProps) => {
   const untagTodo = useFetcher();
 
@@ -36,7 +40,7 @@ const SelectableTag = ({
   todo,
 }: {
   tag: string;
-  todoList: TodoListDto;
+  todoList: TodoListDetailsDto;
   todo: TodoDto;
 }) => {
   const tagTodo = useFetcher();
@@ -70,7 +74,7 @@ export const TagsList = ({
   todoList,
 }: {
   todo: TodoDto;
-  todoList: TodoListDto;
+  todoList: TodoListDetailsDto;
 }) => {
   const isTaggedWith = (tagToCheck: string) => todo.tags.includes(tagToCheck);
 

@@ -1,4 +1,4 @@
-import type { TodoListDto } from "shared/client";
+import type { TodoListDetailsDto } from "shared/client";
 
 import React from "react";
 import { Todos } from "front/todolist/Todos";
@@ -11,7 +11,7 @@ import { useTodoListFilter } from "front/todolist/useTodoListFilter";
 import { TodosHeading } from "front/todolist/TodosHeading";
 
 interface TodoListProps {
-  todoList: TodoListDto;
+  todoList: TodoListDetailsDto;
 }
 
 export const TodoList = ({ todoList }: TodoListProps) => {

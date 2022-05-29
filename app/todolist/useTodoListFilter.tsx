@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared/client";
+import type { TodoDto, TodoListDetailsDto } from "shared/client";
 import type { Filter } from "front/todolist/TagFilters";
 
 import { useState } from "react";
@@ -20,7 +20,7 @@ function makeFilterLabel(
   return fullList.length;
 }
 
-export function useTodoListFilter(todoList: TodoListDto) {
+export function useTodoListFilter(todoList: TodoListDetailsDto) {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const doingTodos = todoList.doingTodos.filter((todo) =>
