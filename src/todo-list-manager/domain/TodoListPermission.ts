@@ -37,6 +37,23 @@ const isOwner = (
     );
 };
 
-export const canEditTodoList = isOwner;
-export const canShareTodoList = isOwner;
+export const isCollaborator = (
+  todoListPermission: TodoListPermission,
+  collaboratorId: CollaboratorId
+) => {
+  const owner = todoListPermission.ownerId === collaboratorId;
+  const collaborator =
+    todoListPermission.collaboratorsIds.includes(collaboratorId);
+
+  if (!owner && !collaborator) {
+    throw new TodoListPermissionDenied(
+      todoListPermission.todoListId,
+      collaboratorId
+    );
+  }
+};
+
 export const canArchiveTodoList = isOwner;
+export const canEditTodoList = isCollaborator;
+export const canShareTodoList = isCollaborator;
+export const canView = isCollaborator;

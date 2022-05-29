@@ -3,6 +3,7 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermission } from "../domain/TodoListPermission";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
+import { CollaboratorId } from "../domain/CollaboratorId";
 
 @Injectable()
 export class TodoListPermissionsDatabaseRepository
@@ -20,6 +21,29 @@ export class TodoListPermissionsDatabaseRepository
       ownerId: row.ownerId,
       collaboratorsIds: row.collaboratorsIds as string[],
     };
+  }
+
+  async ofCollaborator(
+    collaboratorId: CollaboratorId
+  ): Promise<TodoListPermission[]> {
+    const rows = await this.prisma.todoListPermission.findMany({
+      where: {
+        OR: [
+          { ownerId: collaboratorId },
+          {
+            collaboratorsIds: {
+              array_contains: [collaboratorId],
+            },
+          },
+        ],
+      },
+    });
+
+    return rows.map((row) => ({
+      todoListId: row.todoListId,
+      ownerId: row.ownerId,
+      collaboratorsIds: row.collaboratorsIds as string[],
+    }));
   }
 
   async save(todoListPermission: TodoListPermission): Promise<void> {

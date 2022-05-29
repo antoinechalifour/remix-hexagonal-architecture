@@ -1,8 +1,7 @@
 import type { PrismaClient } from "@prisma/client";
 import type { TodoListDto } from "shared/client";
 import type { TodoListId } from "../domain/TodoList";
-import type { FetchTodoList } from "../domain/FetchTodoList";
-import type { OwnerId } from "../domain/OwnerId";
+import type { TodoListQuery } from "../domain/TodoListQuery";
 import { Inject, Injectable } from "@nestjs/common";
 import { PRISMA } from "../../keys";
 
@@ -22,17 +21,17 @@ type TodoRow<Completion extends boolean> = {
 };
 
 @Injectable()
-export class FetchTodoListDatabaseQuery implements FetchTodoList {
+export class TodoListDatabaseQuery implements TodoListQuery {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
-  async run(todoListId: TodoListId, ownerId: OwnerId): Promise<TodoListDto> {
+  async ofTodoList(todoListId: TodoListId): Promise<TodoListDto> {
     const [{ todosOrder, ...todoList }, tags] = await Promise.all([
-      this.fetchTodoList(todoListId, ownerId),
-      this.fetchTodoListTags(todoListId, ownerId),
+      this.fetchTodoList(todoListId),
+      this.fetchTodoListTags(todoListId),
     ]);
     const [doingTodos, completedTodos] = await Promise.all([
-      this.fetchDoingTodos(todoListId, ownerId),
-      this.fetchCompleteTodos(todoListId, ownerId),
+      this.fetchDoingTodos(todoListId),
+      this.fetchCompleteTodos(todoListId),
     ]);
 
     if (!todoList)
@@ -46,39 +45,35 @@ export class FetchTodoListDatabaseQuery implements FetchTodoList {
     };
   }
 
-  private fetchTodoList(todoListId: TodoListId, ownerId: OwnerId) {
+  private fetchTodoList(todoListId: TodoListId) {
     return this.prisma.$queryRaw<TodoListRow[]>`
       SELECT TL.id, TL.title, TL."createdAt", TL."todosOrder"
       FROM "TodoList" TL
-      INNER JOIN "TodoListPermission" TLP on TL."id" = TLP."todoListId"
-      WHERE TL.id = ${todoListId} AND TLP."ownerId" = ${ownerId};
+      WHERE TL.id = ${todoListId};
     `.then((rows) => rows[0]);
   }
 
-  private fetchDoingTodos(todoListId: TodoListId, ownerId: OwnerId) {
+  private fetchDoingTodos(todoListId: TodoListId) {
     return this.prisma.$queryRaw<TodoRow<false>[]>`
       SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
-      INNER JOIN "TodoListPermission" TLP on T."todoListId" = TLP."todoListId"
       WHERE T."isComplete" IS false
-      AND T."todoListId" = ${todoListId} AND TLP."ownerId" = ${ownerId};
+      AND T."todoListId" = ${todoListId};
     `;
   }
 
-  private fetchCompleteTodos(todoListId: TodoListId, ownerId: OwnerId) {
+  private fetchCompleteTodos(todoListId: TodoListId) {
     return this.prisma.$queryRaw<TodoRow<true>[]>`
       SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
-      INNER JOIN "TodoListPermission" TLP on T."todoListId" = TLP."todoListId"
       WHERE T."isComplete" IS true
-      AND T."todoListId" = ${todoListId} AND TLP."ownerId" = ${ownerId};
+      AND T."todoListId" = ${todoListId};
     `;
   }
 
-  private async fetchTodoListTags(todoListId: TodoListId, ownerId: OwnerId) {
+  private async fetchTodoListTags(todoListId: TodoListId) {
     const rows = await this.prisma.$queryRaw<{ tag: string }[]>`
       SELECT DISTINCT jsonb_array_elements_text(T.tags) AS tag
       FROM "Todo" T
-      INNER JOIN "TodoListPermission" TLP on T."todoListId" = TLP."todoListId"
-      WHERE T."todoListId" = ${todoListId} AND TLP."ownerId" = ${ownerId}
+      WHERE T."todoListId" = ${todoListId}
       ORDER BY tag;
     `;
 

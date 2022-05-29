@@ -1,11 +1,11 @@
-export interface HomePageTodoListDto {
+export interface TodoListSummaryDto {
   id: string;
   title: string;
   createdAt: string;
   numberOfTodos: number;
 }
 
-export interface HomePageDto {
+export interface TodoListsSummaryDto {
   totalNumberOfDoingTodos: number;
-  todoLists: HomePageTodoListDto[];
+  todoLists: TodoListSummaryDto[];
 }
