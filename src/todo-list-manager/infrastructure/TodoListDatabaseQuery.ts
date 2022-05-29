@@ -35,9 +35,6 @@ export class TodoListDatabaseQuery implements TodoListQuery {
       this.fetchCompleteTodos(todoListId),
     ]);
 
-    if (!todoList)
-      throw new Response(`Todo list "${todoListId}" was not found.`);
-
     return {
       ...todoList,
       tags,
