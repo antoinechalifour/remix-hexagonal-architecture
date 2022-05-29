@@ -1,5 +1,5 @@
 import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
-import type { HomePageDto } from "shared/client";
+import type { TodoListsSummaryDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
 import { TodoLists } from "front/homepage/TodoLists";
@@ -9,7 +9,9 @@ export const meta: MetaFunction = ({ data: homePage }) => ({
   description: "Welcome to Todo List Manager!",
 });
 
-export const loader: LoaderFunction = async (args): Promise<HomePageDto> =>
+export const loader: LoaderFunction = async (
+  args
+): Promise<TodoListsSummaryDto> =>
   (args.context as RemixAppContext).loaders.homePage(args);
 
 export const action: ActionFunction = async (args) =>

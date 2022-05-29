@@ -1,4 +1,4 @@
-import type { HomePageTodoListDto } from "shared/client";
+import type { TodoListSummaryDto } from "shared/client";
 
 import { Link } from "remix";
 import { useFetcher } from "@remix-run/react";
@@ -9,7 +9,7 @@ import { CrossCircledIcon } from "@radix-ui/react-icons";
 import React from "react";
 
 interface TodoListItemProps {
-  todoList: HomePageTodoListDto;
+  todoList: TodoListSummaryDto;
 }
 
 export const TodoListItem = ({ todoList }: TodoListItemProps) => {

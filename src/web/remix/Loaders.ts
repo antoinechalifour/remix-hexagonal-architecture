@@ -3,20 +3,16 @@ import { json, redirect } from "remix";
 import {
   AuthenticationApplicationService,
   Authenticator,
-  FetchAuthenticationStatusDatabaseQuery,
 } from "authentication";
-import {
-  FetchHomePageDatabaseQuery,
-  FetchTodoListDatabaseQuery,
-} from "todo-list-manager";
+import { TodoListApplicationService } from "todo-list-manager";
 import { AUTHENTICATOR } from "../../keys";
 import { Authenticated } from "../authenticator/Authenticated";
+import { SessionManager } from "../authenticator/SessionManager";
 import { DataFunction } from "./decorators/DataFunction";
 import { Query } from "./decorators/Query";
 import { Params } from "./decorators/Params";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
 import { VerifyAccountQuery } from "./dtos/VerifyAccount";
-import { SessionManager } from "../authenticator/SessionManager";
 
 @Injectable()
 export class Loaders {
@@ -25,9 +21,7 @@ export class Loaders {
     private readonly authenticator: Authenticator,
     private readonly sessionManager: SessionManager,
     private readonly authenticationApplicationService: AuthenticationApplicationService,
-    private readonly fetchHomePageQuery: FetchHomePageDatabaseQuery,
-    private readonly fetchTodoListQuery: FetchTodoListDatabaseQuery,
-    private readonly fetchAuthenticationStatus: FetchAuthenticationStatusDatabaseQuery
+    private readonly todoListApplicationService: TodoListApplicationService
   ) {}
 
   @DataFunction()
@@ -66,7 +60,7 @@ export class Loaders {
 
   @DataFunction()
   async root() {
-    return this.fetchAuthenticationStatus.run();
+    return this.authenticationApplicationService.authenticationStatus();
   }
 
   @Authenticated()
@@ -108,13 +102,17 @@ export class Loaders {
   @DataFunction()
   async homePage() {
     const currentUser = await this.authenticator.currentUser();
-    return this.fetchHomePageQuery.run(currentUser.id);
+    return this.todoListApplicationService.viewHomePage(currentUser.id);
   }
 
   @Authenticated()
   @DataFunction()
   async todoList(@Params() params: FetchTodoListParams) {
     const currentUser = await this.authenticator.currentUser();
-    return this.fetchTodoListQuery.run(params.todoListId, currentUser.id);
+
+    return this.todoListApplicationService.viewTodoList(
+      params.todoListId,
+      currentUser.id
+    );
   }
 }

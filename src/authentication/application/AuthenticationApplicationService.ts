@@ -7,6 +7,8 @@ import { RealClock } from "shared/time";
 import { LoginFlow } from "../usecase/LoginFlow";
 import { RegisterFlow } from "../usecase/RegisterFlow";
 import { VerifyAccount } from "../usecase/VerifyAccount";
+import { ForgotPassword } from "../usecase/ForgotPassword";
+import { ResetPassword } from "../usecase/ResetPassword";
 import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
 import { InvalidVerificationTokenError } from "../domain/InvalidVerificationTokenError";
@@ -14,14 +16,13 @@ import { AccountAlreadyVerifiedError } from "../domain/AccountAlreadyVerifiedErr
 import { AccountNotVerifiedError } from "../domain/AccountNotVerifiedError";
 import { AccountNotFoundError } from "../domain/AccountNotFoundError";
 import { UserRegistered } from "../domain/UserRegistered";
-import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
-import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
-import { PasswordForgotten } from "../domain/PasswordForgotten";
-import { ForgotPassword } from "../usecase/ForgotPassword";
-import { ResetPassword } from "../usecase/ResetPassword";
 import { InvalidPasswordResetTokenError } from "../domain/InvalidPasswordResetTokenError";
 import { PasswordResetTokenExpiredError } from "../domain/PasswordResetTokenExpiredError";
 import { PasswordChanged } from "../domain/PasswordChanged";
+import { PasswordForgotten } from "../domain/PasswordForgotten";
+import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
+import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
+import { FetchAuthenticationStatusSessionQuery } from "../infrastructure/FetchAuthenticationStatusSessionQuery";
 
 type LoginResult =
   | [{ message: string }, null]
@@ -30,6 +31,7 @@ type LoginResult =
 @Injectable()
 export class AuthenticationApplicationService {
   constructor(
+    private readonly fetchAuthenticationStatus: FetchAuthenticationStatusSessionQuery,
     private readonly accounts: AccountDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
@@ -149,5 +151,9 @@ export class AuthenticationApplicationService {
 
       throw err;
     }
+  }
+
+  authenticationStatus() {
+    return this.fetchAuthenticationStatus.run();
   }
 }

@@ -13,14 +13,15 @@ import {
   AuthenticationApplicationService,
   AuthenticationEventsConsumer,
   BCryptPasswordHasher,
-  FetchAuthenticationStatusDatabaseQuery,
+  FetchAuthenticationStatusSessionQuery,
 } from "authentication";
 import {
   CollaboratorsAdapter,
-  FetchHomePageDatabaseQuery,
-  FetchTodoListDatabaseQuery,
+  TodoListsSummaryDatabaseQuery,
+  TodoListDatabaseQuery,
   TodoApplicationService,
   TodoDatabaseRepository,
+  TodoListPermissionsDatabaseRepository,
   TodoListApplicationService,
   TodoListDatabaseRepository,
 } from "todo-list-manager";
@@ -39,7 +40,6 @@ import { TodoListEventsConsumer } from "./controllers/TodoListEventsConsumer";
 import { RemixController } from "./remix/RemixController";
 import { Actions } from "./remix/Actions";
 import { Loaders } from "./remix/Loaders";
-import { TodoListPermissionsDatabaseRepository } from "../todo-list-manager/infrastructure/TodoListPermissionsDatabaseRepository";
 
 @Module({
   imports: [
@@ -57,7 +57,7 @@ import { TodoListPermissionsDatabaseRepository } from "../todo-list-manager/infr
     // Authentication
     AuthenticationApplicationService,
     AccountDatabaseRepository,
-    FetchAuthenticationStatusDatabaseQuery,
+    FetchAuthenticationStatusSessionQuery,
     BCryptPasswordHasher,
     {
       provide: AUTHENTICATOR,
@@ -71,8 +71,8 @@ import { TodoListPermissionsDatabaseRepository } from "../todo-list-manager/infr
     TodoDatabaseRepository,
     TodoListDatabaseRepository,
     TodoListPermissionsDatabaseRepository,
-    FetchHomePageDatabaseQuery,
-    FetchTodoListDatabaseQuery,
+    TodoListsSummaryDatabaseQuery,
+    TodoListDatabaseQuery,
 
     // Remix stuff
     SessionManager,

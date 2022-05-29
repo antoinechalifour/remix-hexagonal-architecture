@@ -1,4 +1,4 @@
-import type { HomePageDto } from "shared/client";
+import type { TodoListsSummaryDto } from "shared/client";
 
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
@@ -9,7 +9,7 @@ import { AddTodoListForm } from "front/homepage/AddTodoListForm";
 import { useLoaderData } from "remix";
 
 export const TodoLists = () => {
-  const { todoLists } = useLoaderData<HomePageDto>();
+  const { todoLists } = useLoaderData<TodoListsSummaryDto>();
 
   return (
     <section className="space-y-10">

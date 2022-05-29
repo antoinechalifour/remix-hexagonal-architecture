@@ -7,7 +7,7 @@ import {
 } from "../domain/FetchAuthenticationStatus";
 
 @Injectable()
-export class FetchAuthenticationStatusDatabaseQuery
+export class FetchAuthenticationStatusSessionQuery
   implements FetchAuthenticationStatus
 {
   constructor(
