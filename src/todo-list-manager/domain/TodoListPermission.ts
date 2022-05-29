@@ -26,34 +26,37 @@ export const shareWithCollaborator = (
   collaboratorsIds: [...permission.collaboratorsIds, collaboratorId],
 });
 
-const isOwner = (
-  todoListPermission: TodoListPermission,
+export const isOwner = (
+  permission: TodoListPermission,
   collaboratorId: CollaboratorId
-) => {
-  if (todoListPermission.ownerId !== collaboratorId)
-    throw new TodoListPermissionDenied(
-      todoListPermission.todoListId,
-      collaboratorId
-    );
-};
+) => permission.ownerId === collaboratorId;
 
 export const isCollaborator = (
-  todoListPermission: TodoListPermission,
+  permission: TodoListPermission,
+  collaboratorId: CollaboratorId
+) => permission.collaboratorsIds.includes(collaboratorId);
+
+const verifyIsOwner = (
+  permission: TodoListPermission,
   collaboratorId: CollaboratorId
 ) => {
-  const owner = todoListPermission.ownerId === collaboratorId;
-  const collaborator =
-    todoListPermission.collaboratorsIds.includes(collaboratorId);
+  if (!isOwner(permission, collaboratorId))
+    throw new TodoListPermissionDenied(permission.todoListId, collaboratorId);
+};
 
-  if (!owner && !collaborator) {
-    throw new TodoListPermissionDenied(
-      todoListPermission.todoListId,
-      collaboratorId
-    );
+export const verifyIsCollaborator = (
+  permission: TodoListPermission,
+  collaboratorId: CollaboratorId
+) => {
+  if (
+    !isOwner(permission, collaboratorId) &&
+    !isCollaborator(permission, collaboratorId)
+  ) {
+    throw new TodoListPermissionDenied(permission.todoListId, collaboratorId);
   }
 };
 
-export const canArchiveTodoList = isOwner;
-export const canEditTodoList = isCollaborator;
-export const canShareTodoList = isCollaborator;
-export const canView = isCollaborator;
+export const canArchiveTodoList = verifyIsOwner;
+export const canEditTodoList = verifyIsCollaborator;
+export const canShareTodoList = verifyIsCollaborator;
+export const canView = verifyIsCollaborator;
