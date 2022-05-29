@@ -1,6 +1,6 @@
-import { CollaboratorId } from "../domain/CollaboratorId";
-import { TodoListPermissions } from "../domain/TodoListPermissions";
-import { TodoListQuery } from "../domain/TodoListQuery";
+import type { CollaboratorId } from "../domain/CollaboratorId";
+import type { TodoListPermissions } from "../domain/TodoListPermissions";
+import type { TodoListQuery } from "../domain/TodoListQuery";
 
 export class ViewHomePage {
   constructor(
