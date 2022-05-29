@@ -14,7 +14,7 @@ import {
   prepareDatabase,
 } from "./database";
 
-describe("TodoListPrismaRepository", () => {
+describe("TodoListDatabaseRepository", () => {
   let prisma: PrismaClient;
   let todoLists: TodoLists;
   let todos: Todos;
