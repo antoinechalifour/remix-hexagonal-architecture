@@ -1,7 +1,8 @@
 import type { PrismaClient } from "@prisma/client";
-import type { TodoListDto } from "shared/client";
+import type { TodoListDetailsDto, TodoListsSummaryDto } from "shared/client";
 import type { TodoListId } from "../domain/TodoList";
 import type { TodoListQuery } from "../domain/TodoListQuery";
+import { Prisma } from "@prisma/client";
 import { Inject, Injectable } from "@nestjs/common";
 import { PRISMA } from "../../keys";
 
@@ -24,7 +25,7 @@ type TodoRow<Completion extends boolean> = {
 export class TodoListDatabaseQuery implements TodoListQuery {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
-  async ofTodoList(todoListId: TodoListId): Promise<TodoListDto> {
+  async detailsOfTodoList(todoListId: TodoListId): Promise<TodoListDetailsDto> {
     const [{ todosOrder, ...todoList }, tags] = await Promise.all([
       this.fetchTodoList(todoListId),
       this.fetchTodoListTags(todoListId),
@@ -42,6 +43,26 @@ export class TodoListDatabaseQuery implements TodoListQuery {
       tags,
       doingTodos: this.sortTodos(doingTodos, todosOrder),
       completedTodos: this.sortTodos(completedTodos, todosOrder),
+    };
+  }
+
+  async summaryOfTodoLists(
+    todoListsIds: string[]
+  ): Promise<TodoListsSummaryDto> {
+    if (todoListsIds.length === 0)
+      return {
+        todoLists: [],
+        totalNumberOfDoingTodos: 0,
+      };
+
+    const [totalNumberOfDoingTodos, todoLists] = await Promise.all([
+      this.fetchTotalNumberOfDoingTodos(todoListsIds),
+      this.fetchTodoLists(todoListsIds),
+    ]);
+
+    return {
+      totalNumberOfDoingTodos,
+      todoLists,
     };
   }
 
@@ -84,5 +105,25 @@ export class TodoListDatabaseQuery implements TodoListQuery {
     const position = (idToCheck: string) =>
       order.findIndex((id) => idToCheck === id) ?? 0;
     return todos.sort((t1, t2) => position(t1.id) - position(t2.id));
+  }
+
+  private fetchTodoLists(todoListsIds: TodoListId[]) {
+    return this.prisma.$queryRaw<any[]>`
+      SELECT TL.id, TL.title, TL."createdAt", count(T.id) as "numberOfTodos"
+      FROM "TodoList" TL
+      LEFT JOIN "Todo" T ON TL.id = T."todoListId" AND T."isComplete" IS false
+      WHERE TL."id" IN (${Prisma.join(todoListsIds)})
+      GROUP BY TL.id;
+    `;
+  }
+
+  private fetchTotalNumberOfDoingTodos(todoListsIds: TodoListId[]) {
+    return this.prisma.$queryRaw<{ totalNumberOfDoingTodos: number }[]>`
+      SELECT count(*) as "totalNumberOfDoingTodos"
+      FROM "Todo" T
+      WHERE T."isComplete" IS false AND T."todoListId" IN (${Prisma.join(
+        todoListsIds
+      )});
+    `.then((rows) => rows[0].totalNumberOfDoingTodos);
   }
 }

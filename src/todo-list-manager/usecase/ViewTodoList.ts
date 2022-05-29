@@ -1,7 +1,7 @@
 import type { TodoListId } from "../domain/TodoList";
 import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
-import type { TodoListQuery } from "todo-list-manager";
+import type { TodoListQuery } from "../domain/TodoListQuery";
 import { canView } from "../domain/TodoListPermission";
 
 export class ViewTodoList {
@@ -14,6 +14,6 @@ export class ViewTodoList {
     const permissions = await this.todoListPermissions.ofTodoList(todoListId);
     canView(permissions, collaboratorId);
 
-    return this.todoListQuery.ofTodoList(todoListId);
+    return this.todoListQuery.detailsOfTodoList(todoListId);
   }
 }

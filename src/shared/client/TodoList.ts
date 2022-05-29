@@ -1,6 +1,6 @@
 import type { CompletedTodoDto, DoingTodoDto } from "./Todo";
 
-export interface TodoListDto {
+export interface TodoListDetailsDto {
   id: string;
   title: string;
   createdAt: string;

@@ -1,5 +1,5 @@
 import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
-import type { TodoListDto } from "shared/client";
+import type { TodoListDetailsDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";
@@ -14,7 +14,9 @@ export const meta: MetaFunction = ({ data: todoList }) => ({
   description: `Created by you on ${todoList?.createdAt}`,
 });
 
-export const loader: LoaderFunction = async (args): Promise<TodoListDto> =>
+export const loader: LoaderFunction = async (
+  args
+): Promise<TodoListDetailsDto> =>
   (args.context as RemixAppContext).loaders.todoList(args);
 
 export const action: ActionFunction = async (args) =>
@@ -31,8 +33,8 @@ export default function TodoListPage() {
 }
 
 function useTodoListPage() {
-  const loaderData = useLoaderData<TodoListDto>();
-  const refresher = useFetcher<TodoListDto>();
+  const loaderData = useLoaderData<TodoListDetailsDto>();
+  const refresher = useFetcher<TodoListDetailsDto>();
   const todoList = refresher.data || loaderData;
   const load = refresher.load;
 

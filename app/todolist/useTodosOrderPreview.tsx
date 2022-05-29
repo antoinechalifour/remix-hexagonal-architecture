@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared/client";
+import type { TodoDto, TodoListDetailsDto } from "shared/client";
 
 import { moveArrayItem } from "shared/lib";
 import { useEffect, useState } from "react";
@@ -8,7 +8,7 @@ interface TodoOrderPreview {
   newIndex: number;
 }
 
-export function useTodosOrderPreview(todoList: TodoListDto) {
+export function useTodosOrderPreview(todoList: TodoListDetailsDto) {
   const [todoOrderPreview, setTodoOrderPreview] =
     useState<TodoOrderPreview | null>(null);
   const reorderForPreview = (todoId: string, newIndex: number) =>

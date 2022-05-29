@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDto } from "shared/client";
+import type { TodoDto, TodoListDetailsDto } from "shared/client";
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
@@ -8,7 +8,7 @@ import { TagsList } from "front/todolist/TagsList";
 import { AddTag } from "front/todolist/AddTag";
 
 export type TodoPopoverContentProps = {
-  todoList: TodoListDto;
+  todoList: TodoListDetailsDto;
   todo: TodoDto;
 };
 export const TodoPopoverContent = ({
