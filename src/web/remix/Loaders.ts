@@ -4,13 +4,18 @@ import {
   AuthenticationApplicationService,
   Authenticator,
 } from "authentication";
-import { TodoListApplicationService } from "todo-list-manager";
+import {
+  TodoListApplicationService,
+  TodoListNotFoundError,
+  TodoListPermissionDeniedError,
+} from "todo-list-manager";
 import { AUTHENTICATOR } from "../../keys";
 import { Authenticated } from "../authenticator/Authenticated";
 import { SessionManager } from "../authenticator/SessionManager";
 import { DataFunction } from "./decorators/DataFunction";
 import { Query } from "./decorators/Query";
 import { Params } from "./decorators/Params";
+import { MapErrorThrowing } from "./decorators/MapErrorThrowing";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
 import { VerifyAccountQuery } from "./dtos/VerifyAccount";
 
@@ -107,6 +112,10 @@ export class Loaders {
 
   @Authenticated()
   @DataFunction()
+  @MapErrorThrowing([
+    [TodoListNotFoundError, 404],
+    [TodoListPermissionDeniedError, 404],
+  ])
   async todoList(@Params() params: FetchTodoListParams) {
     const currentUser = await this.authenticator.currentUser();
 
