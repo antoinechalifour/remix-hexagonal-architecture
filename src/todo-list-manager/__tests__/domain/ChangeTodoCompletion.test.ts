@@ -2,7 +2,7 @@ import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
 import { ChangeTodoCompletion } from "../../usecase/ChangeTodoCompletion";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -37,7 +37,7 @@ it("changing completion requires permission", async () => {
   await expect(
     changeTodoCompletion.execute("todoList/1", "todo/1", "on", "collaborator/1")
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/1")
+    new TodoListPermissionDeniedError("todoList/1", "collaborator/1")
   );
 });
 

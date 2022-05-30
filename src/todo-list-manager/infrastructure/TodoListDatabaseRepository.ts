@@ -2,6 +2,7 @@ import type { TodoList, TodoListId } from "../domain/TodoList";
 import type { TodoLists } from "../domain/TodoLists";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
+import { TodoListNotFoundError } from "../domain/TodoListNotFoundError";
 
 @Injectable()
 export class TodoListDatabaseRepository
@@ -9,17 +10,17 @@ export class TodoListDatabaseRepository
   implements TodoLists
 {
   async ofId(todoListId: TodoListId): Promise<TodoList> {
-    const todoList = await this.prisma.todoList.findFirst({
+    const row = await this.prisma.todoList.findFirst({
       where: { id: todoListId },
     });
 
-    if (!todoList) throw new Error(`Todolist ${todoListId} was not found`);
+    if (!row) throw new TodoListNotFoundError(todoListId);
 
     return {
-      id: todoList.id,
-      createdAt: todoList.createdAt.toISOString(),
-      title: todoList.title,
-      todosOrder: todoList.todosOrder as string[],
+      id: row.id,
+      createdAt: row.createdAt.toISOString(),
+      title: row.title,
+      todosOrder: row.todosOrder as string[],
     };
   }
 

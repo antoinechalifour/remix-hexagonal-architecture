@@ -1,6 +1,6 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { UntagTodo } from "../../usecase/UntagTodo";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -35,7 +35,10 @@ it("untagging todos requires permission", async () => {
       "top priority"
     )
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/not-authorized")
+    new TodoListPermissionDeniedError(
+      "todoList/1",
+      "collaborator/not-authorized"
+    )
   );
 });
 

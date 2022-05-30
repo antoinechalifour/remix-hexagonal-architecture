@@ -1,7 +1,7 @@
 import { Todos } from "../../domain/Todos";
 import { TagTodo } from "../../usecase/TagTodo";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo, TodoBuilder } from "./builders/Todo";
@@ -33,7 +33,10 @@ it("tagging todos requires permission", async () => {
       "feature"
     )
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/not-authorized")
+    new TodoListPermissionDeniedError(
+      "todoList/1",
+      "collaborator/not-authorized"
+    )
   );
 });
 

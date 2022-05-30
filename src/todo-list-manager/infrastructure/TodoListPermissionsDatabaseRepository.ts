@@ -1,9 +1,10 @@
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListId } from "../domain/TodoList";
+import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoListPermission } from "../domain/TodoListPermission";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
-import { CollaboratorId } from "../domain/CollaboratorId";
+import { TodoListNotFoundError } from "../domain/TodoListNotFoundError";
 
 @Injectable()
 export class TodoListPermissionsDatabaseRepository
@@ -13,8 +14,9 @@ export class TodoListPermissionsDatabaseRepository
   async ofTodoList(todoListId: TodoListId): Promise<TodoListPermission> {
     const row = await this.prisma.todoListPermission.findFirst({
       where: { todoListId },
-      rejectOnNotFound: true,
     });
+
+    if (row == null) throw new TodoListNotFoundError(todoListId);
 
     return {
       todoListId: row.todoListId,

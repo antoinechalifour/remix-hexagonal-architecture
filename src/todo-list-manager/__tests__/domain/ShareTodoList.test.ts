@@ -4,7 +4,7 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { CollaboratorsInMemory } from "./fakes/CollaboratorsInMemory";
 
 let shareTodoList: ShareTodoList;
@@ -31,7 +31,10 @@ it("sharing todo list requires permissions", async () => {
       "john.doe@example.com"
     )
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/not-authorized")
+    new TodoListPermissionDeniedError(
+      "todoList/1",
+      "collaborator/not-authorized"
+    )
   );
 });
 

@@ -1,7 +1,7 @@
 import { TodoList, TodoListId } from "./TodoList";
 import { OwnerId } from "./OwnerId";
 import { CollaboratorId } from "./CollaboratorId";
-import { TodoListPermissionDenied } from "./TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "./TodoListPermissionDeniedError";
 
 export type TodoListPermission = {
   todoListId: TodoListId;
@@ -41,7 +41,10 @@ const verifyIsOwner = (
   collaboratorId: CollaboratorId
 ) => {
   if (!isOwner(permission, collaboratorId))
-    throw new TodoListPermissionDenied(permission.todoListId, collaboratorId);
+    throw new TodoListPermissionDeniedError(
+      permission.todoListId,
+      collaboratorId
+    );
 };
 
 export const verifyIsCollaborator = (
@@ -52,7 +55,10 @@ export const verifyIsCollaborator = (
     !isOwner(permission, collaboratorId) &&
     !isCollaborator(permission, collaboratorId)
   ) {
-    throw new TodoListPermissionDenied(permission.todoListId, collaboratorId);
+    throw new TodoListPermissionDeniedError(
+      permission.todoListId,
+      collaboratorId
+    );
   }
 };
 
