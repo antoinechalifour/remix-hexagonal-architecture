@@ -8,7 +8,7 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 
 let reorderTodos: ReorderTodos;
 let todoLists: TodoLists;
@@ -28,7 +28,7 @@ it("reordering todos requires permission", async () => {
   await expect(
     reorderTodos.execute("todoList/1", "collaborator/1", "todo/2", 3)
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/1")
+    new TodoListPermissionDeniedError("todoList/1", "collaborator/1")
   );
 });
 

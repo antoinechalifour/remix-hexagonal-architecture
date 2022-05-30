@@ -5,7 +5,7 @@ import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { Clock, FixedClock } from "shared/time";
 import { GenerateTestId } from "shared/id";
 import { AddTodo } from "../../usecase/AddTodo";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -49,7 +49,10 @@ it("adding a todo requires having permission", async () => {
       "collaborator/unauthorized"
     )
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoLists/1", "collaborator/unauthorized")
+    new TodoListPermissionDeniedError(
+      "todoLists/1",
+      "collaborator/unauthorized"
+    )
   );
 });
 

@@ -1,6 +1,6 @@
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import type { TodoLists } from "../../domain/TodoLists";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { ArchiveTodoList } from "../../usecase/ArchiveTodoList";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -43,7 +43,9 @@ UNAUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
 
     await expect(
       archiveTodoList.execute(todoListId, collaboratorId)
-    ).rejects.toEqual(new TodoListPermissionDenied(todoListId, collaboratorId));
+    ).rejects.toEqual(
+      new TodoListPermissionDeniedError(todoListId, collaboratorId)
+    );
   })
 );
 

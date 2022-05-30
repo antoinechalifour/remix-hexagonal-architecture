@@ -8,7 +8,7 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
@@ -34,7 +34,7 @@ it("renming a todo requires permission", async () => {
       "collaborator/1"
     )
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/1")
+    new TodoListPermissionDeniedError("todoList/1", "collaborator/1")
   );
 });
 

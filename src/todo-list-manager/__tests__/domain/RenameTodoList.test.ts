@@ -8,7 +8,7 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
@@ -28,7 +28,7 @@ it("renaming a todo list requires permission", async () => {
   await expect(
     renameTodoList.execute("todoList/1", "Updated title", "collaborator/1")
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoList/1", "collaborator/1")
+    new TodoListPermissionDeniedError("todoList/1", "collaborator/1")
   );
 });
 

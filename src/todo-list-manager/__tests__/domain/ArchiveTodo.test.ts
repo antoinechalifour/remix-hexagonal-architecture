@@ -1,7 +1,7 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { ArchiveTodo } from "../../usecase/ArchiveTodo";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
@@ -35,7 +35,10 @@ it("archiving a todo requires having permission", async () => {
   await expect(
     archiveTodo.execute("todoLists/1", "todos/1", "collaborator/unauthorized")
   ).rejects.toEqual(
-    new TodoListPermissionDenied("todoLists/1", "collaborator/unauthorized")
+    new TodoListPermissionDeniedError(
+      "todoLists/1",
+      "collaborator/unauthorized"
+    )
   );
 });
 
