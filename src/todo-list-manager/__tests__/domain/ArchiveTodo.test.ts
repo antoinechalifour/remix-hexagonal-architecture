@@ -1,88 +1,91 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
+import { TodoListPermissions } from "../../domain/TodoListPermissions";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 import { ArchiveTodo } from "../../usecase/ArchiveTodo";
 import { TodosInMemory } from "./fakes/TodosInMemory";
-import { aTodoList } from "./builders/TodoList";
-import { aTodo } from "./builders/Todo";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
-import { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { aTodoListPermission } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { aTodoList, TodoListBuilder } from "./builders/TodoList";
+import { aTodo, TodoBuilder } from "./builders/Todo";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
 
-describe("Archiving a todo", () => {
-  let archiveTodo: ArchiveTodo;
-  let todoLists: TodoLists;
-  let todoListPermissions: TodoListPermissions;
-  let todos: Todos;
+let archiveTodo: ArchiveTodo;
+let todoLists: TodoLists;
+let todoListPermissions: TodoListPermissions;
+let todos: Todos;
 
-  beforeEach(() => {
-    todos = new TodosInMemory();
-    todoLists = new TodoListsInMemory();
-    todoListPermissions = new TodoListPermissionsInMemory();
-    archiveTodo = new ArchiveTodo(todoLists, todoListPermissions, todos);
-  });
-
-  it("only the owner can archive a todo", async () => {
-    // Arrange
-    const theOwnerId = "owner/1";
-    const theCollaboratorId = "collaborator/unauthorized";
-    const theTodoListId = "todoLists/1";
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    await todoListPermissions.save(thePermissions);
-
-    // Act
-    const result = archiveTodo.execute(
-      theTodoListId,
-      "todos/1",
-      theCollaboratorId
-    );
-
-    // Assert
-    await expect(result).rejects.toEqual(
-      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
-    );
-  });
-
-  it("should remove the todo from the todo list", async () => {
-    // Arrange
-    const theOwnerId = "owner/1";
-    const theTodoListId = "todoLists/1";
-
-    const theTodoList = aTodoList()
-      .withId(theTodoListId)
-      .withTodosOrder("todos/1", "todos/2")
-      .build();
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    const theTodoRemoved = aTodo()
-      .withId("todos/1")
-      .ofTodoList(theTodoListId)
-      .build();
-    const theTodoNotRemoved = aTodo()
-      .withId("todos/2")
-      .ofTodoList(theTodoListId)
-      .build();
-
-    await Promise.all([
-      todoLists.save(theTodoList),
-      todoListPermissions.save(thePermissions),
-      todos.save(theTodoRemoved),
-      todos.save(theTodoNotRemoved),
-    ]);
-    expect(await todos.ofTodoList(theTodoListId)).toHaveLength(2);
-
-    // Act
-    await archiveTodo.execute(theTodoListId, "todos/1", theOwnerId);
-
-    // Assert
-    expect(await todos.ofTodoList(theTodoListId)).toEqual([theTodoNotRemoved]);
-    const updatedTodoList = await todoLists.ofId(theTodoListId);
-    expect(updatedTodoList.todosOrder).toEqual(["todos/2"]);
-  });
+beforeEach(() => {
+  todos = new TodosInMemory();
+  todoLists = new TodoListsInMemory();
+  todoListPermissions = new TodoListPermissionsInMemory();
+  archiveTodo = new ArchiveTodo(todoLists, todoListPermissions, todos);
 });
+
+it("archiving a todo requires having permission", async () => {
+  await givenPermission(
+    aTodoListPermission()
+      .forTodoList("todoLists/1")
+      .forOwner("collaborator/owner")
+  );
+
+  await expect(
+    archiveTodo.execute("todoLists/1", "todos/1", "collaborator/unauthorized")
+  ).rejects.toEqual(
+    new TodoListPermissionDenied("todoLists/1", "collaborator/unauthorized")
+  );
+});
+
+const AUTHORIZED_CASES = [
+  {
+    role: "authorized collaborator",
+    todoListId: "todoList/1",
+    collaboratorId: "collaborator/authorized",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/1")
+      .withCollaboratorsAuthorized("collaborator/authorized"),
+  },
+  {
+    role: "owner",
+    todoListId: "todoList/2",
+    collaboratorId: "collaborator/owner",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/2")
+      .forOwner("collaborator/owner"),
+  },
+];
+
+AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
+  it(`should remove the todo from the todo list (role=${role})`, async () => {
+    const todoToRemove = aTodo().withId("todos/1").ofTodoList(todoListId);
+    const todoToKeep = aTodo().withId("todos/2").ofTodoList(todoListId);
+    await Promise.all([
+      givenTodoList(
+        aTodoList().withId(todoListId).withTodosOrder("todos/1", "todos/2")
+      ),
+      givenPermission(permission),
+      givenTodos(todoToRemove, todoToKeep),
+    ]);
+
+    await archiveTodo.execute(todoListId, "todos/1", collaboratorId);
+
+    const todoList = await todoLists.ofId(todoListId);
+    expect(await todos.ofTodoList(todoListId)).toEqual([todoToKeep.build()]);
+    expect(todoList.todosOrder).toEqual(["todos/2"]);
+  })
+);
+
+function givenPermission(todoListPermission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(todoListPermission.build());
+}
+
+function givenTodoList(todoList: TodoListBuilder) {
+  return todoLists.save(todoList.build());
+}
+
+function givenTodos(...todosToSave: TodoBuilder[]) {
+  return Promise.all(todosToSave.map((todo) => todos.save(todo.build())));
+}

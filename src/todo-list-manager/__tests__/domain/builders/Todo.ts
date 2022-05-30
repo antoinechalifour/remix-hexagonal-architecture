@@ -1,43 +1,15 @@
 import type { Todo } from "../../../domain/Todo";
 
-interface TodoBuilder {
+export interface TodoBuilder {
   todo: Todo;
   withId(id: string): TodoBuilder;
   withTitle(title: string): TodoBuilder;
   ofTodoList(todoListId: string): TodoBuilder;
   taggedAs(...tags: string[]): TodoBuilder;
+  completed(): TodoBuilder;
+  uncompleted(): TodoBuilder;
   build(): Todo;
 }
-
-export const anUncompletedTodo = (): TodoBuilder => ({
-  todo: {
-    id: "475c8a3b-fce5-4042-afef-9c8b3c1418d7",
-    todoListId: "ee576c05-8bd4-4997-ad59-535c86de3629",
-    isComplete: false,
-    title: "Buy beer",
-    createdAt: "2022-01-13T18:00:00.000Z",
-    tags: [],
-  },
-  withId(id: string): TodoBuilder {
-    this.todo.id = id;
-    return this;
-  },
-  ofTodoList(todoListId: string): TodoBuilder {
-    this.todo.todoListId = todoListId;
-    return this;
-  },
-  withTitle(title: string): TodoBuilder {
-    this.todo.title = title;
-    return this;
-  },
-  taggedAs(...tags): TodoBuilder {
-    this.todo.tags = tags;
-    return this;
-  },
-  build(): Todo {
-    return this.todo;
-  },
-});
 
 export const aTodo = (): TodoBuilder => ({
   todo: {
@@ -62,6 +34,14 @@ export const aTodo = (): TodoBuilder => ({
   },
   taggedAs(...tags): TodoBuilder {
     this.todo.tags = tags;
+    return this;
+  },
+  completed(): TodoBuilder {
+    this.todo.isComplete = true;
+    return this;
+  },
+  uncompleted(): TodoBuilder {
+    this.todo.isComplete = false;
     return this;
   },
   build(): Todo {

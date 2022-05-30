@@ -5,93 +5,100 @@ import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { Clock, FixedClock } from "shared/time";
 import { GenerateTestId } from "shared/id";
 import { AddTodo } from "../../usecase/AddTodo";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
-import { aTodoList } from "./builders/TodoList";
-import { aTodoListPermission } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { aTodoList, TodoListBuilder } from "./builders/TodoList";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
 
-describe("Adding a todo", () => {
-  let addTodo: AddTodo;
-  let todos: Todos;
-  let todoLists: TodoLists;
-  let todoListPermissions: TodoListPermissions;
-  let generateId: GenerateId;
-  let clock: Clock;
+let addTodo: AddTodo;
+let todos: Todos;
+let todoLists: TodoLists;
+let todoListPermissions: TodoListPermissions;
+let generateId: GenerateId;
+let clock: Clock;
 
-  beforeEach(() => {
-    todoLists = new TodoListsInMemory();
-    todoListPermissions = new TodoListPermissionsInMemory();
-    todos = new TodosInMemory();
-    generateId = new GenerateTestId("todo");
-    clock = new FixedClock();
-    addTodo = new AddTodo(
-      todos,
-      todoLists,
-      todoListPermissions,
-      generateId,
-      clock
-    );
-  });
+beforeEach(() => {
+  todoLists = new TodoListsInMemory();
+  todoListPermissions = new TodoListPermissionsInMemory();
+  todos = new TodosInMemory();
+  generateId = new GenerateTestId("todo");
+  clock = new FixedClock();
+  addTodo = new AddTodo(
+    todos,
+    todoLists,
+    todoListPermissions,
+    generateId,
+    clock
+  );
+});
 
-  it("only the owner can add a todo", async () => {
-    // Arrange
-    const theOwnerId = "owner/1";
-    const theCollaboratorId = "collaborator/unauthorized";
-    const theTodoListId = "todoLists/1";
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    await todoListPermissions.save(thePermissions);
+it("adding a todo requires having permission", async () => {
+  await givenPermission(
+    aTodoListPermission().forTodoList("todoLists/1").forOwner("owner/1")
+  );
 
-    // Act
-    const result = addTodo.execute(
-      theTodoListId,
+  await expect(
+    addTodo.execute(
+      "todoLists/1",
       "Some random title",
-      theCollaboratorId
-    );
+      "collaborator/unauthorized"
+    )
+  ).rejects.toEqual(
+    new TodoListPermissionDenied("todoLists/1", "collaborator/unauthorized")
+  );
+});
 
-    // Assert
-    await expect(result).rejects.toEqual(
-      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
-    );
-  });
+const AUTHORIZED_CASES = [
+  {
+    role: "authorized collaborator",
+    todoListId: "todoList/1",
+    collaboratorId: "collaborator/authorized",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/1")
+      .withCollaboratorsAuthorized("collaborator/authorized"),
+  },
+  {
+    role: "owner",
+    todoListId: "todoList/2",
+    collaboratorId: "collaborator/owner",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/2")
+      .forOwner("collaborator/owner"),
+  },
+];
 
-  it("should add a new todo to an existing todo list", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theOwnerId = "owner/1";
-    const theTodoList = aTodoList()
-      .withId(theTodoListId)
-      .withTodosOrder("todo/0")
-      .build();
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
+AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
+  it(`should a new todo to an existing todo list (role=${role})`, async () => {
     await Promise.all([
-      todoLists.save(theTodoList),
-      todoListPermissions.save(thePermissions),
+      givenTodoList(aTodoList().withId(todoListId).withTodosOrder("todo/0")),
+      givenPermission(permission),
     ]);
-    expect(await todos.ofTodoList(theTodoListId)).toHaveLength(0);
 
-    // Act
-    await addTodo.execute(theTodoListId, "Buy cereals", theOwnerId);
+    await addTodo.execute(todoListId, "Buy cereals", collaboratorId);
 
-    // Assert
-    const [todo] = await todos.ofTodoList(theTodoListId);
+    const [todo] = await todos.ofTodoList(todoListId);
+    const todoList = await todoLists.ofId(todoListId);
     expect(todo).toEqual({
       id: "todo/1",
+      todoListId,
       createdAt: "2022-01-05T12:00:00.000Z",
       isComplete: false,
       title: "Buy cereals",
-      todoListId: "todoList/1",
       tags: [],
     });
+    expect(todoList.todosOrder).toEqual(["todo/0", "todo/1"]);
+  })
+);
 
-    const updatedTodoList = await todoLists.ofId(theTodoListId);
-    expect(updatedTodoList.todosOrder).toEqual(["todo/0", "todo/1"]);
-  });
-});
+function givenPermission(permission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(permission.build());
+}
+
+function givenTodoList(todoList: TodoListBuilder) {
+  return todoLists.save(todoList.build());
+}

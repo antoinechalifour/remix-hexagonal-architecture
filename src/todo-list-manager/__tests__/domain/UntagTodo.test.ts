@@ -1,79 +1,92 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
+import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 import { UntagTodo } from "../../usecase/UntagTodo";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
-import { aTodo } from "./builders/Todo";
-import { aTodoListPermission } from "./builders/TodoListPermission";
-import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { aTodo, TodoBuilder } from "./builders/Todo";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
 
-describe("Untagging a todo", () => {
-  let todos: Todos;
-  let todoListPermissions: TodoListPermissions;
-  let untagTodo: UntagTodo;
+let todos: Todos;
+let todoListPermissions: TodoListPermissions;
+let untagTodo: UntagTodo;
 
-  beforeEach(() => {
-    todos = new TodosInMemory();
-    todoListPermissions = new TodoListPermissionsInMemory();
-    untagTodo = new UntagTodo(todos, todoListPermissions);
-  });
+beforeEach(() => {
+  todos = new TodosInMemory();
+  todoListPermissions = new TodoListPermissionsInMemory();
+  untagTodo = new UntagTodo(todos, todoListPermissions);
+});
 
-  it("only the owner can untag a todo", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theTodoId = "todo/1";
-    const theOwnerId = "owner/1";
-    const theCollaboratorId = "collaborator/1";
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    await todoListPermissions.save(thePermissions);
+it("untagging todos requires permission", async () => {
+  await givenPermission(
+    aTodoListPermission()
+      .forTodoList("todoList/1")
+      .forOwner("collaborator/owner")
+  );
 
-    // Act
-    const result = untagTodo.execute(
-      theTodoListId,
-      theTodoId,
-      theCollaboratorId,
+  await expect(
+    untagTodo.execute(
+      "todoList/1",
+      "todo/1",
+      "collaborator/not-authorized",
       "top priority"
-    );
+    )
+  ).rejects.toEqual(
+    new TodoListPermissionDenied("todoList/1", "collaborator/not-authorized")
+  );
+});
 
-    // Assert
-    await expect(result).rejects.toEqual(
-      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
-    );
-  });
+const AUTHORIZED_CASES = [
+  {
+    role: "authorized collaborator",
+    todoListId: "todoList/1",
+    collaboratorId: "collaborator/authorized",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/1")
+      .withCollaboratorsAuthorized("collaborator/authorized"),
+  },
+  {
+    role: "owner",
+    todoListId: "todoList/2",
+    collaboratorId: "collaborator/owner",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/2")
+      .forOwner("collaborator/owner"),
+  },
+];
 
-  it("remove the given tag from the tags", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theTodoId = "todo/1";
-    const theOwnerId = "owner/1";
-    const theTodo = aTodo()
-      .withId(theTodoId)
-      .taggedAs("feature", "top priority", "research required")
-      .build();
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
+AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
+  it(`remove the given tag from the tags (role=${role})`, async () => {
     await Promise.all([
-      todos.save(theTodo),
-      todoListPermissions.save(thePermissions),
+      givenPermission(permission),
+      givenTodo(
+        aTodo()
+          .withId("todo/1")
+          .taggedAs("feature", "top priority", "research required")
+      ),
     ]);
 
-    // Act
     await untagTodo.execute(
-      theTodoListId,
-      theTodoId,
-      theOwnerId,
+      todoListId,
+      "todo/1",
+      collaboratorId,
       "top priority"
     );
 
-    // Assert
-    expect((await todos.ofId(theTodoId)).tags).toEqual([
+    expect((await todos.ofId("todo/1")).tags).toEqual([
       "feature",
       "research required",
     ]);
-  });
-});
+  })
+);
+
+function givenPermission(todoListPermission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(todoListPermission.build());
+}
+
+function givenTodo(todo: TodoBuilder) {
+  return todos.save(todo.build());
+}

@@ -3,68 +3,71 @@ import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { RenameTodoList } from "../../usecase/RenameTodoList";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
-import { aTodoList } from "./builders/TodoList";
-import { aTodoListPermission } from "./builders/TodoListPermission";
+import { aTodoList, TodoListBuilder } from "./builders/TodoList";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
 import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
 
-describe("Renaming a todo list", () => {
-  let todoLists: TodoLists;
-  let todoListPermissions: TodoListPermissions;
-  let renameTodoList: RenameTodoList;
+let todoLists: TodoLists;
+let todoListPermissions: TodoListPermissions;
+let renameTodoList: RenameTodoList;
 
-  beforeEach(() => {
-    todoLists = new TodoListsInMemory();
-    todoListPermissions = new TodoListPermissionsInMemory();
-    renameTodoList = new RenameTodoList(todoLists, todoListPermissions);
-  });
+beforeEach(() => {
+  todoLists = new TodoListsInMemory();
+  todoListPermissions = new TodoListPermissionsInMemory();
+  renameTodoList = new RenameTodoList(todoLists, todoListPermissions);
+});
 
-  it("only the owner can rename a todo list", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theOwnerId = "owner/1";
-    const theCollaboratorId = "collaborator/1";
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    await todoListPermissions.save(thePermissions);
+it("renaming a todo list requires permission", async () => {
+  await givenPermission(
+    aTodoListPermission().forTodoList("todoList/1").forOwner("owner/1")
+  );
 
-    // Act
-    const result = renameTodoList.execute(
-      theTodoListId,
-      "Updated title",
-      theCollaboratorId
-    );
+  await expect(
+    renameTodoList.execute("todoList/1", "Updated title", "collaborator/1")
+  ).rejects.toEqual(
+    new TodoListPermissionDenied("todoList/1", "collaborator/1")
+  );
+});
 
-    // Assert
-    await expect(result).rejects.toEqual(
-      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
-    );
-  });
+const AUTHORIZED_CASES = [
+  {
+    role: "authorized collaborator",
+    todoListId: "todoList/1",
+    collaboratorId: "collaborator/authorized",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/1")
+      .withCollaboratorsAuthorized("collaborator/authorized"),
+  },
+  {
+    role: "owner",
+    todoListId: "todoList/2",
+    collaboratorId: "collaborator/owner",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/2")
+      .forOwner("collaborator/owner"),
+  },
+];
 
-  it("renames the todo list", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    let theOwnerId = "owner/1";
-    const theTodoList = aTodoList()
-      .withId(theTodoListId)
-      .withTitle("Current title")
-      .build();
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
+AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
+  it(`renames the todo list (role=${role})`, async () => {
     await Promise.all([
-      todoListPermissions.save(thePermissions),
-      todoLists.save(theTodoList),
+      givenPermission(permission),
+      givenTodoList(aTodoList().withId(todoListId).withTitle("Current title")),
     ]);
 
-    // Act
-    await renameTodoList.execute(theTodoListId, "Updated title", theOwnerId);
+    await renameTodoList.execute(todoListId, "Updated title", collaboratorId);
 
-    // Assert
-    expect((await todoLists.ofId(theTodoListId)).title).toEqual(
-      "Updated title"
-    );
-  });
-});
+    expect((await todoLists.ofId(todoListId)).title).toEqual("Updated title");
+  })
+);
+
+function givenPermission(todoListPermission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(todoListPermission.build());
+}
+
+function givenTodoList(todoList: TodoListBuilder) {
+  return todoLists.save(todoList.build());
+}
