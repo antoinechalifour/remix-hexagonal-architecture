@@ -1,105 +1,98 @@
 import { Todos } from "../../domain/Todos";
 import { TagTodo } from "../../usecase/TagTodo";
-import { TodosInMemory } from "./fakes/TodosInMemory";
-import { aTodo } from "./builders/Todo";
-import { aTodoListPermission } from "./builders/TodoListPermission";
-import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { TodosInMemory } from "./fakes/TodosInMemory";
+import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
+import { aTodo, TodoBuilder } from "./builders/Todo";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
 
-describe("Tagging a todo", () => {
-  let todos: Todos;
-  let todoListPermissions: TodoListPermissions;
-  let tagTodo: TagTodo;
+let todos: Todos;
+let todoListPermissions: TodoListPermissions;
+let tagTodo: TagTodo;
 
-  beforeEach(() => {
-    todos = new TodosInMemory();
-    todoListPermissions = new TodoListPermissionsInMemory();
-    tagTodo = new TagTodo(todos, todoListPermissions);
-  });
+beforeEach(() => {
+  todos = new TodosInMemory();
+  todoListPermissions = new TodoListPermissionsInMemory();
+  tagTodo = new TagTodo(todos, todoListPermissions);
+});
 
-  it("only the owner can tag todos", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theTodoId = "todo/1";
-    const theOwnerId = "owner/1";
-    const theCollaboratorId = "collaborator/1";
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    await todoListPermissions.save(thePermissions);
+it("tagging todos requires permission", async () => {
+  await givenPermission(
+    aTodoListPermission().forTodoList("todoList/1").forOwner("owner/1")
+  );
 
-    // Act
-    const result = tagTodo.execute(
-      theTodoListId,
-      theTodoId,
-      theCollaboratorId,
+  await expect(
+    tagTodo.execute(
+      "todoList/1",
+      "todo/1",
+      "collaborator/not-authorized",
       "feature"
-    );
+    )
+  ).rejects.toEqual(
+    new TodoListPermissionDenied("todoList/1", "collaborator/not-authorized")
+  );
+});
 
-    // Assert
-    await expect(result).rejects.toEqual(
-      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
-    );
-  });
+const AUTHORIZED_CASES = [
+  {
+    role: "authorized collaborator",
+    todoListId: "todoList/1",
+    collaboratorId: "collaborator/authorized",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/1")
+      .withCollaboratorsAuthorized("collaborator/authorized"),
+  },
+  {
+    role: "owner",
+    todoListId: "todoList/2",
+    collaboratorId: "collaborator/owner",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/2")
+      .forOwner("collaborator/owner"),
+  },
+];
 
-  it("adds new tags to the todo", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theTodoId = "todo/1";
-    const theOwnerId = "owner/1";
-    const theTodo = aTodo().withId(theTodoId).build();
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
+AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
+  it(`adds new tags to the todo (role=${role})`, async () => {
     await Promise.all([
-      todos.save(theTodo),
-      todoListPermissions.save(thePermissions),
+      givenPermission(permission),
+      givenTodo(aTodo().withId("todo/1")),
     ]);
 
-    // Act
-    await tagTodo.execute(theTodoListId, theTodoId, theOwnerId, "feature");
-    await tagTodo.execute(theTodoListId, theTodoId, theOwnerId, "top priority");
-    await tagTodo.execute(theTodoListId, theTodoId, theOwnerId, "feature");
+    await tagTodo.execute(todoListId, "todo/1", collaboratorId, "feature");
+    await tagTodo.execute(todoListId, "todo/1", collaboratorId, "top priority");
+    await tagTodo.execute(todoListId, "todo/1", collaboratorId, "feature"); // Check for duplicates
 
-    // Assert
-    expect((await todos.ofId(theTodoId)).tags).toEqual([
+    expect((await todos.ofId("todo/1")).tags).toEqual([
       "feature",
       "top priority",
     ]);
-  });
+  })
+);
 
-  it("is limited to 3 tags", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theTodoId = "todo/1";
-    const theOwnerId = "owner/1";
-    const theTodo = aTodo()
-      .withId(theTodoId)
-      .taggedAs("tag 1", "tag 2", "tag 3")
-      .build();
-    const thePermissions = aTodoListPermission()
-      .forTodoList(theTodoListId)
-      .forOwner(theOwnerId)
-      .build();
-    await Promise.all([
-      todos.save(theTodo),
-      todoListPermissions.save(thePermissions),
-    ]);
+it("is limited to 3 tags", async () => {
+  await Promise.all([
+    givenPermission(
+      aTodoListPermission()
+        .forTodoList("todoList/1")
+        .forOwner("collaborator/owner")
+    ),
+    givenTodo(aTodo().withId("todo/1").taggedAs("tag 1", "tag 2", "tag 3")),
+  ]);
 
-    // Act
-    const result = tagTodo.execute(
-      theTodoListId,
-      theTodoId,
-      theOwnerId,
-      "tag 4"
-    );
-
-    // Assert
-    await expect(result).rejects.toEqual(
-      new Error("Todos can only have at most 3 tags")
-    );
-  });
+  await expect(
+    tagTodo.execute("todoList/1", "todo/1", "collaborator/owner", "tag 4")
+  ).rejects.toEqual(new Error("Todos can only have at most 3 tags"));
 });
+
+function givenPermission(todoListPermission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(todoListPermission.build());
+}
+
+function givenTodo(todo: TodoBuilder) {
+  return todos.save(todo.build());
+}

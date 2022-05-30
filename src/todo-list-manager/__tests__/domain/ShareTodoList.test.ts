@@ -1,96 +1,86 @@
-import type { Collaborators } from "../../domain/Collaborators";
-import type { Collaborator } from "../../domain/Collaborator";
-import type { CollaboratorId } from "../../domain/CollaboratorId";
 import { ShareTodoList } from "../../usecase/ShareTodoList";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
-import { aTodoListPermission } from "./builders/TodoListPermission";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
 import { TodoListPermissionDenied } from "../../domain/TodoListPermissionDenied";
+import { CollaboratorsInMemory } from "./fakes/CollaboratorsInMemory";
 
-class CollaboratorsInMemory implements Collaborators {
-  private database = new Map<CollaboratorId, Collaborator>();
-  private databaseByEmail = new Map<string, Collaborator>();
+let shareTodoList: ShareTodoList;
+let todoListPermissions: TodoListPermissionsInMemory;
+let collaborators: CollaboratorsInMemory;
 
-  addTestCollaborator(collaborator: Collaborator) {
-    this.database.set(collaborator.id, collaborator);
-    this.databaseByEmail.set(collaborator.email, collaborator);
-  }
+beforeEach(() => {
+  todoListPermissions = new TodoListPermissionsInMemory();
+  collaborators = new CollaboratorsInMemory();
+  shareTodoList = new ShareTodoList(todoListPermissions, collaborators);
+});
 
-  async ofEmail(email: string): Promise<Collaborator> {
-    const collaborator = this.databaseByEmail.get(email);
-    if (collaborator == null) throw new Error("oups");
+it("sharing todo list requires permissions", async () => {
+  await givenPermission(
+    aTodoListPermission()
+      .forTodoList("todoList/1")
+      .forOwner("collaborator/owner")
+  );
 
-    return collaborator;
-  }
-}
-
-describe("ShareTodoList", () => {
-  let shareTodoList: ShareTodoList;
-  let todoListPermissions: TodoListPermissionsInMemory;
-  let collaborators: CollaboratorsInMemory;
-
-  beforeEach(() => {
-    todoListPermissions = new TodoListPermissionsInMemory();
-    collaborators = new CollaboratorsInMemory();
-    shareTodoList = new ShareTodoList(todoListPermissions, collaborators);
-  });
-
-  it("Only owners can share todo lists", async () => {
-    // Arrange
-    const theTodoListId = "todoList/1";
-    const theCollaboratorId = "collaborator/1";
-    await todoListPermissions.save(
-      aTodoListPermission()
-        .forTodoList(theTodoListId)
-        .forOwner("owner/1")
-        .build()
-    );
-
-    // Act
-    const result = shareTodoList.execute(
-      theTodoListId,
-      theCollaboratorId,
+  await expect(
+    shareTodoList.execute(
+      "todoList/1",
+      "collaborator/not-authorized",
       "john.doe@example.com"
-    );
+    )
+  ).rejects.toEqual(
+    new TodoListPermissionDenied("todoList/1", "collaborator/not-authorized")
+  );
+});
 
-    // Assert
-    await expect(result).rejects.toEqual(
-      new TodoListPermissionDenied(theTodoListId, theCollaboratorId)
-    );
-  });
+const AUTHORIZED_CASES = [
+  {
+    role: "authorized collaborator",
+    todoListId: "todoList/1",
+    collaboratorId: "collaborator/authorized",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/1")
+      .withCollaboratorsAuthorized("collaborator/authorized"),
+  },
+  {
+    role: "owner",
+    todoListId: "todoList/2",
+    collaboratorId: "collaborator/owner",
+    permission: aTodoListPermission()
+      .forTodoList("todoList/2")
+      .forOwner("collaborator/owner"),
+  },
+];
 
-  it("Authorizes new collaborators", async () => {
+AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
+  it(`authorizes new collaborators (role=${role})`, async () => {
     // Arrange
     collaborators.addTestCollaborator({
-      id: "collaborator/2",
+      id: "collaborator/new",
       email: "john.doe@example.com",
     });
-    const theTodoListId = "todoList/1";
-    const theCollaboratorId = "collaborator/1";
-    await todoListPermissions.save(
-      aTodoListPermission()
-        .forTodoList(theTodoListId)
-        .forOwner("owner/1")
-        .withCollaboratorsAuthorized("collaborator/1")
-        .build()
-    );
+    await givenPermission(permission);
 
-    // Act
     await shareTodoList.execute(
-      theTodoListId,
-      theCollaboratorId,
+      todoListId,
+      collaboratorId,
       "john.doe@example.com"
     );
     await shareTodoList.execute(
-      theTodoListId,
-      theCollaboratorId,
+      // Execute twice to check for duplicates
+      todoListId,
+      collaboratorId,
       "john.doe@example.com"
     );
 
-    // Assert
-    expect(await todoListPermissions.ofTodoList(theTodoListId)).toEqual({
-      collaboratorsIds: ["collaborator/1", "collaborator/2"],
-      ownerId: "owner/1",
-      todoListId: "todoList/1",
-    });
-  });
-});
+    expect(await todoListPermissions.ofTodoList(todoListId)).toEqual(
+      permission.withMoreCollaboratorsAuthorized("collaborator/new").build()
+    );
+  })
+);
+
+function givenPermission(todoListPermission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(todoListPermission.build());
+}

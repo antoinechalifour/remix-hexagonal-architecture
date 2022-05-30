@@ -3,11 +3,14 @@ import type { TodoListId } from "../../../domain/TodoList";
 import type { OwnerId } from "../../../domain/OwnerId";
 import type { CollaboratorId } from "../../../domain/CollaboratorId";
 
-interface TodoListPermissionBuilder {
+export interface TodoListPermissionBuilder {
   todoListPermission: TodoListPermission;
   forTodoList(todoListId: TodoListId): TodoListPermissionBuilder;
   forOwner(ownerId: OwnerId): TodoListPermissionBuilder;
   withCollaboratorsAuthorized(
+    ...collaboratorsIds: CollaboratorId[]
+  ): TodoListPermissionBuilder;
+  withMoreCollaboratorsAuthorized(
     ...collaboratorsIds: CollaboratorId[]
   ): TodoListPermissionBuilder;
   build(): TodoListPermission;
@@ -31,6 +34,10 @@ export const aTodoListPermission = (): TodoListPermissionBuilder => ({
     ...collaboratorsIds: CollaboratorId[]
   ): TodoListPermissionBuilder {
     this.todoListPermission.collaboratorsIds = collaboratorsIds;
+    return this;
+  },
+  withMoreCollaboratorsAuthorized(...collaboratorsIds: CollaboratorId[]) {
+    this.todoListPermission.collaboratorsIds.push(...collaboratorsIds);
     return this;
   },
   build(): TodoListPermission {

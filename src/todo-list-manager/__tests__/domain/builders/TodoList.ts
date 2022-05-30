@@ -1,7 +1,7 @@
 import type { TodoList } from "../../../domain/TodoList";
 import { TodoId } from "../../../domain/Todo";
 
-interface TodoListBuilder {
+export interface TodoListBuilder {
   todoList: TodoList;
   withId(id: string): TodoListBuilder;
   withTitle(title: string): TodoListBuilder;

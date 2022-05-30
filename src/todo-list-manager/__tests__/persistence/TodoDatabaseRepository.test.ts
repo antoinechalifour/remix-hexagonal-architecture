@@ -7,7 +7,7 @@ import {
 } from "todo-list-manager";
 import { updateCompletion } from "../../domain/Todo";
 import { TodoLists } from "../../domain/TodoLists";
-import { anUncompletedTodo } from "../domain/builders/Todo";
+import { aTodo } from "../domain/builders/Todo";
 import { aTodoList } from "../domain/builders/TodoList";
 import {
   configureTestingDatabaseEnvironment,
@@ -37,10 +37,7 @@ describe("TodoDatabaseRepository", () => {
     await todoLists.save(todoList);
 
     // Persist todos
-    let todo = anUncompletedTodo()
-      .withId(theTodoId)
-      .ofTodoList(todoList.id)
-      .build();
+    let todo = aTodo().withId(theTodoId).ofTodoList(todoList.id).build();
     await todos.save(todo);
     expect(await todos.ofId(theTodoId)).toEqual(todo);
 
