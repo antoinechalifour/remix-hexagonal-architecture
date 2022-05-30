@@ -7,4 +7,8 @@ export class TodoListPermissionDeniedError extends Error {
       `Access to TodoList ${todoListId} denied for collaborator ${collaboratorId}`
     );
   }
+
+  static is(err: unknown): err is TodoListPermissionDeniedError {
+    return err instanceof TodoListPermissionDeniedError;
+  }
 }

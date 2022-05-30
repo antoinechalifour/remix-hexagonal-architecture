@@ -5,6 +5,7 @@ import { PrismaClient } from "@prisma/client";
 import {
   TodoListDatabaseRepository,
   TodoDatabaseRepository,
+  TodoListNotFoundError,
 } from "todo-list-manager";
 
 import { aTodoList } from "../domain/builders/TodoList";
@@ -70,7 +71,7 @@ describe("TodoListDatabaseRepository", () => {
 
     // Assert
     await expect(todoLists.ofId(theTodoListToRemoveId)).rejects.toThrow(
-      "Todolist 78d492f1-f182-41b9-81a4-b117ceadcca7 was not found"
+      new TodoListNotFoundError("78d492f1-f182-41b9-81a4-b117ceadcca7")
     );
     expect(await todos.ofTodoList(theTodoListToRemoveId)).toHaveLength(0);
     expect(await todos.ofTodoList(theTodoListToKeepId)).toHaveLength(1);
@@ -80,7 +81,7 @@ describe("TodoListDatabaseRepository", () => {
     const theTodoListToRemoveId = "141c8f3e-b68e-45a0-9f0e-01e77009d801";
 
     return expect(() => todoLists.ofId(theTodoListToRemoveId)).rejects.toThrow(
-      "Todolist 141c8f3e-b68e-45a0-9f0e-01e77009d801 was not found"
+      new TodoListNotFoundError("141c8f3e-b68e-45a0-9f0e-01e77009d801")
     );
   });
 });

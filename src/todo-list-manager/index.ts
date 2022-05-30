@@ -1,5 +1,7 @@
 export * from "./application/TodoListApplicationService";
 export * from "./application/TodoApplicationService";
+export * from "./domain/TodoListNotFoundError";
+export * from "./domain/TodoListPermissionDeniedError";
 export * from "./infrastructure/TodoListDatabaseRepository";
 export * from "./infrastructure/TodoDatabaseRepository";
 export * from "./infrastructure/TodoListPermissionsDatabaseRepository";
