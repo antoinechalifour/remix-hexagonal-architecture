@@ -20,13 +20,17 @@ export const TodoListHeader = ({
 }: TodoListHeaderProps) => {
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between space-x-4">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
         <TodoListEditableTitle todoList={todoList} />
-        <Collaborators todoListId={todoList.id} collaborators={collaborators} />
+        <Collaborators
+          className="mt-2 sm:mt-0"
+          todoListId={todoList.id}
+          collaborators={collaborators}
+        />
       </div>
 
       <p className="pl-3 text-xs">
-        ↳ You created this list {displayDate(todoList.createdAt)}
+        ↳ Created {displayDate(todoList.createdAt)}
       </p>
 
       <AddTodoForm />
