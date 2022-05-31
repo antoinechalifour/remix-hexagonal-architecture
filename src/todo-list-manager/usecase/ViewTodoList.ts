@@ -3,8 +3,8 @@ import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListQuery } from "../domain/TodoListQuery";
 import type { Collaborators } from "../domain/Collaborators";
-import { canView } from "../domain/TodoListPermission";
-import { TodoListPageDto } from "shared/client";
+import type { TodoListPageDto } from "shared/client";
+import { canView, isOwner } from "../domain/TodoListPermission";
 import { Collaborator } from "../domain/Collaborator";
 
 export class ViewTodoList {
@@ -30,7 +30,8 @@ export class ViewTodoList {
     ]);
 
     return {
-      todoListDetails,
+      isOwner: isOwner(permissions, collaboratorId),
+      todoList: todoListDetails,
       collaborators: collaborators.map(toTodoListCollaboratorDto),
     };
   }

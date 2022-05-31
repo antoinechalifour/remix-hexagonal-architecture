@@ -10,8 +10,8 @@ import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
 export const meta: MetaFunction = ({ data }) => ({
-  title: `Todos | ${data?.todoListDetails.title} (${data?.todoListDetails.doingTodos.length})`,
-  description: `Created by you on ${data?.todoListDetails.createdAt}`,
+  title: `Todos | ${data?.todoList.title} (${data?.todoList.doingTodos.length})`,
+  description: `Created by you on ${data?.todoList.createdAt}`,
 });
 
 export const loader: LoaderFunction = async (
@@ -23,11 +23,11 @@ export const action: ActionFunction = async (args) =>
   (args.context as RemixAppContext).actions.addTodo(args);
 
 export default function TodoListPage() {
-  const { todoList, collaborators } = useTodoListPage();
+  const todoListPage = useTodoListPage();
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <TodoList todoList={todoList} collaborators={collaborators} />
+      <TodoList todoListPage={todoListPage} />
     </DndProvider>
   );
 }
@@ -35,21 +35,18 @@ export default function TodoListPage() {
 function useTodoListPage() {
   const loaderData = useLoaderData<TodoListPageDto>();
   const refresher = useFetcher<TodoListPageDto>();
-  const todoList =
-    refresher.data?.todoListDetails || loaderData.todoListDetails;
-  const collaborators =
-    refresher.data?.collaborators || loaderData.collaborators;
+  const todoListPage = refresher.data || loaderData;
   const load = refresher.load;
 
   useEffect(() => {
-    const source = new EventSource(`/events/l/${todoList.id}`);
+    const source = new EventSource(`/events/l/${todoListPage.todoList.id}`);
 
     source.addEventListener("update", () => {
       load(window.location.pathname);
     });
 
     return () => source.close();
-  }, [load, todoList.id]);
+  }, [load, todoListPage.todoList.id]);
 
-  return { todoList, collaborators };
+  return todoListPage;
 }

@@ -1,4 +1,4 @@
-import type { TodoListDetailsDto } from "shared/client";
+import type { TodoListPageDto } from "shared/client";
 
 import React from "react";
 import { Todos } from "front/todolist/Todos";
@@ -9,14 +9,13 @@ import { TagFilters } from "front/todolist/TagFilters";
 import { useTodosOrderPreview } from "front/todolist/useTodosOrderPreview";
 import { useTodoListFilter } from "front/todolist/useTodoListFilter";
 import { TodosHeading } from "front/todolist/TodosHeading";
-import type { TodoListCollaboratorDto } from "shared/client";
 
 interface TodoListProps {
-  todoList: TodoListDetailsDto;
-  collaborators: TodoListCollaboratorDto[];
+  todoListPage: TodoListPageDto;
 }
 
-export const TodoList = ({ todoList, collaborators }: TodoListProps) => {
+export const TodoList = ({ todoListPage }: TodoListProps) => {
+  const { todoList } = todoListPage;
   const {
     doingTodos,
     completedTodos,
@@ -28,7 +27,7 @@ export const TodoList = ({ todoList, collaborators }: TodoListProps) => {
 
   return (
     <section className="space-y-10">
-      <TodoListHeader todoList={todoList} collaborators={collaborators} />
+      <TodoListHeader />
 
       <TagFilters tags={todoList.tags} filter={filter} />
 

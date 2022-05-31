@@ -1,23 +1,15 @@
-import type {
-  TodoListCollaboratorDto,
-  TodoListDetailsDto,
-} from "shared/client";
+import type { TodoListPageDto } from "shared/client";
 
 import React from "react";
 import { displayDate } from "front/Date";
 import { AddTodoForm } from "front/todolist/AddTodoForm";
 import { Collaborators } from "front/todolist/Collaborators";
 import { TodoListEditableTitle } from "front/todolist/TodoListEditableTitle";
+import { useLoaderData } from "remix";
 
-export type TodoListHeaderProps = {
-  todoList: TodoListDetailsDto;
-  collaborators: TodoListCollaboratorDto[];
-};
+export const TodoListHeader = () => {
+  const { isOwner, todoList, collaborators } = useLoaderData<TodoListPageDto>();
 
-export const TodoListHeader = ({
-  todoList,
-  collaborators,
-}: TodoListHeaderProps) => {
   return (
     <div className="space-y-4">
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
@@ -26,6 +18,7 @@ export const TodoListHeader = ({
           className="mt-2 sm:mt-0"
           todoListId={todoList.id}
           collaborators={collaborators}
+          canShare={isOwner}
         />
       </div>
 

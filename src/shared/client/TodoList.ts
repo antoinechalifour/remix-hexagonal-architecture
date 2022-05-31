@@ -16,7 +16,8 @@ export interface TodoListCollaboratorDto {
 }
 
 export interface TodoListPageDto {
-  todoListDetails: TodoListDetailsDto;
+  isOwner: boolean;
+  todoList: TodoListDetailsDto;
   collaborators: TodoListCollaboratorDto[];
 }
 

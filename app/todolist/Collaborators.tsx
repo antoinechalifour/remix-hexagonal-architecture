@@ -7,12 +7,14 @@ import classNames from "classnames";
 export type CollaboratorsProps = {
   todoListId: string;
   collaborators: TodoListCollaboratorDto[];
+  canShare: boolean;
   className?: string;
 };
 
 export const Collaborators = ({
   todoListId,
   collaborators,
+  canShare,
   className,
 }: CollaboratorsProps) => (
   <ul className={classNames("flex space-x-2", className)}>
@@ -24,8 +26,10 @@ export const Collaborators = ({
       </li>
     ))}
 
-    <li>
-      <ShareButton todoListId={todoListId} />
-    </li>
+    {canShare && (
+      <li>
+        <ShareButton todoListId={todoListId} />
+      </li>
+    )}
   </ul>
 );
