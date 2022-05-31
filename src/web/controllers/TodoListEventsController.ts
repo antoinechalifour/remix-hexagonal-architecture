@@ -1,5 +1,5 @@
 import { Controller, Sse, Param, Inject } from "@nestjs/common";
-import { filter, map } from "rxjs";
+import { filter, interval, map, merge } from "rxjs";
 import { Authenticator } from "authentication";
 import { AUTHENTICATOR } from "../../keys";
 import { TodoListEventsConsumer } from "./TodoListEventsConsumer";
@@ -15,8 +15,11 @@ export class TodoListEventsController {
   @Sse("/:todoListId")
   async getEvents(@Param("todoListId") todoListId: string) {
     const currentUser = await this.authenticator.currentUser();
+    const heartbeat$ = interval(30_000).pipe(
+      map(() => ({ type: "heartbeat", data: "_" }))
+    );
 
-    return this.todoListEvents.events.pipe(
+    const updates$ = this.todoListEvents.events.pipe(
       filter(
         (event) =>
           event.todoListId === todoListId &&
@@ -24,5 +27,7 @@ export class TodoListEventsController {
       ),
       map((event) => ({ type: "update", data: event.type } as MessageEvent))
     );
+
+    return merge(heartbeat$, updates$);
   }
 }

@@ -41,9 +41,7 @@ function useTodoListPage() {
   useEffect(() => {
     const source = new EventSource(`/events/l/${todoListPage.todoList.id}`);
 
-    source.addEventListener("update", () => {
-      load(window.location.pathname);
-    });
+    source.addEventListener("update", () => load(window.location.pathname));
 
     return () => source.close();
   }, [load, todoListPage.todoList.id]);
