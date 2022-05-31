@@ -9,12 +9,14 @@ import { TagFilters } from "front/todolist/TagFilters";
 import { useTodosOrderPreview } from "front/todolist/useTodosOrderPreview";
 import { useTodoListFilter } from "front/todolist/useTodoListFilter";
 import { TodosHeading } from "front/todolist/TodosHeading";
+import type { TodoListContributorsDto } from "shared/client";
 
 interface TodoListProps {
   todoList: TodoListDetailsDto;
+  collaborators: TodoListContributorsDto[];
 }
 
-export const TodoList = ({ todoList }: TodoListProps) => {
+export const TodoList = ({ todoList, collaborators }: TodoListProps) => {
   const {
     doingTodos,
     completedTodos,
@@ -26,7 +28,8 @@ export const TodoList = ({ todoList }: TodoListProps) => {
 
   return (
     <section className="space-y-10">
-      <TodoListHeader todoList={todoList} />
+      <TodoListHeader todoList={todoList} collaborators={collaborators} />
+
       <TagFilters tags={todoList.tags} filter={filter} />
 
       <Todos

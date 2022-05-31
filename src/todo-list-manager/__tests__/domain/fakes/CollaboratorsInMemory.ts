@@ -17,4 +17,8 @@ export class CollaboratorsInMemory implements Collaborators {
 
     return collaborator;
   }
+
+  async ofIds(collaboratorIds: string[]): Promise<Collaborator[]> {
+    throw new Error("Method not implemented.");
+  }
 }

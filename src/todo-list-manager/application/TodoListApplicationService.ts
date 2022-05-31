@@ -109,6 +109,7 @@ export class TodoListApplicationService {
   viewTodoList(todoListId: string, collaboratorId: string) {
     return new ViewTodoList(
       this.todoListPermissions,
+      this.collaborators,
       this.todoListQuery
     ).execute(todoListId, collaboratorId);
   }

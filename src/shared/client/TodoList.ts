@@ -9,6 +9,17 @@ export interface TodoListDetailsDto {
   tags: string[];
 }
 
+export interface TodoListContributorsDto {
+  id: string;
+  email: string;
+  shortName: string;
+}
+
+export interface TodoListPageDto {
+  todoListDetails: TodoListDetailsDto;
+  collaborators: TodoListContributorsDto[];
+}
+
 export interface AddTodoListErrorDto {
   title?: string;
 }

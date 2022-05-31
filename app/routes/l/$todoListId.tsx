@@ -1,5 +1,5 @@
 import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
-import type { TodoListDetailsDto } from "shared/client";
+import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
 import { useLoaderData } from "remix";
@@ -9,9 +9,9 @@ import { TodoList } from "front/todolist/TodoList";
 import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
-export const meta: MetaFunction = ({ data: todoList }) => ({
-  title: `Todos | ${todoList?.title} (${todoList?.doingTodos.length})`,
-  description: `Created by you on ${todoList?.createdAt}`,
+export const meta: MetaFunction = ({ data }) => ({
+  title: `Todos | ${data.todoListDetails?.title} (${data.todoListDetails?.doingTodos.length})`,
+  description: `Created by you on ${data.todoListDetails?.createdAt}`,
 });
 
 export const loader: LoaderFunction = async (
@@ -23,19 +23,22 @@ export const action: ActionFunction = async (args) =>
   (args.context as RemixAppContext).actions.addTodo(args);
 
 export default function TodoListPage() {
-  const { todoList } = useTodoListPage();
+  const { todoList, collaborators } = useTodoListPage();
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <TodoList todoList={todoList} />
+      <TodoList todoList={todoList} collaborators={collaborators} />
     </DndProvider>
   );
 }
 
 function useTodoListPage() {
-  const loaderData = useLoaderData<TodoListDetailsDto>();
-  const refresher = useFetcher<TodoListDetailsDto>();
-  const todoList = refresher.data || loaderData;
+  const loaderData = useLoaderData<TodoListPageDto>();
+  const refresher = useFetcher<TodoListPageDto>();
+  const todoList =
+    refresher.data?.todoListDetails || loaderData.todoListDetails;
+  const collaborators =
+    refresher.data?.collaborators || loaderData.collaborators;
   const load = refresher.load;
 
   useEffect(() => {
@@ -48,5 +51,5 @@ function useTodoListPage() {
     return () => source.close();
   }, [load, todoList.id]);
 
-  return { todoList };
+  return { todoList, collaborators };
 }
