@@ -99,7 +99,7 @@ export class Actions {
 
   @DataFunction()
   async forgotPassword(@Body() body: ForgotPasswordBody) {
-    this.authenticationApplicationService.forgotPassword(body.email);
+    await this.authenticationApplicationService.forgotPassword(body.email);
     return null;
   }
 
