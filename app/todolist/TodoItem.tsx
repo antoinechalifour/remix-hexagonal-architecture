@@ -79,11 +79,11 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         <ul
           className={classNames(
             "col-start-2 row-start-2 md:col-start-3 md:row-start-1",
-            "flex space-x-2"
+            "flex flex-wrap sm:space-x-1"
           )}
         >
           {todo.tags.map((tag) => (
-            <li key={tag}>
+            <li key={tag} className="p-1 sm:p-0">
               <TodoTag>{tag}</TodoTag>
             </li>
           ))}
