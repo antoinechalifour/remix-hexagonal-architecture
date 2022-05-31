@@ -1,5 +1,5 @@
 import type {
-  TodoListContributorsDto,
+  TodoListCollaboratorDto,
   TodoListDetailsDto,
 } from "shared/client";
 
@@ -11,7 +11,7 @@ import { TodoListEditableTitle } from "front/todolist/TodoListEditableTitle";
 
 export type TodoListHeaderProps = {
   todoList: TodoListDetailsDto;
-  collaborators: TodoListContributorsDto[];
+  collaborators: TodoListCollaboratorDto[];
 };
 
 export const TodoListHeader = ({

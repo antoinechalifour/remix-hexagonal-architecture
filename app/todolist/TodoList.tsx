@@ -9,11 +9,11 @@ import { TagFilters } from "front/todolist/TagFilters";
 import { useTodosOrderPreview } from "front/todolist/useTodosOrderPreview";
 import { useTodoListFilter } from "front/todolist/useTodoListFilter";
 import { TodosHeading } from "front/todolist/TodosHeading";
-import type { TodoListContributorsDto } from "shared/client";
+import type { TodoListCollaboratorDto } from "shared/client";
 
 interface TodoListProps {
   todoList: TodoListDetailsDto;
-  collaborators: TodoListContributorsDto[];
+  collaborators: TodoListCollaboratorDto[];
 }
 
 export const TodoList = ({ todoList, collaborators }: TodoListProps) => {
