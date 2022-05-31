@@ -48,7 +48,7 @@ export const FloatingLabelInput = forwardRef<
           value={value}
           onChange={handleChange}
           className={classNames(
-            "block w-full rounded-2xl border bg-transparent py-2 px-3 sm:py-4 sm:px-6",
+            "block w-full rounded border bg-transparent px-4 pt-6 pb-2",
             "border-2 border border-dark focus:border-primary",
             "text-base text-lighter transition-colors",
             {
@@ -59,11 +59,11 @@ export const FloatingLabelInput = forwardRef<
         />
         <span
           className={classNames(
-            "absolute left-4 -translate-y-1/2 p-1 font-bold sm:p-3",
-            "transition-all group-focus-within:top-0 group-focus-within:bg-darker group-focus-within:text-xs",
+            "absolute left-4 -translate-y-1/2 font-bold",
+            "transition-all group-focus-within:top-4 group-focus-within:text-xs",
             {
               "top-1/2": !isStickyLabel,
-              "top-0 bg-darker text-xs": isStickyLabel,
+              "top-4 text-xs": isStickyLabel,
               "text-danger": !!errorMessage,
             }
           )}

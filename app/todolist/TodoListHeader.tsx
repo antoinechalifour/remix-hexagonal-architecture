@@ -22,7 +22,7 @@ export const TodoListHeader = ({
     <div className="space-y-4">
       <div className="flex items-center justify-between space-x-4">
         <TodoListEditableTitle todoList={todoList} />
-        <Collaborators collaborators={collaborators} />
+        <Collaborators todoListId={todoList.id} collaborators={collaborators} />
       </div>
 
       <p className="pl-3 text-xs">
