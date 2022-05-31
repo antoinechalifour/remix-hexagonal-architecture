@@ -1,5 +1,7 @@
-import { Collaborator } from "./Collaborator";
+import type { Collaborator } from "./Collaborator";
+import type { CollaboratorId } from "./CollaboratorId";
 
 export interface Collaborators {
-  ofEmail: (email: string) => Promise<Collaborator>;
+  ofIds(collaboratorIds: CollaboratorId[]): Promise<Collaborator[]>;
+  ofEmail(email: string): Promise<Collaborator>;
 }
