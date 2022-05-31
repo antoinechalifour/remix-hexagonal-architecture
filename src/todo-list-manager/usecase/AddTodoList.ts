@@ -22,6 +22,6 @@ export class AddTodoList {
     await this.todoLists.save(todoList);
     await this.todoListPermissions.save(todoListPermissions);
 
-    return `/l/${todoList.id}`;
+    return todoList.id;
   }
 }

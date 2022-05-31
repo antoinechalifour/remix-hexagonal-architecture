@@ -1,5 +1,4 @@
 import { Injectable } from "@nestjs/common";
-import { json } from "remix";
 import { v4 as uuid } from "uuid";
 import { GenerateUUID } from "shared/id";
 import { NestEvents } from "shared/events";
@@ -11,13 +10,9 @@ import { ForgotPassword } from "../usecase/ForgotPassword";
 import { ResetPassword } from "../usecase/ResetPassword";
 import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
-import { InvalidVerificationTokenError } from "../domain/InvalidVerificationTokenError";
-import { AccountAlreadyVerifiedError } from "../domain/AccountAlreadyVerifiedError";
 import { AccountNotVerifiedError } from "../domain/AccountNotVerifiedError";
 import { AccountNotFoundError } from "../domain/AccountNotFoundError";
 import { UserRegistered } from "../domain/UserRegistered";
-import { InvalidPasswordResetTokenError } from "../domain/InvalidPasswordResetTokenError";
-import { PasswordResetTokenExpiredError } from "../domain/PasswordResetTokenExpiredError";
 import { PasswordChanged } from "../domain/PasswordChanged";
 import { PasswordForgotten } from "../domain/PasswordForgotten";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
@@ -80,24 +75,10 @@ export class AuthenticationApplicationService {
     }
   }
 
-  async verifyAccount(email: string, token: string): Promise<LoginResult> {
-    try {
-      const userId = await new VerifyAccount(this.accounts).execute(
-        email,
-        token
-      );
+  async verifyAccount(email: string, token: string) {
+    const userId = await new VerifyAccount(this.accounts).execute(email, token);
 
-      return [null, { userId, id: uuid() }];
-    } catch (err) {
-      let message: string;
-      if (InvalidVerificationTokenError.is(err) || AccountNotFoundError.is(err))
-        message = "the verification token is invalid";
-      else if (AccountAlreadyVerifiedError.is(err))
-        message = "account is already verified";
-      else throw err;
-
-      return [{ message }, null];
-    }
+    return { userId, id: uuid() };
   }
 
   async forgotPassword(email: string) {
@@ -120,37 +101,13 @@ export class AuthenticationApplicationService {
   }
 
   async resetPassword(email: string, token: string, newPassword: string) {
-    try {
-      await new ResetPassword(
-        this.accounts,
-        this.passwordHasher,
-        this.clock
-      ).execute(email, token, newPassword);
+    await new ResetPassword(
+      this.accounts,
+      this.passwordHasher,
+      this.clock
+    ).execute(email, token, newPassword);
 
-      this.events.publish(new PasswordChanged(email));
-    } catch (err) {
-      if (InvalidPasswordResetTokenError.is(err))
-        throw json(
-          {
-            message:
-              "Invalid password reset code. Have you copied the link correctly?",
-          },
-          { status: 400 }
-        );
-
-      if (PasswordResetTokenExpiredError.is(err))
-        throw json(
-          {
-            message:
-              'The reset code has expired. Please ask a new one by using the "Forgot your password" page.',
-          },
-          {
-            status: 400,
-          }
-        );
-
-      throw err;
-    }
+    this.events.publish(new PasswordChanged(email));
   }
 
   authenticationStatus() {

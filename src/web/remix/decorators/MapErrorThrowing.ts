@@ -1,7 +1,13 @@
+import { json } from "remix";
+
 type ErrorCasting<T extends Error> = {
   is(err: unknown): err is T;
 };
-type ErrorMapping<T extends Error> = [ErrorCasting<T>, number];
+type ErrorOptions = {
+  status: number;
+  message?: string;
+};
+type ErrorMapping<T extends Error> = [ErrorCasting<T>, ErrorOptions];
 
 export const MapErrorThrowing =
   <T extends Error>(mapping: ErrorMapping<T>[]): MethodDecorator =>
@@ -12,11 +18,14 @@ export const MapErrorThrowing =
       try {
         return await originalMethod.apply(this, args);
       } catch (err) {
-        for (let [CustomErrorConstructor, httpStatus] of mapping) {
+        for (let [CustomErrorConstructor, options] of mapping) {
           if (CustomErrorConstructor.is(err))
-            throw new Response(err.message, {
-              status: httpStatus,
-            });
+            throw json(
+              { message: options.message ?? err.message },
+              {
+                status: options.status,
+              }
+            );
         }
         throw err;
       }

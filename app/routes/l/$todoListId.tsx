@@ -10,8 +10,8 @@ import { useEffect } from "react";
 import { useFetcher } from "@remix-run/react";
 
 export const meta: MetaFunction = ({ data }) => ({
-  title: `Todos | ${data.todoListDetails?.title} (${data.todoListDetails?.doingTodos.length})`,
-  description: `Created by you on ${data.todoListDetails?.createdAt}`,
+  title: `Todos | ${data?.todoListDetails.title} (${data?.todoListDetails.doingTodos.length})`,
+  description: `Created by you on ${data?.todoListDetails.createdAt}`,
 });
 
 export const loader: LoaderFunction = async (

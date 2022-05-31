@@ -3,6 +3,9 @@ import { json, redirect } from "remix";
 import {
   AuthenticationApplicationService,
   Authenticator,
+  AccountNotFoundError,
+  AccountAlreadyVerifiedError,
+  InvalidVerificationTokenError,
 } from "authentication";
 import {
   TodoListApplicationService,
@@ -79,21 +82,31 @@ export class Loaders {
   }
 
   @DataFunction()
+  @MapErrorThrowing([
+    [
+      InvalidVerificationTokenError,
+      { status: 400, message: "Invalid verification token" },
+    ],
+    [
+      AccountNotFoundError,
+      { status: 400, message: "Invalid verification token" },
+    ],
+    [
+      AccountAlreadyVerifiedError,
+      { status: 400, message: "This account has already been verified" },
+    ],
+  ])
   async verifyAccount(@Query() query: VerifyAccountQuery) {
     const isAuthenticated = await this.authenticator.isAuthenticated();
     if (isAuthenticated) return redirect("/");
 
     const session = await this.sessionManager.get();
 
-    const [err, sessionData] =
+    const sessionData =
       await this.authenticationApplicationService.verifyAccount(
         query.email,
         query.token
       );
-
-    if (err) {
-      throw json({ message: err.message }, { status: 400 });
-    }
 
     session.set("userId", sessionData.userId);
     session.set("sessionId", sessionData.id);
@@ -113,8 +126,18 @@ export class Loaders {
   @Authenticated()
   @DataFunction()
   @MapErrorThrowing([
-    [TodoListNotFoundError, 404],
-    [TodoListPermissionDeniedError, 404],
+    [
+      TodoListNotFoundError,
+      {
+        status: 404,
+      },
+    ],
+    [
+      TodoListPermissionDeniedError,
+      {
+        status: 404,
+      },
+    ],
   ])
   async todoList(@Params() params: FetchTodoListParams) {
     const currentUser = await this.authenticator.currentUser();

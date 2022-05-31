@@ -3,6 +3,8 @@ import { redirect } from "@remix-run/node";
 import {
   AuthenticationApplicationService,
   Authenticator,
+  InvalidPasswordResetTokenError,
+  PasswordResetTokenExpiredError,
 } from "authentication";
 import {
   TodoApplicationService,
@@ -35,6 +37,7 @@ import { ForgotPasswordBody } from "./dtos/ForgotPassword";
 import { ResetPasswordBody } from "./dtos/ResetPassword";
 import { RegisterBody } from "./dtos/Register";
 import { ShareTodoListBody, ShareTodoListParams } from "./dtos/ShareTodoList";
+import { MapErrorThrowing } from "./decorators/MapErrorThrowing";
 
 @Injectable()
 export class Actions {
@@ -104,6 +107,24 @@ export class Actions {
   }
 
   @DataFunction()
+  @MapErrorThrowing([
+    [
+      InvalidPasswordResetTokenError,
+      {
+        status: 400,
+        message:
+          "Invalid password reset code. Have you copied the link correctly?",
+      },
+    ],
+    [
+      PasswordResetTokenExpiredError,
+      {
+        status: 400,
+        message:
+          'The reset code has expired. Please ask a new one by using the "Forgot your password" page.',
+      },
+    ],
+  ])
   async resetPassword(@Body() body: ResetPasswordBody) {
     await this.authenticationApplicationService.resetPassword(
       body.email,
@@ -199,11 +220,12 @@ export class Actions {
   @Authenticated()
   @DataFunction()
   async addTodoList(@Body() body: AddTodoListBody) {
-    const url = await this.todoListApplicationService.add(
+    const todoListId = await this.todoListApplicationService.add(
       body.title,
       await this.authenticator.currentUser()
     );
-    return redirect(url);
+
+    return redirect(`/l/${todoListId}`);
   }
 
   @Authenticated()
@@ -228,6 +250,7 @@ export class Actions {
       params.todoListId,
       await this.authenticator.currentUser()
     );
+
     return redirect("/");
   }
 
