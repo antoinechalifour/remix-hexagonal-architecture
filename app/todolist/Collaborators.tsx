@@ -1,11 +1,11 @@
-import type { TodoListContributorsDto } from "shared/client";
+import type { TodoListCollaboratorDto } from "shared/client";
 import React from "react";
 import { CollaboratorPin } from "front/todolist/CollaboratorPin";
 import { ShareButton } from "front/todolist/ShareButton";
 
 export type CollaboratorsProps = {
   todoListId: string;
-  collaborators: TodoListContributorsDto[];
+  collaborators: TodoListCollaboratorDto[];
 };
 
 export const Collaborators = ({

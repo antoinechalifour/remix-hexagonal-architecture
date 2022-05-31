@@ -9,7 +9,7 @@ export interface TodoListDetailsDto {
   tags: string[];
 }
 
-export interface TodoListContributorsDto {
+export interface TodoListCollaboratorDto {
   id: string;
   email: string;
   shortName: string;
@@ -17,7 +17,7 @@ export interface TodoListContributorsDto {
 
 export interface TodoListPageDto {
   todoListDetails: TodoListDetailsDto;
-  collaborators: TodoListContributorsDto[];
+  collaborators: TodoListCollaboratorDto[];
 }
 
 export interface AddTodoListErrorDto {
