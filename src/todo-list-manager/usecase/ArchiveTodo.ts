@@ -3,7 +3,7 @@ import type { TodoId } from "../domain/Todo";
 import type { Todos } from "../domain/Todos";
 import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListId } from "../domain/TodoList";
-import { removeTodo } from "../domain/TodoList";
+import { removeTodoOrder } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { canEditTodoList } from "../domain/TodoListPermission";
 
@@ -25,7 +25,7 @@ export class ArchiveTodo {
     const todoList = await this.todoLists.ofId(todoListId);
 
     await Promise.all([
-      this.todoLists.save(removeTodo(todoList, todoId)),
+      this.todoLists.save(removeTodoOrder(todoList, todoId)),
       this.todos.remove(todoId),
     ]);
   }

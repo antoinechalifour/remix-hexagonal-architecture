@@ -5,11 +5,7 @@ import type { TodoId } from "../domain/Todo";
 import { updateCompletion } from "../domain/Todo";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { TodoLists } from "../domain/TodoLists";
-import {
-  orderAsFirstTodo,
-  orderAsLastTodo,
-  reorderTodoList,
-} from "../domain/TodoList";
+import { orderAsFirstTodo, removeTodoOrder } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
 
 export class ChangeTodoCompletion {
@@ -35,13 +31,13 @@ export class ChangeTodoCompletion {
       this.todoLists.ofId(todoListId),
     ]);
 
-    const newTodoOrder = completed
-      ? orderAsLastTodo(todoList.todosOrder)
-      : orderAsFirstTodo();
+    const reorderedTodoList = completed
+      ? removeTodoOrder(todoList, todoId)
+      : orderAsFirstTodo(todoList, todoId);
 
     await Promise.all([
       this.todos.save(updateCompletion(todo, completed, this.clock)),
-      this.todoLists.save(reorderTodoList(todoList, todoId, newTodoOrder)),
+      this.todoLists.save(reorderedTodoList),
     ]);
   }
 }
