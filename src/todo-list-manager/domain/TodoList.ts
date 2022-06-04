@@ -48,12 +48,14 @@ export const addTodo = (
   return [updatedTodoList, createdTodo];
 };
 
-export const removeTodo = (
+export const removeTodoOrder = (
   todoList: TodoList,
-  todoToRemoveId: TodoId
+  todoToRemoveFromOrder: TodoId
 ): TodoList => ({
   ...todoList,
-  todosOrder: todoList.todosOrder.filter((todoId) => todoId !== todoToRemoveId),
+  todosOrder: todoList.todosOrder.filter(
+    (todoId) => todoId !== todoToRemoveFromOrder
+  ),
 });
 
 export const reorderTodoList = (
@@ -78,8 +80,13 @@ export const reorderTodoList = (
   };
 };
 
-export const orderAsFirstTodo = () => 0;
-export const orderAsLastTodo = (todoOrder: string[]) => todoOrder.length - 1;
+export const orderAsFirstTodo = (
+  todoList: TodoList,
+  todoToOrderFirst: TodoId
+): TodoList => ({
+  ...todoList,
+  todosOrder: [todoToOrderFirst, ...todoList.todosOrder],
+});
 
 export const renameTodoList = (todoList: TodoList, title: string) => ({
   ...todoList,

@@ -65,7 +65,7 @@ const AUTHORIZED_CASES = [
 ];
 
 AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
-  it(`should complete the todo and move it to the end of the list (role=${role})`, async () => {
+  it(`should complete the todo (role=${role})`, async () => {
     await Promise.all([
       givenPermission(permission),
       givenTodoList(
@@ -88,20 +88,17 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
     expect((await todoLists.ofId(todoListId)).todosOrder).toEqual([
       "todo/2",
       "todo/3",
-      "todo/1",
     ]);
   })
 );
 
 AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
-  it(`should uncomplete the todo and move it to the beggining of the list (role=${role})`, async () => {
+  it(`should uncomplete the todo and move it to the beginning of the list (role=${role})`, async () => {
     // Arrange
     await Promise.all([
       givenPermission(permission),
       givenTodoList(
-        aTodoList()
-          .withId(todoListId)
-          .withTodosOrder("todo/3", "todo/2", "todo/1")
+        aTodoList().withId(todoListId).withTodosOrder("todo/3", "todo/2")
       ),
       givenTodo(
         aTodo()
