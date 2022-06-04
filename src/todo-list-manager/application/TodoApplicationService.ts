@@ -67,7 +67,8 @@ export class TodoApplicationService {
       new ChangeTodoCompletion(
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
-        new TodoDatabaseRepository(prisma)
+        new TodoDatabaseRepository(prisma),
+        this.clock
       ).execute(todoListId, todoId, isChecked, currentUser.id)
     );
 

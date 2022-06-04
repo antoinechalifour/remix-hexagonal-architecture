@@ -17,6 +17,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       title: row.title,
       isComplete: row.isComplete,
       createdAt: row.createdAt.toISOString(),
+      completedAt: row.completedAt,
       todoListId: row.todoListId,
       tags: row.tags as string[],
     };
@@ -31,6 +32,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       id: row.id,
       title: row.title,
       isComplete: row.isComplete,
+      completedAt: null,
       createdAt: row.createdAt.toISOString(),
       todoListId,
       tags: row.tags as string[],
@@ -42,6 +44,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       where: { id: todo.id },
       update: {
         isComplete: todo.isComplete,
+        completedAt: todo.completedAt,
         title: todo.title,
         tags: todo.tags,
       },
@@ -49,6 +52,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
         id: todo.id,
         title: todo.title,
         isComplete: todo.isComplete,
+        completedAt: todo.completedAt,
         createdAt: new Date(todo.createdAt),
         todoListId: todo.todoListId,
         tags: todo.tags,

@@ -6,7 +6,7 @@ export interface TodoBuilder {
   withTitle(title: string): TodoBuilder;
   ofTodoList(todoListId: string): TodoBuilder;
   taggedAs(...tags: string[]): TodoBuilder;
-  completed(): TodoBuilder;
+  completed({ at }: { at: Date }): TodoBuilder;
   uncompleted(): TodoBuilder;
   build(): Todo;
 }
@@ -18,6 +18,7 @@ export const aTodo = (): TodoBuilder => ({
     title: "Buy beers",
     todoListId: "3608ffe6-c397-416d-8b49-a17340c5fde4",
     isComplete: false,
+    completedAt: null,
     tags: [],
   },
   withId(id: string): TodoBuilder {
@@ -36,8 +37,9 @@ export const aTodo = (): TodoBuilder => ({
     this.todo.tags = tags;
     return this;
   },
-  completed(): TodoBuilder {
+  completed({ at }): TodoBuilder {
     this.todo.isComplete = true;
+    this.todo.completedAt = at;
     return this;
   },
   uncompleted(): TodoBuilder {
