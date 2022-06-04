@@ -1,21 +1,18 @@
 import type { TodoDto } from "shared/client";
 import React from "react";
-import { useFetcher } from "@remix-run/react";
-import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Popover } from "front/ui/Popover";
-import { PlainButton } from "front/ui/Button";
 import { TagsList } from "front/todolist/TagsList";
 import { AddTag } from "front/todolist/AddTag";
-import { useTodoListInfo } from "front/todolist/state";
+import { ArchiveTodo } from "front/todolist/ArchiveTodo";
+import { SendToTop } from "front/todolist/SendToTop";
 
 export type TodoPopoverContentProps = {
   todo: TodoDto;
 };
-export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
-  const { id } = useTodoListInfo();
-  const archiveTodo = useFetcher();
-  const isArchiving = archiveTodo.state === "submitting";
 
+export const TodoPopoverContent = ({
+  todo,
+}: TodoPopoverContentProps) => {
   return (
     <Popover.Content side="right">
       <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
@@ -24,32 +21,18 @@ export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
       <AddTag todo={todo} />
 
       <Popover.Separator />
+      <Popover.SectionTitle>Actions</Popover.SectionTitle>
+      <Popover.Item>
+        <SendToTop todo={todo} />
+      </Popover.Item>
 
+      <Popover.Separator />
       <Popover.SectionTitle className="text-danger">
         Danger zone
       </Popover.SectionTitle>
 
       <Popover.Item>
-        <archiveTodo.Form
-          method="post"
-          action={`/l/${id}/todo/${todo.id}/archive`}
-          replace
-          className="flex items-center"
-        >
-          <PlainButton
-            type="submit"
-            disabled={isArchiving}
-            className="relative flex w-full items-center text-danger"
-            title="Archive this todo"
-          >
-            Archive
-            <CrossCircledIcon
-              className="ml-auto text-danger"
-              width={20}
-              height={20}
-            />
-          </PlainButton>
-        </archiveTodo.Form>
+        <ArchiveTodo todo={todo} />
       </Popover.Item>
 
       <Popover.Arrow />

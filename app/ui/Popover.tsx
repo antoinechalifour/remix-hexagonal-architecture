@@ -8,7 +8,7 @@ export type ContentProps = PopoverContentProps;
 export const Content = ({ children, ...props }: ContentProps) => (
   <BasePopover.Content
     {...props}
-    className="min-w-[220px] rounded bg-lighter py-2 text-dark shadow"
+    className="min-w-[220px] rounded bg-lighter py-2 text-inverse shadow"
   >
     {children}
   </BasePopover.Content>
