@@ -7,7 +7,7 @@ export type Todo = {
   id: TodoId;
   title: string;
   isComplete: boolean;
-  createdAt: string;
+  createdAt: Date;
   completedAt: Date | null;
   todoListId: TodoListId;
   tags: string[];

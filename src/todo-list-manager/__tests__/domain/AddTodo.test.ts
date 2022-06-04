@@ -89,7 +89,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
     expect(todo).toEqual({
       id: "todo/1",
       todoListId,
-      createdAt: "2022-01-05T12:00:00.000Z",
+      createdAt: clock.now(),
       isComplete: false,
       completedAt: null,
       title: "Buy cereals",
