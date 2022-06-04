@@ -39,7 +39,7 @@ export class TodoListDatabaseQuery implements TodoListQuery {
       ...todoList,
       tags,
       doingTodos: this.sortTodos(doingTodos, todosOrder),
-      completedTodos: this.sortTodos(completedTodos, todosOrder),
+      completedTodos,
     };
   }
 
@@ -83,7 +83,8 @@ export class TodoListDatabaseQuery implements TodoListQuery {
     return this.prisma.$queryRaw<TodoRow<true>[]>`
       SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
       WHERE T."isComplete" IS true
-      AND T."todoListId" = ${todoListId};
+      AND T."todoListId" = ${todoListId}
+      ORDER BY t."completedAt" DESC;
     `;
   }
 

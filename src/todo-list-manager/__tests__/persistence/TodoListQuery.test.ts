@@ -27,7 +27,6 @@ it("returns the details of a TodoList", async () => {
         todosOrder: [
           "9fc17fc3-a7f3-4552-b762-c6c25033da94",
           "5498ad46-6ce9-4129-b604-5d286d2c1534",
-          "1949fc6a-87e6-4772-b9d9-0a742c5872fd",
         ],
         createdAt: new Date("2022-05-29T14:00:00.000Z"),
         title: "Example todo list",
@@ -60,6 +59,29 @@ it("returns the details of a TodoList", async () => {
         title: "Buy milk",
         tags: ["shopping"],
         isComplete: true,
+        completedAt: new Date("2022-06-01T14:40:00.000Z"),
+        todoListId: theTodoListId,
+      },
+    }),
+    prisma.todo.create({
+      data: {
+        id: "d6c76bb3-68f0-47d6-8818-0cfd180f6997",
+        createdAt: new Date("2022-05-29T14:50:00.000Z"),
+        title: "Buy brioche",
+        tags: ["shopping"],
+        isComplete: true,
+        completedAt: new Date("2022-06-05T14:40:00.000Z"),
+        todoListId: theTodoListId,
+      },
+    }),
+    prisma.todo.create({
+      data: {
+        id: "f7a445b8-ff7e-4a86-a9ed-fb23dd2afc2d",
+        createdAt: new Date("2022-05-29T15:00:00.000Z"),
+        title: "Buy bread",
+        tags: ["shopping"],
+        isComplete: true,
+        completedAt: new Date("2022-05-30T14:40:00.000Z"),
         todoListId: theTodoListId,
       },
     }),
@@ -76,11 +98,25 @@ it("returns the details of a TodoList", async () => {
     createdAt: "2022-05-29T14:00:00+00:00",
     completedTodos: [
       {
-        createdAt: "2022-05-29T14:40:00+00:00",
-        id: "1949fc6a-87e6-4772-b9d9-0a742c5872fd",
+        id: "d6c76bb3-68f0-47d6-8818-0cfd180f6997",
+        title: "Buy brioche",
         isComplete: true,
+        createdAt: "2022-05-29T14:50:00+00:00",
         tags: ["shopping"],
+      },
+      {
+        id: "1949fc6a-87e6-4772-b9d9-0a742c5872fd",
         title: "Buy milk",
+        isComplete: true,
+        createdAt: "2022-05-29T14:40:00+00:00",
+        tags: ["shopping"],
+      },
+      {
+        id: "f7a445b8-ff7e-4a86-a9ed-fb23dd2afc2d",
+        title: "Buy bread",
+        isComplete: true,
+        createdAt: "2022-05-29T15:00:00+00:00",
+        tags: ["shopping"],
       },
     ],
     doingTodos: [
@@ -109,6 +145,7 @@ it("returns the summary of the given TodoLists (none given)", async () => {
   // Assert
   expect(summary).toEqual({ todoLists: [], totalNumberOfDoingTodos: 0 });
 });
+
 it("returns the summary of the given TodoLists (multiple given)", async () => {
   const theFirstTodoListId = "52421b1b-2cc6-4f91-9811-bb920084b1ba";
   const theSecondTodoListId = "801c2b48-4f56-414e-8f40-8a7714a7d302";
