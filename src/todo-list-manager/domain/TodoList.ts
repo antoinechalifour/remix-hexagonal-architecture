@@ -37,7 +37,7 @@ export const addTodo = (
   };
   const createdTodo: Todo = {
     id: newTodoId,
-    createdAt: clock.now().toISOString(),
+    createdAt: clock.now(),
     title,
     isComplete: false,
     completedAt: null,

@@ -14,7 +14,7 @@ export interface TodoBuilder {
 export const aTodo = (): TodoBuilder => ({
   todo: {
     id: "9d3dd87b-c570-4271-92eb-f4d6ca011ffa",
-    createdAt: "2022-01-15T12:00:00.000Z",
+    createdAt: new Date("2022-01-15T12:00:00.000Z"),
     title: "Buy beers",
     todoListId: "3608ffe6-c397-416d-8b49-a17340c5fde4",
     isComplete: false,

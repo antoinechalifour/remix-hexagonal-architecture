@@ -16,7 +16,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       id: row.id,
       title: row.title,
       isComplete: row.isComplete,
-      createdAt: row.createdAt.toISOString(),
+      createdAt: row.createdAt,
       completedAt: row.completedAt,
       todoListId: row.todoListId,
       tags: row.tags as string[],
@@ -33,7 +33,7 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
       title: row.title,
       isComplete: row.isComplete,
       completedAt: null,
-      createdAt: row.createdAt.toISOString(),
+      createdAt: row.createdAt,
       todoListId,
       tags: row.tags as string[],
     }));
