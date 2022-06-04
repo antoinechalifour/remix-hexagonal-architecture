@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { Todos } from "../domain/Todos";
 import type { TodoId } from "../domain/Todo";
@@ -15,7 +16,8 @@ export class ChangeTodoCompletion {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
-    private readonly todos: Todos
+    private readonly todos: Todos,
+    private readonly clock: Clock
   ) {}
 
   async execute(
@@ -38,7 +40,7 @@ export class ChangeTodoCompletion {
       : orderAsFirstTodo();
 
     await Promise.all([
-      this.todos.save(updateCompletion(todo, completed)),
+      this.todos.save(updateCompletion(todo, completed, this.clock)),
       this.todoLists.save(reorderTodoList(todoList, todoId, newTodoOrder)),
     ]);
   }

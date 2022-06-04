@@ -1,5 +1,6 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
+import { Clock, FixedClock } from "shared/time";
 import { ChangeTodoCompletion } from "../../usecase/ChangeTodoCompletion";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
@@ -17,15 +18,18 @@ let changeTodoCompletion: ChangeTodoCompletion;
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
 let todos: Todos;
+let clock: Clock;
 
 beforeEach(() => {
+  clock = new FixedClock();
   todos = new TodosInMemory();
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
   changeTodoCompletion = new ChangeTodoCompletion(
     todoLists,
     todoListPermissions,
-    todos
+    todos,
+    clock
   );
 });
 
@@ -80,6 +84,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
     );
 
     expect((await todos.ofId("todo/1")).isComplete).toBe(true);
+    expect((await todos.ofId("todo/1")).completedAt).toBe(clock.now());
     expect((await todoLists.ofId(todoListId)).todosOrder).toEqual([
       "todo/2",
       "todo/3",
@@ -98,7 +103,12 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
           .withId(todoListId)
           .withTodosOrder("todo/3", "todo/2", "todo/1")
       ),
-      givenTodo(aTodo().completed().withId("todo/1").ofTodoList(todoListId)),
+      givenTodo(
+        aTodo()
+          .completed({ at: new Date() })
+          .withId("todo/1")
+          .ofTodoList(todoListId)
+      ),
     ]);
 
     await changeTodoCompletion.execute(
@@ -109,6 +119,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
     );
 
     expect((await todos.ofId("todo/1")).isComplete).toBe(false);
+    expect((await todos.ofId("todo/1")).completedAt).toBe(null);
     expect((await todoLists.ofId(todoListId)).todosOrder).toEqual([
       "todo/1",
       "todo/3",

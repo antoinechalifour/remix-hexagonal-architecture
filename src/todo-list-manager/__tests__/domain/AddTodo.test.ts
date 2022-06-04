@@ -91,6 +91,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, collaboratorId, permission }) =>
       todoListId,
       createdAt: "2022-01-05T12:00:00.000Z",
       isComplete: false,
+      completedAt: null,
       title: "Buy cereals",
       tags: [],
     });

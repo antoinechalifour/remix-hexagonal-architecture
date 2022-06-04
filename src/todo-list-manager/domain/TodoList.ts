@@ -40,6 +40,7 @@ export const addTodo = (
     createdAt: clock.now().toISOString(),
     title,
     isComplete: false,
+    completedAt: null,
     todoListId: todoList.id,
     tags: [],
   };
