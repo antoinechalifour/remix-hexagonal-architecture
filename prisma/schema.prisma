@@ -9,13 +9,14 @@ datasource db {
 }
 
 model Todo {
-  id         String   @id @db.Uuid
-  createdAt  DateTime
-  title      String
-  isComplete Boolean
-  TodoList   TodoList @relation(fields: [todoListId], references: [id])
-  todoListId String   @db.Uuid
-  tags       Json     @default("[]")
+  id          String    @id @db.Uuid
+  createdAt   DateTime
+  title       String
+  isComplete  Boolean
+  TodoList    TodoList  @relation(fields: [todoListId], references: [id])
+  todoListId  String    @db.Uuid
+  completedAt DateTime?
+  tags        Json      @default("[]")
 }
 
 model TodoList {
