@@ -31,6 +31,15 @@ module.exports = {
         danger: "hsl(345, 86%, 56%)",
         "danger-lighter": "hsl(345, 86%, 80%)",
       },
+      keyframes: {
+        "scale-in": {
+          "0%": { opacity: 0, transform: "scaleX(0.5)" },
+          "100%": { opacity: 1, transform: "scaleX(1)" },
+        },
+      },
+      animation: {
+        "scale-in": "scale-in 0.1s ease-in-out forwards",
+      },
     },
   },
   plugins: [],

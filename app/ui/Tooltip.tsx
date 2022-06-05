@@ -10,6 +10,7 @@ const Content = ({ children, className, ...props }: TooltipContentProps) => (
   <BaseTooltip.Content
     className={classNames(
       "rounded bg-white py-1 px-2 font-mono text-xs text-dark shadow",
+      "animate-scale-in",
       className
     )}
     {...props}
