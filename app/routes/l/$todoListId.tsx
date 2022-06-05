@@ -2,9 +2,7 @@ import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
 import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
-import { useEffect } from "react";
 import { useLoaderData } from "remix";
-import { useFetcher } from "@remix-run/react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { RecoilRoot } from "recoil";
@@ -25,7 +23,7 @@ export const action: ActionFunction = async (args) =>
   (args.context as RemixAppContext).actions.addTodo(args);
 
 export default function TodoListPage() {
-  const todoListPage = useTodoListPage();
+  const todoListPage = useLoaderData<TodoListPageDto>();
 
   return (
     <RecoilRoot initializeState={makeInitialState(todoListPage)}>
@@ -34,21 +32,4 @@ export default function TodoListPage() {
       </DndProvider>
     </RecoilRoot>
   );
-}
-
-function useTodoListPage() {
-  const loaderData = useLoaderData<TodoListPageDto>();
-  const refresher = useFetcher<TodoListPageDto>();
-  const todoListPage = refresher.data || loaderData;
-  const load = refresher.load;
-
-  useEffect(() => {
-    const source = new EventSource(`/events/l/${todoListPage.todoList.id}`);
-
-    source.addEventListener("update", () => load(window.location.pathname));
-
-    return () => source.close();
-  }, [load, todoListPage.todoList.id]);
-
-  return todoListPage;
 }

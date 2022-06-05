@@ -6,13 +6,13 @@ import { Popover } from "front/ui/Popover";
 import { PlainButton } from "front/ui/Button";
 import { TagsList } from "front/todolist/TagsList";
 import { AddTag } from "front/todolist/AddTag";
-import { useTodoList } from "front/todolist/state";
+import { useTodoListInfo } from "front/todolist/state";
 
 export type TodoPopoverContentProps = {
   todo: TodoDto;
 };
 export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
-  const { todoListInfo } = useTodoList();
+  const { id } = useTodoListInfo();
   const archiveTodo = useFetcher();
   const isArchiving = archiveTodo.state === "submitting";
 
@@ -32,7 +32,7 @@ export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
       <Popover.Item>
         <archiveTodo.Form
           method="post"
-          action={`/l/${todoListInfo.id}/todo/${todo.id}/archive`}
+          action={`/l/${id}/todo/${todo.id}/archive`}
           replace
           className="flex items-center"
         >

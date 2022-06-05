@@ -6,24 +6,20 @@ import { TodoListHeader } from "front/todolist/TodoListHeader";
 import { TagFilters } from "front/todolist/TagFilters";
 import { useTodosOrderPreview } from "front/todolist/useTodosOrderPreview";
 import { TodosHeading } from "front/todolist/TodosHeading";
-import { useFilter, useTodoList } from "front/todolist/state";
+import { useFilter, useSyncLoaderData, useTodos } from "front/todolist/state";
 
 export const TodoList = () => {
-  const {
-    todoListInfo,
-    doingTodos,
-    completedTodos,
-    doingTodosLabel,
-    completedTodosLabel,
-  } = useTodoList();
-  const filter = useFilter();
+  useSyncLoaderData();
+
+  const { doingTodos, completedTodos, doingTodosLabel, completedTodosLabel } =
+    useTodos();
   const { reorderForPreview, sortForPreview } = useTodosOrderPreview();
+  const filter = useFilter();
 
   return (
     <section className="space-y-10">
       <TodoListHeader />
-
-      <TagFilters tags={todoListInfo.tags} />
+      <TagFilters />
 
       <Todos
         title={

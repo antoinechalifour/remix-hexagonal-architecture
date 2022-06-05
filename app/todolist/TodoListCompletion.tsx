@@ -1,15 +1,14 @@
 import classNames from "classnames";
 import { Tooltip } from "front/ui/Tooltip";
+import { useTodoListInfo } from "front/todolist/state";
 
 export type TodoListCompletionProps = {
-  completion: number;
   className?: string;
 };
 
-export const TodoListCompletion = ({
-  completion,
-  className,
-}: TodoListCompletionProps) => {
+export const TodoListCompletion = ({ className }: TodoListCompletionProps) => {
+  const { completion } = useTodoListInfo();
+
   return (
     <Tooltip.Root>
       <Tooltip.Trigger asChild>
