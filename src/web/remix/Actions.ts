@@ -154,7 +154,7 @@ export class Actions {
       params.todoId,
       await this.authenticator.currentUser()
     );
-    return redirect(`/l/${params.todoListId}`);
+    return null;
   }
 
   @Authenticated()
@@ -169,7 +169,7 @@ export class Actions {
       body.isChecked,
       await this.authenticator.currentUser()
     );
-    return redirect(`/l/${params.todoListId}`);
+    return null;
   }
 
   @Authenticated()
