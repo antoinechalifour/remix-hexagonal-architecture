@@ -21,7 +21,7 @@ export const TagFilters = ({ tags, filter }: TagFiltersProps) => {
   if (isEmpty(tags)) return null;
 
   return (
-    <nav className="space-y-2">
+    <nav className="space-y-2 pt-10">
       <p>
         Filter by tag{" "}
         {filter.isFiltered() && (

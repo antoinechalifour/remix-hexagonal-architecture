@@ -3,7 +3,7 @@ import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListQuery } from "../domain/TodoListQuery";
 import type { Collaborators } from "../domain/Collaborators";
-import type { TodoListPageDto } from "shared/client";
+import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
 import { canView, isOwner } from "../domain/TodoListPermission";
 import { Collaborator } from "../domain/Collaborator";
 
@@ -32,8 +32,20 @@ export class ViewTodoList {
     return {
       isOwner: isOwner(permissions, collaboratorId),
       todoList: todoListDetails,
+      completion: this.computeCompletion(todoListDetails),
       collaborators: collaborators.map(toTodoListCollaboratorDto),
     };
+  }
+
+  private computeCompletion(todoListDetails: TodoListDetailsDto) {
+    const totalNumberOfTodos =
+      todoListDetails.doingTodos.length + todoListDetails.completedTodos.length;
+
+    if (totalNumberOfTodos === 0) return 0;
+    let percentage =
+      (todoListDetails.completedTodos.length / totalNumberOfTodos) * 100;
+
+    return Math.round(percentage);
   }
 }
 

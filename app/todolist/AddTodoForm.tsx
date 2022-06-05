@@ -17,7 +17,7 @@ export const AddTodoForm = () => {
     <addTodo.Form
       method="post"
       replace
-      className="grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-5"
+      className="my-10 grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-5"
     >
       <FloatingLabelInput
         label="What needs to be done?"

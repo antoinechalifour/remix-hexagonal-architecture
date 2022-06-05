@@ -18,6 +18,7 @@ export interface TodoListCollaboratorDto {
 export interface TodoListPageDto {
   isOwner: boolean;
   todoList: TodoListDetailsDto;
+  completion: number;
   collaborators: TodoListCollaboratorDto[];
 }
 

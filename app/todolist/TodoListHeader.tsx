@@ -6,12 +6,14 @@ import { AddTodoForm } from "front/todolist/AddTodoForm";
 import { Collaborators } from "front/todolist/Collaborators";
 import { TodoListEditableTitle } from "front/todolist/TodoListEditableTitle";
 import { useLoaderData } from "remix";
+import { TodoListCompletion } from "front/todolist/TodoListCompletion";
 
 export const TodoListHeader = () => {
-  const { isOwner, todoList, collaborators } = useLoaderData<TodoListPageDto>();
+  const { isOwner, todoList, collaborators, completion } =
+    useLoaderData<TodoListPageDto>();
 
   return (
-    <div className="space-y-4">
+    <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
         <TodoListEditableTitle todoList={todoList} />
         <Collaborators
@@ -21,6 +23,8 @@ export const TodoListHeader = () => {
           canShare={isOwner}
         />
       </div>
+
+      <TodoListCompletion className="my-4" completion={completion} />
 
       <p className="pl-3 text-xs">
         ↳ Created {displayDate(todoList.createdAt)}
