@@ -19,7 +19,9 @@ import {
   removeTag,
   removeTodo,
   renameTodoInTodos,
+  tagTodoInTodos,
   todosTaggedWith,
+  untagTodoInTodos,
 } from "front/todolist/model";
 
 const RECOIL_KEYS = {
@@ -231,7 +233,6 @@ export function useOptimisticUpdates() {
   };
 
   const archiveTodo = (id: string) => {
-    console.log(id);
     setDoingTodos((todos) => removeTodo(todos, id));
     setCompletedTodos((todos) => removeTodo(todos, id));
   };
@@ -252,6 +253,16 @@ export function useOptimisticUpdates() {
     setDoingTodos((todos) => addTodo(todos, doingTodo(todo)));
   };
 
+  const tagTodo = (id: string, tag: string) => {
+    setDoingTodos((todos) => tagTodoInTodos(todos, id, tag));
+    setCompletedTodos((todos) => tagTodoInTodos(todos, id, tag));
+  };
+
+  const untagTodo = (id: string, tag: string) => {
+    setDoingTodos((todos) => untagTodoInTodos(todos, id, tag));
+    setCompletedTodos((todos) => untagTodoInTodos(todos, id, tag));
+  };
+
   return {
     renameTodoList: useCallback(renameTodoList, [setTodoListInfo]),
     renameTodo: useCallback(renameTodo, [setCompletedTodos, setDoingTodos]),
@@ -266,5 +277,7 @@ export function useOptimisticUpdates() {
       setCompletedTodos,
       setDoingTodos,
     ]),
+    tagTodo: useCallback(tagTodo, [setCompletedTodos, setDoingTodos]),
+    untagTodo: useCallback(untagTodo, [setCompletedTodos, setDoingTodos]),
   };
 }
