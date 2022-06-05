@@ -41,7 +41,7 @@ export const Button = ({
 );
 
 const CLASSES_COLORED_BUTTONS =
-  "rounded-2xl py-2 px-4 sm:py-4 sm:px-6 shadow transition";
+  "rounded-2xl py-3 px-4 sm:py-4 sm:px-6 shadow transition";
 
 export const ButtonPrimary = ({
   children,
@@ -52,7 +52,7 @@ export const ButtonPrimary = ({
     {...props}
     className={classNames(
       CLASSES_COLORED_BUTTONS,
-      "bg-primary  disabled:bg-primary-lighter",
+      "bg-primary disabled:bg-primary-lighter",
       className
     )}
   >

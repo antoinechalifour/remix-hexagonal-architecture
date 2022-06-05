@@ -28,7 +28,7 @@ export const AddTodoForm = () => {
       />
 
       <ButtonPrimary type="submit" disabled={addTodo.state === "submitting"}>
-        Done
+        Add
       </ButtonPrimary>
     </addTodo.Form>
   );

@@ -29,7 +29,7 @@ export const AddTodoListForm = () => {
         type="submit"
         disabled={addTodoList.state === "submitting"}
       >
-        Done
+        Add
       </ButtonPrimary>
     </addTodoList.Form>
   );
