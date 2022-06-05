@@ -2,12 +2,12 @@ import type { TodoDto } from "shared/client";
 
 import React from "react";
 import { DotFilledIcon } from "@radix-ui/react-icons";
+import { useFetcher } from "@remix-run/react";
+import classNames from "classnames";
 import { Popover } from "front/ui/Popover";
 import { TodoTag } from "front/todolist/TodoTag";
-import { useFetcher } from "@remix-run/react";
 import { PlainButton } from "front/ui/Button";
-import classNames from "classnames";
-import { useTodoList } from "front/todolist/state";
+import { useTodoListInfo } from "front/todolist/state";
 
 type SelectedTagProps = {
   tag: string;
@@ -69,18 +69,18 @@ const SelectableTag = ({ tag, todoListId, todo }: SelectableTagProps) => {
 
 export const TagsList = ({ todo }: { todo: TodoDto }) => {
   const isTaggedWith = (tagToCheck: string) => todo.tags.includes(tagToCheck);
-  const { todoListInfo } = useTodoList();
+  const { id, tags } = useTodoListInfo();
 
   return (
     <ul className="max-h-[210px] overflow-y-auto">
-      {todoListInfo.tags.map((tag) =>
+      {tags.map((tag) =>
         isTaggedWith(tag) ? (
           <li key={tag}>
-            <SelectedTag tag={tag} todo={todo} todoListId={todoListInfo.id} />
+            <SelectedTag tag={tag} todo={todo} todoListId={id} />
           </li>
         ) : (
           <li key={tag}>
-            <SelectableTag tag={tag} todo={todo} todoListId={todoListInfo.id} />
+            <SelectableTag tag={tag} todo={todo} todoListId={id} />
           </li>
         )
       )}

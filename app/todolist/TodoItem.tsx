@@ -10,7 +10,7 @@ import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
 import { TodoPopoverContent } from "front/todolist/TodoPopoverContent";
 import { TodoTag } from "front/todolist/TodoTag";
-import { useTodoList } from "front/todolist/state";
+import { useTodoListInfo } from "front/todolist/state";
 
 export interface TodoItemProps {
   todo: TodoDto;
@@ -20,7 +20,7 @@ export interface TodoItemProps {
 export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
   function TodoItem(props, ref) {
     const { todo, className } = props;
-    const { todoListInfo } = useTodoList();
+    const { id } = useTodoListInfo();
     const completeTodo = useFetcher();
     const renameTodo = useFetcher();
     const isCompleting =
@@ -44,7 +44,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
       >
         <completeTodo.Form
           method="post"
-          action={`/l/${todoListInfo.id}/todo/${todo.id}`}
+          action={`/l/${id}/todo/${todo.id}`}
           onChange={handleChange}
           className="row-span-2 self-start md:row-span-1"
           replace
@@ -60,7 +60,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
 
         <renameTodo.Form
           method="post"
-          action={`/l/${todoListInfo.id}/todo/${todo.id}/rename`}
+          action={`/l/${id}/todo/${todo.id}/rename`}
         >
           <EditableContent
             initialValue={todo.title}

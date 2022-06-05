@@ -2,16 +2,19 @@ import type {
   DoingTodoDto,
   CompletedTodoDto,
   TodoListPageDto,
+  TodoListCollaboratorDto,
 } from "shared/client";
 import type { MutableSnapshot } from "recoil";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { useCallback, useEffect } from "react";
 import type { TodoDto } from "shared/client";
+import { useCallback, useEffect } from "react";
 import { useLoaderData } from "remix";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import { useFetcher } from "@remix-run/react";
 
 const RECOIL_KEYS = {
   tagFilterState: "tagFilterState",
   filterActiveState: "filterActiveState",
+  collaboratorsState: "collaboratorsState",
   todoListInfoState: "todoListInfoState",
   doingTodosState: "doingTodosState",
   doingTodosLabelState: "doingTodosLabelState",
@@ -31,6 +34,11 @@ const filterActiveState = selector({
   get: ({ get }) => get(tagFilterState).length > 0,
 });
 
+const collaboratorsState = atom<TodoListCollaboratorDto[]>({
+  key: RECOIL_KEYS.collaboratorsState,
+  default: [],
+});
+
 const todoListInfoState = atom({
   key: RECOIL_KEYS.todoListInfoState,
   default: {
@@ -38,6 +46,8 @@ const todoListInfoState = atom({
     title: "",
     completion: 0,
     tags: [] as string[],
+    createdAt: "",
+    isOwner: false,
   },
 });
 
@@ -108,16 +118,24 @@ const completedTodosLabelState = selector({
   },
 });
 
-export function makeInitialState({ todoList, completion }: TodoListPageDto) {
+export function makeInitialState({
+  todoList,
+  completion,
+  collaborators,
+  isOwner,
+}: TodoListPageDto) {
   return ({ set }: MutableSnapshot) => {
     set(todoListInfoState, {
       id: todoList.id,
       title: todoList.title,
       tags: todoList.tags,
       completion: completion,
+      createdAt: todoList.createdAt,
+      isOwner,
     });
     set(doingTodosState, todoList.doingTodos);
     set(completedTodosState, todoList.completedTodos);
+    set(collaboratorsState, collaborators);
   };
 }
 
@@ -141,30 +159,66 @@ export function useFilter() {
   };
 }
 
-export function useTodoList() {
-  const loaderData = useLoaderData<TodoListPageDto>();
+export function useCollaborators() {
+  const [collaborators] = useRecoilState(collaboratorsState);
 
-  const [todoListInfo, setTodoListInfo] = useRecoilState(todoListInfoState);
+  return collaborators;
+}
+
+export function useTodoListInfo() {
+  const [todoListInfo] = useRecoilState(todoListInfoState);
+
+  return todoListInfo;
+}
+
+export function useSyncLoaderData() {
+  const loaderData = useLoaderData<TodoListPageDto>();
+  const refresher = useFetcher<TodoListPageDto>();
+
+  const [, setTodoListInfo] = useRecoilState(todoListInfoState);
   const [, setDoingTodos] = useRecoilState(doingTodosState);
   const [, setCompletedTodos] = useRecoilState(completedTodosState);
+  const [, setCollaborators] = useRecoilState(collaboratorsState);
+
+  const todoListPage = refresher.data || loaderData;
+  const load = refresher.load;
+
+  useEffect(() => {
+    const source = new EventSource(`/events/l/${todoListPage.todoList.id}`);
+
+    source.addEventListener("update", () => load(window.location.pathname));
+
+    return () => source.close();
+  }, [load, todoListPage.todoList.id]);
+
+  useEffect(() => {
+    setTodoListInfo({
+      id: todoListPage.todoList.id,
+      title: todoListPage.todoList.title,
+      tags: todoListPage.todoList.tags,
+      completion: todoListPage.completion,
+      createdAt: todoListPage.todoList.createdAt,
+      isOwner: todoListPage.isOwner,
+    });
+    setDoingTodos(todoListPage.todoList.doingTodos);
+    setCompletedTodos(todoListPage.todoList.completedTodos);
+    setCollaborators(todoListPage.collaborators);
+  }, [
+    todoListPage,
+    setCollaborators,
+    setCompletedTodos,
+    setDoingTodos,
+    setTodoListInfo,
+  ]);
+}
+
+export function useTodos() {
   const doingTodos = useRecoilValue(matchingDoingTodosState);
   const doingTodosLabel = useRecoilValue(doingTodosLabelState);
   const completedTodos = useRecoilValue(matchingCompletedTodosState);
   const completedTodosLabel = useRecoilValue(completedTodosLabelState);
 
-  useEffect(() => {
-    setTodoListInfo({
-      id: loaderData.todoList.id,
-      title: loaderData.todoList.title,
-      tags: loaderData.todoList.tags,
-      completion: loaderData.completion,
-    });
-    setDoingTodos(loaderData.todoList.doingTodos);
-    setCompletedTodos(loaderData.todoList.completedTodos);
-  }, [loaderData, setCompletedTodos, setDoingTodos, setTodoListInfo]);
-
   return {
-    todoListInfo,
     doingTodos,
     completedTodos,
     doingTodosLabel,
