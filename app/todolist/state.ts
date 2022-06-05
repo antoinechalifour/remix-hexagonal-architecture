@@ -7,9 +7,8 @@ import type {
 import type { MutableSnapshot } from "recoil";
 import type { TodoDto } from "shared/client";
 import { useCallback, useEffect } from "react";
-import { useLoaderData } from "remix";
+import { useLoaderData, useNavigate } from "remix";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { useFetcher } from "@remix-run/react";
 
 const RECOIL_KEYS = {
   tagFilterState: "tagFilterState",
@@ -173,38 +172,35 @@ export function useTodoListInfo() {
 
 export function useSyncLoaderData() {
   const loaderData = useLoaderData<TodoListPageDto>();
-  const refresher = useFetcher<TodoListPageDto>();
+  const navigate = useNavigate();
 
   const [, setTodoListInfo] = useRecoilState(todoListInfoState);
   const [, setDoingTodos] = useRecoilState(doingTodosState);
   const [, setCompletedTodos] = useRecoilState(completedTodosState);
   const [, setCollaborators] = useRecoilState(collaboratorsState);
 
-  const todoListPage = refresher.data || loaderData;
-  const load = refresher.load;
-
   useEffect(() => {
-    const source = new EventSource(`/events/l/${todoListPage.todoList.id}`);
+    const source = new EventSource(`/events/l/${loaderData.todoList.id}`);
 
-    source.addEventListener("update", () => load(window.location.pathname));
+    source.addEventListener("update", () => navigate(".", { replace: true }));
 
     return () => source.close();
-  }, [load, todoListPage.todoList.id]);
+  }, [navigate, loaderData.todoList.id]);
 
   useEffect(() => {
     setTodoListInfo({
-      id: todoListPage.todoList.id,
-      title: todoListPage.todoList.title,
-      tags: todoListPage.todoList.tags,
-      completion: todoListPage.completion,
-      createdAt: todoListPage.todoList.createdAt,
-      isOwner: todoListPage.isOwner,
+      id: loaderData.todoList.id,
+      title: loaderData.todoList.title,
+      tags: loaderData.todoList.tags,
+      completion: loaderData.completion,
+      createdAt: loaderData.todoList.createdAt,
+      isOwner: loaderData.isOwner,
     });
-    setDoingTodos(todoListPage.todoList.doingTodos);
-    setCompletedTodos(todoListPage.todoList.completedTodos);
-    setCollaborators(todoListPage.collaborators);
+    setDoingTodos(loaderData.todoList.doingTodos);
+    setCompletedTodos(loaderData.todoList.completedTodos);
+    setCollaborators(loaderData.collaborators);
   }, [
-    todoListPage,
+    loaderData,
     setCollaborators,
     setCompletedTodos,
     setDoingTodos,
