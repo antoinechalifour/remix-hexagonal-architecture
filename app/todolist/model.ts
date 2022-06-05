@@ -70,3 +70,41 @@ export function renameTodoInTodos<T extends TodoDto>(
     };
   });
 }
+
+function tagTodo<T extends TodoDto>(todo: T, tag: string): T {
+  return {
+    ...todo,
+    tags: [...todo.tags, tag],
+  };
+}
+
+export function tagTodoInTodos<T extends TodoDto>(
+  todos: T[],
+  id: string,
+  tag: string
+) {
+  return todos.map((todo) => {
+    if (todo.id !== id) return todo;
+
+    return tagTodo(todo, tag);
+  });
+}
+
+function untagTodo<T extends TodoDto>(todo: T, tagToRemove: string): T {
+  return {
+    ...todo,
+    tags: todo.tags.filter((tag) => tag !== tagToRemove),
+  };
+}
+
+export function untagTodoInTodos<T extends TodoDto>(
+  todos: T[],
+  id: string,
+  tag: string
+) {
+  return todos.map((todo) => {
+    if (todo.id !== id) return todo;
+
+    return untagTodo(todo, tag);
+  });
+}
