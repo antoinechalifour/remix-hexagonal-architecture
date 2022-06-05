@@ -214,6 +214,7 @@ export function useTodos() {
 }
 
 export function useOptimisticUpdates() {
+  const [, setTodoListInfo] = useRecoilState(todoListInfoState);
   const [doingTodos, setDoingTodos] = useRecoilState(doingTodosState);
   const [completedTodos, setCompletedTodos] =
     useRecoilState(completedTodosState);
@@ -239,6 +240,12 @@ export function useOptimisticUpdates() {
     setCompletedTodos((todos) => renameTodoInTodos(todos, id, title));
   };
 
+  const renameTodoList = (title: string) =>
+    setTodoListInfo((info) => ({
+      ...info,
+      title,
+    }));
+
   return {
     markAsCompleted: useCallback(markAsCompleted, [
       doingTodos,
@@ -251,5 +258,6 @@ export function useOptimisticUpdates() {
       setDoingTodos,
     ]),
     renameTodo: useCallback(renameTodo, [setCompletedTodos, setDoingTodos]),
+    renameTodoList: useCallback(renameTodoList, [setTodoListInfo]),
   };
 }
