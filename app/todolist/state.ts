@@ -221,3 +221,79 @@ export function useTodos() {
     completedTodosLabel,
   };
 }
+
+export function useOptimisticUpdates() {
+  const [doingTodos, setDoingTodos] = useRecoilState(doingTodosState);
+  const [completedTodos, setCompletedTodos] =
+    useRecoilState(completedTodosState);
+
+  const markAsCompleted = (id: string) => {
+    const todo = doingTodos.find((todo) => todo.id === id);
+    if (todo == null) return;
+
+    setDoingTodos((todos) => todos.filter((todo) => todo.id !== id));
+    setCompletedTodos((todos) => [
+      {
+        ...todo,
+        isComplete: true,
+      },
+      ...todos,
+    ]);
+  };
+
+  const markAsDoing = (id: string) => {
+    const todo = completedTodos.find((todo) => todo.id === id);
+    if (todo == null) return;
+
+    setCompletedTodos((todos) => todos.filter((todo) => todo.id !== id));
+    setDoingTodos((todos) => [
+      {
+        ...todo,
+        isComplete: false,
+      },
+      ...todos,
+    ]);
+  };
+
+  const renameTodo = (id: string, newName: string) => {
+    let isFound = false;
+
+    setDoingTodos((todos) =>
+      todos.map((todo) => {
+        if (todo.id !== id) return todo;
+
+        isFound = true;
+        return {
+          ...todo,
+          title: newName,
+        };
+      })
+    );
+
+    if (isFound) return;
+    setCompletedTodos((todos) =>
+      todos.map((todo) => {
+        if (todo.id !== id) return todo;
+
+        return {
+          ...todo,
+          title: newName,
+        };
+      })
+    );
+  };
+
+  return {
+    markAsCompleted: useCallback(markAsCompleted, [
+      doingTodos,
+      setCompletedTodos,
+      setDoingTodos,
+    ]),
+    markAsDoing: useCallback(markAsDoing, [
+      completedTodos,
+      setCompletedTodos,
+      setDoingTodos,
+    ]),
+    renameTodo: useCallback(renameTodo, [setCompletedTodos, setDoingTodos]),
+  };
+}
