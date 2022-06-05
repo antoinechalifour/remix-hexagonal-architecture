@@ -25,13 +25,13 @@ function givenALoggedInUser() {
 
 function theyCanCreateANewTodoList() {
   cy.findByLabelText("Add a new todo list").click().type("Things to buy");
-  cy.findByRole("button", { name: "Done" }).click();
+  cy.findByRole("button", { name: "Add" }).click();
 }
 
 function theyCanAddATodo(todo) {
   cy.intercept("GET", "/l/**").as("todosLoaded");
   cy.findByLabelText("What needs to be done?").click().type(todo);
-  cy.findByRole("button", { name: "Done" }).click();
+  cy.findByRole("button", { name: "Add" }).click();
   cy.wait("@todosLoaded");
   cy.findByText(`${todo} (click to toggle)`).should("be.visible");
 }
