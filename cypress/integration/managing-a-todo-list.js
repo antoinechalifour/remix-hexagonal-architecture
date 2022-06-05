@@ -14,6 +14,12 @@ describe("The user can manage a todo list", () => {
     theyCanAddATodo("Chocolate");
     theyCanCompleteTheTodo("Pizza");
     theyCanUncompleteTheTodo("Pizza");
+
+    cy.reload(true);
+
+    theyCanCompleteTheTodo("Chocolate");
+    theyCanCompleteTheTodo("Pizza");
+    theyCanCompleteTheTodo("Beer");
   });
 });
 
@@ -32,7 +38,7 @@ function theyCanAddATodo(todo) {
   cy.intercept("GET", "/l/**").as("todosLoaded");
   cy.findByLabelText("What needs to be done?").click().type(todo);
   cy.findByRole("button", { name: "Add" }).click();
-  cy.wait("@todosLoaded");
+  cy.wait(500);
   cy.findByText(`${todo} (click to toggle)`).should("be.visible");
 }
 
