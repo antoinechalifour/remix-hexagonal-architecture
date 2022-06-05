@@ -219,6 +219,23 @@ export function useOptimisticUpdates() {
   const [completedTodos, setCompletedTodos] =
     useRecoilState(completedTodosState);
 
+  const renameTodoList = (title: string) =>
+    setTodoListInfo((info) => ({
+      ...info,
+      title,
+    }));
+
+  const renameTodo = (id: string, title: string) => {
+    setDoingTodos((todos) => renameTodoInTodos(todos, id, title));
+    setCompletedTodos((todos) => renameTodoInTodos(todos, id, title));
+  };
+
+  const archiveTodo = (id: string) => {
+    console.log(id);
+    setDoingTodos((todos) => removeTodo(todos, id));
+    setCompletedTodos((todos) => removeTodo(todos, id));
+  };
+
   const markAsCompleted = (id: string) => {
     const todo = getTodo(doingTodos, id);
     if (todo == null) return;
@@ -235,18 +252,10 @@ export function useOptimisticUpdates() {
     setDoingTodos((todos) => addTodo(todos, doingTodo(todo)));
   };
 
-  const renameTodo = (id: string, title: string) => {
-    setDoingTodos((todos) => renameTodoInTodos(todos, id, title));
-    setCompletedTodos((todos) => renameTodoInTodos(todos, id, title));
-  };
-
-  const renameTodoList = (title: string) =>
-    setTodoListInfo((info) => ({
-      ...info,
-      title,
-    }));
-
   return {
+    renameTodoList: useCallback(renameTodoList, [setTodoListInfo]),
+    renameTodo: useCallback(renameTodo, [setCompletedTodos, setDoingTodos]),
+    archiveTodo: useCallback(archiveTodo, [setCompletedTodos, setDoingTodos]),
     markAsCompleted: useCallback(markAsCompleted, [
       doingTodos,
       setCompletedTodos,
@@ -257,7 +266,5 @@ export function useOptimisticUpdates() {
       setCompletedTodos,
       setDoingTodos,
     ]),
-    renameTodo: useCallback(renameTodo, [setCompletedTodos, setDoingTodos]),
-    renameTodoList: useCallback(renameTodoList, [setTodoListInfo]),
   };
 }
