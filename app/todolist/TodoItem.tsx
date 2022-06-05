@@ -2,15 +2,13 @@ import type { TodoDto } from "shared/client";
 
 import React from "react";
 import classNames from "classnames";
-import { useFetcher } from "@remix-run/react";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import { CheckboxOption } from "front/ui/CheckboxOption";
 import { PlainButton } from "front/ui/Button";
-import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
 import { TodoPopoverContent } from "front/todolist/TodoPopoverContent";
 import { TodoTag } from "front/todolist/TodoTag";
-import { useTodoListInfo } from "front/todolist/state";
+import { CompleteTodo } from "front/todolist/CompleteTodo";
+import { RenameTodo } from "front/todolist/RenameTodo";
 
 export interface TodoItemProps {
   todo: TodoDto;
@@ -20,14 +18,6 @@ export interface TodoItemProps {
 export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
   function TodoItem(props, ref) {
     const { todo, className } = props;
-    const { id } = useTodoListInfo();
-    const completeTodo = useFetcher();
-    const renameTodo = useFetcher();
-    const isCompleting =
-      completeTodo.state === "submitting" || completeTodo.state === "loading";
-
-    const handleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
-      completeTodo.submit(e.currentTarget);
 
     return (
       <div
@@ -38,44 +28,12 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           "grid-rows-[auto_auto] md:grid-rows-1",
           "rounded-2xl p-3 md:px-6 md:py-4",
           "bg-dark shadow",
-          { "opacity-50": isCompleting },
           className
         )}
       >
-        <completeTodo.Form
-          method="post"
-          action={`/l/${id}/todo/${todo.id}`}
-          onChange={handleChange}
-          className="row-span-2 self-start md:row-span-1"
-          replace
-        >
-          <CheckboxOption
-            id={`todo-${todo.id}`}
-            isChecked={todo.isComplete}
-            label={
-              <span className="sr-only">{todo.title} (click to toggle)</span>
-            }
-          />
-        </completeTodo.Form>
+        <CompleteTodo todo={todo} />
 
-        <renameTodo.Form
-          method="post"
-          action={`/l/${id}/todo/${todo.id}/rename`}
-        >
-          <EditableContent
-            initialValue={todo.title}
-            inputName="title"
-            inputClassName="font-semibold md:ml-2"
-          >
-            <span
-              className={classNames("font-semibold md:ml-2", {
-                "line-through opacity-75": todo.isComplete,
-              })}
-            >
-              {todo.title}
-            </span>
-          </EditableContent>
-        </renameTodo.Form>
+        <RenameTodo todo={todo} />
 
         <ul
           className={classNames(
