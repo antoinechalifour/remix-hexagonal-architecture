@@ -42,6 +42,10 @@ export function addTodo<T extends TodoDto>(todos: T[], todo: T): T[] {
   return [todo, ...todos];
 }
 
+export function addTodoLast<T extends TodoDto>(todos: T[], todo: T): T[] {
+  return [...todos, todo];
+}
+
 export function completedTodo(todo: DoingTodoDto): CompletedTodoDto {
   return {
     ...todo,

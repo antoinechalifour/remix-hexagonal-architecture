@@ -10,6 +10,7 @@ import { useCallback, useEffect } from "react";
 import { useLoaderData, useNavigate } from "remix";
 import {
   addTodo,
+  addTodoLast,
   completedTodo,
   doingTodo,
   filterLabel,
@@ -227,6 +228,18 @@ export function useOptimisticUpdates() {
       title,
     }));
 
+  const addTodoToList = (title: string) => {
+    setDoingTodos((todos) =>
+      addTodoLast(todos, {
+        id: Date.now().toString(),
+        tags: [],
+        title,
+        isComplete: false,
+        createdAt: new Date().toISOString(),
+      })
+    );
+  };
+
   const renameTodo = (id: string, title: string) => {
     setDoingTodos((todos) => renameTodoInTodos(todos, id, title));
     setCompletedTodos((todos) => renameTodoInTodos(todos, id, title));
@@ -265,6 +278,7 @@ export function useOptimisticUpdates() {
 
   return {
     renameTodoList: useCallback(renameTodoList, [setTodoListInfo]),
+    addTodo: useCallback(addTodoToList, [setDoingTodos]),
     renameTodo: useCallback(renameTodo, [setCompletedTodos, setDoingTodos]),
     archiveTodo: useCallback(archiveTodo, [setCompletedTodos, setDoingTodos]),
     markAsCompleted: useCallback(markAsCompleted, [

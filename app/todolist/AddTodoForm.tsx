@@ -5,16 +5,17 @@ import { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
+import { useOptimisticUpdates } from "front/todolist/state";
 
 type ActionData = {
   errors?: AddTodoErrorDto;
 };
 
 export const AddTodoForm = () => {
-  const { ref, addTodo } = useAddTodoForm();
+  const { ref, addTodoFetcher } = useAddTodoForm();
 
   return (
-    <addTodo.Form
+    <addTodoFetcher.Form
       method="post"
       replace
       className="my-10 grid grid-cols-[1fr_auto] items-center gap-2 sm:gap-5"
@@ -22,41 +23,51 @@ export const AddTodoForm = () => {
       <FloatingLabelInput
         label="What needs to be done?"
         name="todoTitle"
-        errorMessage={addTodo.data?.errors?.todoTitle}
+        errorMessage={addTodoFetcher.data?.errors?.todoTitle}
         ref={ref}
         inputProps={{ maxLength: 50 }}
       />
 
-      <ButtonPrimary type="submit" disabled={addTodo.state === "submitting"}>
+      <ButtonPrimary
+        type="submit"
+        disabled={addTodoFetcher.state === "submitting"}
+      >
         Add
       </ButtonPrimary>
-    </addTodo.Form>
+    </addTodoFetcher.Form>
   );
 };
 
 function useAddTodoForm() {
-  const addTodo = useFetcher<ActionData>();
+  const addTodoFetcher = useFetcher<ActionData>();
   const isSubmitting = useRef(false);
   const floatingLabelInputRef = useRef<FloatingLabelInputRef>(null);
+  const { addTodo } = useOptimisticUpdates();
 
   useEffect(() => {
-    if (addTodo.state === "submitting") {
+    if (addTodoFetcher.state === "submitting") {
       isSubmitting.current = true;
       return;
     }
 
-    if (isSubmitting.current && addTodo.state === "idle") {
+    if (isSubmitting.current && addTodoFetcher.state === "idle") {
       floatingLabelInputRef.current?.focus();
       isSubmitting.current = false;
       return;
     }
-  }, [addTodo.state]);
+  }, [addTodoFetcher.state]);
 
   useEffect(() => {
-    if (addTodo.type === "done") {
+    if (addTodoFetcher.type === "done") {
       floatingLabelInputRef.current?.clear();
     }
-  }, [addTodo.type]);
+  }, [addTodoFetcher.type]);
 
-  return { ref: floatingLabelInputRef, addTodo };
+  useEffect(() => {
+    const submission = addTodoFetcher.submission;
+    if (submission == null) return;
+    addTodo(submission.formData.get("todoTitle") as string);
+  }, [addTodo, addTodoFetcher.submission]);
+
+  return { ref: floatingLabelInputRef, addTodoFetcher };
 }
