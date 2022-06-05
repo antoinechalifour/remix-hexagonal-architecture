@@ -1,14 +1,26 @@
 import type {
-  DoingTodoDto,
   CompletedTodoDto,
-  TodoListPageDto,
+  DoingTodoDto,
   TodoListCollaboratorDto,
+  TodoListPageDto,
 } from "shared/client";
 import type { MutableSnapshot } from "recoil";
-import type { TodoDto } from "shared/client";
+import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 import { useCallback, useEffect } from "react";
 import { useLoaderData, useNavigate } from "remix";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import {
+  addTodo,
+  completedTodo,
+  doingTodo,
+  filterLabel,
+  getTodo,
+  hasTag,
+  pushTag,
+  removeTag,
+  removeTodo,
+  renameTodoInTodos,
+  todosTaggedWith,
+} from "front/todolist/model";
 
 const RECOIL_KEYS = {
   tagFilterState: "tagFilterState",
@@ -60,11 +72,6 @@ const completedTodosState = atom<CompletedTodoDto[]>({
   default: [],
 });
 
-function hasTagIn(todo: TodoDto, tags: string[]) {
-  if (tags.length === 0) return true;
-  return todo.tags.some((tag) => tags.includes(tag));
-}
-
 const matchingDoingTodosState = selector({
   key: RECOIL_KEYS.matchingDoingTodosState,
   get: ({ get }) => {
@@ -73,22 +80,14 @@ const matchingDoingTodosState = selector({
 
     if (!filterActive) return doingTodos;
 
-    const selectedTags = get(tagFilterState);
-    return doingTodos.filter((todo) => hasTagIn(todo, selectedTags));
+    return todosTaggedWith(doingTodos, get(tagFilterState));
   },
 });
 
 const doingTodosLabelState = selector({
   key: RECOIL_KEYS.doingTodosLabelState,
-  get: ({ get }) => {
-    const filterActive = get(filterActiveState);
-    const doingTodos = get(doingTodosState);
-
-    if (!filterActive) return doingTodos.length;
-
-    const matchingTodos = get(matchingDoingTodosState);
-    return `showing ${matchingTodos.length} of ${doingTodos.length}`;
-  },
+  get: ({ get }) =>
+    filterLabel(get(matchingDoingTodosState), get(doingTodosState)),
 });
 
 const matchingCompletedTodosState = selector({
@@ -99,22 +98,14 @@ const matchingCompletedTodosState = selector({
 
     if (!filterActive) return completedTodos;
 
-    const selectedTags = get(tagFilterState);
-    return completedTodos.filter((todo) => hasTagIn(todo, selectedTags));
+    return todosTaggedWith(completedTodos, get(tagFilterState));
   },
 });
 
 const completedTodosLabelState = selector({
   key: RECOIL_KEYS.completedTodosLabelState,
-  get: ({ get }) => {
-    const filterActive = get(filterActiveState);
-    const completedTodos = get(completedTodosState);
-
-    if (!filterActive) return completedTodos.length;
-
-    const matchingTodos = get(matchingCompletedTodosState);
-    return `showing ${matchingTodos.length} of ${completedTodos.length}`;
-  },
+  get: ({ get }) =>
+    filterLabel(get(matchingCompletedTodosState), get(completedTodosState)),
 });
 
 export function makeInitialState({
@@ -143,11 +134,11 @@ export function useFilter() {
   const active = useRecoilValue(filterActiveState);
 
   const select = (tagToSelect: string) =>
-    setSelectedTags((tags) => [...tags, tagToSelect]);
+    setSelectedTags((tags) => pushTag(tags, tagToSelect));
   const deselect = (tagToDeselect: string) =>
-    setSelectedTags((tags) => tags.filter((tag) => tag !== tagToDeselect));
+    setSelectedTags((tags) => removeTag(tags, tagToDeselect));
   const clear = () => setSelectedTags([]);
-  const isSelected = (tagToCheck: string) => selectedTags.includes(tagToCheck);
+  const isSelected = (tagToCheck: string) => hasTag(selectedTags, tagToCheck);
 
   return {
     active,
@@ -228,59 +219,24 @@ export function useOptimisticUpdates() {
     useRecoilState(completedTodosState);
 
   const markAsCompleted = (id: string) => {
-    const todo = doingTodos.find((todo) => todo.id === id);
+    const todo = getTodo(doingTodos, id);
     if (todo == null) return;
 
-    setDoingTodos((todos) => todos.filter((todo) => todo.id !== id));
-    setCompletedTodos((todos) => [
-      {
-        ...todo,
-        isComplete: true,
-      },
-      ...todos,
-    ]);
+    setDoingTodos((todos) => removeTodo(todos, id));
+    setCompletedTodos((todos) => addTodo(todos, completedTodo(todo)));
   };
 
   const markAsDoing = (id: string) => {
-    const todo = completedTodos.find((todo) => todo.id === id);
+    const todo = getTodo(completedTodos, id);
     if (todo == null) return;
 
-    setCompletedTodos((todos) => todos.filter((todo) => todo.id !== id));
-    setDoingTodos((todos) => [
-      {
-        ...todo,
-        isComplete: false,
-      },
-      ...todos,
-    ]);
+    setCompletedTodos((todos) => removeTodo(todos, id));
+    setDoingTodos((todos) => addTodo(todos, doingTodo(todo)));
   };
 
-  const renameTodo = (id: string, newName: string) => {
-    let isFound = false;
-
-    setDoingTodos((todos) =>
-      todos.map((todo) => {
-        if (todo.id !== id) return todo;
-
-        isFound = true;
-        return {
-          ...todo,
-          title: newName,
-        };
-      })
-    );
-
-    if (isFound) return;
-    setCompletedTodos((todos) =>
-      todos.map((todo) => {
-        if (todo.id !== id) return todo;
-
-        return {
-          ...todo,
-          title: newName,
-        };
-      })
-    );
+  const renameTodo = (id: string, title: string) => {
+    setDoingTodos((todos) => renameTodoInTodos(todos, id, title));
+    setCompletedTodos((todos) => renameTodoInTodos(todos, id, title));
   };
 
   return {
