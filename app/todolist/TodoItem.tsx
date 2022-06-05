@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDetailsDto } from "shared/client";
+import type { TodoDto } from "shared/client";
 
 import React from "react";
 import classNames from "classnames";
@@ -10,16 +10,17 @@ import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
 import { TodoPopoverContent } from "front/todolist/TodoPopoverContent";
 import { TodoTag } from "front/todolist/TodoTag";
+import { useTodoList } from "front/todolist/state";
 
 export interface TodoItemProps {
-  todoList: TodoListDetailsDto;
   todo: TodoDto;
   className?: string;
 }
 
 export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
   function TodoItem(props, ref) {
-    const { todoList, todo, className } = props;
+    const { todo, className } = props;
+    const { todoListInfo } = useTodoList();
     const completeTodo = useFetcher();
     const renameTodo = useFetcher();
     const isCompleting =
@@ -43,7 +44,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
       >
         <completeTodo.Form
           method="post"
-          action={`/l/${todoList.id}/todo/${todo.id}`}
+          action={`/l/${todoListInfo.id}/todo/${todo.id}`}
           onChange={handleChange}
           className="row-span-2 self-start md:row-span-1"
           replace
@@ -59,7 +60,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
 
         <renameTodo.Form
           method="post"
-          action={`/l/${todoList.id}/todo/${todo.id}/rename`}
+          action={`/l/${todoListInfo.id}/todo/${todo.id}/rename`}
         >
           <EditableContent
             initialValue={todo.title}
@@ -99,7 +100,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
             </PlainButton>
           </Popover.Trigger>
 
-          <TodoPopoverContent todoList={todoList} todo={todo} />
+          <TodoPopoverContent todo={todo} />
         </Popover.Root>
       </div>
     );

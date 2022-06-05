@@ -3,31 +3,24 @@ import classNames from "classnames";
 import { isEmpty } from "fp-ts/Array";
 import { PlainButton } from "front/ui/Button";
 import { TodoTag } from "front/todolist/TodoTag";
-
-export interface Filter {
-  isFiltered: () => boolean;
-  isSelected: (tag: string) => boolean;
-  reset: () => void;
-  select: (tag: string) => void;
-  unselect: (tag: string) => void;
-}
+import { useFilter } from "front/todolist/state";
 
 type TagFiltersProps = {
   tags: string[];
-  filter: Filter;
 };
 
-export const TagFilters = ({ tags, filter }: TagFiltersProps) => {
+export const TagFilters = ({ tags }: TagFiltersProps) => {
+  const filter = useFilter();
   if (isEmpty(tags)) return null;
 
   return (
     <nav className="space-y-2 pt-10">
       <p>
         Filter by tag{" "}
-        {filter.isFiltered() && (
+        {filter.active && (
           <PlainButton
             className="ml-1 text-xs underline"
-            onClick={filter.reset}
+            onClick={filter.clear}
           >
             clear
           </PlainButton>
@@ -37,7 +30,7 @@ export const TagFilters = ({ tags, filter }: TagFiltersProps) => {
       <ul className="flex w-full flex-wrap">
         {tags.map((tag) => {
           const active = filter.isSelected(tag);
-          const handler = active ? filter.unselect : filter.select;
+          const handler = active ? filter.deselect : filter.select;
 
           return (
             <li key={tag} className="p-1">

@@ -1,5 +1,3 @@
-import type { TodoListPageDto } from "shared/client";
-
 import React from "react";
 import { Todos } from "front/todolist/Todos";
 import { TodoItem } from "front/todolist/TodoItem";
@@ -7,43 +5,35 @@ import { ReorderableTodoItem } from "front/todolist/ReorderableTodoItem";
 import { TodoListHeader } from "front/todolist/TodoListHeader";
 import { TagFilters } from "front/todolist/TagFilters";
 import { useTodosOrderPreview } from "front/todolist/useTodosOrderPreview";
-import { useTodoListFilter } from "front/todolist/useTodoListFilter";
 import { TodosHeading } from "front/todolist/TodosHeading";
+import { useFilter, useTodoList } from "front/todolist/state";
 
-interface TodoListProps {
-  todoListPage: TodoListPageDto;
-}
-
-export const TodoList = ({ todoListPage }: TodoListProps) => {
-  const { todoList } = todoListPage;
+export const TodoList = () => {
   const {
+    todoListInfo,
     doingTodos,
     completedTodos,
-    doingTodoFilterLabel,
-    completedTodoFilterLabel,
-    filter,
-  } = useTodoListFilter(todoList);
-  const { reorderForPreview, sortForPreview } = useTodosOrderPreview(todoList);
+    doingTodosLabel,
+    completedTodosLabel,
+  } = useTodoList();
+  const filter = useFilter();
+  const { reorderForPreview, sortForPreview } = useTodosOrderPreview();
 
   return (
     <section className="space-y-10">
       <TodoListHeader />
 
-      <TagFilters tags={todoList.tags} filter={filter} />
+      <TagFilters tags={todoListInfo.tags} />
 
       <Todos
         title={
-          <TodosHeading
-            title="Things to do"
-            filterLabel={doingTodoFilterLabel}
-          />
+          <TodosHeading title="Things to do" filterLabel={doingTodosLabel} />
         }
         todos={sortForPreview(doingTodos)}
         emptyMessage="Come on! Don't you have anything to do?"
         renderTodo={(todoItem, index) => (
           <ReorderableTodoItem
-            enabled={!filter.isFiltered()}
-            todoList={todoList}
+            enabled={!filter.active}
             todo={todoItem}
             index={index}
             onPreviewMove={reorderForPreview}
@@ -53,16 +43,11 @@ export const TodoList = ({ todoListPage }: TodoListProps) => {
 
       <Todos
         title={
-          <TodosHeading
-            title="Things done"
-            filterLabel={completedTodoFilterLabel}
-          />
+          <TodosHeading title="Things done" filterLabel={completedTodosLabel} />
         }
         todos={completedTodos}
         emptyMessage="Alright let's get to work!"
-        renderTodo={(todoItem) => (
-          <TodoItem todoList={todoList} todo={todoItem} />
-        )}
+        renderTodo={(todoItem) => <TodoItem todo={todoItem} />}
       />
     </section>
   );

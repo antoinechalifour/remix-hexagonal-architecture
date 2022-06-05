@@ -2,12 +2,14 @@ import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
 import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
+import { useEffect } from "react";
 import { useLoaderData } from "remix";
+import { useFetcher } from "@remix-run/react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { RecoilRoot } from "recoil";
 import { TodoList } from "front/todolist/TodoList";
-import { useEffect } from "react";
-import { useFetcher } from "@remix-run/react";
+import { makeInitialState } from "front/todolist/state";
 
 export const meta: MetaFunction = ({ data }) => ({
   title: `Todos | ${data?.todoList.title} (${data?.todoList.doingTodos.length})`,
@@ -26,9 +28,11 @@ export default function TodoListPage() {
   const todoListPage = useTodoListPage();
 
   return (
-    <DndProvider backend={HTML5Backend}>
-      <TodoList todoListPage={todoListPage} />
-    </DndProvider>
+    <RecoilRoot initializeState={makeInitialState(todoListPage)}>
+      <DndProvider backend={HTML5Backend}>
+        <TodoList />
+      </DndProvider>
+    </RecoilRoot>
   );
 }
 
