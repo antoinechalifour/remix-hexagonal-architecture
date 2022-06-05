@@ -1,4 +1,4 @@
-import type { TodoDto, TodoListDetailsDto } from "shared/client";
+import type { TodoDto } from "shared/client";
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
@@ -6,15 +6,13 @@ import { Popover } from "front/ui/Popover";
 import { PlainButton } from "front/ui/Button";
 import { TagsList } from "front/todolist/TagsList";
 import { AddTag } from "front/todolist/AddTag";
+import { useTodoList } from "front/todolist/state";
 
 export type TodoPopoverContentProps = {
-  todoList: TodoListDetailsDto;
   todo: TodoDto;
 };
-export const TodoPopoverContent = ({
-  todoList,
-  todo,
-}: TodoPopoverContentProps) => {
+export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
+  const { todoListInfo } = useTodoList();
   const archiveTodo = useFetcher();
   const isArchiving = archiveTodo.state === "submitting";
 
@@ -22,8 +20,8 @@ export const TodoPopoverContent = ({
     <Popover.Content side="right">
       <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
 
-      <TagsList todo={todo} todoList={todoList} />
-      <AddTag todo={todo} todoList={todoList} />
+      <TagsList todo={todo} />
+      <AddTag todo={todo} />
 
       <Popover.Separator />
 
@@ -34,7 +32,7 @@ export const TodoPopoverContent = ({
       <Popover.Item>
         <archiveTodo.Form
           method="post"
-          action={`/l/${todoList.id}/todo/${todo.id}/archive`}
+          action={`/l/${todoListInfo.id}/todo/${todo.id}/archive`}
           replace
           className="flex items-center"
         >

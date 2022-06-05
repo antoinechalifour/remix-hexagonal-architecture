@@ -1,14 +1,16 @@
-import type { TodoDto, TodoListDetailsDto } from "shared/client";
+import type { TodoDto } from "shared/client";
 
 import { moveArrayItem } from "shared/lib";
 import { useEffect, useState } from "react";
+import { useTodoList } from "front/todolist/state";
 
 interface TodoOrderPreview {
   todoId: string;
   newIndex: number;
 }
 
-export function useTodosOrderPreview(todoList: TodoListDetailsDto) {
+export function useTodosOrderPreview() {
+  const { doingTodos, completedTodos } = useTodoList();
   const [todoOrderPreview, setTodoOrderPreview] =
     useState<TodoOrderPreview | null>(null);
   const reorderForPreview = (todoId: string, newIndex: number) =>
@@ -16,7 +18,7 @@ export function useTodosOrderPreview(todoList: TodoListDetailsDto) {
 
   useEffect(() => {
     setTodoOrderPreview(null);
-  }, [todoList]);
+  }, [doingTodos, completedTodos]);
 
   const sortForPreview = (todos: TodoDto[]) =>
     sortTodos(todos, todoOrderPreview);

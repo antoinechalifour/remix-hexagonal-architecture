@@ -2,6 +2,7 @@ import type { TodoDto } from "shared/client";
 
 import { useFetcher } from "@remix-run/react";
 import { useDrag, useDrop } from "react-dnd";
+import { useTodoList } from "front/todolist/state";
 
 interface DragItem {
   todoId: string;
@@ -18,11 +19,11 @@ interface CollectedProps {
 const DragTypeTodo = Symbol("todo");
 
 export const useReorderTodo = (
-  todoListId: string,
   todo: TodoDto,
   currentIndex: number,
   onPreviewMove: (todoId: string, newIndex: number) => void
 ) => {
+  const { todoListInfo } = useTodoList();
   const todosOrder = useFetcher();
 
   const moveTodo = (newIndex: number) => {
@@ -32,7 +33,7 @@ export const useReorderTodo = (
 
     todosOrder.submit(formData, {
       method: "put",
-      action: `/l/${todoListId}/order`,
+      action: `/l/${todoListInfo.id}/order`,
     });
   };
 

@@ -1,15 +1,16 @@
-import type { TodoDto, TodoListDetailsDto } from "shared/client";
+import type { TodoDto } from "shared/client";
 
 import React, { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { Popover } from "front/ui/Popover";
+import { useTodoList } from "front/todolist/state";
 
 export type AddTagProps = {
-  todoList: TodoListDetailsDto;
   todo: TodoDto;
 };
 
-export const AddTag = ({ todoList, todo }: AddTagProps) => {
+export const AddTag = ({ todo }: AddTagProps) => {
+  const { todoListInfo } = useTodoList();
   const tagTodo = useFetcher();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -27,7 +28,7 @@ export const AddTag = ({ todoList, todo }: AddTagProps) => {
     <Popover.Item>
       <tagTodo.Form
         method="post"
-        action={`/l/${todoList.id}/todo/${todo.id}/tag`}
+        action={`/l/${todoListInfo.id}/todo/${todo.id}/tag`}
       >
         <input
           ref={inputRef}
