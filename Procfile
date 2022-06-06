@@ -1,1 +1,1 @@
-web: yarn remix setup && yarn prisma:migrate && node dist/src/main.js
+web: yarn prisma:migrate && node dist/src/main.js

@@ -1,4 +1,4 @@
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/node";
 import type { RemixAppContext } from "web";
 
 export const loader: LoaderFunction = (args) =>

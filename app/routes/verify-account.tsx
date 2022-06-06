@@ -1,4 +1,4 @@
-import type { LoaderFunction, MetaFunction } from "remix";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import type { RemixAppContext } from "web";
 
 import { VerifyAccount } from "front/authentication/VerifyAccount";

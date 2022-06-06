@@ -24,16 +24,15 @@
       "authentication": ["./src/authentication"],
       "todo-list-manager": ["./src/todo-list-manager"]
     },
-
-    // Remix takes care of building everything in `remix build`.
-    // "noEmit": true,
-
-    // Nest specifics
     "skipLibCheck": true,
     "incremental": true,
     "outDir": "./dist",
     "module": "CommonJS",
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
+    "emitDecoratorMetadata": true,
+    "allowJs": false,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "noEmit": true
   }
 }

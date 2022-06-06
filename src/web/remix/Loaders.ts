@@ -1,5 +1,5 @@
 import { Inject, Injectable } from "@nestjs/common";
-import { json, redirect } from "remix";
+import { json, redirect } from "@remix-run/node";
 import {
   AuthenticationApplicationService,
   Authenticator,

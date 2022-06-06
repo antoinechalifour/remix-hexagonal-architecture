@@ -1,4 +1,4 @@
-import { useNavigate } from "remix";
+import { useNavigate } from "@remix-run/react";
 import { useEffect } from "react";
 
 export function useVerifyAccount() {

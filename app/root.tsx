@@ -1,4 +1,5 @@
-import type { LinksFunction, LoaderFunction } from "remix";
+import type { LinksFunction, LoaderFunction } from "@remix-run/node";
+
 import {
   Link,
   Links,
@@ -10,7 +11,7 @@ import {
   useCatch,
   useLoaderData,
   useLocation,
-} from "remix";
+} from "@remix-run/react";
 
 import * as React from "react";
 

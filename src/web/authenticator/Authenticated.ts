@@ -1,5 +1,5 @@
 import { DataFunctionArgs } from "@remix-run/node";
-import { redirect } from "remix";
+import { redirect } from "@remix-run/node";
 import { Inject } from "@nestjs/common";
 import { AUTHENTICATOR } from "../../keys";
 import { SessionAuthenticator } from "./SessionAuthenticator";

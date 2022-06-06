@@ -5,7 +5,6 @@
   "license": "",
   "scripts": {
     "start": "nest start",
-    "postinstall": "remix setup node",
     "build": "run-p build:front build:nest",
     "test": "jest --runInBand",
     "dev": "run-s dev:migrate dev:start",
@@ -48,7 +47,6 @@
     "@radix-ui/react-icons": "1.1.1",
     "@radix-ui/react-popover": "^0.1.6",
     "@radix-ui/react-tooltip": "^0.1.7",
-    "@remix-run/dev": "1.5.1",
     "@remix-run/express": "1.5.1",
     "@remix-run/node": "1.5.1",
     "@remix-run/react": "1.5.1",
@@ -67,13 +65,13 @@
     "react-dom": "17.0.2",
     "recoil": "^0.7.3",
     "reflect-metadata": "0.1.13",
-    "remix": "1.5.1",
     "reset.css": "2.0.2",
     "rxjs": "7.5.5",
     "uuid": "8.3.2"
   },
   "devDependencies": {
     "@nestjs/cli": "8.2.5",
+    "@remix-run/dev": "1.5.1",
     "@remix-run/eslint-config": "1.5.1",
     "@testing-library/cypress": "8.0.2",
     "@types/bcrypt": "5.0.0",

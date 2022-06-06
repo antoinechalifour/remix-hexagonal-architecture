@@ -1,8 +1,8 @@
-import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
+import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import { useLoaderData } from "@remix-run/react";
 import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
-import { useLoaderData } from "remix";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { RecoilRoot } from "recoil";
