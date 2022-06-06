@@ -11,23 +11,23 @@ export type SendToTopProps = {
 };
 
 export const SendToTop = ({ todo, onDone }: SendToTopProps) => {
-  const sendToTop = useFetcher();
+  const sendToTopFetcher = useFetcher();
   const { id } = useTodoListInfo();
 
   useEffect(() => {
-    if (sendToTop.type !== "done") return;
+    if (sendToTopFetcher.type !== "done") return;
 
     onDone();
-  }, [onDone, sendToTop.type]);
+  }, [onDone, sendToTopFetcher.type]);
 
   return (
-    <sendToTop.Form method="post" action={`/l/${id}/order`}>
+    <sendToTopFetcher.Form method="post" action={`/l/${id}/order`}>
       <input type="hidden" name="todoId" value={todo.id} />
       <input type="hidden" name="newIndex" value={0} />
       <PlainButton type="submit" className="flex w-full items-center">
         Send to top
         <DoubleArrowUpIcon className="ml-auto " width={16} height={16} />
       </PlainButton>
-    </sendToTop.Form>
+    </sendToTopFetcher.Form>
   );
 };

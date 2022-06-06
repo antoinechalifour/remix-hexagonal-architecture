@@ -5,6 +5,7 @@ import { TagsList } from "front/todolist/TagsList";
 import { AddTag } from "front/todolist/AddTag";
 import { ArchiveTodo } from "front/todolist/ArchiveTodo";
 import { SendToTop } from "front/todolist/SendToTop";
+import { SendToBottom } from "front/todolist/SendToBottom";
 
 export type TodoPopoverContentProps = {
   todo: TodoDto;
@@ -12,7 +13,7 @@ export type TodoPopoverContentProps = {
 
 export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const onSentToTop = () => closeButtonRef.current?.click();
+  const closePopOver = () => closeButtonRef.current?.click();
 
   return (
     <Popover.Content side="right">
@@ -31,7 +32,10 @@ export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
           <Popover.Separator />
           <Popover.SectionTitle>Actions</Popover.SectionTitle>
           <Popover.Item>
-            <SendToTop todo={todo} onDone={onSentToTop} />
+            <SendToTop todo={todo} onDone={closePopOver} />
+          </Popover.Item>
+          <Popover.Item>
+            <SendToBottom todo={todo} onDone={closePopOver} />
           </Popover.Item>
         </>
       )}
