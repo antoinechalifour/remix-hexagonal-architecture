@@ -16,12 +16,14 @@ export const Content = ({ children, ...props }: ContentProps) => (
 
 export type ItemProps = { children: ReactNode; className?: string };
 export const Item = ({ children, className }: ItemProps) => (
-  <div className={classNames("px-3 py-1", className)}>{children}</div>
+  <div className={classNames("px-3 py-1 text-xs", className)}>{children}</div>
 );
 
 export type LabelProps = { children: ReactNode; className?: string };
 export const SectionTitle = ({ children, className }: LabelProps) => (
-  <p className={classNames("px-3 py-1 text-sm", className)}>{children}</p>
+  <p className={classNames("px-3 py-1 text-sm font-semibold", className)}>
+    {children}
+  </p>
 );
 
 export const Separator = () => (

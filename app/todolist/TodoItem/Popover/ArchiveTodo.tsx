@@ -28,11 +28,7 @@ export const ArchiveTodo = ({ todo }: ArchiveTodoProps) => {
         title="Archive this todo"
       >
         Archive
-        <CrossCircledIcon
-          className="ml-auto text-danger"
-          width={20}
-          height={20}
-        />
+        <CrossCircledIcon className="ml-auto text-danger" />
       </PlainButton>
     </archiveTodo.Form>
   );

@@ -28,7 +28,7 @@ export const SelectableTag = ({
         action={`/l/${todoListId}/todo/${todo.id}/tag`}
       >
         <input type="hidden" name="tag" value={tag} disabled={disabled} />
-        <PlainButton type="submit">
+        <PlainButton type="submit" className="py-1">
           <TodoTag
             className={classNames({
               "cursor-pointer": !disabled,

@@ -24,7 +24,7 @@ export const SelectedTag = ({ tag, todoListId, todo }: SelectedTagProps) => {
         action={`/l/${todoListId}/todo/${todo.id}/untag`}
       >
         <input type="hidden" name="tag" value={tag} />
-        <PlainButton type="submit">
+        <PlainButton type="submit" className="py-1">
           <TodoTag className="cursor-pointer">{tag}</TodoTag>
         </PlainButton>
       </untagTodo.Form>

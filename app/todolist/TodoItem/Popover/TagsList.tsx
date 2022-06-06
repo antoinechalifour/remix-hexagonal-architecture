@@ -9,18 +9,16 @@ export const TagsList = ({ todo }: { todo: TodoDto }) => {
   const { id, tags } = useTodoListInfo();
 
   return (
-    <ul className="max-h-[210px] overflow-y-auto">
-      {tags.map((tag) =>
-        isTaggedWith(tag) ? (
-          <li key={tag}>
+    <ul className="-mt-2 -mb-2 max-h-[210px] overflow-y-auto py-2">
+      {tags.map((tag) => (
+        <li key={tag}>
+          {isTaggedWith(tag) ? (
             <SelectedTag tag={tag} todo={todo} todoListId={id} />
-          </li>
-        ) : (
-          <li key={tag}>
+          ) : (
             <SelectableTag tag={tag} todo={todo} todoListId={id} />
-          </li>
-        )
-      )}
+          )}
+        </li>
+      ))}
     </ul>
   );
 };
