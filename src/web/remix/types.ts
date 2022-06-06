@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction } from "remix";
+import { ActionFunction, LoaderFunction } from "@remix-run/node";
 
 export type MakeRemixContext<Actions, Loaders> = {
   actions: {

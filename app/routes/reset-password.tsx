@@ -1,7 +1,7 @@
-import type { ActionFunction, MetaFunction } from "remix";
+import type { ActionFunction, MetaFunction } from "@remix-run/node";
+import { useCatch } from "@remix-run/react";
 import type { RemixAppContext } from "web";
 
-import { useCatch } from "remix";
 import { ResetPasswordForm } from "front/authentication/ResetPasswordForm";
 import { PageTitle } from "front/ui/PageTitle";
 

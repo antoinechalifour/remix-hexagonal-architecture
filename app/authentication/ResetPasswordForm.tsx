@@ -1,4 +1,4 @@
-import { useLocation } from "remix";
+import { useLocation } from "@remix-run/react";
 import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";

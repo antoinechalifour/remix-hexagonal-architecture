@@ -1,5 +1,5 @@
 import path from "path";
-import { SessionIdStorageStrategy } from "remix";
+import { SessionIdStorageStrategy } from "@remix-run/node";
 import { DynamicModule, Module } from "@nestjs/common";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ServeStaticModule } from "@nestjs/serve-static";

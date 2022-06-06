@@ -7,7 +7,7 @@ import type {
 import type { MutableSnapshot } from "recoil";
 import type { TodoDto } from "shared/client";
 import { useCallback, useEffect } from "react";
-import { useLoaderData, useNavigate } from "remix";
+import { useLoaderData, useNavigate } from "@remix-run/react";
 import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
 
 const RECOIL_KEYS = {

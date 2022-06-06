@@ -1,4 +1,4 @@
-import type { ActionFunction, LoaderFunction, MetaFunction } from "remix";
+import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import type { TodoListsSummaryDto } from "shared/client";
 import type { RemixAppContext } from "web";
 

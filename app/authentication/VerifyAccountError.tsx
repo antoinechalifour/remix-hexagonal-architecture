@@ -1,5 +1,5 @@
-import type { ThrownResponse } from "remix";
-import { useCatch } from "remix";
+import type { ThrownResponse } from "@remix-run/react";
+import { useCatch } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { InfoPageTemplate } from "front/authentication/InfoPageTemplate";
 

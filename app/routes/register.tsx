@@ -1,4 +1,4 @@
-import type { MetaFunction, ActionFunction, LoaderFunction } from "remix";
+import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import type { RemixAppContext } from "web";
 import { RegisterForm } from "front/authentication/RegisterForm";
 

@@ -6,7 +6,7 @@ import { EmptyMessage } from "front/ui/EmptyMessage";
 import { PageTitle } from "front/ui/PageTitle";
 import { TodoListItem } from "front/homepage/TodoListItem";
 import { AddTodoListForm } from "front/homepage/AddTodoListForm";
-import { useLoaderData } from "remix";
+import { useLoaderData } from "@remix-run/react";
 
 export const TodoLists = () => {
   const { todoLists } = useLoaderData<TodoListsSummaryDto>();

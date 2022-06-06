@@ -1,6 +1,6 @@
 import type { TodoListSummaryDto } from "shared/client";
 
-import { Link } from "remix";
+import { Link } from "@remix-run/react";
 import { useFetcher } from "@remix-run/react";
 import classNames from "classnames";
 import { displayDate } from "front/Date";

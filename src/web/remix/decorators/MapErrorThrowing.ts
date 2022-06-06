@@ -1,4 +1,4 @@
-import { json } from "remix";
+import { json } from "@remix-run/node";
 
 type ErrorCasting<T extends Error> = {
   is(err: unknown): err is T;

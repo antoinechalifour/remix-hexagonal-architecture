@@ -1,4 +1,4 @@
-import type { ActionFunction, MetaFunction } from "remix";
+import type { ActionFunction, MetaFunction } from "@remix-run/node";
 import type { RemixAppContext } from "web";
 import { ForgotPasswordForm } from "front/authentication/ForgotPasswordForm";
 

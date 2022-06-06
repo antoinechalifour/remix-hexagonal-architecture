@@ -5,7 +5,7 @@ import {
   createCookieSessionStorage,
   Session,
   SessionIdStorageStrategy,
-} from "remix";
+} from "@remix-run/node";
 import { SESSION_CONFIG } from "../../keys";
 
 @Injectable({ scope: Scope.REQUEST })
