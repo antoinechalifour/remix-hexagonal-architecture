@@ -8,7 +8,7 @@ import { CheckboxOption } from "front/ui/CheckboxOption";
 import { PlainButton } from "front/ui/Button";
 import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
-import { TodoPopoverContent } from "front/todolist/TodoPopoverContent";
+import { TodoPopoverContent } from "front/todolist/TodoItem/Popover/TodoPopoverContent";
 import { TodoTag } from "front/todolist/TodoTag";
 import { useTodoListInfo } from "front/todolist/state";
 

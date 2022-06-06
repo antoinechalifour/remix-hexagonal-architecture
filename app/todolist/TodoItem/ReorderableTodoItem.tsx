@@ -4,7 +4,7 @@ import { TodoItem } from "./TodoItem";
 import React from "react";
 import { DragHandleHorizontalIcon } from "@radix-ui/react-icons";
 import classNames from "classnames";
-import { useReorderTodo } from "front/todolist/useReorderTodo";
+import { useReorderTodo } from "front/todolist/TodoItem/useReorderTodo";
 
 export type ReorderableTodoItemProps = TodoItemProps & {
   index: number;

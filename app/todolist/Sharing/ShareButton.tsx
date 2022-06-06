@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { ShareTodoListForm } from "front/todolist/ShareTodoListForm";
+import { ShareTodoListForm } from "front/todolist/Sharing/ShareTodoListForm";
 import { Dialog } from "front/ui/Dialog";
 
 export type ShareButtonProps = { todoListId: string };

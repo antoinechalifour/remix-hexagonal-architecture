@@ -1,9 +1,9 @@
 import React from "react";
 import { displayDate } from "front/Date";
-import { AddTodoForm } from "front/todolist/AddTodoForm";
-import { Collaborators } from "front/todolist/Collaborators";
-import { TodoListEditableTitle } from "front/todolist/TodoListEditableTitle";
-import { TodoListCompletion } from "front/todolist/TodoListCompletion";
+import { AddTodoForm } from "front/todolist/TodoList/AddTodoForm";
+import { Collaborators } from "front/todolist/Sharing/Collaborators";
+import { TodoListEditableTitle } from "front/todolist/TodoList/TodoListEditableTitle";
+import { TodoListCompletion } from "front/todolist/TodoList/TodoListCompletion";
 import { useTodoListInfo } from "front/todolist/state";
 
 export const TodoListHeader = () => {

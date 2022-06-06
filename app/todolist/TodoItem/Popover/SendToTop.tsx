@@ -26,7 +26,7 @@ export const SendToTop = ({ todo, onDone }: SendToTopProps) => {
       <input type="hidden" name="newIndex" value={0} />
       <PlainButton type="submit" className="flex w-full items-center">
         Send to top
-        <DoubleArrowUpIcon className="ml-auto " width={16} height={16} />
+        <DoubleArrowUpIcon className="ml-auto" width={16} height={16} />
       </PlainButton>
     </sendToTopFetcher.Form>
   );

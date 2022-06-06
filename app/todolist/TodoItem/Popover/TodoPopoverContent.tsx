@@ -1,11 +1,11 @@
 import type { TodoDto } from "shared/client";
 import React, { useRef } from "react";
 import { Popover } from "front/ui/Popover";
-import { TagsList } from "front/todolist/TagsList";
-import { AddTag } from "front/todolist/AddTag";
-import { ArchiveTodo } from "front/todolist/ArchiveTodo";
-import { SendToTop } from "front/todolist/SendToTop";
-import { SendToBottom } from "front/todolist/SendToBottom";
+import { TagsList } from "front/todolist/TodoItem/Popover/TagsList";
+import { AddTag } from "front/todolist/TodoItem/Popover/AddTag";
+import { ArchiveTodo } from "front/todolist/TodoItem/Popover/ArchiveTodo";
+import { SendToTop } from "front/todolist/TodoItem/Popover/SendToTop";
+import { SendToBottom } from "front/todolist/TodoItem/Popover/SendToBottom";
 
 export type TodoPopoverContentProps = {
   todo: TodoDto;

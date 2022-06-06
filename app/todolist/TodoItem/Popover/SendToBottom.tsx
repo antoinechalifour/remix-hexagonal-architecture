@@ -27,7 +27,7 @@ export const SendToBottom = ({ todo, onDone }: SendToBottomProps) => {
       <input type="hidden" name="newIndex" value={doingTodos.length - 1} />
       <PlainButton type="submit" className="flex w-full items-center">
         Send to bottom
-        <DoubleArrowDownIcon className="ml-auto " width={16} height={16} />
+        <DoubleArrowDownIcon className="ml-auto" width={16} height={16} />
       </PlainButton>
     </sendToBottomFetcher.Form>
   );

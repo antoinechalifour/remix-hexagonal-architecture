@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
-import { CollaboratorPin } from "front/todolist/CollaboratorPin";
-import { ShareButton } from "front/todolist/ShareButton";
+import { CollaboratorPin } from "front/todolist/Sharing/CollaboratorPin";
+import { ShareButton } from "front/todolist/Sharing/ShareButton";
 import { useCollaborators } from "front/todolist/state";
 
 export type CollaboratorsProps = {
