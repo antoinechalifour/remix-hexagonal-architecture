@@ -221,3 +221,7 @@ export function useTodos() {
     completedTodosLabel,
   };
 }
+
+export function useAllDoingTodos() {
+  return useRecoilValue(doingTodosState);
+}

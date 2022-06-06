@@ -1,11 +1,11 @@
 import React from "react";
-import { Todos } from "front/todolist/Todos";
-import { TodoItem } from "front/todolist/TodoItem";
-import { ReorderableTodoItem } from "front/todolist/ReorderableTodoItem";
-import { TodoListHeader } from "front/todolist/TodoListHeader";
-import { TagFilters } from "front/todolist/TagFilters";
+import { Todos } from "front/todolist/TodoList/Todos";
+import { TodoItem } from "front/todolist/TodoItem/TodoItem";
+import { ReorderableTodoItem } from "front/todolist/TodoItem/ReorderableTodoItem";
+import { TodoListHeader } from "front/todolist/TodoList/TodoListHeader";
+import { TagFilters } from "front/todolist/TodoList/TagFilters";
 import { useTodosOrderPreview } from "front/todolist/useTodosOrderPreview";
-import { TodosHeading } from "front/todolist/TodosHeading";
+import { TodosHeading } from "front/todolist/TodoList/TodosHeading";
 import { useFilter, useSyncLoaderData, useTodos } from "front/todolist/state";
 
 export const TodoList = () => {
