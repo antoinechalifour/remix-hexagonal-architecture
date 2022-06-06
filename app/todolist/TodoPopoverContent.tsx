@@ -1,5 +1,5 @@
 import type { TodoDto } from "shared/client";
-import React from "react";
+import React, { useRef } from "react";
 import { Popover } from "front/ui/Popover";
 import { TagsList } from "front/todolist/TagsList";
 import { AddTag } from "front/todolist/AddTag";
@@ -10,21 +10,31 @@ export type TodoPopoverContentProps = {
   todo: TodoDto;
 };
 
-export const TodoPopoverContent = ({
-  todo,
-}: TodoPopoverContentProps) => {
+export const TodoPopoverContent = ({ todo }: TodoPopoverContentProps) => {
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const onSentToTop = () => closeButtonRef.current?.click();
+
   return (
     <Popover.Content side="right">
-      <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
+      <Popover.Close asChild>
+        <button ref={closeButtonRef} className="sr-only">
+          Close
+        </button>
+      </Popover.Close>
 
+      <Popover.SectionTitle className="text-faded">Tags</Popover.SectionTitle>
       <TagsList todo={todo} />
       <AddTag todo={todo} />
 
-      <Popover.Separator />
-      <Popover.SectionTitle>Actions</Popover.SectionTitle>
-      <Popover.Item>
-        <SendToTop todo={todo} />
-      </Popover.Item>
+      {!todo.isComplete && (
+        <>
+          <Popover.Separator />
+          <Popover.SectionTitle>Actions</Popover.SectionTitle>
+          <Popover.Item>
+            <SendToTop todo={todo} onDone={onSentToTop} />
+          </Popover.Item>
+        </>
+      )}
 
       <Popover.Separator />
       <Popover.SectionTitle className="text-danger">

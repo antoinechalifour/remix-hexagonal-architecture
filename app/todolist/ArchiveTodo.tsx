@@ -1,22 +1,23 @@
-import type { TodoDto, TodoListDetailsDto } from "shared/client";
+import type { TodoDto } from "shared/client";
 import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { PlainButton } from "front/ui/Button";
+import { useTodoListInfo } from "front/todolist/state";
 
 export type ArchiveTodoProps = {
-  todoList: TodoListDetailsDto;
   todo: TodoDto;
 };
 
-export const ArchiveTodo = ({ todoList, todo }: ArchiveTodoProps) => {
+export const ArchiveTodo = ({ todo }: ArchiveTodoProps) => {
   const archiveTodo = useFetcher();
+  const { id } = useTodoListInfo();
   const isArchiving = archiveTodo.state === "submitting";
 
   return (
     <archiveTodo.Form
       method="post"
-      action={`/l/${todoList.id}/todo/${todo.id}/archive`}
+      action={`/l/${id}/todo/${todo.id}/archive`}
       replace
       className="flex items-center"
     >
