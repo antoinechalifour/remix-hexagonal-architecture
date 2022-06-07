@@ -2,7 +2,7 @@ import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { useCollaborators } from "front/todolist/state";
 import { CollaboratorPin } from "front/todolist/Sharing/CollaboratorPin";
-import { PlainButton } from "front/ui/Button";
+import { RevokeCollaborator } from "front/todolist/Sharing/RevokeCollaborator";
 
 export const ManageCollaborators = () => {
   const collaborators = useCollaborators();
@@ -21,12 +21,15 @@ export const ManageCollaborators = () => {
 
             <span>{collaborator.email}</span>
 
-            {collaborator.role === "collaborator" && (
-              <span className="text-xs text-faded">
-                {" "}
-                • <PlainButton className="underline">Revoke</PlainButton>
-              </span>
-            )}
+            <span className="text-xs text-faded">
+              {" "}
+              •{" "}
+              {collaborator.role === "collaborator" ? (
+                <RevokeCollaborator collaborator={collaborator} />
+              ) : (
+                "Owner"
+              )}
+            </span>
           </li>
         ))}
       </ul>
