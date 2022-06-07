@@ -21,7 +21,7 @@ export const MapErrorThrowing =
         for (let [CustomErrorConstructor, options] of mapping) {
           if (CustomErrorConstructor.is(err))
             throw json(
-              { message: options.message ?? err.message },
+              { error: true, message: options.message ?? err.message },
               {
                 status: options.status,
               }
@@ -44,7 +44,7 @@ export const MapErrorReturning =
         for (let [CustomErrorConstructor, options] of mapping) {
           if (CustomErrorConstructor.is(err))
             return json(
-              { message: options.message ?? err.message },
+              { error: true, message: options.message ?? err.message },
               {
                 status: options.status,
               }
