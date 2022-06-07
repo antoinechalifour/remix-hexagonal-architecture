@@ -7,17 +7,13 @@ import { TodoListCompletion } from "front/todolist/TodoList/TodoListCompletion";
 import { useTodoListInfo } from "front/todolist/state";
 
 export const TodoListHeader = () => {
-  const { createdAt, id, isOwner } = useTodoListInfo();
+  const { createdAt, isOwner } = useTodoListInfo();
 
   return (
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
         <TodoListEditableTitle />
-        <Collaborators
-          className="mt-2 sm:mt-0"
-          todoListId={id}
-          canShare={isOwner}
-        />
+        <Collaborators className="mt-2 sm:mt-0" canShare={isOwner} />
       </div>
 
       <TodoListCompletion className="my-4" />
