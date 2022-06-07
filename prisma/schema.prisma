@@ -9,14 +9,14 @@ datasource db {
 }
 
 model Todo {
-  id          String    @id @db.Uuid
-  createdAt   DateTime
-  title       String
-  isComplete  Boolean
-  TodoList    TodoList  @relation(fields: [todoListId], references: [id])
-  todoListId  String    @db.Uuid
-  completedAt DateTime?
-  tags        Json      @default("[]")
+  id         String    @id @db.Uuid
+  createdAt  DateTime
+  title      String
+  isDone     Boolean
+  TodoList   TodoList  @relation(fields: [todoListId], references: [id])
+  todoListId String    @db.Uuid
+  doneAt     DateTime?
+  tags       Json      @default("[]")
 }
 
 model TodoList {
@@ -38,7 +38,7 @@ model Account {
 }
 
 model TodoListPermission {
-  todoListId       String @unique @db.Uuid
-  ownerId          String @db.Uuid
-  collaboratorsIds Json   @default("[]")
+  todoListId      String @unique @db.Uuid
+  ownerId         String @db.Uuid
+  contributorsIds Json   @default("[]")
 }

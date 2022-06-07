@@ -1,14 +1,12 @@
-import type { TodoListId } from "./TodoList";
-import type { CollaboratorId } from "./CollaboratorId";
 import { Event } from "shared/events";
 
 export class TodoListShared extends Event {
-  static type = "todoList.shared";
+  static TYPE = "todoList.shared";
 
   constructor(
-    public readonly todoListId: TodoListId,
-    public readonly collaboratorId: CollaboratorId
+    public readonly todoListId: string,
+    public readonly contributorId: string
   ) {
-    super(TodoListShared.type);
+    super(TodoListShared.TYPE);
   }
 }

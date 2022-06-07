@@ -16,7 +16,7 @@ type TodoListRow = {
 type TodoRow<Completion extends boolean> = {
   id: string;
   title: string;
-  isComplete: Completion;
+  isDone: Completion;
   createdAt: string;
   tags: string[];
 };
@@ -30,16 +30,16 @@ export class TodoListDatabaseQuery implements TodoListQuery {
       this.fetchTodoList(todoListId),
       this.fetchTodoListTags(todoListId),
     ]);
-    const [doingTodos, completedTodos] = await Promise.all([
+    const [doingTodos, doneTodos] = await Promise.all([
       this.fetchDoingTodos(todoListId),
-      this.fetchCompleteTodos(todoListId),
+      this.fetchDoneTodos(todoListId),
     ]);
 
     return {
       ...todoList,
       tags,
       doingTodos: this.sortTodos(doingTodos, todosOrder),
-      completedTodos,
+      doneTodos,
     };
   }
 
@@ -73,18 +73,18 @@ export class TodoListDatabaseQuery implements TodoListQuery {
 
   private fetchDoingTodos(todoListId: TodoListId) {
     return this.prisma.$queryRaw<TodoRow<false>[]>`
-      SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
-      WHERE T."isComplete" IS false
+      SELECT T.id, T.title, T."isDone", T."createdAt", T.tags FROM "Todo" T
+      WHERE T."isDone" IS false
       AND T."todoListId" = ${todoListId};
     `;
   }
 
-  private fetchCompleteTodos(todoListId: TodoListId) {
+  private fetchDoneTodos(todoListId: TodoListId) {
     return this.prisma.$queryRaw<TodoRow<true>[]>`
-      SELECT T.id, T.title, T."isComplete", T."createdAt", T.tags FROM "Todo" T
-      WHERE T."isComplete" IS true
+      SELECT T.id, T.title, T."isDone", T."createdAt", T.tags FROM "Todo" T
+      WHERE T."isDone" IS true
       AND T."todoListId" = ${todoListId}
-      ORDER BY t."completedAt" DESC;
+      ORDER BY t."doneAt" DESC;
     `;
   }
 
@@ -109,7 +109,7 @@ export class TodoListDatabaseQuery implements TodoListQuery {
     return this.prisma.$queryRaw<any[]>`
       SELECT TL.id, TL.title, TL."createdAt", count(T.id) as "numberOfTodos"
       FROM "TodoList" TL
-      LEFT JOIN "Todo" T ON TL.id = T."todoListId" AND T."isComplete" IS false
+      LEFT JOIN "Todo" T ON TL.id = T."todoListId" AND T."isDone" IS false
       WHERE TL."id" IN (${Prisma.join(todoListsIds)})
       GROUP BY TL.id;
     `;
@@ -119,7 +119,7 @@ export class TodoListDatabaseQuery implements TodoListQuery {
     return this.prisma.$queryRaw<{ totalNumberOfDoingTodos: number }[]>`
       SELECT count(*) as "totalNumberOfDoingTodos"
       FROM "Todo" T
-      WHERE T."isComplete" IS false AND T."todoListId" IN (${Prisma.join(
+      WHERE T."isDone" IS false AND T."todoListId" IN (${Prisma.join(
         todoListsIds
       )});
     `.then((rows) => rows[0].totalNumberOfDoingTodos);

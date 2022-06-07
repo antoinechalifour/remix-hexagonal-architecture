@@ -21,13 +21,12 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
   function TodoItem(props, ref) {
     const { todo, className } = props;
     const { id } = useTodoListInfo();
-    const completeTodo = useFetcher();
-    const renameTodo = useFetcher();
-    const isCompleting =
-      completeTodo.state === "submitting" || completeTodo.state === "loading";
+    const markTodoFetcher = useFetcher();
+    const updateTodoFetcher = useFetcher();
+    const isBusy = markTodoFetcher.state !== "idle";
 
     const handleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
-      completeTodo.submit(e.currentTarget);
+      markTodoFetcher.submit(e.currentTarget);
 
     return (
       <div
@@ -38,11 +37,11 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           "grid-rows-[auto_auto] md:grid-rows-1",
           "rounded-2xl p-3 md:px-6 md:py-4",
           "bg-dark shadow",
-          { "opacity-50": isCompleting },
+          { "opacity-50": isBusy },
           className
         )}
       >
-        <completeTodo.Form
+        <markTodoFetcher.Form
           method="post"
           action={`/l/${id}/todo/${todo.id}`}
           onChange={handleChange}
@@ -51,16 +50,16 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         >
           <CheckboxOption
             id={`todo-${todo.id}`}
-            isChecked={todo.isComplete}
+            isChecked={todo.isDone}
             label={
               <span className="sr-only">{todo.title} (click to toggle)</span>
             }
           />
-        </completeTodo.Form>
+        </markTodoFetcher.Form>
 
-        <renameTodo.Form
+        <updateTodoFetcher.Form
           method="post"
-          action={`/l/${id}/todo/${todo.id}/rename`}
+          action={`/l/${id}/todo/${todo.id}/update`}
         >
           <EditableContent
             initialValue={todo.title}
@@ -69,13 +68,13 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           >
             <span
               className={classNames("font-semibold md:ml-2", {
-                "line-through opacity-75": todo.isComplete,
+                "line-through opacity-75": todo.isDone,
               })}
             >
               {todo.title}
             </span>
           </EditableContent>
-        </renameTodo.Form>
+        </updateTodoFetcher.Form>
 
         <ul
           className={classNames(

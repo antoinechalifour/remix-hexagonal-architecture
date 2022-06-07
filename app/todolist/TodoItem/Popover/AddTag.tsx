@@ -11,22 +11,25 @@ export type AddTagProps = {
 
 export const AddTag = ({ todo }: AddTagProps) => {
   const { id } = useTodoListInfo();
-  const tagTodo = useFetcher();
+  const addTagFetcher = useFetcher();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (tagTodo.type !== "done") return;
+    if (addTagFetcher.type !== "done") return;
 
     const input = inputRef.current;
     if (input == null) return;
     input.value = "";
-  }, [tagTodo.type]);
+  }, [addTagFetcher.type]);
 
   if (todo.tags.length === 3) return null;
 
   return (
     <Popover.Item>
-      <tagTodo.Form method="post" action={`/l/${id}/todo/${todo.id}/tag`}>
+      <addTagFetcher.Form
+        method="post"
+        action={`/l/${id}/todo/${todo.id}/add-tag`}
+      >
         <input
           ref={inputRef}
           className="ml-4 w-[15ch] rounded bg-gray-200 py-1 px-2 font-mono text-xs text-gray-700"
@@ -39,7 +42,7 @@ export const AddTag = ({ todo }: AddTagProps) => {
         <button type="submit" className="sr-only">
           Tag
         </button>
-      </tagTodo.Form>
+      </addTagFetcher.Form>
     </Popover.Item>
   );
 };

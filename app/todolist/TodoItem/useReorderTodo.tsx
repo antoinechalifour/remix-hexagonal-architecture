@@ -33,7 +33,7 @@ export const useReorderTodo = (
 
     todosOrder.submit(formData, {
       method: "put",
-      action: `/l/${id}/order`,
+      action: `/l/${id}/reorder-todo`,
     });
   };
 

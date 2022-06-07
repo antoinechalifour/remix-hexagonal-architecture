@@ -1,7 +1,7 @@
 import type { TodoDto } from "shared/client";
 import React from "react";
 import { Popover } from "front/ui/Popover";
-import { ArchiveTodo } from "front/todolist/TodoItem/Popover/ArchiveTodo";
+import { DeleteTodo } from "front/todolist/TodoItem/Popover/DeleteTodo";
 
 export type TodoDangerZoneProps = { todo: TodoDto };
 export const TodoDangerZone = ({ todo }: TodoDangerZoneProps) => (
@@ -11,7 +11,7 @@ export const TodoDangerZone = ({ todo }: TodoDangerZoneProps) => (
     </Popover.SectionTitle>
 
     <Popover.Item>
-      <ArchiveTodo todo={todo} />
+      <DeleteTodo todo={todo} />
     </Popover.Item>
   </>
 );

@@ -1,16 +1,16 @@
 import { TodoList, TodoListId } from "./TodoList";
 import { OwnerId } from "./OwnerId";
-import { CollaboratorId } from "./CollaboratorId";
+import { ContributorId } from "./ContributorId";
 import { TodoListPermissionDeniedError } from "./TodoListPermissionDeniedError";
-import { Collaborator } from "./Collaborator";
+import { Contributor } from "./Contributor";
 
 export type TodoListPermission = {
   todoListId: TodoListId;
   ownerId: OwnerId;
-  collaboratorsIds: CollaboratorId[];
+  contributorsIds: ContributorId[];
 };
 
-export type CollaboratorRole = "owner" | "collaborator";
+export type Role = "owner" | "contributor";
 
 export const createPermissions = (
   todoList: TodoList,
@@ -18,70 +18,69 @@ export const createPermissions = (
 ): TodoListPermission => ({
   todoListId: todoList.id,
   ownerId: ownerId,
-  collaboratorsIds: [],
+  contributorsIds: [],
 });
 
-export const shareWithCollaborator = (
+export const grantAccess = (
   permission: TodoListPermission,
-  collaboratorId: CollaboratorId
+  contributorId: ContributorId
 ): TodoListPermission => ({
   ...permission,
-  collaboratorsIds: [...permission.collaboratorsIds, collaboratorId],
+  contributorsIds: [...permission.contributorsIds, contributorId],
 });
 
-export const unshareWithCollaborator = (
+export const revokeAccess = (
   permission: TodoListPermission,
-  collaboratorIdToRemove: CollaboratorId
+  contributorToRemove: ContributorId
 ): TodoListPermission => ({
   ...permission,
-  collaboratorsIds: permission.collaboratorsIds.filter(
-    (collaboratorId) => collaboratorId !== collaboratorIdToRemove
+  contributorsIds: permission.contributorsIds.filter(
+    (contributorId) => contributorId !== contributorToRemove
   ),
 });
 
 export const isOwner = (
   permission: TodoListPermission,
-  collaboratorId: CollaboratorId
-) => permission.ownerId === collaboratorId;
+  contributorId: ContributorId
+) => permission.ownerId === contributorId;
 
-export const isCollaborator = (
+export const isContributor = (
   permission: TodoListPermission,
-  collaboratorId: CollaboratorId
-) => permission.collaboratorsIds.includes(collaboratorId);
+  contributorId: ContributorId
+) => permission.contributorsIds.includes(contributorId);
 
 const verifyIsOwner = (
   permission: TodoListPermission,
-  collaboratorId: CollaboratorId
+  contributorId: ContributorId
 ) => {
-  if (!isOwner(permission, collaboratorId))
+  if (!isOwner(permission, contributorId))
     throw new TodoListPermissionDeniedError(
       permission.todoListId,
-      collaboratorId
+      contributorId
     );
 };
 
-export const verifyIsCollaborator = (
+export const verifyIsContributor = (
   permission: TodoListPermission,
-  collaboratorId: CollaboratorId
+  contributorId: ContributorId
 ) => {
   if (
-    !isOwner(permission, collaboratorId) &&
-    !isCollaborator(permission, collaboratorId)
+    !isOwner(permission, contributorId) &&
+    !isContributor(permission, contributorId)
   ) {
     throw new TodoListPermissionDeniedError(
       permission.todoListId,
-      collaboratorId
+      contributorId
     );
   }
 };
 
 export const canArchiveTodoList = verifyIsOwner;
-export const canEditTodoList = verifyIsCollaborator;
-export const canShareTodoList = verifyIsCollaborator;
-export const canView = verifyIsCollaborator;
+export const canEditTodoList = verifyIsContributor;
+export const canShareTodoList = verifyIsContributor;
+export const canView = verifyIsContributor;
 
-export const getCollaboratorRole = (
-  collaborator: Collaborator,
+export const getRole = (
+  contributor: Contributor,
   permission: TodoListPermission
-): CollaboratorRole =>
-  permission.ownerId === collaborator.id ? "owner" : "collaborator";
+): Role => (permission.ownerId === contributor.id ? "owner" : "contributor");

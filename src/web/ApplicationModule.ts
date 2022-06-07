@@ -16,7 +16,7 @@ import {
   FetchAuthenticationStatusSessionQuery,
 } from "authentication";
 import {
-  CollaboratorsAdapter,
+  ContributorsAdapter,
   TodoListDatabaseQuery,
   TodoApplicationService,
   TodoDatabaseRepository,
@@ -64,7 +64,7 @@ import { Loaders } from "./remix/Loaders";
     },
 
     // TodoListManager
-    CollaboratorsAdapter,
+    ContributorsAdapter,
     TodoApplicationService,
     TodoListApplicationService,
     TodoDatabaseRepository,

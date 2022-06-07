@@ -21,7 +21,7 @@ export const SendToTop = ({ todo, onDone }: SendToTopProps) => {
   }, [onDone, sendToTopFetcher.type]);
 
   return (
-    <sendToTopFetcher.Form method="post" action={`/l/${id}/order`}>
+    <sendToTopFetcher.Form method="post" action={`/l/${id}/reorder-todo`}>
       <input type="hidden" name="todoId" value={todo.id} />
       <input type="hidden" name="newIndex" value={0} />
       <PlainButton type="submit" className="flex w-full items-center">

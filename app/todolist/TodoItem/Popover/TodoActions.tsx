@@ -9,7 +9,7 @@ export type TodoActionsProps = {
   onAction: () => void;
 };
 export const TodoActions = ({ todo, onAction }: TodoActionsProps) => {
-  if (todo.isComplete) return null;
+  if (todo.isDone) return null;
 
   return (
     <>

@@ -7,7 +7,7 @@ import {
   PasswordResetTokenExpiredError,
 } from "authentication";
 import {
-  CollaboratorNotFoundError,
+  ContributorNotFoundError,
   TodoApplicationService,
   TodoListApplicationService,
 } from "todo-list-manager";
@@ -18,31 +18,31 @@ import { Body } from "./decorators/Body";
 import { Params } from "./decorators/Params";
 import { SessionManager } from "../authenticator/SessionManager";
 import { AddTodoBody, AddTodoParams } from "./dtos/AddTodo";
-import { ArchiveTodoParams } from "./dtos/ArchiveTodo";
-import {
-  ChangeTodoCompletionBody,
-  ChangeTodoCompletionParams,
-} from "./dtos/ChangeTodoCompletion";
-import { AddTodoListBody } from "./dtos/AddTodoList";
+import { DeleteTodoFromTodoListParams } from "./dtos/DeleteTodoFromTodoList";
+import { MarkTodoBody, MarkTodoParams } from "./dtos/MarkTodo";
+import { CreateTodoListBody } from "./dtos/CreateTodoList";
 import { ArchiveTodoListParams } from "./dtos/ArchiveTodoList";
 import { LoginBody } from "./dtos/Login";
-import { ReorderTodosBody, ReorderTodosParams } from "./dtos/ReorderTodos";
+import { ReorderTodoBody, ReorderTodoParams } from "./dtos/ReorderTodo";
 import {
-  RenameTodoListBody,
-  RenameTodoListParams,
-} from "./dtos/RenameTodoList";
-import { RenameTodoBody, RenameTodoParams } from "./dtos/RenameTodo";
-import { TagTodoBody, TagTodoParams } from "./dtos/TagTodo";
-import { UntagTodoBody, UntagTodoParams } from "./dtos/UntagTodo";
+  UpdateTodoListTitleBody,
+  UpdateTodoListTitleParams,
+} from "./dtos/UpdateTodoListTitle";
+import {
+  UpdateTodoTitleBody,
+  UpdateTodoTitleParams,
+} from "./dtos/UpdateTodoTitle";
+import { AddTagToTodoBody, AddTagToTodoParams } from "./dtos/AddTagToTodo";
+import {
+  RemoveTagFromTodoBody,
+  RemoveTagFromTodoParams,
+} from "./dtos/RemoveTagFromTodo";
 import { ForgotPasswordBody } from "./dtos/ForgotPassword";
 import { ResetPasswordBody } from "./dtos/ResetPassword";
 import { RegisterBody } from "./dtos/Register";
-import { ShareTodoListBody, ShareTodoListParams } from "./dtos/ShareTodoList";
+import { GrantAccessBody, GrantAccessParams } from "./dtos/GrantAccess";
 import { MapErrorReturning, MapErrorThrowing } from "./decorators/MapError";
-import {
-  UnshareTodoListBody,
-  UnshareTodoListParams,
-} from "./dtos/UnshareTodoList";
+import { RevokeAccessBody, RevokeAccessParams } from "./dtos/RevokeAccess";
 
 @Injectable()
 export class Actions {
@@ -142,8 +142,11 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async addTodo(@Params() params: AddTodoParams, @Body() body: AddTodoBody) {
-    await this.todoApplicationService.add(
+  async addTodoToTodoList(
+    @Params() params: AddTodoParams,
+    @Body() body: AddTodoBody
+  ) {
+    await this.todoApplicationService.addTodoToTodoList(
       params.todoListId,
       body.todoTitle,
       await this.authenticator.currentUser()
@@ -153,8 +156,8 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async archiveTodo(@Params() params: ArchiveTodoParams) {
-    await this.todoApplicationService.archive(
+  async deleteTodoFromTodoList(@Params() params: DeleteTodoFromTodoListParams) {
+    await this.todoApplicationService.deleteFromTodoList(
       params.todoListId,
       params.todoId,
       await this.authenticator.currentUser()
@@ -164,11 +167,8 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async changeTodoCompletion(
-    @Params() params: ChangeTodoCompletionParams,
-    @Body() body: ChangeTodoCompletionBody
-  ) {
-    await this.todoApplicationService.changeTodoCompletion(
+  async markTodo(@Params() params: MarkTodoParams, @Body() body: MarkTodoBody) {
+    await this.todoApplicationService.markTodo(
       params.todoListId,
       params.todoId,
       body.isChecked,
@@ -179,11 +179,11 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async renameTodo(
-    @Params() params: RenameTodoParams,
-    @Body() body: RenameTodoBody
+  async updateTodoTitle(
+    @Params() params: UpdateTodoTitleParams,
+    @Body() body: UpdateTodoTitleBody
   ) {
-    await this.todoApplicationService.renameTodo(
+    await this.todoApplicationService.updateTodoTitle(
       params.todoListId,
       params.todoId,
       body.title,
@@ -195,24 +195,11 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async tagTodo(@Params() params: TagTodoParams, @Body() body: TagTodoBody) {
-    await this.todoApplicationService.tagTogo(
-      params.todoListId,
-      params.todoId,
-      body.tag,
-      await this.authenticator.currentUser()
-    );
-
-    return null;
-  }
-
-  @Authenticated()
-  @DataFunction()
-  async untagTodo(
-    @Params() params: UntagTodoParams,
-    @Body() body: UntagTodoBody
+  async addTagToTodo(
+    @Params() params: AddTagToTodoParams,
+    @Body() body: AddTagToTodoBody
   ) {
-    await this.todoApplicationService.untagTogo(
+    await this.todoApplicationService.addTagToTodo(
       params.todoListId,
       params.todoId,
       body.tag,
@@ -224,8 +211,24 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async addTodoList(@Body() body: AddTodoListBody) {
-    const todoListId = await this.todoListApplicationService.add(
+  async removeTagFromTodo(
+    @Params() params: RemoveTagFromTodoParams,
+    @Body() body: RemoveTagFromTodoBody
+  ) {
+    await this.todoApplicationService.removeTagFromTodo(
+      params.todoListId,
+      params.todoId,
+      body.tag,
+      await this.authenticator.currentUser()
+    );
+
+    return null;
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async createTodoList(@Body() body: CreateTodoListBody) {
+    const todoListId = await this.todoListApplicationService.createTodoList(
       body.title,
       await this.authenticator.currentUser()
     );
@@ -235,11 +238,11 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async renameTodoList(
-    @Params() params: RenameTodoListParams,
-    @Body() body: RenameTodoListBody
+  async updateTodoListTitle(
+    @Params() params: UpdateTodoListTitleParams,
+    @Body() body: UpdateTodoListTitleBody
   ) {
-    await this.todoListApplicationService.rename(
+    await this.todoListApplicationService.updateTodoListTitle(
       params.todoListId,
       body.title,
       await this.authenticator.currentUser()
@@ -261,11 +264,11 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async reorderTodoList(
-    @Params() params: ReorderTodosParams,
-    @Body() body: ReorderTodosBody
+  async reorderTodo(
+    @Params() params: ReorderTodoParams,
+    @Body() body: ReorderTodoBody
   ) {
-    await this.todoListApplicationService.reorder(
+    await this.todoListApplicationService.reorderTodo(
       params.todoListId,
       await this.authenticator.currentUser(),
       body.todoId,
@@ -277,12 +280,12 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  @MapErrorReturning([[CollaboratorNotFoundError, { status: 404 }]])
-  async shareTodoList(
-    @Params() params: ShareTodoListParams,
-    @Body() body: ShareTodoListBody
+  @MapErrorReturning([[ContributorNotFoundError, { status: 404 }]])
+  async grantAccess(
+    @Params() params: GrantAccessParams,
+    @Body() body: GrantAccessBody
   ) {
-    await this.todoListApplicationService.share(
+    await this.todoListApplicationService.grantAccess(
       params.todoListId,
       body.email,
       await this.authenticator.currentUser()
@@ -293,13 +296,13 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
-  async unshareTodoList(
-    @Params() params: UnshareTodoListParams,
-    @Body() body: UnshareTodoListBody
+  async revokeAccess(
+    @Params() params: RevokeAccessParams,
+    @Body() body: RevokeAccessBody
   ) {
-    await this.todoListApplicationService.unshare(
+    await this.todoListApplicationService.revokeAccess(
       params.todoListId,
-      body.collaboratorId,
+      body.contributorId,
       await this.authenticator.currentUser()
     );
 

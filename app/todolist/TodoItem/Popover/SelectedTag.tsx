@@ -12,22 +12,22 @@ export type SelectedTagProps = {
   todo: TodoDto;
 };
 export const SelectedTag = ({ tag, todoListId, todo }: SelectedTagProps) => {
-  const untagTodo = useFetcher();
+  const removeTagFetcher = useFetcher();
 
   return (
     <Popover.Item className="grid grid-cols-[1rem_auto] items-center">
       <div>
         <DotFilledIcon className="text-primary" fill="currentColor" />
       </div>
-      <untagTodo.Form
+      <removeTagFetcher.Form
         method="post"
-        action={`/l/${todoListId}/todo/${todo.id}/untag`}
+        action={`/l/${todoListId}/todo/${todo.id}/remove-tag`}
       >
         <input type="hidden" name="tag" value={tag} />
         <PlainButton type="submit" className="py-1">
           <TodoTag className="cursor-pointer">{tag}</TodoTag>
         </PlainButton>
-      </untagTodo.Form>
+      </removeTagFetcher.Form>
     </Popover.Item>
   );
 };

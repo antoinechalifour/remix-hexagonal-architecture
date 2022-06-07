@@ -17,15 +17,15 @@ export const SelectableTag = ({
   todoListId,
   todo,
 }: SelectableTagProps) => {
-  const tagTodo = useFetcher();
+  const addTagFetcher = useFetcher();
   const disabled = todo.tags.length === 3;
 
   return (
     <Popover.Item>
-      <tagTodo.Form
+      <addTagFetcher.Form
         className="ml-4"
         method="post"
-        action={`/l/${todoListId}/todo/${todo.id}/tag`}
+        action={`/l/${todoListId}/todo/${todo.id}/add-tag`}
       >
         <input type="hidden" name="tag" value={tag} disabled={disabled} />
         <PlainButton type="submit" className="py-1">
@@ -38,7 +38,7 @@ export const SelectableTag = ({
             {tag}
           </TodoTag>
         </PlainButton>
-      </tagTodo.Form>
+      </addTagFetcher.Form>
     </Popover.Item>
   );
 };

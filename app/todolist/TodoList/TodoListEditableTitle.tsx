@@ -6,10 +6,10 @@ import { useTodoListInfo } from "front/todolist/state";
 
 export const TodoListEditableTitle = () => {
   const { id, title } = useTodoListInfo();
-  const updateTodoListTitle = useFetcher();
+  const updateTodoListFetcher = useFetcher();
 
   return (
-    <updateTodoListTitle.Form method="post" action={`/l/${id}/rename`}>
+    <updateTodoListFetcher.Form method="post" action={`/l/${id}/update`}>
       <EditableContent
         initialValue={title}
         inputName="title"
@@ -17,6 +17,6 @@ export const TodoListEditableTitle = () => {
       >
         <PageTitle>{title}</PageTitle>
       </EditableContent>
-    </updateTodoListTitle.Form>
+    </updateTodoListFetcher.Form>
   );
 };
