@@ -3,6 +3,7 @@ import type { Collaborator } from "../domain/Collaborator";
 import type { Account as AccountRow } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
+import { CollaboratorNotFoundError } from "../domain/CollaboratorNotFoundError";
 
 @Injectable()
 export class CollaboratorsAdapter
@@ -22,8 +23,9 @@ export class CollaboratorsAdapter
   async ofEmail(email: string): Promise<Collaborator> {
     const account = await this.prisma.account.findFirst({
       where: { email },
-      rejectOnNotFound: true,
     });
+
+    if (account == null) throw new CollaboratorNotFoundError(email);
 
     return toCollaborator(account);
   }

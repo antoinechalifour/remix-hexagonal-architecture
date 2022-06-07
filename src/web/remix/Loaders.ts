@@ -18,7 +18,7 @@ import { SessionManager } from "../authenticator/SessionManager";
 import { DataFunction } from "./decorators/DataFunction";
 import { Query } from "./decorators/Query";
 import { Params } from "./decorators/Params";
-import { MapErrorThrowing } from "./decorators/MapErrorThrowing";
+import { MapErrorThrowing } from "./decorators/MapError";
 import { FetchTodoListParams } from "./dtos/FetchTodoList";
 import { VerifyAccountQuery } from "./dtos/VerifyAccount";
 
