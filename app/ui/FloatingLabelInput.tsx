@@ -49,9 +49,10 @@ export const FloatingLabelInput = forwardRef<
           onChange={handleChange}
           className={classNames(
             "block w-full rounded border bg-transparent px-4 pt-6 pb-2",
-            "border-2 border border-dark focus:border-primary",
+            "border-2 border",
             "text-base text-lighter transition-colors",
             {
+              "border-dark focus:border-primary": !errorMessage,
               "border-danger": !!errorMessage,
             },
             inputProps.className

@@ -6,17 +6,24 @@ import { ButtonPrimary } from "front/ui/Button";
 
 export type ShareTodoListFormProps = { todoListId: string };
 
+type ErrorReponse = {
+  error: true;
+  message: string;
+};
+
 export const ShareTodoListForm = ({ todoListId }: ShareTodoListFormProps) => {
-  const shareTodoList = useFetcher();
+  const shareTodoListFetcher = useFetcher<ErrorReponse | null>();
   const inputRef = useRef<FloatingLabelInputRef | null>(null);
 
   useEffect(() => {
-    if (shareTodoList.type !== "done") return;
+    if (shareTodoListFetcher.type !== "done") return;
+    if (shareTodoListFetcher.data?.error) return;
+
     inputRef.current?.clear();
-  }, [shareTodoList.type]);
+  }, [shareTodoListFetcher, shareTodoListFetcher.type]);
 
   return (
-    <shareTodoList.Form
+    <shareTodoListFetcher.Form
       action={`/l/${todoListId}/share`}
       method="post"
       className="space-y-4"
@@ -26,10 +33,11 @@ export const ShareTodoListForm = ({ todoListId }: ShareTodoListFormProps) => {
         label="Collaborator email"
         ref={inputRef}
         inputProps={{ type: "email", className: "text-inverse" }}
+        errorMessage={shareTodoListFetcher.data?.message}
       />
       <ButtonPrimary type="submit" className="w-full">
         Share
       </ButtonPrimary>
-    </shareTodoList.Form>
+    </shareTodoListFetcher.Form>
   );
 };
