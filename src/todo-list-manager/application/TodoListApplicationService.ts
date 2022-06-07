@@ -18,6 +18,7 @@ import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRe
 import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
 import { CollaboratorsAdapter } from "../infrastructure/CollaboratorsAdapter";
 import { TodoListDatabaseQuery } from "../infrastructure/TodoListDatabaseQuery";
+import { UnshareTodoList } from "../usecase/UnshareTodoList";
 
 @Injectable()
 export class TodoListApplicationService {
@@ -97,6 +98,18 @@ export class TodoListApplicationService {
     ).execute(todoListId, currentUser.id, collaboratorEmail);
 
     this.events.publish(new TodoListShared(todoListId, collaboratorEmail));
+  }
+
+  async unshare(
+    todoListId: string,
+    collaboratorId: string,
+    currentUser: CurrentUser
+  ) {
+    await new UnshareTodoList(this.todoListPermissions).execute(
+      todoListId,
+      currentUser.id,
+      collaboratorId
+    );
   }
 
   viewHomePage(collaboratorId: string) {
