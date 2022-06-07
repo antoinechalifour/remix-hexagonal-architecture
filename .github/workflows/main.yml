@@ -85,3 +85,6 @@ jobs:
         with:
           start: yarn e2e:app
           wait-on: 'http://localhost:3333'
+          record: true
+        env:
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
