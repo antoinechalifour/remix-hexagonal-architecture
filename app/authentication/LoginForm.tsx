@@ -1,5 +1,11 @@
 import type { AuthenticationErrorDto } from "shared/client";
-import { Form, Link, useActionData, useLoaderData, useTransition } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useTransition,
+} from "@remix-run/react";
 import { UpdateIcon } from "@radix-ui/react-icons";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
@@ -17,6 +23,7 @@ export const LoginForm = () => {
   const loaderData = useLoaderData<AuthenticationErrorDto>();
   const actionData = useActionData<LoginFormErrors>();
   const transition = useTransition();
+  console.log(transition);
 
   return (
     <FormCard title="Login">
@@ -51,11 +58,11 @@ export const LoginForm = () => {
 
         <ButtonPrimary
           type="submit"
-          disabled={transition.state === "submitting"}
+          disabled={transition.type !== "idle"}
           className="flex-1"
           name="login"
         >
-          {transition.state === "submitting" ? (
+          {transition.type !== "idle" ? (
             <UpdateIcon className="mx-auto animate-spin" />
           ) : (
             "Login"
