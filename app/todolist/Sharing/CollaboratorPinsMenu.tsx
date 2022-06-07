@@ -4,12 +4,15 @@ import { CollaboratorPin } from "front/todolist/Sharing/CollaboratorPin";
 import { ShareButton } from "front/todolist/Sharing/ShareButton";
 import { useCollaborators } from "front/todolist/state";
 
-export type CollaboratorsProps = {
+export type CollaboratorPinsMenuProps = {
   canShare: boolean;
   className?: string;
 };
 
-export const Collaborators = ({ canShare, className }: CollaboratorsProps) => {
+export const CollaboratorPinsMenu = ({
+  canShare,
+  className,
+}: CollaboratorPinsMenuProps) => {
   const collaborators = useCollaborators();
 
   return (

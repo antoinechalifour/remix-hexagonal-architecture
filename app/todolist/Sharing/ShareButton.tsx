@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import { PlusIcon } from "@radix-ui/react-icons";
-import { ShareTodoListForm } from "front/todolist/Sharing/ShareTodoListForm";
+import { ShareTodoListDialogContent } from "front/todolist/Sharing/ShareTodoListDialogContent";
 import { Dialog } from "front/ui/Dialog";
 
 export const ShareButton = () => (
@@ -21,7 +21,7 @@ export const ShareButton = () => (
     </Dialog.Trigger>
 
     <Dialog.Content title="Share this todo list">
-      <ShareTodoListForm />
+      <ShareTodoListDialogContent />
     </Dialog.Content>
   </Dialog.Root>
 );

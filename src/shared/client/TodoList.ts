@@ -13,6 +13,7 @@ export interface TodoListCollaboratorDto {
   id: string;
   email: string;
   shortName: string;
+  role: "owner" | "collaborator";
 }
 
 export interface TodoListPageDto {

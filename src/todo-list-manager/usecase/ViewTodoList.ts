@@ -3,8 +3,17 @@ import type { CollaboratorId } from "../domain/CollaboratorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListQuery } from "../domain/TodoListQuery";
 import type { Collaborators } from "../domain/Collaborators";
-import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
-import { canView, isOwner } from "../domain/TodoListPermission";
+import type {
+  TodoListCollaboratorDto,
+  TodoListDetailsDto,
+  TodoListPageDto,
+} from "shared/client";
+import {
+  canView,
+  getCollaboratorRole,
+  isOwner,
+  TodoListPermission,
+} from "../domain/TodoListPermission";
 import { Collaborator } from "../domain/Collaborator";
 
 export class ViewTodoList {
@@ -33,7 +42,9 @@ export class ViewTodoList {
       isOwner: isOwner(permissions, collaboratorId),
       todoList: todoListDetails,
       completion: this.computeCompletion(todoListDetails),
-      collaborators: collaborators.map(toTodoListCollaboratorDto),
+      collaborators: collaborators.map((collaborator) =>
+        toTodoListCollaboratorDto(collaborator, permissions)
+      ),
     };
   }
 
@@ -49,7 +60,10 @@ export class ViewTodoList {
   }
 }
 
-function toTodoListCollaboratorDto(collaborator: Collaborator) {
+function toTodoListCollaboratorDto(
+  collaborator: Collaborator,
+  permission: TodoListPermission
+): TodoListCollaboratorDto {
   const [beforeAtSign] = collaborator.email.split("@");
   const parts = beforeAtSign.split(".").slice(0, 2);
   const shortName = parts.map((parts) => parts.charAt(0)).join("");
@@ -58,5 +72,6 @@ function toTodoListCollaboratorDto(collaborator: Collaborator) {
     id: collaborator.id,
     email: collaborator.email,
     shortName,
+    role: getCollaboratorRole(collaborator, permission),
   };
 }
