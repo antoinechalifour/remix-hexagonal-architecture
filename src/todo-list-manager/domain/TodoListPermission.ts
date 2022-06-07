@@ -29,6 +29,16 @@ export const shareWithCollaborator = (
   collaboratorsIds: [...permission.collaboratorsIds, collaboratorId],
 });
 
+export const unshareWithCollaborator = (
+  permission: TodoListPermission,
+  collaboratorIdToRemove: CollaboratorId
+): TodoListPermission => ({
+  ...permission,
+  collaboratorsIds: permission.collaboratorsIds.filter(
+    (collaboratorId) => collaboratorId !== collaboratorIdToRemove
+  ),
+});
+
 export const isOwner = (
   permission: TodoListPermission,
   collaboratorId: CollaboratorId

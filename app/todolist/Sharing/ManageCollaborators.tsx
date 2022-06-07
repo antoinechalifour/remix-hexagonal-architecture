@@ -11,7 +11,7 @@ export const ManageCollaborators = () => {
   return (
     <div className="mb-4">
       <p>These people can collaborate on this todo list :</p>
-      <ul className="space-y-1 py-1 px-2">
+      <ul className="max-h-[300px] space-y-1 overflow-y-auto py-1 px-2">
         {collaborators.map((collaborator) => (
           <li
             className="flex items-center space-x-2 text-sm font-semibold"

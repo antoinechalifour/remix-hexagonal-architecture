@@ -39,6 +39,10 @@ import { ResetPasswordBody } from "./dtos/ResetPassword";
 import { RegisterBody } from "./dtos/Register";
 import { ShareTodoListBody, ShareTodoListParams } from "./dtos/ShareTodoList";
 import { MapErrorReturning, MapErrorThrowing } from "./decorators/MapError";
+import {
+  UnshareTodoListBody,
+  UnshareTodoListParams,
+} from "./dtos/UnshareTodoList";
 
 @Injectable()
 export class Actions {
@@ -281,6 +285,21 @@ export class Actions {
     await this.todoListApplicationService.share(
       params.todoListId,
       body.email,
+      await this.authenticator.currentUser()
+    );
+
+    return null;
+  }
+
+  @Authenticated()
+  @DataFunction()
+  async unshareTodoList(
+    @Params() params: UnshareTodoListParams,
+    @Body() body: UnshareTodoListBody
+  ) {
+    await this.todoListApplicationService.unshare(
+      params.todoListId,
+      body.collaboratorId,
       await this.authenticator.currentUser()
     );
 
