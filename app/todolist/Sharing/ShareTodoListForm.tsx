@@ -1,10 +1,10 @@
 import type { FloatingLabelInputRef } from "front/ui/FloatingLabelInput";
 import React, { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
+import { UpdateIcon } from "@radix-ui/react-icons";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
+import { useTodoListInfo } from "front/todolist/state";
 import { ButtonPrimary } from "front/ui/Button";
-import { useCollaborators, useTodoListInfo } from "front/todolist/state";
-import { isEmpty } from "fp-ts/Array";
 
 type ErrorReponse = {
   error: true;
@@ -15,7 +15,7 @@ export const ShareTodoListForm = () => {
   const shareTodoListFetcher = useFetcher<ErrorReponse | null>();
   const inputRef = useRef<FloatingLabelInputRef | null>(null);
   const { id } = useTodoListInfo();
-  const collaborators = useCollaborators();
+  const isBusy = shareTodoListFetcher.state !== "idle";
 
   useEffect(() => {
     if (shareTodoListFetcher.type !== "done") return;
@@ -30,21 +30,6 @@ export const ShareTodoListForm = () => {
       method="post"
       className="space-y-4"
     >
-      {!isEmpty(collaborators) && (
-        <div className="mb-4">
-          <p>These people can collaborate on this todo list :</p>
-          <ul className="space-y-1 py-1 px-2">
-            {collaborators.map((collaborator) => (
-              <li className="text-sm font-semibold" key={collaborator.id}>
-                <span className="text-faded">•</span> {collaborator.email}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      <hr />
-
       <p className="pb-1">Add someone else</p>
 
       <FloatingLabelInput
@@ -55,8 +40,8 @@ export const ShareTodoListForm = () => {
         errorMessage={shareTodoListFetcher.data?.message}
       />
 
-      <ButtonPrimary type="submit" className="w-full">
-        Share
+      <ButtonPrimary type="submit" className="w-full" disabled={isBusy}>
+        {isBusy ? <UpdateIcon className="mx-auto animate-spin" /> : "Share"}
       </ButtonPrimary>
     </shareTodoListFetcher.Form>
   );

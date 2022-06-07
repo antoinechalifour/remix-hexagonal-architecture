@@ -3,7 +3,7 @@ import classNames from "classnames";
 import { colorFromString } from "front/palette";
 import { Tooltip } from "front/ui/Tooltip";
 
-export type CollaboratorPinProps = { children: string; label: string };
+export type CollaboratorPinProps = { children: string; label?: string };
 
 export const CollaboratorPin = ({ children, label }: CollaboratorPinProps) => (
   <Tooltip.Provider delayDuration={200}>
@@ -20,11 +20,14 @@ export const CollaboratorPin = ({ children, label }: CollaboratorPinProps) => (
           {children}
         </div>
       </Tooltip.Trigger>
-      <Tooltip.Content sideOffset={5}>
-        <Tooltip.Arrow />
 
-        {label}
-      </Tooltip.Content>
+      {label != null && (
+        <Tooltip.Content sideOffset={5}>
+          <Tooltip.Arrow />
+
+          {label}
+        </Tooltip.Content>
+      )}
     </Tooltip.Root>
   </Tooltip.Provider>
 );

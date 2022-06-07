@@ -2,12 +2,15 @@ import { TodoList, TodoListId } from "./TodoList";
 import { OwnerId } from "./OwnerId";
 import { CollaboratorId } from "./CollaboratorId";
 import { TodoListPermissionDeniedError } from "./TodoListPermissionDeniedError";
+import { Collaborator } from "./Collaborator";
 
 export type TodoListPermission = {
   todoListId: TodoListId;
   ownerId: OwnerId;
   collaboratorsIds: CollaboratorId[];
 };
+
+export type CollaboratorRole = "owner" | "collaborator";
 
 export const createPermissions = (
   todoList: TodoList,
@@ -66,3 +69,9 @@ export const canArchiveTodoList = verifyIsOwner;
 export const canEditTodoList = verifyIsCollaborator;
 export const canShareTodoList = verifyIsCollaborator;
 export const canView = verifyIsCollaborator;
+
+export const getCollaboratorRole = (
+  collaborator: Collaborator,
+  permission: TodoListPermission
+): CollaboratorRole =>
+  permission.ownerId === collaborator.id ? "owner" : "collaborator";
