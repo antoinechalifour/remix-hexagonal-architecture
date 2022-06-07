@@ -5,16 +5,11 @@ import { ShareButton } from "front/todolist/Sharing/ShareButton";
 import { useCollaborators } from "front/todolist/state";
 
 export type CollaboratorsProps = {
-  todoListId: string;
   canShare: boolean;
   className?: string;
 };
 
-export const Collaborators = ({
-  todoListId,
-  canShare,
-  className,
-}: CollaboratorsProps) => {
+export const Collaborators = ({ canShare, className }: CollaboratorsProps) => {
   const collaborators = useCollaborators();
 
   return (
@@ -29,7 +24,7 @@ export const Collaborators = ({
 
       {canShare && (
         <li>
-          <ShareButton todoListId={todoListId} />
+          <ShareButton />
         </li>
       )}
     </ul>
