@@ -1,8 +1,9 @@
 import type { TodoListCollaboratorDto } from "shared/client";
+import React from "react";
 import { useFetcher } from "@remix-run/react";
+import classNames from "classnames";
 import { useTodoListInfo } from "front/todolist/state";
 import { PlainButton } from "front/ui/Button";
-import React from "react";
 
 export const RevokeCollaborator = ({
   collaborator,
@@ -11,6 +12,7 @@ export const RevokeCollaborator = ({
 }) => {
   const revokeCollaboratorFetcher = useFetcher();
   const { id } = useTodoListInfo();
+  const isBusy = revokeCollaboratorFetcher.state !== "idle";
 
   const revoke = () => {
     const formData = new FormData();
@@ -24,10 +26,12 @@ export const RevokeCollaborator = ({
   return (
     <PlainButton
       onClick={revoke}
-      className="underline"
-      disabled={revokeCollaboratorFetcher.state !== "idle"}
+      className={classNames({
+        underline: !isBusy,
+      })}
+      disabled={isBusy}
     >
-      Revoke
+      {isBusy ? "Revoking..." : "Revoke"}
     </PlainButton>
   );
 };
