@@ -7,6 +7,7 @@ import {
   PasswordResetTokenExpiredError,
 } from "authentication";
 import {
+  CollaboratorNotFoundError,
   TodoApplicationService,
   TodoListApplicationService,
 } from "todo-list-manager";
@@ -37,7 +38,7 @@ import { ForgotPasswordBody } from "./dtos/ForgotPassword";
 import { ResetPasswordBody } from "./dtos/ResetPassword";
 import { RegisterBody } from "./dtos/Register";
 import { ShareTodoListBody, ShareTodoListParams } from "./dtos/ShareTodoList";
-import { MapErrorThrowing } from "./decorators/MapErrorThrowing";
+import { MapErrorReturning, MapErrorThrowing } from "./decorators/MapError";
 
 @Injectable()
 export class Actions {
@@ -272,6 +273,7 @@ export class Actions {
 
   @Authenticated()
   @DataFunction()
+  @MapErrorReturning([[CollaboratorNotFoundError, { status: 404 }]])
   async shareTodoList(
     @Params() params: ShareTodoListParams,
     @Body() body: ShareTodoListBody
