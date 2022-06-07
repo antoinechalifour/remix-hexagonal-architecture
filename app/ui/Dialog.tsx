@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import React from "react";
 import * as BaseDialog from "@radix-ui/react-dialog";
 import { Cross1Icon } from "@radix-ui/react-icons";
+import classNames from "classnames";
 
 type ContentProps = {
   title: string;
@@ -9,8 +10,13 @@ type ContentProps = {
 };
 const Content = ({ children, title }: ContentProps) => (
   <BaseDialog.Portal>
-    <BaseDialog.Overlay className="fixed inset-0 bg-darker/75" />
-    <BaseDialog.Content className="fixed top-40 left-1/2 w-11/12 max-w-md -translate-x-1/2  rounded bg-white p-4 text-inverse">
+    <BaseDialog.Overlay className="fixed inset-0 z-40 animate-enter bg-darker/50 backdrop-blur-sm" />
+    <BaseDialog.Content
+      className={classNames(
+        "fixed top-40 left-1/2 z-50 w-11/12 max-w-md -translate-x-1/2 ",
+        "animate-enter rounded bg-white p-4 text-inverse shadow"
+      )}
+    >
       <BaseDialog.Title className="mb-4 text-xl font-bold">
         {title}
       </BaseDialog.Title>

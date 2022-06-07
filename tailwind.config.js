@@ -36,9 +36,14 @@ module.exports = {
           "0%": { opacity: 0, transform: "scaleX(0.5)" },
           "100%": { opacity: 1, transform: "scaleX(1)" },
         },
+        enter: {
+          "0%": { opacity: 0 },
+          "100%": { opacity: 1 },
+        },
       },
       animation: {
         "scale-in": "scale-in 0.1s ease-in-out forwards",
+        enter: "enter 0.2s ease-in-out forwards",
       },
     },
   },
