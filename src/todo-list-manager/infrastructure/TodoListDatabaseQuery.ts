@@ -1,5 +1,5 @@
 import type { PrismaClient } from "@prisma/client";
-import type { TodoListDetailsDto, TodoListsSummaryDto } from "shared/client";
+import type { TodoListDetailsDto, TodoListSummaryDto } from "shared/client";
 import type { TodoListId } from "../domain/TodoList";
 import type { TodoListQuery } from "../domain/TodoListQuery";
 import { Prisma } from "@prisma/client";
@@ -45,22 +45,10 @@ export class TodoListDatabaseQuery implements TodoListQuery {
 
   async summaryOfTodoLists(
     todoListsIds: string[]
-  ): Promise<TodoListsSummaryDto> {
-    if (todoListsIds.length === 0)
-      return {
-        todoLists: [],
-        totalNumberOfDoingTodos: 0,
-      };
+  ): Promise<TodoListSummaryDto[]> {
+    if (todoListsIds.length === 0) return [];
 
-    const [totalNumberOfDoingTodos, todoLists] = await Promise.all([
-      this.fetchTotalNumberOfDoingTodos(todoListsIds),
-      this.fetchTodoLists(todoListsIds),
-    ]);
-
-    return {
-      totalNumberOfDoingTodos,
-      todoLists,
-    };
+    return this.fetchTodoLists(todoListsIds);
   }
 
   private fetchTodoList(todoListId: TodoListId) {
@@ -113,15 +101,5 @@ export class TodoListDatabaseQuery implements TodoListQuery {
       WHERE TL."id" IN (${Prisma.join(todoListsIds)})
       GROUP BY TL.id;
     `;
-  }
-
-  private fetchTotalNumberOfDoingTodos(todoListsIds: TodoListId[]) {
-    return this.prisma.$queryRaw<{ totalNumberOfDoingTodos: number }[]>`
-      SELECT count(*) as "totalNumberOfDoingTodos"
-      FROM "Todo" T
-      WHERE T."isDone" IS false AND T."todoListId" IN (${Prisma.join(
-        todoListsIds
-      )});
-    `.then((rows) => rows[0].totalNumberOfDoingTodos);
   }
 }

@@ -143,7 +143,7 @@ it("returns the summary of the given TodoLists (none given)", async () => {
   const summary = await query.summaryOfTodoLists([]);
 
   // Assert
-  expect(summary).toEqual({ todoLists: [], totalNumberOfDoingTodos: 0 });
+  expect(summary).toEqual([]);
 });
 
 it("returns the summary of the given TodoLists (multiple given)", async () => {
@@ -219,21 +219,18 @@ it("returns the summary of the given TodoLists (multiple given)", async () => {
   ]);
 
   // Assert
-  expect(summary).toEqual({
-    totalNumberOfDoingTodos: 3,
-    todoLists: [
-      {
-        createdAt: "2022-05-29T14:00:00+00:00",
-        id: "52421b1b-2cc6-4f91-9811-bb920084b1ba",
-        numberOfTodos: 2,
-        title: "Food",
-      },
-      {
-        createdAt: "2022-05-30T14:00:00+00:00",
-        id: "801c2b48-4f56-414e-8f40-8a7714a7d302",
-        numberOfTodos: 1,
-        title: "Things to fix",
-      },
-    ],
-  });
+  expect(summary).toEqual([
+    {
+      createdAt: "2022-05-29T14:00:00+00:00",
+      id: "52421b1b-2cc6-4f91-9811-bb920084b1ba",
+      numberOfTodos: 2,
+      title: "Food",
+    },
+    {
+      createdAt: "2022-05-30T14:00:00+00:00",
+      id: "801c2b48-4f56-414e-8f40-8a7714a7d302",
+      numberOfTodos: 1,
+      title: "Things to fix",
+    },
+  ]);
 });
