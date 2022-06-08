@@ -26,8 +26,14 @@ export class ViewHomePage {
     ]);
 
     return {
-      todoListsOwned,
-      todoListsContributed,
+      todoListsOwned: todoListsOwned.map((todoList) => ({
+        ...todoList,
+        permissions: { archive: true, leave: false },
+      })),
+      todoListsContributed: todoListsContributed.map((todoList) => ({
+        ...todoList,
+        permissions: { archive: false, leave: true },
+      })),
       totalNumberOfDoingTodos: this.totalNumberOfDoingTodos([
         ...todoListsOwned,
         ...todoListsContributed,

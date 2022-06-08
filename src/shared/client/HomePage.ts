@@ -5,8 +5,18 @@ export interface TodoListSummaryDto {
   numberOfTodos: number;
 }
 
+export interface TodoListPermissionDto {
+  permissions: {
+    archive: boolean;
+    leave: boolean;
+  };
+}
+
+export type TodoListSummaryWithPermissionDto = TodoListSummaryDto &
+  TodoListPermissionDto;
+
 export interface HomePageDto {
   totalNumberOfDoingTodos: number;
-  todoListsOwned: TodoListSummaryDto[];
-  todoListsContributed: TodoListSummaryDto[];
+  todoListsOwned: TodoListSummaryWithPermissionDto[];
+  todoListsContributed: TodoListSummaryWithPermissionDto[];
 }
