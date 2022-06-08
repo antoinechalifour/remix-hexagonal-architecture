@@ -5,7 +5,8 @@ export interface TodoListSummaryDto {
   numberOfTodos: number;
 }
 
-export interface TodoListsSummaryDto {
+export interface HomePageDto {
   totalNumberOfDoingTodos: number;
-  todoLists: TodoListSummaryDto[];
+  todoListsOwned: TodoListSummaryDto[];
+  todoListsContributed: TodoListSummaryDto[];
 }

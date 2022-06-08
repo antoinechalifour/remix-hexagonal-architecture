@@ -84,3 +84,6 @@ export const getRole = (
   contributor: Contributor,
   permission: TodoListPermission
 ): Role => (permission.ownerId === contributor.id ? "owner" : "contributor");
+
+export const getTodoListId = (permission: TodoListPermission) =>
+  permission.todoListId;

@@ -1,53 +1,72 @@
-import { TodoListsSummaryDto } from "shared/client";
 import { ViewHomePage } from "../../usecase/ViewHomePage";
-import { TodoListQuery } from "../../domain/TodoListQuery";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
-import { aTodoListPermission } from "./builders/TodoListPermission";
+import {
+  aTodoListPermission,
+  TodoListPermissionBuilder,
+} from "./builders/TodoListPermission";
+import { TodoListQueryInMemory } from "./fakes/TodoListQueryInMemory";
 
-describe("Viewing the home page", () => {
-  let todoListPermissions: TodoListPermissionsInMemory;
-  let todoListQuery: TodoListQuery;
-  let viewHomePage: ViewHomePage;
+let todoListPermissions: TodoListPermissionsInMemory;
+let todoListQuery: TodoListQueryInMemory;
+let viewHomePage: ViewHomePage;
 
-  beforeEach(() => {
-    todoListPermissions = new TodoListPermissionsInMemory();
-    todoListQuery = {
-      detailsOfTodoList: jest.fn(),
-      summaryOfTodoLists: jest.fn(),
-    };
-    viewHomePage = new ViewHomePage(todoListPermissions, todoListQuery);
-  });
+beforeEach(() => {
+  todoListPermissions = new TodoListPermissionsInMemory();
+  todoListQuery = new TodoListQueryInMemory();
+  viewHomePage = new ViewHomePage(todoListPermissions, todoListQuery);
+});
 
-  it("shows only todolists viewable by the contributor", async () => {
-    // Act
-    const summary: TodoListsSummaryDto = {
-      todoLists: [
-        {
-          id: "todoList/1",
-          title: "grossiries",
-          createdAt: "2022-05-30T14:00:00+00:00",
-          numberOfTodos: 1,
-        },
-      ],
-      totalNumberOfDoingTodos: 0,
-    };
-    (todoListQuery.summaryOfTodoLists as jest.Mock).mockResolvedValue(summary);
-    const theContributorId = "contributor/1";
-    const theAuthorizedTodoList = "todoList/1";
-    await todoListPermissions.save(
+it("shows only todolists viewable by the contributor", async () => {
+  // Act
+  await Promise.all([
+    givenPermission(
+      aTodoListPermission().forTodoList("todoList/1").forOwner("contributor/1")
+    ),
+    givenPermission(
       aTodoListPermission()
-        .forOwner(theContributorId)
-        .forTodoList(theAuthorizedTodoList)
-        .build()
-    );
+        .forTodoList("todoList/2")
+        .withContributors("contributor/1")
+    ),
+  ]);
+  todoListQuery.withTodoListSummary(
+    {
+      id: "todoList/1",
+      title: "Things to buy",
+      createdAt: "2022-05-30T14:00:00+00:00",
+      numberOfTodos: 1,
+    },
+    {
+      id: "todoList/2",
+      title: "Things to fix",
+      createdAt: "2022-06-01T14:00:00+00:00",
+      numberOfTodos: 2,
+    }
+  );
+  // Act
+  const todoListsSummary = await viewHomePage.execute("contributor/1");
 
-    // Act
-    const todoListsSummary = await viewHomePage.execute(theContributorId);
-
-    // Assert
-    expect(todoListQuery.summaryOfTodoLists).toHaveBeenCalledWith([
-      theAuthorizedTodoList,
-    ]);
-    expect(todoListsSummary).toEqual(summary);
+  // Assert
+  expect(todoListsSummary).toEqual({
+    totalNumberOfDoingTodos: 3,
+    todoListsOwned: [
+      {
+        createdAt: "2022-05-30T14:00:00+00:00",
+        id: "todoList/1",
+        numberOfTodos: 1,
+        title: "Things to buy",
+      },
+    ],
+    todoListsContributed: [
+      {
+        createdAt: "2022-06-01T14:00:00+00:00",
+        id: "todoList/2",
+        numberOfTodos: 2,
+        title: "Things to fix",
+      },
+    ],
   });
 });
+
+function givenPermission(permission: TodoListPermissionBuilder) {
+  return todoListPermissions.save(permission.build());
+}

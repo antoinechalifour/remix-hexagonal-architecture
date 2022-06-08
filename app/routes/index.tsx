@@ -3,22 +3,20 @@ import type {
   LoaderFunction,
   MetaFunction,
 } from "@remix-run/node";
-import type { TodoListsSummaryDto } from "shared/client";
+import type { HomePageDto } from "shared/client";
 import type { RemixAppContext } from "web";
 
-import { TodoLists } from "front/homepage/TodoLists";
+import { HomePage } from "front/homepage/HomePage";
 
 export const meta: MetaFunction = ({ data: homePage }) => ({
   title: `Todos | Your todo lists (${homePage.totalNumberOfDoingTodos})`,
   description: "Welcome to Todo List Manager!",
 });
 
-export const loader: LoaderFunction = async (
-  args
-): Promise<TodoListsSummaryDto> =>
+export const loader: LoaderFunction = async (args): Promise<HomePageDto> =>
   (args.context as RemixAppContext).loaders.homePage(args);
 
 export const action: ActionFunction = async (args) =>
   (args.context as RemixAppContext).actions.createTodoList(args);
 
-export default TodoLists;
+export default HomePage;
