@@ -54,6 +54,10 @@ it("shows only todolists viewable by the contributor", async () => {
         id: "todoList/1",
         numberOfTodos: 1,
         title: "Things to buy",
+        permissions: {
+          archive: true,
+          leave: false,
+        },
       },
     ],
     todoListsContributed: [
@@ -62,6 +66,10 @@ it("shows only todolists viewable by the contributor", async () => {
         id: "todoList/2",
         numberOfTodos: 2,
         title: "Things to fix",
+        permissions: {
+          archive: false,
+          leave: true,
+        },
       },
     ],
   });

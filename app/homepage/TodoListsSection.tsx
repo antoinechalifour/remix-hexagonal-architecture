@@ -1,4 +1,4 @@
-import type { TodoListSummaryDto } from "shared/client";
+import type { TodoListSummaryWithPermissionDto } from "shared/client";
 import React from "react";
 import { isEmpty } from "fp-ts/Array";
 import { EmptyMessage } from "front/ui/EmptyMessage";
@@ -7,7 +7,7 @@ import { TodoListItem } from "front/homepage/TodoListItem";
 export type TodoListsSectionProps = {
   title: string;
   emptyMessage: string;
-  todoLists: TodoListSummaryDto[];
+  todoLists: TodoListSummaryWithPermissionDto[];
 };
 export const TodoListsSection = ({
   title,
