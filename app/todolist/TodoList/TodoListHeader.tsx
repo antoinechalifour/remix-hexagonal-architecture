@@ -1,7 +1,7 @@
 import React from "react";
 import { displayDate } from "front/Date";
 import { AddTodoForm } from "front/todolist/TodoList/AddTodoForm";
-import { CollaboratorPinsMenu } from "front/todolist/Sharing/CollaboratorPinsMenu";
+import { ContributorPinsMenu } from "front/todolist/Sharing/ContributorPinsMenu";
 import { TodoListEditableTitle } from "front/todolist/TodoList/TodoListEditableTitle";
 import { TodoListCompletion } from "front/todolist/TodoList/TodoListCompletion";
 import { useTodoListInfo } from "front/todolist/state";
@@ -13,7 +13,7 @@ export const TodoListHeader = () => {
     <div>
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:space-x-4">
         <TodoListEditableTitle />
-        <CollaboratorPinsMenu className="mt-2 sm:mt-0" canShare={isOwner} />
+        <ContributorPinsMenu className="mt-2 sm:mt-0" canShare={isOwner} />
       </div>
 
       <TodoListCompletion className="my-4" />

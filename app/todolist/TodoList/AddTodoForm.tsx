@@ -27,7 +27,7 @@ export const AddTodoForm = () => {
         inputProps={{ maxLength: 50 }}
       />
 
-      <ButtonPrimary type="submit" disabled={addTodo.state === "submitting"}>
+      <ButtonPrimary type="submit" disabled={addTodo.state !== "idle"}>
         Add
       </ButtonPrimary>
     </addTodo.Form>

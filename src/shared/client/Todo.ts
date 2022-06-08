@@ -1,7 +1,7 @@
-export interface CompletedTodoDto {
+export interface DoneTodos {
   id: string;
   title: string;
-  isComplete: true;
+  isDone: true;
   createdAt: string;
   tags: string[];
 }
@@ -9,12 +9,12 @@ export interface CompletedTodoDto {
 export interface DoingTodoDto {
   id: string;
   title: string;
-  isComplete: false;
+  isDone: false;
   createdAt: string;
   tags: string[];
 }
 
-export type TodoDto = CompletedTodoDto | DoingTodoDto;
+export type TodoDto = DoneTodos | DoingTodoDto;
 
 export interface AddTodoErrorDto {
   todoTitle?: string;

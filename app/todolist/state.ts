@@ -1,19 +1,25 @@
 import type {
   DoingTodoDto,
-  CompletedTodoDto,
+  DoneTodos,
   TodoListPageDto,
-  TodoListCollaboratorDto,
+  TodoListContributorDto,
 } from "shared/client";
 import type { MutableSnapshot } from "recoil";
 import type { TodoDto } from "shared/client";
 import { useCallback, useEffect } from "react";
 import { useLoaderData, useNavigate } from "@remix-run/react";
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
+import {
+  atom,
+  selector,
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState,
+} from "recoil";
 
 const RECOIL_KEYS = {
   tagFilterState: "tagFilterState",
   filterActiveState: "filterActiveState",
-  collaboratorsState: "collaboratorsState",
+  contributorsState: "contributorsState",
   todoListInfoState: "todoListInfoState",
   doingTodosState: "doingTodosState",
   doingTodosLabelState: "doingTodosLabelState",
@@ -33,8 +39,8 @@ const filterActiveState = selector({
   get: ({ get }) => get(tagFilterState).length > 0,
 });
 
-const collaboratorsState = atom<TodoListCollaboratorDto[]>({
-  key: RECOIL_KEYS.collaboratorsState,
+const contributorsState = atom<TodoListContributorDto[]>({
+  key: RECOIL_KEYS.contributorsState,
   default: [],
 });
 
@@ -55,7 +61,7 @@ const doingTodosState = atom<DoingTodoDto[]>({
   default: [],
 });
 
-const completedTodosState = atom<CompletedTodoDto[]>({
+const completedTodosState = atom<DoneTodos[]>({
   key: RECOIL_KEYS.completedTodosState,
   default: [],
 });
@@ -120,7 +126,7 @@ const completedTodosLabelState = selector({
 export function makeInitialState({
   todoList,
   completion,
-  collaborators,
+  contributors,
   isOwner,
 }: TodoListPageDto) {
   return ({ set }: MutableSnapshot) => {
@@ -133,8 +139,8 @@ export function makeInitialState({
       isOwner,
     });
     set(doingTodosState, todoList.doingTodos);
-    set(completedTodosState, todoList.completedTodos);
-    set(collaboratorsState, collaborators);
+    set(completedTodosState, todoList.doneTodos);
+    set(contributorsState, contributors);
   };
 }
 
@@ -158,10 +164,10 @@ export function useFilter() {
   };
 }
 
-export function useCollaborators() {
-  const [collaborators] = useRecoilState(collaboratorsState);
+export function useContributors() {
+  const [contributors] = useRecoilState(contributorsState);
 
-  return collaborators;
+  return contributors;
 }
 
 export function useTodoListInfo() {
@@ -174,10 +180,10 @@ export function useSyncLoaderData() {
   const loaderData = useLoaderData<TodoListPageDto>();
   const navigate = useNavigate();
 
-  const [, setTodoListInfo] = useRecoilState(todoListInfoState);
-  const [, setDoingTodos] = useRecoilState(doingTodosState);
-  const [, setCompletedTodos] = useRecoilState(completedTodosState);
-  const [, setCollaborators] = useRecoilState(collaboratorsState);
+  const setTodoListInfo = useSetRecoilState(todoListInfoState);
+  const setDoingTodos = useSetRecoilState(doingTodosState);
+  const setCompletedTodos = useSetRecoilState(completedTodosState);
+  const setContributors = useSetRecoilState(contributorsState);
 
   useEffect(() => {
     const source = new EventSource(`/events/l/${loaderData.todoList.id}`);
@@ -197,11 +203,11 @@ export function useSyncLoaderData() {
       isOwner: loaderData.isOwner,
     });
     setDoingTodos(loaderData.todoList.doingTodos);
-    setCompletedTodos(loaderData.todoList.completedTodos);
-    setCollaborators(loaderData.collaborators);
+    setCompletedTodos(loaderData.todoList.doneTodos);
+    setContributors(loaderData.contributors);
   }, [
     loaderData,
-    setCollaborators,
+    setContributors,
     setCompletedTodos,
     setDoingTodos,
     setTodoListInfo,

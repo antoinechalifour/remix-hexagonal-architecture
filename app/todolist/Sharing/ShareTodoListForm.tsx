@@ -12,21 +12,21 @@ type ErrorReponse = {
 };
 
 export const ShareTodoListForm = () => {
-  const shareTodoListFetcher = useFetcher<ErrorReponse | null>();
+  const grantAccessFetcher = useFetcher<ErrorReponse | null>();
   const inputRef = useRef<FloatingLabelInputRef | null>(null);
   const { id } = useTodoListInfo();
-  const isBusy = shareTodoListFetcher.state !== "idle";
+  const isBusy = grantAccessFetcher.state !== "idle";
 
   useEffect(() => {
-    if (shareTodoListFetcher.type !== "done") return;
-    if (shareTodoListFetcher.data?.error) return;
+    if (grantAccessFetcher.type !== "done") return;
+    if (grantAccessFetcher.data?.error) return;
 
     inputRef.current?.clear();
-  }, [shareTodoListFetcher, shareTodoListFetcher.type]);
+  }, [grantAccessFetcher, grantAccessFetcher.type]);
 
   return (
-    <shareTodoListFetcher.Form
-      action={`/l/${id}/share`}
+    <grantAccessFetcher.Form
+      action={`/l/${id}/grant-access`}
       method="post"
       className="space-y-4"
     >
@@ -34,15 +34,15 @@ export const ShareTodoListForm = () => {
 
       <FloatingLabelInput
         name="email"
-        label="Collaborator email"
+        label="Contributor email"
         ref={inputRef}
         inputProps={{ type: "email", className: "text-inverse" }}
-        errorMessage={shareTodoListFetcher.data?.message}
+        errorMessage={grantAccessFetcher.data?.message}
       />
 
       <ButtonPrimary type="submit" className="w-full" disabled={isBusy}>
         {isBusy ? <UpdateIcon className="mx-auto animate-spin" /> : "Share"}
       </ButtonPrimary>
-    </shareTodoListFetcher.Form>
+    </grantAccessFetcher.Form>
   );
 };

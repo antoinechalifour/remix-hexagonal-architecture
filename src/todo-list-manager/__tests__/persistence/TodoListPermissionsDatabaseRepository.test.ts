@@ -1,8 +1,8 @@
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { PrismaClient } from "@prisma/client";
 import { TodoListPermissionsDatabaseRepository } from "todo-list-manager";
-import { shareWithCollaborator } from "../../domain/TodoListPermission";
-import { aTodoListPermission } from "../domain/builders/TodoListPermission";
+import { grantAccess } from "../../domain/TodoListPermission";
+import { aTodoListPermission } from "../usecase/builders/TodoListPermission";
 import {
   configureTestingDatabaseEnvironment,
   prepareDatabase,
@@ -27,7 +27,7 @@ it("persists and retrieves todo list permissions", async () => {
   const todoListPermission = aTodoListPermission()
     .forTodoList(theTodoListId)
     .forOwner(theOwnerId)
-    .withCollaboratorsAuthorized(
+    .withContributors(
       "b3bb9c18-1d45-4590-9f2e-870c9deebe06",
       "b53fe547-437c-4fed-8824-797bfe0305c6"
     )
@@ -41,19 +41,16 @@ it("persists and retrieves todo list permissions", async () => {
   );
 
   // By owner
-  expect(await todoListPermissions.ofCollaborator(theOwnerId)).toEqual([
+  expect(await todoListPermissions.ofContributor(theOwnerId)).toEqual([
     todoListPermission,
   ]);
 
-  // Update, by collaborator
-  const newCollaboratorId = "03c02ef9-d429-4d5a-bde7-6cc0da1d0912";
-  const newPermissions = shareWithCollaborator(
-    todoListPermission,
-    newCollaboratorId
-  );
+  // Update, by contributor
+  const newContributorId = "03c02ef9-d429-4d5a-bde7-6cc0da1d0912";
+  const newPermissions = grantAccess(todoListPermission, newContributorId);
   await todoListPermissions.save(newPermissions);
 
-  expect(await todoListPermissions.ofCollaborator(newCollaboratorId)).toEqual([
+  expect(await todoListPermissions.ofContributor(newContributorId)).toEqual([
     newPermissions,
   ]);
 });

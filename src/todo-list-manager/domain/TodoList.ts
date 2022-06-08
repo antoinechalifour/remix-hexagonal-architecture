@@ -1,7 +1,6 @@
 import type { GenerateId } from "shared/id";
 import type { Clock } from "shared/time";
 import type { Todo, TodoId } from "./Todo";
-
 import { moveArrayItem } from "shared/lib";
 
 export type TodoListId = string;
@@ -13,7 +12,7 @@ export type TodoList = {
   todosOrder: TodoId[];
 };
 
-export const makeTodoList = (
+export const createTotoList = (
   title: string,
   generateId: GenerateId,
   clock: Clock
@@ -39,8 +38,8 @@ export const addTodo = (
     id: newTodoId,
     createdAt: clock.now(),
     title,
-    isComplete: false,
-    completedAt: null,
+    isDone: false,
+    doneAt: null,
     todoListId: todoList.id,
     tags: [],
   };
@@ -48,17 +47,15 @@ export const addTodo = (
   return [updatedTodoList, createdTodo];
 };
 
-export const removeTodoOrder = (
+export const removeTodoFromOrder = (
   todoList: TodoList,
-  todoToRemoveFromOrder: TodoId
+  todoToRemoveId: TodoId
 ): TodoList => ({
   ...todoList,
-  todosOrder: todoList.todosOrder.filter(
-    (todoId) => todoId !== todoToRemoveFromOrder
-  ),
+  todosOrder: todoList.todosOrder.filter((todoId) => todoId !== todoToRemoveId),
 });
 
-export const reorderTodoList = (
+export const reorderTodoInTodoList = (
   todoList: TodoList,
   todoToReorderId: TodoId,
   newIndex: number
@@ -80,15 +77,15 @@ export const reorderTodoList = (
   };
 };
 
-export const orderAsFirstTodo = (
+export const insertTodoToFirstPlace = (
   todoList: TodoList,
-  todoToOrderFirst: TodoId
+  todoToInsertId: TodoId
 ): TodoList => ({
   ...todoList,
-  todosOrder: [todoToOrderFirst, ...todoList.todosOrder],
+  todosOrder: [todoToInsertId, ...todoList.todosOrder],
 });
 
-export const renameTodoList = (todoList: TodoList, title: string) => ({
+export const updateTodoListTitle = (todoList: TodoList, newTitle: string) => ({
   ...todoList,
-  title,
+  title: newTitle,
 });

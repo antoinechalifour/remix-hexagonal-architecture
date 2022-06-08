@@ -15,9 +15,9 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
     return {
       id: row.id,
       title: row.title,
-      isComplete: row.isComplete,
+      isDone: row.isDone,
       createdAt: row.createdAt,
-      completedAt: row.completedAt,
+      doneAt: row.doneAt,
       todoListId: row.todoListId,
       tags: row.tags as string[],
     };
@@ -31,8 +31,8 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
     return todos.map((row) => ({
       id: row.id,
       title: row.title,
-      isComplete: row.isComplete,
-      completedAt: null,
+      isDone: row.isDone,
+      doneAt: row.doneAt,
       createdAt: row.createdAt,
       todoListId,
       tags: row.tags as string[],
@@ -43,16 +43,16 @@ export class TodoDatabaseRepository extends PrismaRepository implements Todos {
     await this.prisma.todo.upsert({
       where: { id: todo.id },
       update: {
-        isComplete: todo.isComplete,
-        completedAt: todo.completedAt,
+        isDone: todo.isDone,
+        doneAt: todo.doneAt,
         title: todo.title,
         tags: todo.tags,
       },
       create: {
         id: todo.id,
         title: todo.title,
-        isComplete: todo.isComplete,
-        completedAt: todo.completedAt,
+        isDone: todo.isDone,
+        doneAt: todo.doneAt,
         createdAt: new Date(todo.createdAt),
         todoListId: todo.todoListId,
         tags: todo.tags,

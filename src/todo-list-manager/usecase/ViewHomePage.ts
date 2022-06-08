@@ -1,4 +1,4 @@
-import type { CollaboratorId } from "../domain/CollaboratorId";
+import type { ContributorId } from "../domain/ContributorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListQuery } from "../domain/TodoListQuery";
 
@@ -8,9 +8,9 @@ export class ViewHomePage {
     private readonly todoListQuery: TodoListQuery
   ) {}
 
-  async execute(collaboratorId: CollaboratorId) {
-    const permissions = await this.todoListPermissions.ofCollaborator(
-      collaboratorId
+  async execute(contributorId: ContributorId) {
+    const permissions = await this.todoListPermissions.ofContributor(
+      contributorId
     );
 
     return this.todoListQuery.summaryOfTodoLists(

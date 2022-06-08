@@ -7,18 +7,18 @@ import { Prisma } from "shared/database";
 import { PRISMA } from "../../keys";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
 import { TodoListShared } from "../domain/TodoListShared";
-import { AddTodoList } from "../usecase/AddTodoList";
+import { CreateTodoList } from "../usecase/CreateTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
-import { ReorderTodos } from "../usecase/ReorderTodos";
-import { RenameTodoList } from "../usecase/RenameTodoList";
-import { ShareTodoList } from "../usecase/ShareTodoList";
+import { ReorderTodo } from "../usecase/ReorderTodo";
+import { UpdateTodoListTitle } from "../usecase/UpdateTodoListTitle";
+import { GrantAccess } from "../usecase/GrantAccess";
 import { ViewHomePage } from "../usecase/ViewHomePage";
 import { ViewTodoList } from "../usecase/ViewTodoList";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
-import { CollaboratorsAdapter } from "../infrastructure/CollaboratorsAdapter";
+import { ContributorsAdapter } from "../infrastructure/ContributorsAdapter";
 import { TodoListDatabaseQuery } from "../infrastructure/TodoListDatabaseQuery";
-import { UnshareTodoList } from "../usecase/UnshareTodoList";
+import { RevokeAccess } from "../usecase/RevokeAccess";
 
 @Injectable()
 export class TodoListApplicationService {
@@ -27,15 +27,15 @@ export class TodoListApplicationService {
     private readonly todoLists: TodoListDatabaseRepository,
     private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
     private readonly todoListQuery: TodoListDatabaseQuery,
-    private readonly collaborators: CollaboratorsAdapter,
+    private readonly contributors: ContributorsAdapter,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
     private readonly events: NestEvents
   ) {}
 
-  add(title: string, currentUser: CurrentUser) {
+  createTodoList(title: string, currentUser: CurrentUser) {
     return this.prisma.$transaction((prisma) =>
-      new AddTodoList(
+      new CreateTodoList(
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         this.generateId,
@@ -53,29 +53,28 @@ export class TodoListApplicationService {
     );
   }
 
-  async rename(
+  async updateTodoListTitle(
     todoListId: string,
     todoListTitle: string,
     currentUser: CurrentUser
   ) {
-    await new RenameTodoList(this.todoLists, this.todoListPermissions).execute(
-      todoListId,
-      todoListTitle,
-      currentUser.id
-    );
+    await new UpdateTodoListTitle(
+      this.todoLists,
+      this.todoListPermissions
+    ).execute(todoListId, todoListTitle, currentUser.id);
 
     this.events.publish(
       new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
-  async reorder(
+  async reorderTodo(
     todoListId: string,
     currentUser: CurrentUser,
     todoId: string,
     newIndex: number
   ) {
-    await new ReorderTodos(this.todoLists, this.todoListPermissions).execute(
+    await new ReorderTodo(this.todoLists, this.todoListPermissions).execute(
       todoListId,
       currentUser.id,
       todoId,
@@ -87,43 +86,44 @@ export class TodoListApplicationService {
     );
   }
 
-  async share(
+  async grantAccess(
     todoListId: string,
-    collaboratorEmail: string,
+    contributorEmail: string,
     currentUser: CurrentUser
   ) {
-    await new ShareTodoList(
-      this.todoListPermissions,
-      this.collaborators
-    ).execute(todoListId, currentUser.id, collaboratorEmail);
-
-    this.events.publish(new TodoListShared(todoListId, collaboratorEmail));
-  }
-
-  async unshare(
-    todoListId: string,
-    collaboratorId: string,
-    currentUser: CurrentUser
-  ) {
-    await new UnshareTodoList(this.todoListPermissions).execute(
+    await new GrantAccess(this.todoListPermissions, this.contributors).execute(
       todoListId,
       currentUser.id,
-      collaboratorId
+      contributorEmail
+    );
+
+    this.events.publish(new TodoListShared(todoListId, contributorEmail));
+  }
+
+  async revokeAccess(
+    todoListId: string,
+    contributorId: string,
+    currentUser: CurrentUser
+  ) {
+    await new RevokeAccess(this.todoListPermissions).execute(
+      todoListId,
+      currentUser.id,
+      contributorId
     );
   }
 
-  viewHomePage(collaboratorId: string) {
+  viewHomePage(contributorId: string) {
     return new ViewHomePage(
       this.todoListPermissions,
       this.todoListQuery
-    ).execute(collaboratorId);
+    ).execute(contributorId);
   }
 
-  viewTodoList(todoListId: string, collaboratorId: string) {
+  viewTodoList(todoListId: string, contributorId: string) {
     return new ViewTodoList(
       this.todoListPermissions,
-      this.collaborators,
+      this.contributors,
       this.todoListQuery
-    ).execute(todoListId, collaboratorId);
+    ).execute(todoListId, contributorId);
   }
 }

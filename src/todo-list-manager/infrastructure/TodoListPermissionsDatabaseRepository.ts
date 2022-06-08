@@ -1,6 +1,6 @@
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListId } from "../domain/TodoList";
-import type { CollaboratorId } from "../domain/CollaboratorId";
+import type { ContributorId } from "../domain/ContributorId";
 import type { TodoListPermission } from "../domain/TodoListPermission";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
@@ -21,20 +21,20 @@ export class TodoListPermissionsDatabaseRepository
     return {
       todoListId: row.todoListId,
       ownerId: row.ownerId,
-      collaboratorsIds: row.collaboratorsIds as string[],
+      contributorsIds: row.contributorsIds as string[],
     };
   }
 
-  async ofCollaborator(
-    collaboratorId: CollaboratorId
+  async ofContributor(
+    contributorId: ContributorId
   ): Promise<TodoListPermission[]> {
     const rows = await this.prisma.todoListPermission.findMany({
       where: {
         OR: [
-          { ownerId: collaboratorId },
+          { ownerId: contributorId },
           {
-            collaboratorsIds: {
-              array_contains: [collaboratorId],
+            contributorsIds: {
+              array_contains: [contributorId],
             },
           },
         ],
@@ -44,7 +44,7 @@ export class TodoListPermissionsDatabaseRepository
     return rows.map((row) => ({
       todoListId: row.todoListId,
       ownerId: row.ownerId,
-      collaboratorsIds: row.collaboratorsIds as string[],
+      contributorsIds: row.contributorsIds as string[],
     }));
   }
 
@@ -54,9 +54,9 @@ export class TodoListPermissionsDatabaseRepository
       create: {
         todoListId: todoListPermission.todoListId,
         ownerId: todoListPermission.ownerId,
-        collaboratorsIds: todoListPermission.collaboratorsIds,
+        contributorsIds: todoListPermission.contributorsIds,
       },
-      update: { collaboratorsIds: todoListPermission.collaboratorsIds },
+      update: { contributorsIds: todoListPermission.contributorsIds },
     });
   }
 

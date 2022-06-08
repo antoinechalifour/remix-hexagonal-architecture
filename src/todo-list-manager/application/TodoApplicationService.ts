@@ -5,15 +5,15 @@ import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
 import { GenerateUUID } from "shared/id";
 import { PRISMA } from "../../keys";
-import { AddTodo } from "../usecase/AddTodo";
-import { ChangeTodoCompletion } from "../usecase/ChangeTodoCompletion";
-import { ArchiveTodo } from "../usecase/ArchiveTodo";
+import { AddTodoToTodoList } from "../usecase/AddTodoToTodoList";
+import { MarkTodo } from "../usecase/MarkTodo";
+import { DeleteTodoFromTodoList } from "../usecase/DeleteTodoFromTodoList";
 import { TodoListDatabaseRepository } from "../infrastructure/TodoListDatabaseRepository";
 import { TodoDatabaseRepository } from "../infrastructure/TodoDatabaseRepository";
 import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoListPermissionsDatabaseRepository";
-import { RenameTodo } from "../usecase/RenameTodo";
-import { TagTodo } from "../usecase/TagTodo";
-import { UntagTodo } from "../usecase/UntagTodo";
+import { UpdateTodoTitle } from "../usecase/UpdateTodoTitle";
+import { AddTagToTodo } from "../usecase/AddTagToTodo";
+import { RemoveTagFromTodo } from "../usecase/RemoveTagFromTodo";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
 
 @Injectable()
@@ -27,9 +27,13 @@ export class TodoApplicationService {
     private readonly events: NestEvents
   ) {}
 
-  async add(todoListId: string, title: string, currentUser: CurrentUser) {
+  async addTodoToTodoList(
+    todoListId: string,
+    title: string,
+    currentUser: CurrentUser
+  ) {
     await this.prisma.$transaction((prisma) =>
-      new AddTodo(
+      new AddTodoToTodoList(
         new TodoDatabaseRepository(prisma),
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
@@ -43,9 +47,13 @@ export class TodoApplicationService {
     );
   }
 
-  async archive(todoListId: string, todoId: string, currentUser: CurrentUser) {
+  async deleteFromTodoList(
+    todoListId: string,
+    todoId: string,
+    currentUser: CurrentUser
+  ) {
     await this.prisma.$transaction((prisma) =>
-      new ArchiveTodo(
+      new DeleteTodoFromTodoList(
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma)
@@ -57,19 +65,19 @@ export class TodoApplicationService {
     );
   }
 
-  async changeTodoCompletion(
+  async markTodo(
     todoListId: string,
     todoId: string,
-    isChecked: string,
+    isDone: string,
     currentUser: CurrentUser
   ) {
     await this.prisma.$transaction((prisma) =>
-      new ChangeTodoCompletion(
+      new MarkTodo(
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma),
         this.clock
-      ).execute(todoListId, todoId, isChecked, currentUser.id)
+      ).execute(todoListId, todoId, isDone === "on", currentUser.id)
     );
 
     this.events.publish(
@@ -77,13 +85,13 @@ export class TodoApplicationService {
     );
   }
 
-  async renameTodo(
+  async updateTodoTitle(
     todoListId: string,
     todoId: string,
     title: string,
     currentUser: CurrentUser
   ) {
-    await new RenameTodo(this.todos, this.todoListPermissions).execute(
+    await new UpdateTodoTitle(this.todos, this.todoListPermissions).execute(
       todoListId,
       todoId,
       title,
@@ -95,13 +103,13 @@ export class TodoApplicationService {
     );
   }
 
-  async tagTogo(
+  async addTagToTodo(
     todoListId: string,
     todoId: string,
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new TagTodo(this.todos, this.todoListPermissions).execute(
+    await new AddTagToTodo(this.todos, this.todoListPermissions).execute(
       todoListId,
       todoId,
       currentUser.id,
@@ -113,13 +121,13 @@ export class TodoApplicationService {
     );
   }
 
-  async untagTogo(
+  async removeTagFromTodo(
     todoListId: string,
     todoId: string,
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new UntagTodo(this.todos, this.todoListPermissions).execute(
+    await new RemoveTagFromTodo(this.todos, this.todoListPermissions).execute(
       todoListId,
       todoId,
       currentUser.id,

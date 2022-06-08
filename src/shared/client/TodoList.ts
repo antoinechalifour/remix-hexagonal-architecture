@@ -1,26 +1,26 @@
-import type { CompletedTodoDto, DoingTodoDto } from "./Todo";
+import type { DoneTodos, DoingTodoDto } from "./Todo";
 
 export interface TodoListDetailsDto {
   id: string;
   title: string;
   createdAt: string;
-  doingTodos: Array<DoingTodoDto>;
-  completedTodos: Array<CompletedTodoDto>;
+  doingTodos: DoingTodoDto[];
+  doneTodos: DoneTodos[];
   tags: string[];
 }
 
-export interface TodoListCollaboratorDto {
+export interface TodoListContributorDto {
   id: string;
   email: string;
   shortName: string;
-  role: "owner" | "collaborator";
+  role: "owner" | "contributor";
 }
 
 export interface TodoListPageDto {
   isOwner: boolean;
   todoList: TodoListDetailsDto;
   completion: number;
-  collaborators: TodoListCollaboratorDto[];
+  contributors: TodoListContributorDto[];
 }
 
 export interface AddTodoListErrorDto {

@@ -6,40 +6,42 @@ export type TodoId = string;
 export type Todo = {
   id: TodoId;
   title: string;
-  isComplete: boolean;
+  isDone: boolean;
   createdAt: Date;
-  completedAt: Date | null;
+  doneAt: Date | null;
   todoListId: TodoListId;
   tags: string[];
 };
 
-export const updateCompletion = (
-  todo: Todo,
-  isComplete: boolean,
-  clock: Clock
-): Todo => ({
+export const markAsDoing = (todo: Todo): Todo => ({
   ...todo,
-  isComplete,
-  completedAt: isComplete ? clock.now() : null,
+  isDone: false,
+  doneAt: null,
 });
 
-export const renameTodo = (todo: Todo, title: string): Todo => ({
+export const markAsDone = (todo: Todo, clock: Clock): Todo => ({
   ...todo,
-  title,
+  isDone: true,
+  doneAt: clock.now(),
 });
 
-export const tagTodo = (todo: Todo, tag: string): Todo => {
-  if (todo.tags.includes(tag)) return todo;
+export const updateTitle = (todo: Todo, newTitle: string): Todo => ({
+  ...todo,
+  title: newTitle,
+});
+
+export const addTag = (todo: Todo, tagToAdd: string): Todo => {
+  if (todo.tags.includes(tagToAdd)) return todo;
   if (todo.tags.length === 3)
     throw new Error("Todos can only have at most 3 tags");
 
   return {
     ...todo,
-    tags: [...todo.tags, tag],
+    tags: [...todo.tags, tagToAdd],
   };
 };
 
-export const untagTodo = (todo: Todo, tagToRemove: string): Todo => ({
+export const removeTag = (todo: Todo, tagToRemove: string): Todo => ({
   ...todo,
   tags: todo.tags.filter((tag) => tag !== tagToRemove),
 });

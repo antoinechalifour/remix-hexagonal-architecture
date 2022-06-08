@@ -1,11 +1,11 @@
 import React from "react";
 import { ShareTodoListForm } from "front/todolist/Sharing/ShareTodoListForm";
-import { ManageCollaborators } from "front/todolist/Sharing/ManageCollaborators";
+import { ManageContributors } from "front/todolist/Sharing/ManageContributors";
 
 export const ShareTodoListDialogContent = () => {
   return (
     <div className="space-y-4">
-      <ManageCollaborators />
+      <ManageContributors />
       <hr />
       <ShareTodoListForm />
     </div>

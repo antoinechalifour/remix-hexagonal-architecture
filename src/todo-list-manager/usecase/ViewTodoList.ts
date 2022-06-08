@@ -1,77 +1,77 @@
 import type { TodoListId } from "../domain/TodoList";
-import type { CollaboratorId } from "../domain/CollaboratorId";
+import type { ContributorId } from "../domain/ContributorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListQuery } from "../domain/TodoListQuery";
-import type { Collaborators } from "../domain/Collaborators";
+import type { Contributors } from "../domain/Contributors";
 import type {
-  TodoListCollaboratorDto,
+  TodoListContributorDto,
   TodoListDetailsDto,
   TodoListPageDto,
 } from "shared/client";
 import {
   canView,
-  getCollaboratorRole,
+  getRole,
   isOwner,
   TodoListPermission,
 } from "../domain/TodoListPermission";
-import { Collaborator } from "../domain/Collaborator";
+import { Contributor } from "../domain/Contributor";
 
 export class ViewTodoList {
   constructor(
     private readonly todoListPermissions: TodoListPermissions,
-    private readonly collaborators: Collaborators,
+    private readonly contributors: Contributors,
     private readonly todoListQuery: TodoListQuery
   ) {}
 
   async execute(
     todoListId: TodoListId,
-    collaboratorId: CollaboratorId
+    contributorId: ContributorId
   ): Promise<TodoListPageDto> {
     const permissions = await this.todoListPermissions.ofTodoList(todoListId);
-    canView(permissions, collaboratorId);
+    canView(permissions, contributorId);
 
-    const [collaborators, todoListDetails] = await Promise.all([
-      this.collaborators.ofIds([
+    const [contributors, todoListDetails] = await Promise.all([
+      this.contributors.ofIds([
         permissions.ownerId,
-        ...permissions.collaboratorsIds,
+        ...permissions.contributorsIds,
       ]),
       this.todoListQuery.detailsOfTodoList(todoListId),
     ]);
 
     return {
-      isOwner: isOwner(permissions, collaboratorId),
+      isOwner: isOwner(permissions, contributorId),
       todoList: todoListDetails,
       completion: this.computeCompletion(todoListDetails),
-      collaborators: collaborators.map((collaborator) =>
-        toTodoListCollaboratorDto(collaborator, permissions)
+      contributors: contributors.map((contributor) =>
+        toTodoListContributorDto(contributor, permissions)
       ),
     };
   }
 
   private computeCompletion(todoListDetails: TodoListDetailsDto) {
     const totalNumberOfTodos =
-      todoListDetails.doingTodos.length + todoListDetails.completedTodos.length;
+      todoListDetails.doingTodos.length + todoListDetails.doneTodos.length;
 
     if (totalNumberOfTodos === 0) return 0;
     let percentage =
-      (todoListDetails.completedTodos.length / totalNumberOfTodos) * 100;
+      (todoListDetails.doneTodos.length / totalNumberOfTodos) * 100;
 
     return Math.round(percentage);
   }
 }
 
-function toTodoListCollaboratorDto(
-  collaborator: Collaborator,
+function toTodoListContributorDto(
+  contributor: Contributor,
   permission: TodoListPermission
-): TodoListCollaboratorDto {
-  const [beforeAtSign] = collaborator.email.split("@");
+): TodoListContributorDto {
+  const [beforeAtSign] = contributor.email.split("@");
   const parts = beforeAtSign.split(".").slice(0, 2);
   const shortName = parts.map((parts) => parts.charAt(0)).join("");
 
   return {
-    id: collaborator.id,
-    email: collaborator.email,
+    id: contributor.id,
+    email: contributor.email,
     shortName,
-    role: getCollaboratorRole(collaborator, permission),
+    role: getRole(contributor, permission),
   };
 }

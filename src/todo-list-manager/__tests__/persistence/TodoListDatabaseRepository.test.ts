@@ -8,8 +8,8 @@ import {
   TodoListNotFoundError,
 } from "todo-list-manager";
 
-import { aTodoList } from "../domain/builders/TodoList";
-import { aTodo } from "../domain/builders/Todo";
+import { aTodoList } from "../usecase/builders/TodoList";
+import { aTodo } from "../usecase/builders/Todo";
 import {
   configureTestingDatabaseEnvironment,
   prepareDatabase,

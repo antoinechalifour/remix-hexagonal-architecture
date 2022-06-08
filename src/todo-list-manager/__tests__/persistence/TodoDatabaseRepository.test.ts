@@ -3,13 +3,13 @@ import type { Todos } from "../../domain/Todos";
 import { Clock, FixedClock } from "shared/time";
 import { PrismaClient } from "@prisma/client";
 import {
-  TodoListDatabaseRepository,
   TodoDatabaseRepository,
+  TodoListDatabaseRepository,
 } from "todo-list-manager";
-import { updateCompletion } from "../../domain/Todo";
+import { markAsDoing, markAsDone } from "../../domain/Todo";
 import { TodoLists } from "../../domain/TodoLists";
-import { aTodo } from "../domain/builders/Todo";
-import { aTodoList } from "../domain/builders/TodoList";
+import { aTodo } from "../usecase/builders/Todo";
+import { aTodoList } from "../usecase/builders/TodoList";
 import {
   configureTestingDatabaseEnvironment,
   prepareDatabase,
@@ -44,7 +44,7 @@ it("persists and retrieves todos", async () => {
   expect(await todos.ofId(theTodoId)).toEqual(todo);
 
   // Updates todos
-  todo = updateCompletion(todo, true, clock);
+  todo = markAsDone(todo, clock);
   await todos.save(todo);
   expect(await todos.ofId(theTodoId)).toEqual(todo);
 

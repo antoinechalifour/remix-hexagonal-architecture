@@ -1,4 +1,8 @@
-import type { ActionFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
+import type {
+  ActionFunction,
+  LoaderFunction,
+  MetaFunction,
+} from "@remix-run/node";
 import { useLoaderData } from "@remix-run/react";
 import type { TodoListDetailsDto, TodoListPageDto } from "shared/client";
 import type { RemixAppContext } from "web";
@@ -20,7 +24,7 @@ export const loader: LoaderFunction = async (
   (args.context as RemixAppContext).loaders.todoList(args);
 
 export const action: ActionFunction = async (args) =>
-  (args.context as RemixAppContext).actions.addTodo(args);
+  (args.context as RemixAppContext).actions.addTodoToTodoList(args);
 
 export default function TodoListPage() {
   const todoListPage = useLoaderData<TodoListPageDto>();

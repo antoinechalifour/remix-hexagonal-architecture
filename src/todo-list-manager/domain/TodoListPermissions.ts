@@ -1,10 +1,10 @@
 import { TodoListPermission } from "./TodoListPermission";
 import { TodoListId } from "./TodoList";
-import { CollaboratorId } from "./CollaboratorId";
+import { ContributorId } from "./ContributorId";
 
 export interface TodoListPermissions {
   ofTodoList(todoListId: TodoListId): Promise<TodoListPermission>;
-  ofCollaborator(collaboratorId: CollaboratorId): Promise<TodoListPermission[]>;
+  ofContributor(contributorId: ContributorId): Promise<TodoListPermission[]>;
   save(todoListPermission: TodoListPermission): Promise<void>;
   remove(todoListPermission: TodoListPermission): Promise<void>;
 }
