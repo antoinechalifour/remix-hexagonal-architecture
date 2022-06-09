@@ -4,6 +4,8 @@ import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { Clock, FixedClock } from "shared/time";
 import { GenerateTestId } from "shared/id";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { AddTodoToTodoList } from "../../usecase/AddTodoToTodoList";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
@@ -21,6 +23,7 @@ let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
 let generateId: GenerateId;
 let clock: Clock;
+let events: CollectEvents;
 
 beforeEach(() => {
   todoLists = new TodoListsInMemory();
@@ -28,12 +31,14 @@ beforeEach(() => {
   todos = new TodosInMemory();
   generateId = new GenerateTestId("todo");
   clock = new FixedClock();
+  events = new CollectEvents();
   addTodoToTodoList = new AddTodoToTodoList(
     todos,
     todoLists,
     todoListPermissions,
     generateId,
-    clock
+    clock,
+    events
   );
 });
 
@@ -93,6 +98,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       tags: [],
     });
     expect(todoList.todosOrder).toEqual(["todo/0", "todo/1"]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
+    ]);
   })
 );
 

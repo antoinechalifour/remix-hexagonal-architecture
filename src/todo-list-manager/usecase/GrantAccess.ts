@@ -1,3 +1,4 @@
+import type { Events } from "shared/events";
 import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { Contributors } from "../domain/Contributors";
@@ -7,11 +8,13 @@ import {
   isContributor,
   grantAccess,
 } from "../domain/TodoListPermission";
+import { TodoListShared } from "../domain/TodoListShared";
 
 export class GrantAccess {
   constructor(
     private readonly todoListPermissions: TodoListPermissions,
-    private readonly contributors: Contributors
+    private readonly contributors: Contributors,
+    private readonly events: Events
   ) {}
 
   async execute(
@@ -29,6 +32,14 @@ export class GrantAccess {
     if (!isContributor(permission, contributorToGrantAccess.id)) {
       await this.todoListPermissions.save(
         grantAccess(permission, contributorToGrantAccess.id)
+      );
+
+      this.events.publish(
+        new TodoListShared(
+          todoListId,
+          contributorId,
+          contributorToGrantAccess.id
+        )
       );
     }
   }

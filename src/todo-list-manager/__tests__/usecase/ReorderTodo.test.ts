@@ -1,6 +1,9 @@
 import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { ReorderTodo } from "../../usecase/ReorderTodo";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodoList, TodoListBuilder } from "./builders/TodoList";
@@ -8,16 +11,17 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 
 let reorderTodo: ReorderTodo;
 let todoLists: TodoLists;
+let events: CollectEvents;
 let todoListPermissions: TodoListPermissions;
 
 beforeEach(() => {
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
-  reorderTodo = new ReorderTodo(todoLists, todoListPermissions);
+  events = new CollectEvents();
+  reorderTodo = new ReorderTodo(todoLists, todoListPermissions, events);
 });
 
 it("reordering todos requires permission", async () => {
@@ -70,6 +74,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/3",
       "todo/4",
       "todo/2",
+    ]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
     ]);
   })
 );

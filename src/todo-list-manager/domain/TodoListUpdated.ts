@@ -5,8 +5,7 @@ export class TodoListUpdated extends Event {
 
   constructor(
     public readonly todoListId: string,
-    public readonly ownerId: string,
-    public readonly sessionId: string
+    public readonly contributorId: string
   ) {
     super(TodoListUpdated.TYPE);
   }

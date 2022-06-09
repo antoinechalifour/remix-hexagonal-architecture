@@ -1,20 +1,24 @@
+import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { TodoListShared } from "../../domain/TodoListShared";
 import { GrantAccess } from "../../usecase/GrantAccess";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { ContributorsInMemory } from "./fakes/ContributorsInMemory";
 
 let grantAccess: GrantAccess;
 let todoListPermissions: TodoListPermissionsInMemory;
 let contributors: ContributorsInMemory;
+let events: CollectEvents;
 
 beforeEach(() => {
   todoListPermissions = new TodoListPermissionsInMemory();
   contributors = new ContributorsInMemory();
-  grantAccess = new GrantAccess(todoListPermissions, contributors);
+  events = new CollectEvents();
+  grantAccess = new GrantAccess(todoListPermissions, contributors, events);
 });
 
 it("sharing todo list requires permissions", async () => {
@@ -81,6 +85,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     expect(await todoListPermissions.ofTodoList(todoListId)).toEqual(
       permission.withNewContributors("contributor/new").build()
     );
+    expect(events.collected()).toEqual([
+      new TodoListShared(todoListId, contributorId, "contributor/new"),
+    ]);
   })
 );
 

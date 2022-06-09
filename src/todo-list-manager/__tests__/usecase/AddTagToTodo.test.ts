@@ -1,3 +1,5 @@
+import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { Todos } from "../../domain/Todos";
 import { AddTagToTodo } from "../../usecase/AddTagToTodo";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
@@ -12,12 +14,14 @@ import {
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
+let events: CollectEvents;
 let addTagToTodo: AddTagToTodo;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
-  addTagToTodo = new AddTagToTodo(todos, todoListPermissions);
+  events = new CollectEvents();
+  addTagToTodo = new AddTagToTodo(todos, todoListPermissions, events);
 });
 
 it("adding a tag to a todo requires permission", async () => {
@@ -78,6 +82,11 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     expect((await todos.ofId("todo/1")).tags).toEqual([
       "feature",
       "top priority",
+    ]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId),
     ]);
   })
 );

@@ -1,4 +1,5 @@
 import type { Clock } from "shared/time";
+import type { Events } from "shared/events";
 import type { ContributorId } from "../domain/ContributorId";
 import type { Todos } from "../domain/Todos";
 import type { Todo, TodoId } from "../domain/Todo";
@@ -11,13 +12,15 @@ import {
   TodoList,
 } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
+import { TodoListUpdated } from "../domain/TodoListUpdated";
 
 export class MarkTodo {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly todos: Todos,
-    private readonly clock: Clock
+    private readonly clock: Clock,
+    private readonly events: Events
   ) {}
 
   async execute(
@@ -38,6 +41,8 @@ export class MarkTodo {
       this.todos.save(this.markTodo(todo, isDone)),
       this.todoLists.save(this.reorderTodoList(todoList, todoId, isDone)),
     ]);
+
+    this.events.publish(new TodoListUpdated(todoListId, contributorId));
   }
 
   private reorderTodoList(todoList: TodoList, todoId: TodoId, isDone: boolean) {

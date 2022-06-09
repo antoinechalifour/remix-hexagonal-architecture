@@ -1,6 +1,8 @@
 import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { UpdateTodoListTitle } from "../../usecase/UpdateTodoListTitle";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodoList, TodoListBuilder } from "./builders/TodoList";
@@ -12,12 +14,18 @@ import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDe
 
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
+let events: CollectEvents;
 let updateTodoListTitle: UpdateTodoListTitle;
 
 beforeEach(() => {
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
-  updateTodoListTitle = new UpdateTodoListTitle(todoLists, todoListPermissions);
+  events = new CollectEvents();
+  updateTodoListTitle = new UpdateTodoListTitle(
+    todoLists,
+    todoListPermissions,
+    events
+  );
 });
 
 it("renaming a todo list requires permission", async () => {
@@ -65,6 +73,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     );
 
     expect((await todoLists.ofId(todoListId)).title).toEqual("Updated title");
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
+    ]);
   })
 );
 
