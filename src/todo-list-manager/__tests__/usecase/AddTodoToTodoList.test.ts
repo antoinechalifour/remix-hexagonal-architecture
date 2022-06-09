@@ -5,9 +5,9 @@ import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { Clock, FixedClock } from "shared/time";
 import { GenerateTestId } from "shared/id";
 import { CollectEvents } from "../../../shared/events/CollectEvents";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { AddTodoToTodoList } from "../../usecase/AddTodoToTodoList";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TodoAdded } from "../../domain/TodoAdded";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -99,7 +99,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     });
     expect(todoList.todosOrder).toEqual(["todo/0", "todo/1"]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoAdded(todoListId, contributorId, "todo/1"),
     ]);
   })
 );
