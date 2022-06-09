@@ -30,6 +30,9 @@ export const updateTitle = (todo: Todo, newTitle: string): Todo => ({
   title: newTitle,
 });
 
+export const hasTag = (todo: Todo, tagToCheck: string): boolean =>
+  todo.tags.includes(tagToCheck);
+
 export const addTag = (todo: Todo, tagToAdd: string): Todo => {
   if (todo.tags.includes(tagToAdd)) return todo;
   if (todo.tags.length === 3)
