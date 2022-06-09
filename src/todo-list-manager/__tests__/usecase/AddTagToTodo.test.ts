@@ -11,17 +11,20 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
+import { FixedClock } from "shared/time";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
 let events: CollectEvents;
+let clock: FixedClock;
 let addTagToTodo: AddTagToTodo;
 
 beforeEach(() => {
+  clock = new FixedClock();
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
   events = new CollectEvents();
-  addTagToTodo = new AddTagToTodo(todos, todoListPermissions, events);
+  addTagToTodo = new AddTagToTodo(todos, todoListPermissions, clock, events);
 });
 
 it("adding a tag to a todo requires permission", async () => {
@@ -84,8 +87,20 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "top priority",
     ]);
     expect(events.collected()).toEqual([
-      new TagAddedToTodo(todoListId, contributorId, "todo/1", "feature"),
-      new TagAddedToTodo(todoListId, contributorId, "todo/1", "top priority"),
+      new TagAddedToTodo(
+        todoListId,
+        contributorId,
+        "todo/1",
+        "feature",
+        clock.now()
+      ),
+      new TagAddedToTodo(
+        todoListId,
+        contributorId,
+        "todo/1",
+        "top priority",
+        clock.now()
+      ),
     ]);
   })
 );

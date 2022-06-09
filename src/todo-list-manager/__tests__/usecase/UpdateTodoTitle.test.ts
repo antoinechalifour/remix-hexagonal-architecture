@@ -11,17 +11,25 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
+import { FixedClock } from "shared/time";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
+let clock: FixedClock;
 let events: CollectEvents;
 let updateTodoTitle: UpdateTodoTitle;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
+  clock = new FixedClock();
   events = new CollectEvents();
-  updateTodoTitle = new UpdateTodoTitle(todos, todoListPermissions, events);
+  updateTodoTitle = new UpdateTodoTitle(
+    todos,
+    todoListPermissions,
+    clock,
+    events
+  );
 });
 
 it("updating a todo title requires permission", async () => {
@@ -77,7 +85,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
 
     expect((await todos.ofId("todo/1")).title).toEqual("Updated title");
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );

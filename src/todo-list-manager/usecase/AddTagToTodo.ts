@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { Events } from "shared/events";
 import type { ContributorId } from "../domain/ContributorId";
 import type { Todos } from "../domain/Todos";
@@ -11,6 +12,7 @@ export class AddTagToTodo {
   constructor(
     private readonly todos: Todos,
     private readonly todoListPermissions: TodoListPermissions,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -28,7 +30,13 @@ export class AddTagToTodo {
 
     await this.todos.save(addTag(todo, tag));
     this.events.publish(
-      new TagAddedToTodo(todoListId, contributorId, todoId, tag)
+      new TagAddedToTodo(
+        todoListId,
+        contributorId,
+        todoId,
+        tag,
+        this.clock.now()
+      )
     );
   }
 }

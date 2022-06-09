@@ -99,7 +99,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     });
     expect(todoList.todosOrder).toEqual(["todo/0", "todo/1"]);
     expect(events.collected()).toEqual([
-      new TodoAdded(todoListId, contributorId, "todo/1"),
+      new TodoAdded(todoListId, contributorId, "todo/1", clock.now()),
     ]);
   })
 );

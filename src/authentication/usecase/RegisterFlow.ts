@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { GenerateId } from "shared/id";
 import type { Events } from "shared/events";
 import type { Accounts } from "../domain/Accounts";
@@ -10,6 +11,7 @@ export class RegisterFlow {
     private readonly credentials: Accounts,
     private readonly generateId: GenerateId,
     private readonly passwordHasher: PasswordHasher,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -23,7 +25,11 @@ export class RegisterFlow {
 
     await this.credentials.save(account);
     this.events.publish(
-      new UserRegistered(account.email, account.verificationToken)
+      new UserRegistered(
+        account.email,
+        account.verificationToken,
+        this.clock.now()
+      )
     );
   }
 }

@@ -5,8 +5,9 @@ export class PasswordForgotten extends Event {
 
   constructor(
     public readonly email: string,
-    public readonly passwordResetToken: string
+    public readonly passwordResetToken: string,
+    publishedAt: Date
   ) {
-    super(PasswordForgotten.TYPE);
+    super(PasswordForgotten.TYPE, publishedAt);
   }
 }

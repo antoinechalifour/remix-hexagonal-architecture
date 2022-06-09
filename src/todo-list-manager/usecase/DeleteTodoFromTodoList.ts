@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { Events } from "shared/events";
 import type { ContributorId } from "../domain/ContributorId";
 import type { TodoId } from "../domain/Todo";
@@ -14,6 +15,7 @@ export class DeleteTodoFromTodoList {
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly todos: Todos,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -32,6 +34,8 @@ export class DeleteTodoFromTodoList {
       this.todos.remove(todoId),
     ]);
 
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(
+      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+    );
   }
 }

@@ -11,19 +11,23 @@ import {
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { FixedClock } from "shared/time";
 
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
+let clock: FixedClock;
 let events: CollectEvents;
 let updateTodoListTitle: UpdateTodoListTitle;
 
 beforeEach(() => {
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
+  clock = new FixedClock();
   events = new CollectEvents();
   updateTodoListTitle = new UpdateTodoListTitle(
     todoLists,
     todoListPermissions,
+    clock,
     events
   );
 });
@@ -74,7 +78,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
 
     expect((await todoLists.ofId(todoListId)).title).toEqual("Updated title");
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );

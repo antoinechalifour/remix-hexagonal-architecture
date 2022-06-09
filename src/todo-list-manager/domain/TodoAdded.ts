@@ -6,8 +6,9 @@ export class TodoAdded extends Event {
   constructor(
     public readonly todoListId: string,
     public readonly contributorId: string,
-    public readonly todoId: string
+    public readonly todoId: string,
+    publishedAt: Date
   ) {
-    super(TodoAdded.TYPE);
+    super(TodoAdded.TYPE, publishedAt);
   }
 }

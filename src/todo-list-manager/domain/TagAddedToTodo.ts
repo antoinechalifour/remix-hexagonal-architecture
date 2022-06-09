@@ -7,8 +7,9 @@ export class TagAddedToTodo extends Event {
     public readonly todoListId: string,
     public readonly contributorId: string,
     public readonly todoId: string,
-    public readonly tag: string
+    public readonly tag: string,
+    publishedAt: Date
   ) {
-    super(TagAddedToTodo.TYPE);
+    super(TagAddedToTodo.TYPE, publishedAt);
   }
 }

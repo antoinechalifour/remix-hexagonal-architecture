@@ -5,8 +5,9 @@ export class UserRegistered extends Event {
 
   constructor(
     public readonly email: string,
-    public readonly verificationToken: string
+    public readonly verificationToken: string,
+    publishedAt: Date
   ) {
-    super(UserRegistered.TYPE);
+    super(UserRegistered.TYPE, publishedAt);
   }
 }

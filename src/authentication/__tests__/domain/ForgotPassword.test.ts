@@ -7,13 +7,14 @@ import { Accounts } from "../../domain/Accounts";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { anAccountForgotPassword, aVerifiedAccount } from "./builders/Account";
 
+let clock: FixedClock;
 let accounts: Accounts;
 let events: CollectEvents;
 let forgotPassword: ForgotPassword;
 
 beforeEach(() => {
   const generateId = new GenerateTestId("passwordResetCode");
-  const clock = new FixedClock(new Date("2022-05-22T12:00:00.000Z"));
+  clock = new FixedClock(new Date("2022-05-22T12:00:00.000Z"));
   accounts = new AccountsInMemory();
   events = new CollectEvents();
   forgotPassword = new ForgotPassword(accounts, generateId, clock, events);
@@ -37,6 +38,10 @@ it("generates the password reset token", async () => {
       .build()
   );
   expect(events.collected()).toEqual([
-    new PasswordForgotten("john.doe@example.com", "passwordResetCode/1"),
+    new PasswordForgotten(
+      "john.doe@example.com",
+      "passwordResetCode/1",
+      clock.now()
+    ),
   ]);
 });

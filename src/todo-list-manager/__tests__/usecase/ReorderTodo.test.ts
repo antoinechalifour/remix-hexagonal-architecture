@@ -11,17 +11,20 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
+import { FixedClock } from "shared/time";
 
 let reorderTodo: ReorderTodo;
 let todoLists: TodoLists;
 let events: CollectEvents;
+let clock: FixedClock;
 let todoListPermissions: TodoListPermissions;
 
 beforeEach(() => {
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
   events = new CollectEvents();
-  reorderTodo = new ReorderTodo(todoLists, todoListPermissions, events);
+  clock = new FixedClock();
+  reorderTodo = new ReorderTodo(todoLists, todoListPermissions, clock, events);
 });
 
 it("reordering todos requires permission", async () => {
@@ -76,7 +79,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/2",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );

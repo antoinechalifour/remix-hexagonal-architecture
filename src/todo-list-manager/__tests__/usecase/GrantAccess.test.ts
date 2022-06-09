@@ -8,17 +8,25 @@ import {
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
 import { ContributorsInMemory } from "./fakes/ContributorsInMemory";
+import { FixedClock } from "shared/time";
 
 let grantAccess: GrantAccess;
 let todoListPermissions: TodoListPermissionsInMemory;
 let contributors: ContributorsInMemory;
+let clock: FixedClock;
 let events: CollectEvents;
 
 beforeEach(() => {
   todoListPermissions = new TodoListPermissionsInMemory();
   contributors = new ContributorsInMemory();
   events = new CollectEvents();
-  grantAccess = new GrantAccess(todoListPermissions, contributors, events);
+  clock = new FixedClock();
+  grantAccess = new GrantAccess(
+    todoListPermissions,
+    contributors,
+    clock,
+    events
+  );
 });
 
 it("sharing todo list requires permissions", async () => {
@@ -86,7 +94,12 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       permission.withNewContributors("contributor/new").build()
     );
     expect(events.collected()).toEqual([
-      new TodoListShared(todoListId, contributorId, "contributor/new"),
+      new TodoListShared(
+        todoListId,
+        contributorId,
+        "contributor/new",
+        clock.now()
+      ),
     ]);
   })
 );

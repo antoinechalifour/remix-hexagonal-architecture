@@ -42,7 +42,9 @@ export class MarkTodo {
       this.todoLists.save(this.reorderTodoList(todoList, todoId, isDone)),
     ]);
 
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(
+      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+    );
   }
 
   private reorderTodoList(todoList: TodoList, todoId: TodoId, isDone: boolean) {

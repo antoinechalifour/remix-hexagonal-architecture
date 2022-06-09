@@ -57,6 +57,7 @@ export class AuthenticationApplicationService {
         this.accounts,
         this.generateId,
         this.passwordHasher,
+        this.clock,
         this.events
       ).execute(email, password);
     } catch (err) {

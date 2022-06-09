@@ -59,6 +59,7 @@ export class TodoListApplicationService {
     await new UpdateTodoListTitle(
       this.todoLists,
       this.todoListPermissions,
+      this.clock,
       this.events
     ).execute(todoListId, todoListTitle, currentUser.id);
   }
@@ -72,6 +73,7 @@ export class TodoListApplicationService {
     await new ReorderTodo(
       this.todoLists,
       this.todoListPermissions,
+      this.clock,
       this.events
     ).execute(todoListId, currentUser.id, todoId, newIndex);
   }
@@ -84,6 +86,7 @@ export class TodoListApplicationService {
     await new GrantAccess(
       this.todoListPermissions,
       this.contributors,
+      this.clock,
       this.events
     ).execute(todoListId, currentUser.id, contributorEmail);
   }

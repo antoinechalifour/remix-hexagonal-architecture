@@ -84,7 +84,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/3",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );
@@ -115,7 +115,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/2",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );

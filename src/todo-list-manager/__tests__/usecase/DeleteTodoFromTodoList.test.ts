@@ -14,22 +14,26 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
+import { FixedClock } from "shared/time";
 
 let deleteTodoFromTodoList: DeleteTodoFromTodoList;
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
 let todos: Todos;
 let events: CollectEvents;
+let clock: FixedClock;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
   events = new CollectEvents();
+  clock = new FixedClock();
   deleteTodoFromTodoList = new DeleteTodoFromTodoList(
     todoLists,
     todoListPermissions,
     todos,
+    clock,
     events
   );
 });
@@ -89,7 +93,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     expect(await todos.ofTodoList(todoListId)).toEqual([todoToKeep.build()]);
     expect(todoList.todosOrder).toEqual(["todos/2"]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );

@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { Events } from "shared/events";
 import type { ContributorId } from "../domain/ContributorId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
@@ -10,6 +11,7 @@ export class UpdateTodoListTitle {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -23,6 +25,8 @@ export class UpdateTodoListTitle {
 
     const todoList = await this.todoLists.ofId(todoListId);
     await this.todoLists.save(updateTodoListTitle(todoList, title));
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(
+      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+    );
   }
 }

@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { Events } from "shared/events";
 import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListId } from "../domain/TodoList";
@@ -12,6 +13,7 @@ export class ReorderTodo {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -28,6 +30,8 @@ export class ReorderTodo {
     await this.todoLists.save(
       reorderTodoInTodoList(todoList, todoToReorderId, newIndex)
     );
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(
+      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+    );
   }
 }

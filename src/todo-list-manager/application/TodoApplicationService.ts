@@ -53,6 +53,7 @@ export class TodoApplicationService {
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma),
+        this.clock,
         this.events
       ).execute(todoListId, todoId, currentUser.id)
     );
@@ -84,6 +85,7 @@ export class TodoApplicationService {
     await new UpdateTodoTitle(
       this.todos,
       this.todoListPermissions,
+      this.clock,
       this.events
     ).execute(todoListId, todoId, title, currentUser.id);
   }
@@ -97,6 +99,7 @@ export class TodoApplicationService {
     await new AddTagToTodo(
       this.todos,
       this.todoListPermissions,
+      this.clock,
       this.events
     ).execute(todoListId, todoId, currentUser.id, tag);
   }
@@ -110,6 +113,7 @@ export class TodoApplicationService {
     await new RemoveTagFromTodo(
       this.todos,
       this.todoListPermissions,
+      this.clock,
       this.events
     ).execute(todoListId, todoId, currentUser.id, tag);
   }
