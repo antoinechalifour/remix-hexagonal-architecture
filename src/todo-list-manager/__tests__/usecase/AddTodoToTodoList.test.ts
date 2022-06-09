@@ -4,7 +4,7 @@ import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { Clock, FixedClock } from "shared/time";
 import { GenerateTestId } from "shared/id";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { CollectEvents } from "shared/events";
 import { AddTodoToTodoList } from "../../usecase/AddTodoToTodoList";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoAdded } from "../../domain/TodoAdded";
