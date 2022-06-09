@@ -55,6 +55,9 @@ export const removeTodoFromOrder = (
   todosOrder: todoList.todosOrder.filter((todoId) => todoId !== todoToRemoveId),
 });
 
+export const currentTodoOrder = (todoList: TodoList, todoToFindId: TodoId) =>
+  todoList.todosOrder.findIndex((todoId) => todoId === todoToFindId);
+
 export const reorderTodoInTodoList = (
   todoList: TodoList,
   todoToReorderId: TodoId,
