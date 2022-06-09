@@ -1,8 +1,9 @@
 import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { CollectEvents } from "shared/events";
+import { FixedClock } from "shared/time";
 import { ReorderTodo } from "../../usecase/ReorderTodo";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
+import { TodoReordered } from "../../domain/TodoReordered";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -11,7 +12,6 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { FixedClock } from "shared/time";
 
 let reorderTodo: ReorderTodo;
 let todoLists: TodoLists;
@@ -79,7 +79,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/2",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TodoReordered(todoListId, contributorId, "todo/2", 1, 3, clock.now()),
     ]);
   })
 );
