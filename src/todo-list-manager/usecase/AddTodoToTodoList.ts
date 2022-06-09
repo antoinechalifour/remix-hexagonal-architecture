@@ -7,7 +7,7 @@ import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { addTodo, TodoListId } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoAdded } from "../domain/TodoAdded";
 
 export class AddTodoToTodoList {
   constructor(
@@ -40,6 +40,6 @@ export class AddTodoToTodoList {
       this.todos.save(addedTodo),
     ]);
 
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(new TodoAdded(todoListId, contributorId, addedTodo.id));
   }
 }
