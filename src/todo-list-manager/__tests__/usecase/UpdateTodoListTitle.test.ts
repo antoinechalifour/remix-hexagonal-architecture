@@ -1,8 +1,10 @@
 import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { FixedClock } from "shared/time";
+import { CollectEvents } from "shared/events";
 import { UpdateTodoListTitle } from "../../usecase/UpdateTodoListTitle";
 import { TodoListUpdated } from "../../domain/TodoListUpdated";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodoList, TodoListBuilder } from "./builders/TodoList";
@@ -10,8 +12,6 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
-import { FixedClock } from "shared/time";
 
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
@@ -78,7 +78,17 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
 
     expect((await todoLists.ofId(todoListId)).title).toEqual("Updated title");
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TodoListUpdated(
+        todoListId,
+        contributorId,
+        {
+          title: {
+            previous: "Current title",
+            current: "Updated title",
+          },
+        },
+        clock.now()
+      ),
     ]);
   })
 );

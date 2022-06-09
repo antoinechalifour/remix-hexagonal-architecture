@@ -6,7 +6,7 @@ import type { ContributorId } from "../domain/ContributorId";
 import type { TodoListId } from "../domain/TodoList";
 import { updateTitle, TodoId } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoUpdated } from "../domain/TodoUpdated";
 
 export class UpdateTodoTitle {
   constructor(
@@ -26,9 +26,18 @@ export class UpdateTodoTitle {
     canEditTodoList(permission, contributorId);
 
     const todo = await this.todos.ofId(todoId);
+    const previousTitle = todo.title;
     await this.todos.save(updateTitle(todo, title));
     this.events.publish(
-      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+      new TodoUpdated(
+        todoListId,
+        contributorId,
+        todoId,
+        {
+          title: { previous: previousTitle, current: title },
+        },
+        this.clock.now()
+      )
     );
   }
 }
