@@ -1,10 +1,17 @@
-import { TodoListPermissions } from "../domain/TodoListPermissions";
-import { TodoListId } from "../domain/TodoList";
-import { ContributorId } from "../domain/ContributorId";
+import type { Clock } from "shared/time";
+import type { Events } from "shared/events";
+import type { TodoListPermissions } from "../domain/TodoListPermissions";
+import type { TodoListId } from "../domain/TodoList";
+import type { ContributorId } from "../domain/ContributorId";
 import { canShareTodoList, revokeAccess } from "../domain/TodoListPermission";
+import { AccessRevoked } from "../domain/AccessRevoked";
 
 export class RevokeAccess {
-  constructor(private readonly todoListPermissions: TodoListPermissions) {}
+  constructor(
+    private readonly todoListPermissions: TodoListPermissions,
+    private readonly clock: Clock,
+    private readonly events: Events
+  ) {}
 
   async execute(
     todoListId: TodoListId,
@@ -16,6 +23,14 @@ export class RevokeAccess {
 
     await this.todoListPermissions.save(
       revokeAccess(permissions, contributorToRevokeAccess)
+    );
+    this.events.publish(
+      new AccessRevoked(
+        todoListId,
+        ownerId,
+        contributorToRevokeAccess,
+        this.clock.now()
+      )
     );
   }
 }
