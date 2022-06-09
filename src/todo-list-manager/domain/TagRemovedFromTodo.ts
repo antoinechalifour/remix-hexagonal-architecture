@@ -1,7 +1,7 @@
 import { Event } from "shared/events";
 
-export class TagAddedToTodo extends Event {
-  static TYPE = "todo.tagAdded";
+export class TagRemovedFromTodo extends Event {
+  static TYPE = "todo.tagRemoved";
 
   constructor(
     public readonly todoListId: string,
@@ -10,6 +10,6 @@ export class TagAddedToTodo extends Event {
     public readonly tag: string,
     publishedAt: Date
   ) {
-    super(TagAddedToTodo.TYPE, publishedAt);
+    super(TagRemovedFromTodo.TYPE, publishedAt);
   }
 }

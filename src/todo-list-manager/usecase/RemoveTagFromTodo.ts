@@ -4,9 +4,9 @@ import type { ContributorId } from "../domain/ContributorId";
 import type { Todos } from "../domain/Todos";
 import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
-import { TodoId, removeTag } from "../domain/Todo";
+import { TodoId, removeTag, hasTag } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TagRemovedFromTodo } from "../domain/TagRemovedFromTodo";
 
 export class RemoveTagFromTodo {
   constructor(
@@ -26,9 +26,17 @@ export class RemoveTagFromTodo {
     canEditTodoList(permission, contributorId);
 
     const todo = await this.todos.ofId(todoId);
+    if (!hasTag(todo, tag)) return;
+
     await this.todos.save(removeTag(todo, tag));
     this.events.publish(
-      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+      new TagRemovedFromTodo(
+        todoListId,
+        contributorId,
+        todoId,
+        tag,
+        this.clock.now()
+      )
     );
   }
 }
