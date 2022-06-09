@@ -12,9 +12,6 @@ import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
 import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
 import { AccountNotVerifiedError } from "../domain/AccountNotVerifiedError";
 import { AccountNotFoundError } from "../domain/AccountNotFoundError";
-import { UserRegistered } from "../domain/UserRegistered";
-import { PasswordChanged } from "../domain/PasswordChanged";
-import { PasswordForgotten } from "../domain/PasswordForgotten";
 import { BCryptPasswordHasher } from "../infrastructure/BCryptPasswordHasher";
 import { AccountDatabaseRepository } from "../infrastructure/AccountDatabaseRepository";
 import { FetchAuthenticationStatusSessionQuery } from "../infrastructure/FetchAuthenticationStatusSessionQuery";
@@ -56,15 +53,12 @@ export class AuthenticationApplicationService {
 
   async register(email: string, password: string) {
     try {
-      const account = await new RegisterFlow(
+      await new RegisterFlow(
         this.accounts,
         this.generateId,
-        this.passwordHasher
+        this.passwordHasher,
+        this.events
       ).execute(email, password);
-
-      this.events.publish(
-        new UserRegistered(account.email, account.verificationToken)
-      );
     } catch (err) {
       let message: string;
 
@@ -83,15 +77,12 @@ export class AuthenticationApplicationService {
 
   async forgotPassword(email: string) {
     try {
-      const account = await new ForgotPassword(
+      await new ForgotPassword(
         this.accounts,
         this.generateId,
-        this.clock
+        this.clock,
+        this.events
       ).execute(email);
-
-      this.events.publish(
-        new PasswordForgotten(account.email, account.passwordResetToken)
-      );
     } catch (err) {
       if (AccountNotFoundError.is(err)) return;
       if (AccountNotVerifiedError.is(err)) return;
@@ -104,10 +95,9 @@ export class AuthenticationApplicationService {
     await new ResetPassword(
       this.accounts,
       this.passwordHasher,
-      this.clock
+      this.clock,
+      this.events
     ).execute(email, token, newPassword);
-
-    this.events.publish(new PasswordChanged(email));
   }
 
   authenticationStatus() {
