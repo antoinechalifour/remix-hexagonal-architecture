@@ -1,9 +1,9 @@
 import { CollectEvents } from "../../../shared/events/CollectEvents";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { Todos } from "../../domain/Todos";
 import { AddTagToTodo } from "../../usecase/AddTagToTodo";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TagAddedToTodo } from "../../domain/TagAddedToTodo";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo, TodoBuilder } from "./builders/Todo";
@@ -84,9 +84,8 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "top priority",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
-      new TodoListUpdated(todoListId, contributorId),
-      new TodoListUpdated(todoListId, contributorId),
+      new TagAddedToTodo(todoListId, contributorId, "todo/1", "feature"),
+      new TagAddedToTodo(todoListId, contributorId, "todo/1", "top priority"),
     ]);
   })
 );

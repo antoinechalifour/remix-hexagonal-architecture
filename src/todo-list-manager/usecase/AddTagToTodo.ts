@@ -3,9 +3,9 @@ import type { ContributorId } from "../domain/ContributorId";
 import type { Todos } from "../domain/Todos";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListId } from "../domain/TodoList";
-import { addTag, TodoId } from "../domain/Todo";
+import { addTag, hasTag, TodoId } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TagAddedToTodo } from "../domain/TagAddedToTodo";
 
 export class AddTagToTodo {
   constructor(
@@ -24,7 +24,11 @@ export class AddTagToTodo {
     canEditTodoList(permission, contributorId);
 
     const todo = await this.todos.ofId(todoId);
+    if (hasTag(todo, tag)) return;
+
     await this.todos.save(addTag(todo, tag));
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(
+      new TagAddedToTodo(todoListId, contributorId, todoId, tag)
+    );
   }
 }
