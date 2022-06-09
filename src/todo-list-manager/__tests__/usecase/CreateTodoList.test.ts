@@ -3,7 +3,9 @@ import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { GenerateTestId } from "shared/id";
 import { Clock, FixedClock } from "shared/time";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { CreateTodoList } from "../../usecase/CreateTodoList";
+import { TodoListCreated } from "../../domain/TodoListCreated";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 
@@ -12,17 +14,20 @@ let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
 let generateId: GenerateId;
 let clock: Clock;
+let events: CollectEvents;
 
 beforeEach(() => {
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
   generateId = new GenerateTestId("todoList");
   clock = new FixedClock();
+  events = new CollectEvents();
   createTodoList = new CreateTodoList(
     todoLists,
     todoListPermissions,
     generateId,
-    clock
+    clock,
+    events
   );
 });
 
@@ -49,4 +54,7 @@ it("should create a new todo list", async () => {
     ownerId: "owner/1",
     contributorsIds: [],
   });
+  expect(events.collected()).toEqual([
+    new TodoListCreated("todoList/1", theOwnerId, clock.now()),
+  ]);
 });
