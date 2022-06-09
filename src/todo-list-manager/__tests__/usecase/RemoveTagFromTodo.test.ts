@@ -1,9 +1,10 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { FixedClock } from "shared/time";
+import { CollectEvents } from "shared/events";
 import { RemoveTagFromTodo } from "../../usecase/RemoveTagFromTodo";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
+import { TagRemovedFromTodo } from "../../domain/TagRemovedFromTodo";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo, TodoBuilder } from "./builders/Todo";
@@ -11,7 +12,6 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { FixedClock } from "shared/time";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
@@ -96,7 +96,13 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "research required",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TagRemovedFromTodo(
+        todoListId,
+        contributorId,
+        "todo/1",
+        "top priority",
+        clock.now()
+      ),
     ]);
   })
 );
