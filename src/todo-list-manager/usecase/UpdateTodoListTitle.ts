@@ -24,9 +24,17 @@ export class UpdateTodoListTitle {
     canEditTodoList(permission, contributorId);
 
     const todoList = await this.todoLists.ofId(todoListId);
+    const previousTitle = todoList.title;
     await this.todoLists.save(updateTodoListTitle(todoList, title));
     this.events.publish(
-      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+      new TodoListUpdated(
+        todoListId,
+        contributorId,
+        {
+          title: { previous: previousTitle, current: title },
+        },
+        this.clock.now()
+      )
     );
   }
 }

@@ -1,9 +1,10 @@
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import type { Todos } from "../../domain/Todos";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { FixedClock } from "shared/time";
+import { CollectEvents } from "shared/events";
 import { UpdateTodoTitle } from "../../usecase/UpdateTodoTitle";
+import { TodoUpdated } from "../../domain/TodoUpdated";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo, TodoBuilder } from "./builders/Todo";
@@ -11,7 +12,6 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { FixedClock } from "shared/time";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
@@ -85,7 +85,15 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
 
     expect((await todos.ofId("todo/1")).title).toEqual("Updated title");
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TodoUpdated(
+        todoListId,
+        contributorId,
+        "todo/1",
+        {
+          title: { previous: "Current title", current: "Updated title" },
+        },
+        clock.now()
+      ),
     ]);
   })
 );
