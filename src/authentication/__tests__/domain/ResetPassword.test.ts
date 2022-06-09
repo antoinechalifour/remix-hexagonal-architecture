@@ -84,6 +84,6 @@ it("resets the password when the token and expiration date are OK", async () => 
     aVerifiedAccount().forEmail(theEmail).usingPassword(theNewPassword).build()
   );
   expect(events.collected()).toEqual([
-    new PasswordChanged("jane.doe@example.com"),
+    new PasswordChanged("jane.doe@example.com", clock.now()),
   ]);
 });

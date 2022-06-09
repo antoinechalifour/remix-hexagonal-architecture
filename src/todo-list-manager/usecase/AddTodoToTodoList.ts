@@ -40,6 +40,8 @@ export class AddTodoToTodoList {
       this.todos.save(addedTodo),
     ]);
 
-    this.events.publish(new TodoAdded(todoListId, contributorId, addedTodo.id));
+    this.events.publish(
+      new TodoAdded(todoListId, contributorId, addedTodo.id, this.clock.now())
+    );
   }
 }

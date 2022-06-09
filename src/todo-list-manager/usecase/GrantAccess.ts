@@ -1,4 +1,5 @@
 import type { Events } from "shared/events";
+import type { Clock } from "shared/time";
 import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { Contributors } from "../domain/Contributors";
@@ -14,6 +15,7 @@ export class GrantAccess {
   constructor(
     private readonly todoListPermissions: TodoListPermissions,
     private readonly contributors: Contributors,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -38,7 +40,8 @@ export class GrantAccess {
         new TodoListShared(
           todoListId,
           contributorId,
-          contributorToGrantAccess.id
+          contributorToGrantAccess.id,
+          this.clock.now()
         )
       );
     }

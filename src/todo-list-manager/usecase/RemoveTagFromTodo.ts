@@ -1,3 +1,4 @@
+import type { Clock } from "shared/time";
 import type { Events } from "shared/events";
 import type { ContributorId } from "../domain/ContributorId";
 import type { Todos } from "../domain/Todos";
@@ -11,6 +12,7 @@ export class RemoveTagFromTodo {
   constructor(
     private readonly todos: Todos,
     private readonly todoListPermissions: TodoListPermissions,
+    private readonly clock: Clock,
     private readonly events: Events
   ) {}
 
@@ -25,6 +27,8 @@ export class RemoveTagFromTodo {
 
     const todo = await this.todos.ofId(todoId);
     await this.todos.save(removeTag(todo, tag));
-    this.events.publish(new TodoListUpdated(todoListId, contributorId));
+    this.events.publish(
+      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+    );
   }
 }

@@ -11,17 +11,25 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
+import { FixedClock } from "shared/time";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
 let events: CollectEvents;
+let clock: FixedClock;
 let removeTagFromTodo: RemoveTagFromTodo;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
+  clock = new FixedClock();
   events = new CollectEvents();
-  removeTagFromTodo = new RemoveTagFromTodo(todos, todoListPermissions, events);
+  removeTagFromTodo = new RemoveTagFromTodo(
+    todos,
+    todoListPermissions,
+    clock,
+    events
+  );
 });
 
 it("removing tag from todos requires permission", async () => {
@@ -88,7 +96,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "research required",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId),
+      new TodoListUpdated(todoListId, contributorId, clock.now()),
     ]);
   })
 );
