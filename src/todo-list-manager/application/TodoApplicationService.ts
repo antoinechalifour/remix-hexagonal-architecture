@@ -14,7 +14,6 @@ import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoLis
 import { UpdateTodoTitle } from "../usecase/UpdateTodoTitle";
 import { AddTagToTodo } from "../usecase/AddTagToTodo";
 import { RemoveTagFromTodo } from "../usecase/RemoveTagFromTodo";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
 
 @Injectable()
 export class TodoApplicationService {
@@ -38,12 +37,9 @@ export class TodoApplicationService {
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         this.generateId,
-        this.clock
+        this.clock,
+        this.events
       ).execute(todoListId, title, currentUser.id)
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
@@ -56,12 +52,9 @@ export class TodoApplicationService {
       new DeleteTodoFromTodoList(
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
-        new TodoDatabaseRepository(prisma)
+        new TodoDatabaseRepository(prisma),
+        this.events
       ).execute(todoListId, todoId, currentUser.id)
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
@@ -76,12 +69,9 @@ export class TodoApplicationService {
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         new TodoDatabaseRepository(prisma),
-        this.clock
+        this.clock,
+        this.events
       ).execute(todoListId, todoId, isDone === "on", currentUser.id)
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
     );
   }
 
@@ -91,16 +81,11 @@ export class TodoApplicationService {
     title: string,
     currentUser: CurrentUser
   ) {
-    await new UpdateTodoTitle(this.todos, this.todoListPermissions).execute(
-      todoListId,
-      todoId,
-      title,
-      currentUser.id
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
-    );
+    await new UpdateTodoTitle(
+      this.todos,
+      this.todoListPermissions,
+      this.events
+    ).execute(todoListId, todoId, title, currentUser.id);
   }
 
   async addTagToTodo(
@@ -109,16 +94,11 @@ export class TodoApplicationService {
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new AddTagToTodo(this.todos, this.todoListPermissions).execute(
-      todoListId,
-      todoId,
-      currentUser.id,
-      tag
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
-    );
+    await new AddTagToTodo(
+      this.todos,
+      this.todoListPermissions,
+      this.events
+    ).execute(todoListId, todoId, currentUser.id, tag);
   }
 
   async removeTagFromTodo(
@@ -127,15 +107,10 @@ export class TodoApplicationService {
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new RemoveTagFromTodo(this.todos, this.todoListPermissions).execute(
-      todoListId,
-      todoId,
-      currentUser.id,
-      tag
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
-    );
+    await new RemoveTagFromTodo(
+      this.todos,
+      this.todoListPermissions,
+      this.events
+    ).execute(todoListId, todoId, currentUser.id, tag);
   }
 }

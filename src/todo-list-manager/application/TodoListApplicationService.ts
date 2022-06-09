@@ -5,8 +5,6 @@ import { NestEvents } from "shared/events";
 import { GenerateUUID } from "shared/id";
 import { Prisma } from "shared/database";
 import { PRISMA } from "../../keys";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
-import { TodoListShared } from "../domain/TodoListShared";
 import { CreateTodoList } from "../usecase/CreateTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
 import { ReorderTodo } from "../usecase/ReorderTodo";
@@ -60,12 +58,9 @@ export class TodoListApplicationService {
   ) {
     await new UpdateTodoListTitle(
       this.todoLists,
-      this.todoListPermissions
+      this.todoListPermissions,
+      this.events
     ).execute(todoListId, todoListTitle, currentUser.id);
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
-    );
   }
 
   async reorderTodo(
@@ -74,16 +69,11 @@ export class TodoListApplicationService {
     todoId: string,
     newIndex: number
   ) {
-    await new ReorderTodo(this.todoLists, this.todoListPermissions).execute(
-      todoListId,
-      currentUser.id,
-      todoId,
-      newIndex
-    );
-
-    this.events.publish(
-      new TodoListUpdated(todoListId, currentUser.id, currentUser.sessionId)
-    );
+    await new ReorderTodo(
+      this.todoLists,
+      this.todoListPermissions,
+      this.events
+    ).execute(todoListId, currentUser.id, todoId, newIndex);
   }
 
   async grantAccess(
@@ -91,13 +81,11 @@ export class TodoListApplicationService {
     contributorEmail: string,
     currentUser: CurrentUser
   ) {
-    await new GrantAccess(this.todoListPermissions, this.contributors).execute(
-      todoListId,
-      currentUser.id,
-      contributorEmail
-    );
-
-    this.events.publish(new TodoListShared(todoListId, contributorEmail));
+    await new GrantAccess(
+      this.todoListPermissions,
+      this.contributors,
+      this.events
+    ).execute(todoListId, currentUser.id, contributorEmail);
   }
 
   async revokeAccess(

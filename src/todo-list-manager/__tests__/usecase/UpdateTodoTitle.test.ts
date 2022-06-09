@@ -1,6 +1,9 @@
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import type { Todos } from "../../domain/Todos";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { UpdateTodoTitle } from "../../usecase/UpdateTodoTitle";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo, TodoBuilder } from "./builders/Todo";
@@ -8,16 +11,17 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
+let events: CollectEvents;
 let updateTodoTitle: UpdateTodoTitle;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
-  updateTodoTitle = new UpdateTodoTitle(todos, todoListPermissions);
+  events = new CollectEvents();
+  updateTodoTitle = new UpdateTodoTitle(todos, todoListPermissions, events);
 });
 
 it("updating a todo title requires permission", async () => {
@@ -72,6 +76,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     );
 
     expect((await todos.ofId("todo/1")).title).toEqual("Updated title");
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
+    ]);
   })
 );
 

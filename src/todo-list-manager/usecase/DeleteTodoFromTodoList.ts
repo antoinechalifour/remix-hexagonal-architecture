@@ -1,17 +1,20 @@
+import type { Events } from "shared/events";
 import type { ContributorId } from "../domain/ContributorId";
 import type { TodoId } from "../domain/Todo";
 import type { Todos } from "../domain/Todos";
 import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListId } from "../domain/TodoList";
-import { removeTodoFromOrder } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
+import { removeTodoFromOrder } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
+import { TodoListUpdated } from "../domain/TodoListUpdated";
 
 export class DeleteTodoFromTodoList {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
-    private readonly todos: Todos
+    private readonly todos: Todos,
+    private readonly events: Events
   ) {}
 
   async execute(
@@ -28,5 +31,7 @@ export class DeleteTodoFromTodoList {
       this.todoLists.save(removeTodoFromOrder(todoList, todoId)),
       this.todos.remove(todoId),
     ]);
+
+    this.events.publish(new TodoListUpdated(todoListId, contributorId));
   }
 }

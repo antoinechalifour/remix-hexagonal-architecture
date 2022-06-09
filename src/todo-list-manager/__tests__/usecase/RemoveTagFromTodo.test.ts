@@ -1,7 +1,9 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { RemoveTagFromTodo } from "../../usecase/RemoveTagFromTodo";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import { aTodo, TodoBuilder } from "./builders/Todo";
@@ -12,12 +14,14 @@ import {
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;
+let events: CollectEvents;
 let removeTagFromTodo: RemoveTagFromTodo;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
-  removeTagFromTodo = new RemoveTagFromTodo(todos, todoListPermissions);
+  events = new CollectEvents();
+  removeTagFromTodo = new RemoveTagFromTodo(todos, todoListPermissions, events);
 });
 
 it("removing tag from todos requires permission", async () => {
@@ -82,6 +86,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     expect((await todos.ofId("todo/1")).tags).toEqual([
       "feature",
       "research required",
+    ]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
     ]);
   })
 );

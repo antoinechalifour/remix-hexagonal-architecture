@@ -1,7 +1,9 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
 import { Clock, FixedClock } from "shared/time";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { MarkTodo } from "../../usecase/MarkTodo";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodosInMemory } from "./fakes/TodosInMemory";
@@ -19,13 +21,15 @@ let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
 let todos: Todos;
 let clock: Clock;
+let events: CollectEvents;
 
 beforeEach(() => {
   clock = new FixedClock();
   todos = new TodosInMemory();
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
-  markTodo = new MarkTodo(todoLists, todoListPermissions, todos, clock);
+  events = new CollectEvents();
+  markTodo = new MarkTodo(todoLists, todoListPermissions, todos, clock, events);
 });
 
 it("changing completion requires permission", async () => {
@@ -79,6 +83,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/2",
       "todo/3",
     ]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
+    ]);
   })
 );
 
@@ -106,6 +113,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/1",
       "todo/3",
       "todo/2",
+    ]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
     ]);
   })
 );

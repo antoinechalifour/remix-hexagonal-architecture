@@ -1,8 +1,10 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
+import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { DeleteTodoFromTodoList } from "../../usecase/DeleteTodoFromTodoList";
+import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -17,15 +19,18 @@ let deleteTodoFromTodoList: DeleteTodoFromTodoList;
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;
 let todos: Todos;
+let events: CollectEvents;
 
 beforeEach(() => {
   todos = new TodosInMemory();
   todoLists = new TodoListsInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();
+  events = new CollectEvents();
   deleteTodoFromTodoList = new DeleteTodoFromTodoList(
     todoLists,
     todoListPermissions,
-    todos
+    todos,
+    events
   );
 });
 
@@ -83,6 +88,9 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     const todoList = await todoLists.ofId(todoListId);
     expect(await todos.ofTodoList(todoListId)).toEqual([todoToKeep.build()]);
     expect(todoList.todosOrder).toEqual(["todos/2"]);
+    expect(events.collected()).toEqual([
+      new TodoListUpdated(todoListId, contributorId),
+    ]);
   })
 );
 
