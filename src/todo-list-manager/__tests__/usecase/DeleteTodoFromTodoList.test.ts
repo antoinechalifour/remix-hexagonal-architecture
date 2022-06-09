@@ -1,10 +1,10 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { FixedClock } from "shared/time";
+import { CollectEvents } from "shared/events";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { DeleteTodoFromTodoList } from "../../usecase/DeleteTodoFromTodoList";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -14,7 +14,7 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { FixedClock } from "shared/time";
+import { TodoDeleted } from "../../domain/TodoDeleted";
 
 let deleteTodoFromTodoList: DeleteTodoFromTodoList;
 let todoLists: TodoLists;
@@ -77,7 +77,10 @@ const AUTHORIZED_CASES = [
 
 AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
   it(`should delete the todo from the todo list (role=${role})`, async () => {
-    const todoToRemove = aTodo().withId("todos/1").ofTodoList(todoListId);
+    const todoToRemove = aTodo()
+      .withId("todos/1")
+      .withTitle("Buy pizza")
+      .ofTodoList(todoListId);
     const todoToKeep = aTodo().withId("todos/2").ofTodoList(todoListId);
     await Promise.all([
       givenTodoList(
@@ -93,7 +96,13 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     expect(await todos.ofTodoList(todoListId)).toEqual([todoToKeep.build()]);
     expect(todoList.todosOrder).toEqual(["todos/2"]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TodoDeleted(
+        todoListId,
+        contributorId,
+        "todos/1",
+        "Buy pizza",
+        clock.now()
+      ),
     ]);
   })
 );

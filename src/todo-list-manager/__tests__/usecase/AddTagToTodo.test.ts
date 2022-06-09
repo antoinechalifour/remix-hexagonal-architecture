@@ -1,4 +1,5 @@
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { FixedClock } from "shared/time";
+import { CollectEvents } from "shared/events";
 import { Todos } from "../../domain/Todos";
 import { AddTagToTodo } from "../../usecase/AddTagToTodo";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
@@ -11,7 +12,6 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { FixedClock } from "shared/time";
 
 let todos: Todos;
 let todoListPermissions: TodoListPermissions;

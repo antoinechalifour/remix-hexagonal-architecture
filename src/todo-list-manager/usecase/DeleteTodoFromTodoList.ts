@@ -8,7 +8,7 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { removeTodoFromOrder } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoDeleted } from "../domain/TodoDeleted";
 
 export class DeleteTodoFromTodoList {
   constructor(
@@ -27,7 +27,10 @@ export class DeleteTodoFromTodoList {
     const permission = await this.todoListPermissions.ofTodoList(todoListId);
     canEditTodoList(permission, contributorId);
 
-    const todoList = await this.todoLists.ofId(todoListId);
+    const [todoList, todo] = await Promise.all([
+      this.todoLists.ofId(todoListId),
+      this.todos.ofId(todoId),
+    ]);
 
     await Promise.all([
       this.todoLists.save(removeTodoFromOrder(todoList, todoId)),
@@ -35,7 +38,13 @@ export class DeleteTodoFromTodoList {
     ]);
 
     this.events.publish(
-      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+      new TodoDeleted(
+        todoListId,
+        contributorId,
+        todo.id,
+        todo.title,
+        this.clock.now()
+      )
     );
   }
 }

@@ -3,7 +3,7 @@ import type { TodoLists } from "../../domain/TodoLists";
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { GenerateTestId } from "shared/id";
 import { Clock, FixedClock } from "shared/time";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { CollectEvents } from "shared/events";
 import { CreateTodoList } from "../../usecase/CreateTodoList";
 import { TodoListCreated } from "../../domain/TodoListCreated";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
