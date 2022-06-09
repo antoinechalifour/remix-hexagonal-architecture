@@ -37,7 +37,8 @@ export class TodoListApplicationService {
         new TodoListDatabaseRepository(prisma),
         new TodoListPermissionsDatabaseRepository(prisma),
         this.generateId,
-        this.clock
+        this.clock,
+        this.events
       ).execute(title, currentUser.id)
     );
   }
