@@ -1,11 +1,11 @@
 import type { Todos } from "../../domain/Todos";
 import type { TodoLists } from "../../domain/TodoLists";
 import { Clock, FixedClock } from "shared/time";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { CollectEvents } from "shared/events";
 import { MarkTodo } from "../../usecase/MarkTodo";
-import { TodoListUpdated } from "../../domain/TodoListUpdated";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TodoCompletionChanged } from "../../domain/TodoCompletionChanged";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -84,7 +84,13 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/3",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TodoCompletionChanged(
+        todoListId,
+        contributorId,
+        "todo/1",
+        "done",
+        clock.now()
+      ),
     ]);
   })
 );
@@ -115,7 +121,13 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       "todo/2",
     ]);
     expect(events.collected()).toEqual([
-      new TodoListUpdated(todoListId, contributorId, clock.now()),
+      new TodoCompletionChanged(
+        todoListId,
+        contributorId,
+        "todo/1",
+        "doing",
+        clock.now()
+      ),
     ]);
   })
 );

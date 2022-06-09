@@ -1,4 +1,4 @@
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { CollectEvents } from "shared/events";
 import { TodoListShared } from "../../domain/TodoListShared";
 import { GrantAccess } from "../../usecase/GrantAccess";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";

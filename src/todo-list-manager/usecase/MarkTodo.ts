@@ -12,7 +12,7 @@ import {
   TodoList,
 } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoCompletionChanged } from "../domain/TodoCompletionChanged";
 
 export class MarkTodo {
   constructor(
@@ -43,8 +43,18 @@ export class MarkTodo {
     ]);
 
     this.events.publish(
-      new TodoListUpdated(todoListId, contributorId, this.clock.now())
+      new TodoCompletionChanged(
+        todoListId,
+        contributorId,
+        todoId,
+        this.getCompletion(isDone),
+        this.clock.now()
+      )
     );
+  }
+
+  private getCompletion(isDone: boolean) {
+    return isDone ? "done" : "doing";
   }
 
   private reorderTodoList(todoList: TodoList, todoId: TodoId, isDone: boolean) {
