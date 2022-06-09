@@ -99,7 +99,8 @@ export class TodoListDatabaseQuery implements TodoListQuery {
       FROM "TodoList" TL
       LEFT JOIN "Todo" T ON TL.id = T."todoListId" AND T."isDone" IS false
       WHERE TL."id" IN (${Prisma.join(todoListsIds)})
-      GROUP BY TL.id;
+      GROUP BY TL.id, TL."createdAt"
+      ORDER BY TL."createdAt" DESC;
     `;
   }
 }
