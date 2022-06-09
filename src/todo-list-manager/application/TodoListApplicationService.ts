@@ -97,11 +97,11 @@ export class TodoListApplicationService {
     contributorId: string,
     currentUser: CurrentUser
   ) {
-    await new RevokeAccess(this.todoListPermissions).execute(
-      todoListId,
-      currentUser.id,
-      contributorId
-    );
+    await new RevokeAccess(
+      this.todoListPermissions,
+      this.clock,
+      this.events
+    ).execute(todoListId, currentUser.id, contributorId);
   }
 
   viewHomePage(contributorId: string) {

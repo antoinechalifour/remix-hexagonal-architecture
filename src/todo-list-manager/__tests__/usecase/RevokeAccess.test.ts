@@ -1,17 +1,24 @@
+import { CollectEvents } from "shared/events";
+import { FixedClock } from "shared/time";
+import { RevokeAccess } from "../../usecase/RevokeAccess";
+import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { AccessRevoked } from "../../domain/AccessRevoked";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
-import { RevokeAccess } from "../../usecase/RevokeAccess";
 
 let revokeAccess: RevokeAccess;
 let todoListPermissions: TodoListPermissionsInMemory;
+let events: CollectEvents;
+let clock: FixedClock;
 
 beforeEach(() => {
   todoListPermissions = new TodoListPermissionsInMemory();
-  revokeAccess = new RevokeAccess(todoListPermissions);
+  events = new CollectEvents();
+  clock = new FixedClock();
+  revokeAccess = new RevokeAccess(todoListPermissions, clock, events);
 });
 
 it("revoking access to a todo list requires permissions", async () => {
@@ -58,6 +65,14 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
     expect(await todoListPermissions.ofTodoList(todoListId)).toEqual(
       permission.withContributors("contributor/2").build()
     );
+    expect(events.collected()).toEqual([
+      new AccessRevoked(
+        todoListId,
+        contributorId,
+        "contributor/1",
+        clock.now()
+      ),
+    ]);
   })
 );
 
