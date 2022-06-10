@@ -42,7 +42,7 @@ import { Loaders } from "./remix/Loaders";
 
 @Module({
   imports: [
-    EventEmitterModule.forRoot(),
+    EventEmitterModule.forRoot({ wildcard: true }),
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, "../../../public"),
       serveStaticOptions: {
