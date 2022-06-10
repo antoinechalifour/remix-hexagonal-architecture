@@ -1,7 +1,7 @@
 import { Event } from "shared/events";
 
 export class TodoCompletionChanged extends Event {
-  static TYPE = "todo.markedAsDone";
+  static TYPE = "todo.completionChanged";
 
   constructor(
     public readonly todoListId: string,

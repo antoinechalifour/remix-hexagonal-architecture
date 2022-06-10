@@ -5,7 +5,7 @@ export class TodoDeleted extends Event {
 
   constructor(
     public readonly todoListId: string,
-    public readonly type: string,
+    public readonly contributorId: string,
     public readonly todoId: string,
     public readonly todoTitle: string,
     publishedAt: Date
