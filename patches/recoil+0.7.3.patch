@@ -1,0 +1,52 @@
+diff --git a/node_modules/recoil/cjs/index.js b/node_modules/recoil/cjs/index.js
+index 90a65d9..a745925 100644
+--- a/node_modules/recoil/cjs/index.js
++++ b/node_modules/recoil/cjs/index.js
+@@ -468,7 +468,7 @@ function reactMode() {
+ function isFastRefreshEnabled() {
+   // @fb-only: const {isAcceptingUpdate} = require('__debug');
+   // @fb-only: return typeof isAcceptingUpdate === 'function' && isAcceptingUpdate();
+-  return false; // @oss-only
++  return true; // @oss-only
+ }
+ 
+ var Recoil_ReactMode = {
+diff --git a/node_modules/recoil/es/index.js b/node_modules/recoil/es/index.js
+index 30be8f3..55697fa 100644
+--- a/node_modules/recoil/es/index.js
++++ b/node_modules/recoil/es/index.js
+@@ -462,7 +462,7 @@ function reactMode() {
+ function isFastRefreshEnabled() {
+   // @fb-only: const {isAcceptingUpdate} = require('__debug');
+   // @fb-only: return typeof isAcceptingUpdate === 'function' && isAcceptingUpdate();
+-  return false; // @oss-only
++  return true; // @oss-only
+ }
+ 
+ var Recoil_ReactMode = {
+diff --git a/node_modules/recoil/native/index.js b/node_modules/recoil/native/index.js
+index cb9ecf4..a98f37c 100644
+--- a/node_modules/recoil/native/index.js
++++ b/node_modules/recoil/native/index.js
+@@ -462,7 +462,7 @@ function reactMode() {
+ function isFastRefreshEnabled() {
+   // @fb-only: const {isAcceptingUpdate} = require('__debug');
+   // @fb-only: return typeof isAcceptingUpdate === 'function' && isAcceptingUpdate();
+-  return false; // @oss-only
++  return true; // @oss-only
+ }
+ 
+ var Recoil_ReactMode = {
+diff --git a/node_modules/recoil/umd/index.js b/node_modules/recoil/umd/index.js
+index d23b0f7..68e5670 100644
+--- a/node_modules/recoil/umd/index.js
++++ b/node_modules/recoil/umd/index.js
+@@ -468,7 +468,7 @@
+   function isFastRefreshEnabled() {
+     // @fb-only: const {isAcceptingUpdate} = require('__debug');
+     // @fb-only: return typeof isAcceptingUpdate === 'function' && isAcceptingUpdate();
+-    return false; // @oss-only
++    return true; // @oss-only
+   }
+ 
+   var Recoil_ReactMode = {
