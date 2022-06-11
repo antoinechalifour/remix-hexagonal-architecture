@@ -7,6 +7,7 @@ import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { createTotoList } from "../domain/TodoList";
 import { createPermissions } from "../domain/TodoListPermission";
 import { TodoListCreated } from "../domain/TodoListCreated";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class CreateTodoList {
   constructor(
@@ -14,7 +15,7 @@ export class CreateTodoList {
     private readonly todoListPermissions: TodoListPermissions,
     private readonly generateId: GenerateId,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(title: string, ownerId: OwnerId) {

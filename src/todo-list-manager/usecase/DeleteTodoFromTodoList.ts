@@ -9,6 +9,7 @@ import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { removeTodoFromOrder } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TodoDeleted } from "../domain/TodoDeleted";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class DeleteTodoFromTodoList {
   constructor(
@@ -16,7 +17,7 @@ export class DeleteTodoFromTodoList {
     private readonly todoListPermissions: TodoListPermissions,
     private readonly todos: Todos,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

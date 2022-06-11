@@ -7,13 +7,14 @@ import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { TodoId, removeTag, hasTag } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TagRemovedFromTodo } from "../domain/TagRemovedFromTodo";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class RemoveTagFromTodo {
   constructor(
     private readonly todos: Todos,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

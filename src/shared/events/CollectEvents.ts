@@ -4,7 +4,7 @@ import { Event } from "./Event";
 export class CollectEvents implements Events {
   private events: Event[] = [];
 
-  publish<T extends Event>(event: T): void {
+  publish(event: Event): void {
     this.events.push(event);
   }
 
