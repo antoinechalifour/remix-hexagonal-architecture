@@ -10,13 +10,14 @@ import {
   grantAccess,
 } from "../domain/TodoListPermission";
 import { TodoListAccessGranted } from "../domain/TodoListAccessGranted";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class GrantAccess {
   constructor(
     private readonly todoListPermissions: TodoListPermissions,
     private readonly contributors: Contributors,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

@@ -7,13 +7,14 @@ import type { TodoListId } from "../domain/TodoList";
 import { addTag, hasTag, TodoId } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TagAddedToTodo } from "../domain/TagAddedToTodo";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class AddTagToTodo {
   constructor(
     private readonly todos: Todos,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

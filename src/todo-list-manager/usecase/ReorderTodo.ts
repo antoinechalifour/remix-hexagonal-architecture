@@ -8,13 +8,14 @@ import type { ContributorId } from "../domain/ContributorId";
 import { currentTodoOrder, reorderTodoInTodoList } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TodoReordered } from "../domain/TodoReordered";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class ReorderTodo {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

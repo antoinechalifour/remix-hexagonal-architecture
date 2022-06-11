@@ -3,7 +3,7 @@ import { CurrentUser } from "authentication";
 import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
 import { GenerateUUID } from "shared/id";
-import { Prisma } from "shared/database";
+import { Prisma, PrismaQueryRunner } from "shared/database";
 import { PRISMA } from "../../keys";
 import { CreateTodoList } from "../usecase/CreateTodoList";
 import { ArchiveTodoList } from "../usecase/ArchiveTodoList";
@@ -17,6 +17,8 @@ import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoLis
 import { ContributorsAdapter } from "../infrastructure/ContributorsAdapter";
 import { TodoListDatabaseQuery } from "../infrastructure/TodoListDatabaseQuery";
 import { RevokeAccess } from "../usecase/RevokeAccess";
+import { TodoListEvents } from "../infrastructure/TodoListEvents";
+import { TodoListEventDatabaseRepository } from "../infrastructure/TodoListEventDatabaseRepository";
 
 @Injectable()
 export class TodoListApplicationService {
@@ -34,11 +36,11 @@ export class TodoListApplicationService {
   createTodoList(title: string, currentUser: CurrentUser) {
     return this.prisma.$transaction((prisma) =>
       new CreateTodoList(
-        new TodoListDatabaseRepository(prisma),
-        new TodoListPermissionsDatabaseRepository(prisma),
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma),
         this.generateId,
         this.clock,
-        this.events
+        this.transactionalTodoListEvents(prisma)
       ).execute(title, currentUser.id)
     );
   }
@@ -46,8 +48,8 @@ export class TodoListApplicationService {
   async archive(todoListId: string, currentUser: CurrentUser) {
     await this.prisma.$transaction((prisma) =>
       new ArchiveTodoList(
-        new TodoListDatabaseRepository(prisma),
-        new TodoListPermissionsDatabaseRepository(prisma)
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma)
       ).execute(todoListId, currentUser.id)
     );
   }
@@ -57,12 +59,14 @@ export class TodoListApplicationService {
     todoListTitle: string,
     currentUser: CurrentUser
   ) {
-    await new UpdateTodoListTitle(
-      this.todoLists,
-      this.todoListPermissions,
-      this.clock,
-      this.events
-    ).execute(todoListId, todoListTitle, currentUser.id);
+    await this.prisma.$transaction((prisma) =>
+      new UpdateTodoListTitle(
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, todoListTitle, currentUser.id)
+    );
   }
 
   async reorderTodo(
@@ -71,12 +75,14 @@ export class TodoListApplicationService {
     todoId: string,
     newIndex: number
   ) {
-    await new ReorderTodo(
-      this.todoLists,
-      this.todoListPermissions,
-      this.clock,
-      this.events
-    ).execute(todoListId, currentUser.id, todoId, newIndex);
+    await this.prisma.$transaction((prisma) =>
+      new ReorderTodo(
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, currentUser.id, todoId, newIndex)
+    );
   }
 
   async grantAccess(
@@ -84,12 +90,14 @@ export class TodoListApplicationService {
     contributorEmail: string,
     currentUser: CurrentUser
   ) {
-    await new GrantAccess(
-      this.todoListPermissions,
-      this.contributors,
-      this.clock,
-      this.events
-    ).execute(todoListId, currentUser.id, contributorEmail);
+    await this.prisma.$transaction((prisma) =>
+      new GrantAccess(
+        this.transactionalTodoListPermissions(prisma),
+        this.transactionalContributors(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, currentUser.id, contributorEmail)
+    );
   }
 
   async revokeAccess(
@@ -97,11 +105,13 @@ export class TodoListApplicationService {
     contributorId: string,
     currentUser: CurrentUser
   ) {
-    await new RevokeAccess(
-      this.todoListPermissions,
-      this.clock,
-      this.events
-    ).execute(todoListId, currentUser.id, contributorId);
+    await this.prisma.$transaction((prisma) =>
+      new RevokeAccess(
+        this.transactionalTodoListPermissions(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, currentUser.id, contributorId)
+    );
   }
 
   viewHomePage(contributorId: string) {
@@ -117,5 +127,24 @@ export class TodoListApplicationService {
       this.contributors,
       this.todoListQuery
     ).execute(todoListId, contributorId);
+  }
+
+  private transactionalTodoLists(prisma: PrismaQueryRunner) {
+    return new TodoListDatabaseRepository(prisma);
+  }
+
+  private transactionalTodoListPermissions(prisma: PrismaQueryRunner) {
+    return new TodoListPermissionsDatabaseRepository(prisma);
+  }
+
+  private transactionalContributors(prisma: PrismaQueryRunner) {
+    return new ContributorsAdapter(prisma);
+  }
+
+  private transactionalTodoListEvents(prisma: PrismaQueryRunner) {
+    return new TodoListEvents(
+      this.events,
+      new TodoListEventDatabaseRepository(prisma)
+    );
   }
 }

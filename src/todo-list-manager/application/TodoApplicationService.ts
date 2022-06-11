@@ -1,6 +1,6 @@
 import { Inject, Injectable } from "@nestjs/common";
 import { CurrentUser } from "authentication";
-import { Prisma } from "shared/database";
+import { Prisma, PrismaQueryRunner } from "shared/database";
 import { RealClock } from "shared/time";
 import { NestEvents } from "shared/events";
 import { GenerateUUID } from "shared/id";
@@ -14,13 +14,13 @@ import { TodoListPermissionsDatabaseRepository } from "../infrastructure/TodoLis
 import { UpdateTodoTitle } from "../usecase/UpdateTodoTitle";
 import { AddTagToTodo } from "../usecase/AddTagToTodo";
 import { RemoveTagFromTodo } from "../usecase/RemoveTagFromTodo";
+import { TodoListEvents } from "../infrastructure/TodoListEvents";
+import { TodoListEventDatabaseRepository } from "../infrastructure/TodoListEventDatabaseRepository";
 
 @Injectable()
 export class TodoApplicationService {
   constructor(
     @Inject(PRISMA) private readonly prisma: Prisma,
-    private readonly todos: TodoDatabaseRepository,
-    private readonly todoListPermissions: TodoListPermissionsDatabaseRepository,
     private readonly generateId: GenerateUUID,
     private readonly clock: RealClock,
     private readonly events: NestEvents
@@ -33,12 +33,12 @@ export class TodoApplicationService {
   ) {
     await this.prisma.$transaction((prisma) =>
       new AddTodoToTodoList(
-        new TodoDatabaseRepository(prisma),
-        new TodoListDatabaseRepository(prisma),
-        new TodoListPermissionsDatabaseRepository(prisma),
+        this.transactionalTodos(prisma),
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma),
         this.generateId,
         this.clock,
-        this.events
+        this.transactionalTodoListEvents(prisma)
       ).execute(todoListId, title, currentUser.id)
     );
   }
@@ -50,11 +50,11 @@ export class TodoApplicationService {
   ) {
     await this.prisma.$transaction((prisma) =>
       new DeleteTodoFromTodoList(
-        new TodoListDatabaseRepository(prisma),
-        new TodoListPermissionsDatabaseRepository(prisma),
-        new TodoDatabaseRepository(prisma),
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.transactionalTodos(prisma),
         this.clock,
-        this.events
+        this.transactionalTodoListEvents(prisma)
       ).execute(todoListId, todoId, currentUser.id)
     );
   }
@@ -67,11 +67,11 @@ export class TodoApplicationService {
   ) {
     await this.prisma.$transaction((prisma) =>
       new MarkTodo(
-        new TodoListDatabaseRepository(prisma),
-        new TodoListPermissionsDatabaseRepository(prisma),
-        new TodoDatabaseRepository(prisma),
+        this.transactionalTodoLists(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.transactionalTodos(prisma),
         this.clock,
-        this.events
+        this.transactionalTodoListEvents(prisma)
       ).execute(todoListId, todoId, isDone === "on", currentUser.id)
     );
   }
@@ -82,12 +82,14 @@ export class TodoApplicationService {
     title: string,
     currentUser: CurrentUser
   ) {
-    await new UpdateTodoTitle(
-      this.todos,
-      this.todoListPermissions,
-      this.clock,
-      this.events
-    ).execute(todoListId, todoId, title, currentUser.id);
+    await this.prisma.$transaction((prisma) =>
+      new UpdateTodoTitle(
+        this.transactionalTodos(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, todoId, title, currentUser.id)
+    );
   }
 
   async addTagToTodo(
@@ -96,12 +98,14 @@ export class TodoApplicationService {
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new AddTagToTodo(
-      this.todos,
-      this.todoListPermissions,
-      this.clock,
-      this.events
-    ).execute(todoListId, todoId, currentUser.id, tag);
+    await this.prisma.$transaction((prisma) =>
+      new AddTagToTodo(
+        this.transactionalTodos(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, todoId, currentUser.id, tag)
+    );
   }
 
   async removeTagFromTodo(
@@ -110,11 +114,32 @@ export class TodoApplicationService {
     tag: string,
     currentUser: CurrentUser
   ) {
-    await new RemoveTagFromTodo(
-      this.todos,
-      this.todoListPermissions,
-      this.clock,
-      this.events
-    ).execute(todoListId, todoId, currentUser.id, tag);
+    await this.prisma.$transaction((prisma) =>
+      new RemoveTagFromTodo(
+        this.transactionalTodos(prisma),
+        this.transactionalTodoListPermissions(prisma),
+        this.clock,
+        this.transactionalTodoListEvents(prisma)
+      ).execute(todoListId, todoId, currentUser.id, tag)
+    );
+  }
+
+  private transactionalTodoLists(prisma: PrismaQueryRunner) {
+    return new TodoListDatabaseRepository(prisma);
+  }
+
+  private transactionalTodos(prisma: PrismaQueryRunner) {
+    return new TodoDatabaseRepository(prisma);
+  }
+
+  private transactionalTodoListPermissions(prisma: PrismaQueryRunner) {
+    return new TodoListPermissionsDatabaseRepository(prisma);
+  }
+
+  private transactionalTodoListEvents(prisma: PrismaQueryRunner) {
+    return new TodoListEvents(
+      this.events,
+      new TodoListEventDatabaseRepository(prisma)
+    );
   }
 }

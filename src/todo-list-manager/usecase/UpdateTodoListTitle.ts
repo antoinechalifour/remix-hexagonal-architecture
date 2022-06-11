@@ -6,13 +6,14 @@ import type { TodoLists } from "../domain/TodoLists";
 import { updateTodoListTitle, TodoListId } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TodoListUpdated } from "../domain/TodoListUpdated";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class UpdateTodoListTitle {
   constructor(
     private readonly todoLists: TodoLists,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

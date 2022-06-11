@@ -7,13 +7,14 @@ import type { TodoListId } from "../domain/TodoList";
 import { updateTitle, TodoId } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TodoUpdated } from "../domain/TodoUpdated";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class UpdateTodoTitle {
   constructor(
     private readonly todos: Todos,
     private readonly todoListPermissions: TodoListPermissions,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

@@ -13,6 +13,7 @@ import {
 } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
 import { TodoCompletionChanged } from "../domain/TodoCompletionChanged";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class MarkTodo {
   constructor(
@@ -20,7 +21,7 @@ export class MarkTodo {
     private readonly todoListPermissions: TodoListPermissions,
     private readonly todos: Todos,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(

@@ -7,7 +7,7 @@ import { Event } from "./Event";
 export class NestEvents implements Events {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
-  publish<T extends Event>(event: T) {
+  publish(event: Event) {
     this.eventEmitter.emit(event.type, event);
   }
 }

@@ -5,12 +5,13 @@ import type { TodoListId } from "../domain/TodoList";
 import type { ContributorId } from "../domain/ContributorId";
 import { canShareTodoList, revokeAccess } from "../domain/TodoListPermission";
 import { TodoListAccessRevoked } from "../domain/TodoListAccessRevoked";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 export class RevokeAccess {
   constructor(
     private readonly todoListPermissions: TodoListPermissions,
     private readonly clock: Clock,
-    private readonly events: Events
+    private readonly events: Events<TodoListEvent>
   ) {}
 
   async execute(
