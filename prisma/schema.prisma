@@ -42,3 +42,10 @@ model TodoListPermission {
   ownerId         String @db.Uuid
   contributorsIds Json   @default("[]")
 }
+
+model TodoListEvent {
+  id          String   @id @db.Uuid
+  todoListId  String   @db.Uuid
+  publishedAt DateTime
+  event       Json
+}
