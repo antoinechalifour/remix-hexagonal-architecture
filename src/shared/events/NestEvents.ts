@@ -8,8 +8,6 @@ export class NestEvents implements Events {
   constructor(private readonly eventEmitter: EventEmitter2) {}
 
   publish<T extends Event>(event: T) {
-    this.eventEmitter
-      .emitAsync(event.type, event)
-      .catch((err) => console.log(err));
+    this.eventEmitter.emit(event.type, event);
   }
 }

@@ -4,7 +4,7 @@ import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { TodoListId } from "../domain/TodoList";
 import type { ContributorId } from "../domain/ContributorId";
 import { canShareTodoList, revokeAccess } from "../domain/TodoListPermission";
-import { AccessRevoked } from "../domain/AccessRevoked";
+import { TodoListAccessRevoked } from "../domain/TodoListAccessRevoked";
 
 export class RevokeAccess {
   constructor(
@@ -25,7 +25,7 @@ export class RevokeAccess {
       revokeAccess(permissions, contributorToRevokeAccess)
     );
     this.events.publish(
-      new AccessRevoked(
+      new TodoListAccessRevoked(
         todoListId,
         ownerId,
         contributorToRevokeAccess,

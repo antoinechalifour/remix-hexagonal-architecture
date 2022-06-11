@@ -1,14 +1,14 @@
-import { Event } from "shared/events";
+import { TodoListEvent } from "./TodoListEvent";
 
-export class TodoAdded extends Event {
+export class TodoAdded extends TodoListEvent {
   static TYPE = "todo.added";
 
   constructor(
-    public readonly todoListId: string,
-    public readonly contributorId: string,
+    todoListId: string,
+    contributorId: string,
     public readonly todoId: string,
     publishedAt: Date
   ) {
-    super(TodoAdded.TYPE, publishedAt);
+    super(TodoAdded.TYPE, todoListId, contributorId, publishedAt);
   }
 }

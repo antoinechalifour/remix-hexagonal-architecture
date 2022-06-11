@@ -1,17 +1,17 @@
-import { Event } from "shared/events";
+import { TodoListEvent } from "./TodoListEvent";
 
 export type Changes = Record<string, { previous: string; current: string }>;
 
-export class TodoUpdated extends Event {
+export class TodoUpdated extends TodoListEvent {
   static TYPE = "todo.updated";
 
   constructor(
-    public readonly todoListId: string,
-    public readonly contributorId: string,
+    todoListId: string,
+    contributorId: string,
     public readonly todoId: string,
     public readonly changes: Changes,
     publishedAt: Date
   ) {
-    super(TodoUpdated.TYPE, publishedAt);
+    super(TodoUpdated.TYPE, todoListId, contributorId, publishedAt);
   }
 }

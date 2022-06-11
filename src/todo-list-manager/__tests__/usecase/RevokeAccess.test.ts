@@ -2,7 +2,7 @@ import { CollectEvents } from "shared/events";
 import { FixedClock } from "shared/time";
 import { RevokeAccess } from "../../usecase/RevokeAccess";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
-import { AccessRevoked } from "../../domain/AccessRevoked";
+import { TodoListAccessRevoked } from "../../domain/TodoListAccessRevoked";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import {
   aTodoListPermission,
@@ -66,7 +66,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       permission.withContributors("contributor/2").build()
     );
     expect(events.collected()).toEqual([
-      new AccessRevoked(
+      new TodoListAccessRevoked(
         todoListId,
         contributorId,
         "contributor/1",
