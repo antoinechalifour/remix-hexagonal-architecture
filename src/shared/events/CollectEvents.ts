@@ -4,7 +4,7 @@ import { Event } from "./Event";
 export class CollectEvents implements Events {
   private events: Event[] = [];
 
-  publish(event: Event): void {
+  async publish(event: Event): Promise<void> {
     this.events.push(event);
   }
 

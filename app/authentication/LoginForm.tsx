@@ -23,7 +23,6 @@ export const LoginForm = () => {
   const loaderData = useLoaderData<AuthenticationErrorDto>();
   const actionData = useActionData<LoginFormErrors>();
   const transition = useTransition();
-  console.log(transition);
 
   return (
     <FormCard title="Login">

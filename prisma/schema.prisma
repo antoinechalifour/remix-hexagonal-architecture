@@ -48,4 +48,6 @@ model TodoListEvent {
   todoListId  String   @db.Uuid
   publishedAt DateTime
   event       Json
+
+  @@index([todoListId])
 }

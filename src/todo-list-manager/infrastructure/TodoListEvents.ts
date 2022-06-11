@@ -10,10 +10,8 @@ export class TodoListEvents implements Events<TodoListEvent> {
     private readonly todoListEventDatabaseRepository: TodoListEventDatabaseRepository
   ) {}
 
-  publish(event: TodoListEvent): void {
-    this.todoListEventDatabaseRepository
-      .save(event)
-      .then(() => this.events.publish(event))
-      .catch();
+  async publish(event: TodoListEvent): Promise<void> {
+    await this.todoListEventDatabaseRepository;
+    await this.events.publish(event);
   }
 }

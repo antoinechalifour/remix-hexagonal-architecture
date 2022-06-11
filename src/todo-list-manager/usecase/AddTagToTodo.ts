@@ -30,7 +30,7 @@ export class AddTagToTodo {
     if (hasTag(todo, tag)) return;
 
     await this.todos.save(addTag(todo, tag));
-    this.events.publish(
+    await this.events.publish(
       new TagAddedToTodo(
         todoListId,
         contributorId,

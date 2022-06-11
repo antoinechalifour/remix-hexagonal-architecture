@@ -38,7 +38,7 @@ export class DeleteTodoFromTodoList {
       this.todos.remove(todoId),
     ]);
 
-    this.events.publish(
+    await this.events.publish(
       new TodoDeleted(
         todoListId,
         contributorId,

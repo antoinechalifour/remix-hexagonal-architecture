@@ -27,7 +27,7 @@ export class UpdateTodoListTitle {
     const todoList = await this.todoLists.ofId(todoListId);
     const previousTitle = todoList.title;
     await this.todoLists.save(updateTodoListTitle(todoList, title));
-    this.events.publish(
+    await this.events.publish(
       new TodoListUpdated(
         todoListId,
         contributorId,

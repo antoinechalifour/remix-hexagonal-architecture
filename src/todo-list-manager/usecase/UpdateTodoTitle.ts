@@ -29,7 +29,7 @@ export class UpdateTodoTitle {
     const todo = await this.todos.ofId(todoId);
     const previousTitle = todo.title;
     await this.todos.save(updateTitle(todo, title));
-    this.events.publish(
+    await this.events.publish(
       new TodoUpdated(
         todoListId,
         contributorId,

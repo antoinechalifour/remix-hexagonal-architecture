@@ -33,12 +33,14 @@ it("shows only todolists viewable by the contributor", async () => {
       id: "todoList/1",
       title: "Things to buy",
       createdAt: "2022-05-30T14:00:00+00:00",
+      lastUpdatedAt: null,
       numberOfTodos: 1,
     },
     {
       id: "todoList/2",
       title: "Things to fix",
       createdAt: "2022-06-01T14:00:00+00:00",
+      lastUpdatedAt: null,
       numberOfTodos: 2,
     }
   );
@@ -50,8 +52,9 @@ it("shows only todolists viewable by the contributor", async () => {
     totalNumberOfDoingTodos: 3,
     todoListsOwned: [
       {
-        createdAt: "2022-05-30T14:00:00+00:00",
         id: "todoList/1",
+        createdAt: "2022-05-30T14:00:00+00:00",
+        lastUpdatedAt: null,
         numberOfTodos: 1,
         title: "Things to buy",
         permissions: {
@@ -62,8 +65,9 @@ it("shows only todolists viewable by the contributor", async () => {
     ],
     todoListsContributed: [
       {
-        createdAt: "2022-06-01T14:00:00+00:00",
         id: "todoList/2",
+        createdAt: "2022-06-01T14:00:00+00:00",
+        lastUpdatedAt: null,
         numberOfTodos: 2,
         title: "Things to fix",
         permissions: {

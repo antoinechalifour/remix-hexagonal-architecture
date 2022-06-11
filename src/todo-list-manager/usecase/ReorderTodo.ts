@@ -33,7 +33,7 @@ export class ReorderTodo {
     await this.todoLists.save(
       reorderTodoInTodoList(todoList, todoToReorderId, newIndex)
     );
-    this.events.publish(
+    await this.events.publish(
       new TodoReordered(
         todoListId,
         contributorId,

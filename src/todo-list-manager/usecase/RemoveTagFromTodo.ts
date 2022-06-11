@@ -30,7 +30,7 @@ export class RemoveTagFromTodo {
     if (!hasTag(todo, tag)) return;
 
     await this.todos.save(removeTag(todo, tag));
-    this.events.publish(
+    await this.events.publish(
       new TagRemovedFromTodo(
         todoListId,
         contributorId,

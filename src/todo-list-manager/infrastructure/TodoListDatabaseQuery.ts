@@ -48,6 +48,7 @@ export class TodoListDatabaseQuery implements TodoListQuery {
   ): Promise<TodoListSummaryDto[]> {
     if (todoListsIds.length === 0) return [];
 
+    console.log(await this.fetchTodoLists(todoListsIds));
     return this.fetchTodoLists(todoListsIds);
   }
 
@@ -95,12 +96,17 @@ export class TodoListDatabaseQuery implements TodoListQuery {
 
   private fetchTodoLists(todoListsIds: TodoListId[]) {
     return this.prisma.$queryRaw<any[]>`
-      SELECT TL.id, TL.title, TL."createdAt", count(T.id) as "numberOfTodos"
+      SELECT TL.id, TL.title, TL."createdAt", "lastUpdatedAt", count(T.id) as "numberOfTodos"
       FROM "TodoList" TL
       LEFT JOIN "Todo" T ON TL.id = T."todoListId" AND T."isDone" IS false
+      LEFT JOIN (
+        SELECT "todoListId", max("publishedAt") as "lastUpdatedAt" 
+        FROM "TodoListEvent"
+        GROUP BY "todoListId"
+      ) as TLE ON TLE."todoListId" = TL.id
       WHERE TL."id" IN (${Prisma.join(todoListsIds)})
-      GROUP BY TL.id, TL."createdAt"
-      ORDER BY TL."createdAt" DESC;
+      GROUP BY TL.id, "lastUpdatedAt"
+      ORDER BY "lastUpdatedAt" DESC;;
     `;
   }
 }
