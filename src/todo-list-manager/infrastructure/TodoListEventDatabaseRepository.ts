@@ -1,10 +1,18 @@
 import { Injectable } from "@nestjs/common";
-import { TodoListEvent } from "../domain/TodoListEvent";
 import { PrismaRepository } from "shared/database";
+import { v4 as uuid } from "uuid";
+import { TodoListEvent } from "../domain/TodoListEvent";
 
 @Injectable()
 export class TodoListEventDatabaseRepository extends PrismaRepository {
   async save(event: TodoListEvent) {
-    console.log("Repository to implement:", event);
+    await this.prisma.todoListEvent.create({
+      data: {
+        id: uuid(),
+        todoListId: event.todoListId,
+        publishedAt: event.publishedAt,
+        event: JSON.stringify(event),
+      },
+    });
   }
 }
