@@ -5,24 +5,26 @@ import { Event } from "shared/events";
 import { TodoListUpdated } from "../../todo-list-manager/domain/TodoListUpdated";
 import { TodoUpdated } from "../../todo-list-manager/domain/TodoUpdated";
 import { TodoReordered } from "../../todo-list-manager/domain/TodoReordered";
-import { TodoListShared } from "../../todo-list-manager/domain/TodoListShared";
+import { TodoListAccessGranted } from "../../todo-list-manager/domain/TodoListAccessGranted";
 import { TodoDeleted } from "../../todo-list-manager/domain/TodoDeleted";
 import { TodoCompletionChanged } from "../../todo-list-manager/domain/TodoCompletionChanged";
 import { TodoAdded } from "../../todo-list-manager/domain/TodoAdded";
 import { TagAddedToTodo } from "../../todo-list-manager/domain/TagAddedToTodo";
 import { TagRemovedFromTodo } from "../../todo-list-manager/domain/TagRemovedFromTodo";
-import { AccessRevoked } from "../../todo-list-manager/domain/AccessRevoked";
+import { TodoListAccessRevoked } from "../../todo-list-manager/domain/TodoListAccessRevoked";
 
 @Injectable()
 export class TodoListEventsConsumer {
   private subject = new Subject<Event & { todoListId: string }>();
 
-  @OnEvent("todoList.*")
-  handeTodoListEvents(event: TodoListUpdated | TodoListShared | AccessRevoked) {
+  @OnEvent("todoList.*", { async: true })
+  handeTodoListEvents(
+    event: TodoListUpdated | TodoListAccessGranted | TodoListAccessRevoked
+  ) {
     this.subject.next(event);
   }
 
-  @OnEvent("todo.*")
+  @OnEvent("todo.*", { async: true })
   handleTodoEvents(
     event:
       | TodoUpdated

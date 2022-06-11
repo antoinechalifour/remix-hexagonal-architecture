@@ -1,5 +1,5 @@
 import { CollectEvents } from "shared/events";
-import { TodoListShared } from "../../domain/TodoListShared";
+import { TodoListAccessGranted } from "../../domain/TodoListAccessGranted";
 import { GrantAccess } from "../../usecase/GrantAccess";
 import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
@@ -94,7 +94,7 @@ AUTHORIZED_CASES.forEach(({ role, todoListId, contributorId, permission }) =>
       permission.withNewContributors("contributor/new").build()
     );
     expect(events.collected()).toEqual([
-      new TodoListShared(
+      new TodoListAccessGranted(
         todoListId,
         contributorId,
         "contributor/new",

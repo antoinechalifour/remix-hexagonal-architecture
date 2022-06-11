@@ -9,7 +9,7 @@ import {
   isContributor,
   grantAccess,
 } from "../domain/TodoListPermission";
-import { TodoListShared } from "../domain/TodoListShared";
+import { TodoListAccessGranted } from "../domain/TodoListAccessGranted";
 
 export class GrantAccess {
   constructor(
@@ -37,7 +37,7 @@ export class GrantAccess {
       );
 
       this.events.publish(
-        new TodoListShared(
+        new TodoListAccessGranted(
           todoListId,
           contributorId,
           contributorToGrantAccess.id,
