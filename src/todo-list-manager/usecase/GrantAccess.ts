@@ -37,7 +37,7 @@ export class GrantAccess {
         grantAccess(permission, contributorToGrantAccess.id)
       );
 
-      this.events.publish(
+      await this.events.publish(
         new TodoListAccessGranted(
           todoListId,
           contributorId,

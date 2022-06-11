@@ -150,6 +150,30 @@ it("returns the summary of the given TodoLists (multiple given)", async () => {
   const theFirstTodoListId = "52421b1b-2cc6-4f91-9811-bb920084b1ba";
   const theSecondTodoListId = "801c2b48-4f56-414e-8f40-8a7714a7d302";
   await prisma.$transaction([
+    prisma.todoListEvent.create({
+      data: {
+        id: "e585be1c-ac8d-4017-a29d-c68ccb1ebe5d",
+        todoListId: theFirstTodoListId,
+        publishedAt: new Date("2022-05-29T14:00:00.000Z"),
+        event: {},
+      },
+    }),
+    prisma.todoListEvent.create({
+      data: {
+        id: "587ea441-720b-47d7-9e3e-12aad8edeadd",
+        todoListId: theFirstTodoListId,
+        publishedAt: new Date("2022-06-01T14:00:00.000Z"),
+        event: {},
+      },
+    }),
+    prisma.todoListEvent.create({
+      data: {
+        id: "eec9124c-4a65-42c8-81d2-29fea4bb0190",
+        todoListId: theSecondTodoListId,
+        publishedAt: new Date("2022-06-05T14:00:00.000Z"),
+        event: {},
+      },
+    }),
     prisma.todoList.create({
       data: {
         id: theFirstTodoListId,
@@ -225,12 +249,14 @@ it("returns the summary of the given TodoLists (multiple given)", async () => {
       id: "801c2b48-4f56-414e-8f40-8a7714a7d302",
       numberOfTodos: 1,
       title: "Things to fix",
+      lastUpdatedAt: "2022-06-05T14:00:00+00:00",
     },
     {
       createdAt: "2022-05-29T14:00:00+00:00",
       id: "52421b1b-2cc6-4f91-9811-bb920084b1ba",
       numberOfTodos: 2,
       title: "Food",
+      lastUpdatedAt: "2022-06-01T14:00:00+00:00",
     },
   ]);
 });

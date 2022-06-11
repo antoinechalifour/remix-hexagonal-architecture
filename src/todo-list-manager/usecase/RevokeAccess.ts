@@ -25,7 +25,7 @@ export class RevokeAccess {
     await this.todoListPermissions.save(
       revokeAccess(permissions, contributorToRevokeAccess)
     );
-    this.events.publish(
+    await this.events.publish(
       new TodoListAccessRevoked(
         todoListId,
         ownerId,

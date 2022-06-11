@@ -24,7 +24,7 @@ export class CreateTodoList {
 
     await this.todoLists.save(todoList);
     await this.todoListPermissions.save(todoListPermissions);
-    this.events.publish(
+    await this.events.publish(
       new TodoListCreated(todoList.id, ownerId, this.clock.now())
     );
 

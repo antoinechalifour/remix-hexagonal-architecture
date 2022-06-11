@@ -2,6 +2,7 @@ export interface TodoListSummaryDto {
   id: string;
   title: string;
   createdAt: string;
+  lastUpdatedAt: string | null;
   numberOfTodos: number;
 }
 

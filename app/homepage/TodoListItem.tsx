@@ -2,8 +2,8 @@ import type { TodoListSummaryWithPermissionDto } from "shared/client";
 import React from "react";
 import { Link, useFetcher } from "@remix-run/react";
 import classNames from "classnames";
-import { displayDate } from "front/Date";
 import { ArchiveTodoList } from "front/homepage/ArchiveTodoList";
+import { TodoListTimeInfo } from "front/homepage/TodoListTimeInfo";
 
 interface TodoListItemProps {
   todoList: TodoListSummaryWithPermissionDto;
@@ -16,7 +16,7 @@ export const TodoListItem = ({ todoList }: TodoListItemProps) => {
   return (
     <div
       className={classNames(
-        "grid grid-cols-[1fr_auto] grid-rows-2 gap-2",
+        "grid grid-cols-[1fr_auto] gap-1",
         "rounded bg-dark py-4 px-6 shadow",
         {
           "opacity-50": isArchiving,
@@ -39,9 +39,7 @@ export const TodoListItem = ({ todoList }: TodoListItemProps) => {
         )}
       </div>
 
-      <p className="pl-4 text-sm text-light">
-        ↳ Created {displayDate(todoList.createdAt)}
-      </p>
+      <TodoListTimeInfo todoList={todoList} />
     </div>
   );
 };
