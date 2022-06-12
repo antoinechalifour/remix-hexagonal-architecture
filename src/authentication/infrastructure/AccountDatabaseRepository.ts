@@ -6,11 +6,11 @@ import {
   UnverifiedAccount,
   VerifiedAccount,
 } from "../domain/Account";
-import { EmailAlreadyInUseError } from "../domain/EmailAlreadyInUseError";
-import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
-import { AccountAlreadyVerifiedError } from "../domain/AccountAlreadyVerifiedError";
-import { AccountNotVerifiedError } from "../domain/AccountNotVerifiedError";
-import { AccountNotFoundError } from "../domain/AccountNotFoundError";
+import { EmailAlreadyInUseError } from "../domain/error/EmailAlreadyInUseError";
+import { InvalidCredentialsError } from "../domain/error/InvalidCredentialsError";
+import { AccountAlreadyVerifiedError } from "../domain/error/AccountAlreadyVerifiedError";
+import { AccountNotVerifiedError } from "../domain/error/AccountNotVerifiedError";
+import { AccountNotFoundError } from "../domain/error/AccountNotFoundError";
 import assert from "assert";
 
 @Injectable()

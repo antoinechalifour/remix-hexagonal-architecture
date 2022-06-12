@@ -9,8 +9,8 @@ import {
   isContributor,
   grantAccess,
 } from "../domain/TodoListPermission";
-import { TodoListAccessGranted } from "../domain/TodoListAccessGranted";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoListAccessGranted } from "../domain/event/TodoListAccessGranted";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class GrantAccess {
   constructor(

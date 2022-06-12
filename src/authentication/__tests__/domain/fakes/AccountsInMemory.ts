@@ -4,10 +4,10 @@ import {
   UnverifiedAccount,
   VerifiedAccount,
 } from "../../../domain/Account";
-import { InvalidCredentialsError } from "../../../domain/InvalidCredentialsError";
-import { AccountAlreadyVerifiedError } from "../../../domain/AccountAlreadyVerifiedError";
-import { AccountNotVerifiedError } from "../../../domain/AccountNotVerifiedError";
-import { AccountNotFoundError } from "../../../domain/AccountNotFoundError";
+import { InvalidCredentialsError } from "../../../domain/error/InvalidCredentialsError";
+import { AccountAlreadyVerifiedError } from "../../../domain/error/AccountAlreadyVerifiedError";
+import { AccountNotVerifiedError } from "../../../domain/error/AccountNotVerifiedError";
+import { AccountNotFoundError } from "../../../domain/error/AccountNotFoundError";
 
 export class AccountsInMemory implements Accounts {
   private _database = new Map<

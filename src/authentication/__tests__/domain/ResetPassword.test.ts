@@ -6,7 +6,7 @@ import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { FakePasswordHasher } from "./fakes/FakePasswordHasher";
 import { anAccountForgotPassword, aVerifiedAccount } from "./builders/Account";
 import { CollectEvents } from "../../../shared/events/CollectEvents";
-import { PasswordChanged } from "../../domain/PasswordChanged";
+import { PasswordChanged } from "../../domain/event/PasswordChanged";
 
 let resetPassword: ResetPassword;
 let passwordHasher: PasswordHasher;

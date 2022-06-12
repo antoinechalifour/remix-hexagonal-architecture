@@ -1,6 +1,6 @@
 import { Events, NestEvents } from "shared/events";
 import { Injectable } from "@nestjs/common";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 import { TodoListEventDatabaseRepository } from "./TodoListEventDatabaseRepository";
 
 @Injectable()

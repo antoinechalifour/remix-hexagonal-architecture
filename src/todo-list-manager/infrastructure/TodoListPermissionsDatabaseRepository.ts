@@ -4,7 +4,7 @@ import type { ContributorId } from "../domain/ContributorId";
 import type { TodoListPermission } from "../domain/TodoListPermission";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
-import { TodoListNotFoundError } from "../domain/TodoListNotFoundError";
+import { TodoListNotFoundError } from "../domain/error/TodoListNotFoundError";
 
 @Injectable()
 export class TodoListPermissionsDatabaseRepository

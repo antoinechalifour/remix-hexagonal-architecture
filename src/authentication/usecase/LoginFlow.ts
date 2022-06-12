@@ -1,6 +1,6 @@
 import { Accounts } from "../domain/Accounts";
 import { PasswordHasher } from "../domain/PasswordHasher";
-import { InvalidCredentialsError } from "../domain/InvalidCredentialsError";
+import { InvalidCredentialsError } from "../domain/error/InvalidCredentialsError";
 
 export class LoginFlow {
   constructor(

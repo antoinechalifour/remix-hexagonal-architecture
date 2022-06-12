@@ -3,7 +3,7 @@ import type { Contributor } from "../domain/Contributor";
 import type { Account as AccountRow } from "@prisma/client";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
-import { ContributorNotFoundError } from "../domain/ContributorNotFoundError";
+import { ContributorNotFoundError } from "../domain/error/ContributorNotFoundError";
 
 @Injectable()
 export class ContributorsAdapter

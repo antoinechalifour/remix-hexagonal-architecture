@@ -3,7 +3,7 @@ import type { Events } from "shared/events";
 import type { Accounts } from "../domain/Accounts";
 import type { PasswordHasher } from "../domain/PasswordHasher";
 import { resetPassword } from "../domain/Account";
-import { PasswordChanged } from "../domain/PasswordChanged";
+import { PasswordChanged } from "../domain/event/PasswordChanged";
 
 export class ResetPassword {
   constructor(

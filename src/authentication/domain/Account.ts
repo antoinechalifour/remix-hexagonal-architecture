@@ -3,9 +3,9 @@ import type { PasswordHasher } from "./PasswordHasher";
 
 import { add, isAfter } from "date-fns";
 import { Clock } from "shared/time";
-import { InvalidVerificationTokenError } from "./InvalidVerificationTokenError";
-import { PasswordResetTokenExpiredError } from "./PasswordResetTokenExpiredError";
-import { InvalidPasswordResetTokenError } from "./InvalidPasswordResetTokenError";
+import { InvalidVerificationTokenError } from "./error/InvalidVerificationTokenError";
+import { PasswordResetTokenExpiredError } from "./error/PasswordResetTokenExpiredError";
+import { InvalidPasswordResetTokenError } from "./error/InvalidPasswordResetTokenError";
 
 export type UnverifiedAccount = {
   type: "unverified";

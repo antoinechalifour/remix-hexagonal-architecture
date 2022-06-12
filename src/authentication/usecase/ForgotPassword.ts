@@ -3,7 +3,7 @@ import type { Events } from "shared/events";
 import type { Clock } from "shared/time";
 import type { Accounts } from "../domain/Accounts";
 import { generateResetPasswordToken } from "../domain/Account";
-import { PasswordForgotten } from "../domain/PasswordForgotten";
+import { PasswordForgotten } from "../domain/event/PasswordForgotten";
 
 export class ForgotPassword {
   constructor(

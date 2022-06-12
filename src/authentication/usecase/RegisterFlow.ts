@@ -4,7 +4,7 @@ import type { Events } from "shared/events";
 import type { Accounts } from "../domain/Accounts";
 import type { PasswordHasher } from "../domain/PasswordHasher";
 import { register } from "../domain/Account";
-import { UserRegistered } from "../domain/UserRegistered";
+import { UserRegistered } from "../domain/event/UserRegistered";
 
 export class RegisterFlow {
   constructor(

@@ -7,8 +7,8 @@ import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import type { ContributorId } from "../domain/ContributorId";
 import { currentTodoOrder, reorderTodoInTodoList } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoReordered } from "../domain/TodoReordered";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoReordered } from "../domain/event/TodoReordered";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class ReorderTodo {
   constructor(

@@ -6,8 +6,8 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { TodoId, removeTag, hasTag } from "../domain/Todo";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TagRemovedFromTodo } from "../domain/TagRemovedFromTodo";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TagRemovedFromTodo } from "../domain/event/TagRemovedFromTodo";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class RemoveTagFromTodo {
   constructor(

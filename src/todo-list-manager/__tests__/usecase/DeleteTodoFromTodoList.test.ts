@@ -3,7 +3,7 @@ import type { TodoLists } from "../../domain/TodoLists";
 import { FixedClock } from "shared/time";
 import { CollectEvents } from "shared/events";
 import { TodoListPermissions } from "../../domain/TodoListPermissions";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TodoListPermissionDeniedError } from "../../domain/error/TodoListPermissionDeniedError";
 import { DeleteTodoFromTodoList } from "../../usecase/DeleteTodoFromTodoList";
 import { TodosInMemory } from "./fakes/TodosInMemory";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
@@ -14,7 +14,7 @@ import {
   aTodoListPermission,
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
-import { TodoDeleted } from "../../domain/TodoDeleted";
+import { TodoDeleted } from "../../domain/event/TodoDeleted";
 
 let deleteTodoFromTodoList: DeleteTodoFromTodoList;
 let todoLists: TodoLists;
