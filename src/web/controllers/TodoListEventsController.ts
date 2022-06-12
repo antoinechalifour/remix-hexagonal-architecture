@@ -1,5 +1,5 @@
 import { Controller, Sse, Param } from "@nestjs/common";
-import { filter, interval, map, merge } from "rxjs";
+import { delay, filter, interval, map, merge } from "rxjs";
 import { TodoListEventsConsumer } from "./TodoListEventsConsumer";
 
 @Controller("events/l")
@@ -13,8 +13,9 @@ export class TodoListEventsController {
     );
 
     const updates$ = this.todoListEvents.events.pipe(
+      delay(100),
       filter((event) => event.todoListId === todoListId),
-      map((event) => ({ type: "update", data: event.type } as MessageEvent))
+      map((event) => ({ type: "update", data: event.id } as MessageEvent))
     );
 
     return merge(heartbeat$, updates$);

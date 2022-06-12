@@ -6,7 +6,7 @@ import type {
 } from "shared/client";
 import type { MutableSnapshot } from "recoil";
 import type { TodoDto } from "shared/client";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { useLoaderData, useNavigate } from "@remix-run/react";
 import {
   atom,
@@ -179,6 +179,7 @@ export function useTodoListInfo() {
 export function useSyncLoaderData() {
   const loaderData = useLoaderData<TodoListPageDto>();
   const navigate = useNavigate();
+  const versionRef = useRef("");
 
   const setTodoListInfo = useSetRecoilState(todoListInfoState);
   const setDoingTodos = useSetRecoilState(doingTodosState);
@@ -186,9 +187,15 @@ export function useSyncLoaderData() {
   const setContributors = useSetRecoilState(contributorsState);
 
   useEffect(() => {
+    versionRef.current = loaderData.todoList.version;
+  });
+
+  useEffect(() => {
     const source = new EventSource(`/events/l/${loaderData.todoList.id}`);
 
-    source.addEventListener("update", () => navigate(".", { replace: true }));
+    source.addEventListener("update", (e) => {
+      if (versionRef.current !== e.data) navigate(".", { replace: true });
+    });
 
     return () => source.close();
   }, [navigate, loaderData.todoList.id]);
