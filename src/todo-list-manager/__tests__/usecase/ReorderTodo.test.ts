@@ -13,6 +13,10 @@ import {
   TodoListPermissionBuilder,
 } from "./builders/TodoListPermission";
 
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
+
 let reorderTodo: ReorderTodo;
 let todoLists: TodoLists;
 let events: CollectEvents;

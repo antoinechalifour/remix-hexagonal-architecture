@@ -9,6 +9,10 @@ import { TodoListCreated } from "../../domain/event/TodoListCreated";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
+
 let createTodoList: CreateTodoList;
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;

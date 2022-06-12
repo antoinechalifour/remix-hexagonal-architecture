@@ -16,6 +16,10 @@ import {
 } from "./builders/TodoListPermission";
 import { TodoDeleted } from "../../domain/event/TodoDeleted";
 
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
+
 let deleteTodoFromTodoList: DeleteTodoFromTodoList;
 let todoLists: TodoLists;
 let todoListPermissions: TodoListPermissions;

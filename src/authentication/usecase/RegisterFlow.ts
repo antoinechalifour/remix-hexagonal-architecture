@@ -24,7 +24,7 @@ export class RegisterFlow {
     );
 
     await this.credentials.save(account);
-    this.events.publish(
+    await this.events.publish(
       new UserRegistered(
         account.email,
         account.verificationToken,

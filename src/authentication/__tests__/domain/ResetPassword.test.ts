@@ -1,12 +1,16 @@
 import { Clock, FixedClock } from "shared/time";
+import { CollectEvents } from "shared/events";
 import { Accounts } from "../../domain/Accounts";
 import { PasswordHasher } from "../../domain/PasswordHasher";
 import { ResetPassword } from "../../usecase/ResetPassword";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { FakePasswordHasher } from "./fakes/FakePasswordHasher";
 import { anAccountForgotPassword, aVerifiedAccount } from "./builders/Account";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
 import { PasswordChanged } from "../../domain/event/PasswordChanged";
+
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
 
 let resetPassword: ResetPassword;
 let passwordHasher: PasswordHasher;

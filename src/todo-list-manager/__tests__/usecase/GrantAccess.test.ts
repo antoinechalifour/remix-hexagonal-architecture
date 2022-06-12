@@ -16,6 +16,10 @@ let contributors: ContributorsInMemory;
 let clock: FixedClock;
 let events: CollectEvents;
 
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
+
 beforeEach(() => {
   todoListPermissions = new TodoListPermissionsInMemory();
   contributors = new ContributorsInMemory();
