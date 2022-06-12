@@ -19,6 +19,10 @@ let events: CollectEvents;
 let clock: FixedClock;
 let removeTagFromTodo: RemoveTagFromTodo;
 
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
+
 beforeEach(() => {
   todos = new TodosInMemory();
   todoListPermissions = new TodoListPermissionsInMemory();

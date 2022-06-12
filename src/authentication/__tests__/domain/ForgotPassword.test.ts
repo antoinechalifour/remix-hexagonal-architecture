@@ -1,11 +1,15 @@
 import { GenerateTestId } from "shared/id";
 import { FixedClock } from "shared/time";
-import { CollectEvents } from "../../../shared/events/CollectEvents";
+import { CollectEvents } from "shared/events";
 import { PasswordForgotten } from "../../domain/event/PasswordForgotten";
 import { ForgotPassword } from "../../usecase/ForgotPassword";
 import { Accounts } from "../../domain/Accounts";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { anAccountForgotPassword, aVerifiedAccount } from "./builders/Account";
+
+jest.mock("uuid", () => ({
+  v4: () => "e775b0c1-7622-40df-a329-95f83b260c80",
+}));
 
 let clock: FixedClock;
 let accounts: Accounts;

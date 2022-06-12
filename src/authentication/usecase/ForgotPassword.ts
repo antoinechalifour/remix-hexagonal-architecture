@@ -20,7 +20,7 @@ export class ForgotPassword {
       this.clock
     );
     await this.accounts.save(account);
-    this.events.publish(
+    await this.events.publish(
       new PasswordForgotten(
         account.email,
         account.passwordResetToken,

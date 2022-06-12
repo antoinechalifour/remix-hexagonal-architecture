@@ -26,6 +26,6 @@ export class ResetPassword {
         this.clock
       )
     );
-    this.events.publish(new PasswordChanged(email, this.clock.now()));
+    await this.events.publish(new PasswordChanged(email, this.clock.now()));
   }
 }
