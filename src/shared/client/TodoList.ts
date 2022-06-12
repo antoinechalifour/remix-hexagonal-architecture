@@ -2,6 +2,7 @@ import type { DoneTodos, DoingTodoDto } from "./Todo";
 
 export interface TodoListDetailsDto {
   id: string;
+  version: string;
   title: string;
   createdAt: string;
   doingTodos: DoingTodoDto[];

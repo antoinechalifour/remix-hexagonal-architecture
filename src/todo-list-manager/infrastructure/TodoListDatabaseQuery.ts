@@ -26,7 +26,8 @@ export class TodoListDatabaseQuery implements TodoListQuery {
   constructor(@Inject(PRISMA) private readonly prisma: PrismaClient) {}
 
   async detailsOfTodoList(todoListId: TodoListId): Promise<TodoListDetailsDto> {
-    const [{ todosOrder, ...todoList }, tags] = await Promise.all([
+    const [version, { todosOrder, ...todoList }, tags] = await Promise.all([
+      this.fetchTodoListVersion(todoListId),
       this.fetchTodoList(todoListId),
       this.fetchTodoListTags(todoListId),
     ]);
@@ -37,6 +38,7 @@ export class TodoListDatabaseQuery implements TodoListQuery {
 
     return {
       ...todoList,
+      version,
       tags,
       doingTodos: this.sortTodos(doingTodos, todosOrder),
       doneTodos,
@@ -49,6 +51,17 @@ export class TodoListDatabaseQuery implements TodoListQuery {
     if (todoListsIds.length === 0) return [];
 
     return this.fetchTodoLists(todoListsIds);
+  }
+
+  private async fetchTodoListVersion(todoListId: TodoListId) {
+    const rows = await this.prisma.$queryRaw<{ version: string }[]>`
+      SELECT id as version FROM "TodoListEvent"
+      WHERE "todoListId" = ${todoListId}
+      ORDER BY "publishedAt" DESC
+      LIMIT 1;
+    `;
+
+    return rows[0]?.version ?? "";
   }
 
   private fetchTodoList(todoListId: TodoListId) {

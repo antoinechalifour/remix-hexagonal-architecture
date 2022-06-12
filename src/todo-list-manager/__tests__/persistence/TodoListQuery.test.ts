@@ -21,6 +21,22 @@ it("returns the details of a TodoList", async () => {
   // Arrange
   const theTodoListId = "52421b1b-2cc6-4f91-9811-bb920084b1ba";
   await prisma.$transaction([
+    prisma.todoListEvent.create({
+      data: {
+        id: "cbcce2aa-9d29-449b-8b1d-d3d278650cdc",
+        event: {},
+        todoListId: theTodoListId,
+        publishedAt: new Date("2022-05-29T14:00:00.000Z"),
+      },
+    }),
+    prisma.todoListEvent.create({
+      data: {
+        id: "36dc6bef-a0b6-44da-b619-1f2bc79840bf",
+        event: {},
+        todoListId: theTodoListId,
+        publishedAt: new Date("2022-06-05T14:00:00.000Z"),
+      },
+    }),
     prisma.todoList.create({
       data: {
         id: theTodoListId,
@@ -93,6 +109,7 @@ it("returns the details of a TodoList", async () => {
   // Assert
   expect(details).toEqual({
     id: "52421b1b-2cc6-4f91-9811-bb920084b1ba",
+    version: "36dc6bef-a0b6-44da-b619-1f2bc79840bf",
     title: "Example todo list",
     tags: ["food", "fun", "shopping"],
     createdAt: "2022-05-29T14:00:00+00:00",
