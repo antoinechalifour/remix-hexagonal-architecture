@@ -5,7 +5,7 @@ import { GenerateTestId } from "shared/id";
 import { Clock, FixedClock } from "shared/time";
 import { CollectEvents } from "shared/events";
 import { CreateTodoList } from "../../usecase/CreateTodoList";
-import { TodoListCreated } from "../../domain/TodoListCreated";
+import { TodoListCreated } from "../../domain/event/TodoListCreated";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 

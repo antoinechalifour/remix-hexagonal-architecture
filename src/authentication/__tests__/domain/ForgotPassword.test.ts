@@ -1,7 +1,7 @@
 import { GenerateTestId } from "shared/id";
 import { FixedClock } from "shared/time";
 import { CollectEvents } from "../../../shared/events/CollectEvents";
-import { PasswordForgotten } from "../../domain/PasswordForgotten";
+import { PasswordForgotten } from "../../domain/event/PasswordForgotten";
 import { ForgotPassword } from "../../usecase/ForgotPassword";
 import { Accounts } from "../../domain/Accounts";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";

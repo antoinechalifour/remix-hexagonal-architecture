@@ -8,8 +8,8 @@ import type { TodoListId } from "../domain/TodoList";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { removeTodoFromOrder } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoDeleted } from "../domain/TodoDeleted";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoDeleted } from "../domain/event/TodoDeleted";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class DeleteTodoFromTodoList {
   constructor(

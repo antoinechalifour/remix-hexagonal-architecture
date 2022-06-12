@@ -1,7 +1,7 @@
 import { TodoList, TodoListId } from "./TodoList";
 import { OwnerId } from "./OwnerId";
 import { ContributorId } from "./ContributorId";
-import { TodoListPermissionDeniedError } from "./TodoListPermissionDeniedError";
+import { TodoListPermissionDeniedError } from "./error/TodoListPermissionDeniedError";
 import { Contributor } from "./Contributor";
 
 export type TodoListPermission = {

@@ -1,4 +1,4 @@
-import { TodoListId } from "./TodoList";
+import { TodoListId } from "../TodoList";
 
 export class TodoListNotFoundError extends Error {
   constructor(todoListId: TodoListId) {

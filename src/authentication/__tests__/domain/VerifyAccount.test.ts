@@ -1,7 +1,7 @@
 import { VerifyAccount } from "../../usecase/VerifyAccount";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { aUnverifiedAccount, aVerifiedAccount } from "./builders/Account";
-import { InvalidVerificationTokenError } from "../../domain/InvalidVerificationTokenError";
+import { InvalidVerificationTokenError } from "../../domain/error/InvalidVerificationTokenError";
 
 describe("Verifying an account", () => {
   it("verifies the account when the token is valid", async () => {

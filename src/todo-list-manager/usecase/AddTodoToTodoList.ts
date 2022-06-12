@@ -7,8 +7,8 @@ import type { TodoLists } from "../domain/TodoLists";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { addTodo, TodoListId } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoAdded } from "../domain/TodoAdded";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoAdded } from "../domain/event/TodoAdded";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class AddTodoToTodoList {
   constructor(

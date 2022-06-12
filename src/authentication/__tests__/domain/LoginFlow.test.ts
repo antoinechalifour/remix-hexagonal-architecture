@@ -1,5 +1,5 @@
 import { LoginFlow } from "../../usecase/LoginFlow";
-import { InvalidCredentialsError } from "../../domain/InvalidCredentialsError";
+import { InvalidCredentialsError } from "../../domain/error/InvalidCredentialsError";
 import { AccountsInMemory } from "./fakes/AccountsInMemory";
 import { FakePasswordHasher } from "./fakes/FakePasswordHasher";
 import { aVerifiedAccount } from "./builders/Account";

@@ -1,7 +1,7 @@
 import { CollectEvents } from "shared/events";
-import { TodoListAccessGranted } from "../../domain/TodoListAccessGranted";
+import { TodoListAccessGranted } from "../../domain/event/TodoListAccessGranted";
 import { GrantAccess } from "../../usecase/GrantAccess";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TodoListPermissionDeniedError } from "../../domain/error/TodoListPermissionDeniedError";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";
 import {
   aTodoListPermission,

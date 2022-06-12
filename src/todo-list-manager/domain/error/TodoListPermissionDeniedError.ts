@@ -1,5 +1,5 @@
-import type { TodoListId } from "./TodoList";
-import type { ContributorId } from "./ContributorId";
+import type { TodoListId } from "../TodoList";
+import type { ContributorId } from "../ContributorId";
 
 export class TodoListPermissionDeniedError extends Error {
   constructor(todoListId: TodoListId, contributorId: ContributorId) {

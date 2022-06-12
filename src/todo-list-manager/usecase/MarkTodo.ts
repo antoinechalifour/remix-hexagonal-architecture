@@ -12,8 +12,8 @@ import {
   TodoList,
 } from "../domain/TodoList";
 import { canEditTodoList } from "../domain/TodoListPermission";
-import { TodoCompletionChanged } from "../domain/TodoCompletionChanged";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoCompletionChanged } from "../domain/event/TodoCompletionChanged";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class MarkTodo {
   constructor(

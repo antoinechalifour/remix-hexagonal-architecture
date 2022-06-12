@@ -2,7 +2,7 @@ import type { TodoList, TodoListId } from "../domain/TodoList";
 import type { TodoLists } from "../domain/TodoLists";
 import { Injectable } from "@nestjs/common";
 import { PrismaRepository } from "shared/database";
-import { TodoListNotFoundError } from "../domain/TodoListNotFoundError";
+import { TodoListNotFoundError } from "../domain/error/TodoListNotFoundError";
 
 @Injectable()
 export class TodoListDatabaseRepository

@@ -1,6 +1,6 @@
 import type { TodoListPermissions } from "../../domain/TodoListPermissions";
 import type { TodoLists } from "../../domain/TodoLists";
-import { TodoListPermissionDeniedError } from "../../domain/TodoListPermissionDeniedError";
+import { TodoListPermissionDeniedError } from "../../domain/error/TodoListPermissionDeniedError";
 import { ArchiveTodoList } from "../../usecase/ArchiveTodoList";
 import { TodoListsInMemory } from "./fakes/TodoListsInMemory";
 import { TodoListPermissionsInMemory } from "./fakes/TodoListPermissionsInMemory";

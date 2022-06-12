@@ -6,8 +6,8 @@ import type { OwnerId } from "../domain/OwnerId";
 import type { TodoListPermissions } from "../domain/TodoListPermissions";
 import { createTotoList } from "../domain/TodoList";
 import { createPermissions } from "../domain/TodoListPermission";
-import { TodoListCreated } from "../domain/TodoListCreated";
-import { TodoListEvent } from "../domain/TodoListEvent";
+import { TodoListCreated } from "../domain/event/TodoListCreated";
+import { TodoListEvent } from "../domain/event/TodoListEvent";
 
 export class CreateTodoList {
   constructor(
