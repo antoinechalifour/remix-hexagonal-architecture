@@ -6,24 +6,27 @@ import * as Checkbox from "@radix-ui/react-checkbox";
 
 interface CheckboxOptionProps {
   id: string;
-  isChecked: boolean;
+  checked: boolean;
   label: React.ReactNode;
+  disabled?: boolean;
 }
 
 export const CheckboxOption = ({
   id,
-  isChecked,
+  checked: initialChecked,
   label,
+  disabled,
 }: CheckboxOptionProps) => {
-  const [checked, setChecked] = useState<CheckedState>(isChecked);
+  const [checked, setChecked] = useState<CheckedState>(initialChecked);
 
   return (
     <div>
       <input name="isChecked" type="hidden" value="off" />
       <Checkbox.Root
-        defaultChecked={isChecked}
+        defaultChecked={checked}
         checked={checked}
         onCheckedChange={setChecked}
+        disabled={disabled}
         id={id}
         value="on"
         name="isChecked"
@@ -34,6 +37,7 @@ export const CheckboxOption = ({
           {
             "bg-darker": !checked,
             "bg-primary": checked,
+            "cursor-not-allowed": disabled,
           }
         )}
       >

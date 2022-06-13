@@ -5,6 +5,7 @@ import { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
+import { useTodoListOutdated } from "front/todolist/state";
 
 type ActionData = {
   errors?: AddTodoErrorDto;
@@ -12,6 +13,8 @@ type ActionData = {
 
 export const AddTodoForm = () => {
   const { ref, addTodo } = useAddTodoForm();
+  const isOutdated = useTodoListOutdated();
+  const disabled = isOutdated || addTodo.state !== "idle";
 
   return (
     <addTodo.Form
@@ -24,10 +27,10 @@ export const AddTodoForm = () => {
         name="todoTitle"
         errorMessage={addTodo.data?.errors?.todoTitle}
         ref={ref}
-        inputProps={{ maxLength: 50 }}
+        inputProps={{ maxLength: 50, disabled }}
       />
 
-      <ButtonPrimary type="submit" disabled={addTodo.state !== "idle"}>
+      <ButtonPrimary type="submit" disabled={disabled}>
         Add
       </ButtonPrimary>
     </addTodo.Form>

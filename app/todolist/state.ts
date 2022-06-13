@@ -27,6 +27,7 @@ const RECOIL_KEYS = {
   completedTodosState: "completedTodosState",
   completedTodosLabelState: "completedTodosLabelState",
   matchingCompletedTodosState: "matchingCompletedTodosState",
+  todoListOutdatedState: "todoListOutdatedState",
 };
 
 const tagFilterState = atom<string[]>({
@@ -123,6 +124,11 @@ const completedTodosLabelState = selector({
   },
 });
 
+const todoListOutdatedState = atom({
+  key: RECOIL_KEYS.todoListOutdatedState,
+  default: false,
+});
+
 export function makeInitialState({
   todoList,
   completion,
@@ -165,15 +171,15 @@ export function useFilter() {
 }
 
 export function useContributors() {
-  const [contributors] = useRecoilState(contributorsState);
-
-  return contributors;
+  return useRecoilValue(contributorsState);
 }
 
 export function useTodoListInfo() {
-  const [todoListInfo] = useRecoilState(todoListInfoState);
+  return useRecoilValue(todoListInfoState);
+}
 
-  return todoListInfo;
+export function useTodoListOutdated() {
+  return useRecoilValue(todoListOutdatedState);
 }
 
 export function useSyncLoaderData() {
@@ -185,20 +191,25 @@ export function useSyncLoaderData() {
   const setDoingTodos = useSetRecoilState(doingTodosState);
   const setCompletedTodos = useSetRecoilState(completedTodosState);
   const setContributors = useSetRecoilState(contributorsState);
+  const setTodoListOutdated = useSetRecoilState(todoListOutdatedState);
 
   useEffect(() => {
     versionRef.current = loaderData.todoList.version;
   });
 
   useEffect(() => {
+    setTodoListOutdated(false);
+  }, [loaderData, setTodoListOutdated]);
+
+  useEffect(() => {
     const source = new EventSource(`/events/l/${loaderData.todoList.id}`);
 
     source.addEventListener("update", (e) => {
-      if (versionRef.current !== e.data) navigate(".", { replace: true });
+      if (versionRef.current !== e.data) setTodoListOutdated(true);
     });
 
     return () => source.close();
-  }, [navigate, loaderData.todoList.id]);
+  }, [navigate, loaderData.todoList.id, setTodoListOutdated]);
 
   useEffect(() => {
     setTodoListInfo({

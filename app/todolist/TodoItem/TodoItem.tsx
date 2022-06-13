@@ -10,7 +10,7 @@ import { EditableContent } from "front/ui/EditableContent";
 import { Popover } from "front/ui/Popover";
 import { TodoPopoverContent } from "front/todolist/TodoItem/Popover/TodoPopoverContent";
 import { TodoTag } from "front/todolist/TodoTag";
-import { useTodoListInfo } from "front/todolist/state";
+import { useTodoListInfo, useTodoListOutdated } from "front/todolist/state";
 
 export interface TodoItemProps {
   todo: TodoDto;
@@ -21,6 +21,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
   function TodoItem(props, ref) {
     const { todo, className } = props;
     const { id } = useTodoListInfo();
+    const outdated = useTodoListOutdated();
     const markTodoFetcher = useFetcher();
     const updateTodoFetcher = useFetcher();
     const isBusy = markTodoFetcher.state !== "idle";
@@ -50,7 +51,8 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         >
           <CheckboxOption
             id={`todo-${todo.id}`}
-            isChecked={todo.isDone}
+            checked={todo.isDone}
+            disabled={outdated}
             label={
               <span className="sr-only">{todo.title} (click to toggle)</span>
             }
@@ -63,6 +65,7 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
         >
           <EditableContent
             initialValue={todo.title}
+            disabled={outdated}
             inputName="title"
             inputClassName="font-semibold md:ml-2"
           >
@@ -89,18 +92,20 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           ))}
         </ul>
 
-        <Popover.Root>
-          <Popover.Trigger
-            asChild
-            className="row-span-2 self-start md:row-span-1 md:self-center"
-          >
-            <PlainButton className="h-6 w-6">
-              <DotsVerticalIcon className="mx-auto" />
-            </PlainButton>
-          </Popover.Trigger>
+        {!outdated && (
+          <Popover.Root>
+            <Popover.Trigger
+              asChild
+              className="row-span-2 self-start md:row-span-1 md:self-center"
+            >
+              <PlainButton className="h-6 w-6">
+                <DotsVerticalIcon className="mx-auto" />
+              </PlainButton>
+            </Popover.Trigger>
 
-          <TodoPopoverContent todo={todo} />
-        </Popover.Root>
+            <TodoPopoverContent todo={todo} />
+          </Popover.Root>
+        )}
       </div>
     );
   }
