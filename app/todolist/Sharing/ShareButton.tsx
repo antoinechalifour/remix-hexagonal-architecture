@@ -3,10 +3,11 @@ import classNames from "classnames";
 import { PlusIcon } from "@radix-ui/react-icons";
 import { ShareTodoListDialogContent } from "front/todolist/Sharing/ShareTodoListDialogContent";
 import { Dialog } from "front/ui/Dialog";
-import { useTodoListOutdated } from "front/todolist/state";
+import { useIsTodoListStale } from "front/todolist/state";
 
 export const ShareButton = () => {
-  const outdated = useTodoListOutdated();
+  const stale = useIsTodoListStale();
+
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
@@ -18,7 +19,7 @@ export const ShareButton = () => {
           )}
           type="button"
           aria-label="Share this todo list"
-          disabled={outdated}
+          disabled={stale}
         >
           <PlusIcon fill="currentColor" className="text-inverse" />
         </button>
