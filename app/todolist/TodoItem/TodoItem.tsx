@@ -3,14 +3,11 @@ import type { TodoDto } from "shared/client";
 import React from "react";
 import classNames from "classnames";
 import { useFetcher } from "@remix-run/react";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { CheckboxOption } from "front/ui/CheckboxOption";
-import { PlainButton } from "front/ui/Button";
-import { EditableContent } from "front/ui/EditableContent";
-import { Popover } from "front/ui/Popover";
-import { TodoPopoverContent } from "front/todolist/TodoItem/Popover/TodoPopoverContent";
-import { TodoTag } from "front/todolist/TodoTag";
-import { useTodoListInfo, useIsTodoListStale } from "front/todolist/state";
+import { useIsTodoListStale, useTodoListInfo } from "front/todolist/state";
+import { EditTodoTitle } from "front/todolist/TodoItem/EditTodoTitle";
+import { TodoPopoverMenu } from "front/todolist/TodoItem/TodoPopoverMenu";
+import { TodoTags } from "front/todolist/TodoItem/TodoTags";
 
 export interface TodoItemProps {
   todo: TodoDto;
@@ -23,7 +20,6 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
     const { id } = useTodoListInfo();
     const stale = useIsTodoListStale();
     const markTodoFetcher = useFetcher();
-    const updateTodoFetcher = useFetcher();
     const isBusy = markTodoFetcher.state !== "idle";
 
     const handleChange = (e: React.ChangeEvent<HTMLFormElement>) =>
@@ -59,53 +55,9 @@ export const TodoItem = React.forwardRef<HTMLDivElement, TodoItemProps>(
           />
         </markTodoFetcher.Form>
 
-        <updateTodoFetcher.Form
-          method="post"
-          action={`/l/${id}/todo/${todo.id}/update`}
-        >
-          <EditableContent
-            initialValue={todo.title}
-            disabled={stale}
-            inputName="title"
-            inputClassName="font-semibold md:ml-2"
-          >
-            <span
-              className={classNames("font-semibold md:ml-2", {
-                "line-through opacity-75": todo.isDone,
-              })}
-            >
-              {todo.title}
-            </span>
-          </EditableContent>
-        </updateTodoFetcher.Form>
-
-        <ul
-          className={classNames(
-            "col-start-2 row-start-2 md:col-start-3 md:row-start-1",
-            "flex flex-wrap sm:space-x-1"
-          )}
-        >
-          {todo.tags.map((tag) => (
-            <li key={tag} className="p-1 sm:p-0">
-              <TodoTag>{tag}</TodoTag>
-            </li>
-          ))}
-        </ul>
-
-        {!stale && (
-          <Popover.Root>
-            <Popover.Trigger
-              asChild
-              className="row-span-2 self-start md:row-span-1 md:self-center"
-            >
-              <PlainButton className="h-6 w-6">
-                <DotsVerticalIcon className="mx-auto" />
-              </PlainButton>
-            </Popover.Trigger>
-
-            <TodoPopoverContent todo={todo} />
-          </Popover.Root>
-        )}
+        <EditTodoTitle todo={todo} />
+        <TodoTags todo={todo} />
+        <TodoPopoverMenu todo={todo} />
       </div>
     );
   }
