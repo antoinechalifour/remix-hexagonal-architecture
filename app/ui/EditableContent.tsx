@@ -7,6 +7,7 @@ export interface EditableContentProps {
   children: ReactElement<{ className?: string }>;
   initialValue: string;
   inputName: string;
+  disabled?: boolean;
   inputClassName?: string;
 }
 
@@ -14,12 +15,13 @@ export const EditableContent = ({
   children,
   initialValue,
   inputName,
+  disabled,
   inputClassName,
 }: EditableContentProps) => {
   const { isEditionMode, switchToDisplayMode, switchToEditionMode } =
     useEditableContent(initialValue);
 
-  if (isEditionMode)
+  if (isEditionMode && !disabled)
     return (
       <EditableContentEditionMode
         inputName={inputName}
@@ -30,7 +32,10 @@ export const EditableContent = ({
     );
 
   return (
-    <EditableContentDisplayMode onEdit={switchToEditionMode}>
+    <EditableContentDisplayMode
+      readonly={disabled}
+      onEdit={switchToEditionMode}
+    >
       {children}
     </EditableContentDisplayMode>
   );
