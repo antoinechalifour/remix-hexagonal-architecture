@@ -27,7 +27,7 @@ const RECOIL_KEYS = {
   completedTodosState: "completedTodosState",
   completedTodosLabelState: "completedTodosLabelState",
   matchingCompletedTodosState: "matchingCompletedTodosState",
-  todoListOutdatedState: "todoListOutdatedState",
+  todoListStaleState: "todoListStaleState",
 };
 
 const tagFilterState = atom<string[]>({
@@ -124,8 +124,8 @@ const completedTodosLabelState = selector({
   },
 });
 
-const todoListOutdatedState = atom({
-  key: RECOIL_KEYS.todoListOutdatedState,
+const todoListStaleState = atom({
+  key: RECOIL_KEYS.todoListStaleState,
   default: false,
 });
 
@@ -178,8 +178,8 @@ export function useTodoListInfo() {
   return useRecoilValue(todoListInfoState);
 }
 
-export function useTodoListOutdated() {
-  return useRecoilValue(todoListOutdatedState);
+export function useIsTodoListStale() {
+  return useRecoilValue(todoListStaleState);
 }
 
 export function useSyncLoaderData() {
@@ -191,7 +191,7 @@ export function useSyncLoaderData() {
   const setDoingTodos = useSetRecoilState(doingTodosState);
   const setCompletedTodos = useSetRecoilState(completedTodosState);
   const setContributors = useSetRecoilState(contributorsState);
-  const setTodoListOutdated = useSetRecoilState(todoListOutdatedState);
+  const setTodoListOutdated = useSetRecoilState(todoListStaleState);
 
   useEffect(() => {
     versionRef.current = loaderData.todoList.version;

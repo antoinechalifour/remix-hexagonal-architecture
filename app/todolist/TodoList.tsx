@@ -9,7 +9,7 @@ import { TodosHeading } from "front/todolist/TodoList/TodosHeading";
 import {
   useFilter,
   useSyncLoaderData,
-  useTodoListOutdated,
+  useIsTodoListStale,
   useTodos,
 } from "front/todolist/state";
 import { TodoListOutdatedMessage } from "front/todolist/TodoListOutdatedMessage";
@@ -20,7 +20,7 @@ export const TodoList = () => {
   const { doingTodos, completedTodos, doingTodosLabel, completedTodosLabel } =
     useTodos();
   const { reorderForPreview, sortForPreview } = useTodosOrderPreview();
-  const outdated = useTodoListOutdated();
+  const stale = useIsTodoListStale();
   const filter = useFilter();
 
   return (
@@ -36,7 +36,7 @@ export const TodoList = () => {
         emptyMessage="Come on! Don't you have anything to do?"
         renderTodo={(todoItem, index) => (
           <ReorderableTodoItem
-            enabled={!filter.active && !outdated}
+            enabled={!filter.active && !stale}
             todo={todoItem}
             index={index}
             onPreviewMove={reorderForPreview}

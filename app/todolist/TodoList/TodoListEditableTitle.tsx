@@ -2,11 +2,11 @@ import React from "react";
 import { useFetcher } from "@remix-run/react";
 import { EditableContent } from "front/ui/EditableContent";
 import { PageTitle } from "front/ui/PageTitle";
-import { useTodoListInfo, useTodoListOutdated } from "front/todolist/state";
+import { useTodoListInfo, useIsTodoListStale } from "front/todolist/state";
 
 export const TodoListEditableTitle = () => {
   const { id, title } = useTodoListInfo();
-  const outdated = useTodoListOutdated();
+  const stale = useIsTodoListStale();
   const updateTodoListFetcher = useFetcher();
 
   return (
@@ -14,7 +14,7 @@ export const TodoListEditableTitle = () => {
       <EditableContent
         initialValue={title}
         inputName="title"
-        disabled={outdated}
+        disabled={stale}
         inputClassName="text-2xl font-semibold text-lighter"
       >
         <PageTitle>{title}</PageTitle>

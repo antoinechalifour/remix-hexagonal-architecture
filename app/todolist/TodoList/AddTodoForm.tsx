@@ -1,11 +1,10 @@
 import type { AddTodoErrorDto } from "shared/client";
 import type { FloatingLabelInputRef } from "front/ui/FloatingLabelInput";
-
 import { useEffect, useRef } from "react";
 import { useFetcher } from "@remix-run/react";
 import { FloatingLabelInput } from "front/ui/FloatingLabelInput";
 import { ButtonPrimary } from "front/ui/Button";
-import { useTodoListOutdated } from "front/todolist/state";
+import { useIsTodoListStale } from "front/todolist/state";
 
 type ActionData = {
   errors?: AddTodoErrorDto;
@@ -13,8 +12,8 @@ type ActionData = {
 
 export const AddTodoForm = () => {
   const { ref, addTodo } = useAddTodoForm();
-  const isOutdated = useTodoListOutdated();
-  const disabled = isOutdated || addTodo.state !== "idle";
+  const stale = useIsTodoListStale();
+  const disabled = stale || addTodo.state !== "idle";
 
   return (
     <addTodo.Form
